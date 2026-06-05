@@ -25,9 +25,13 @@ jobs:
       # O tlmgr pode não estar no PATH logo após o setup; localizamos antes.
       - name: Instalar pacotes LaTeX das figuras
         run: |
-          TLMGR=$(command -v tlmgr || find "$HOME" -name tlmgr -type f 2>/dev/null | head -n1)
+          # No runner Linux o tlmgr do TinyTeX é um SYMLINK; por isso NÃO usar
+          # "-type f" (excluiria o link). command -v também falha se o bin não
+          # entrou no PATH. Achamos o link, pomos seu diretório no PATH e rodamos.
+          TLMGR=$(command -v tlmgr || find "$HOME" -name tlmgr 2>/dev/null | head -n1)
           echo "tlmgr em: $TLMGR"
-          "$TLMGR" install standalone pgf pgfplots dvisvgm xcolor amsmath amsfonts
+          export PATH="$(dirname "$TLMGR"):$PATH"
+          tlmgr install standalone pgf pgfplots dvisvgm xcolor amsmath amsfonts
 
       # SEM ISTO o mermaid (mapa de pré-requisitos do index.qmd) trava o render
       # do PDF no runner Ubuntu por falta de Chromium headless.
