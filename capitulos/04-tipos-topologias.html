@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Tipos de Rede e Topologias – Manual de Redes de Computadores</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../capitulos/05-meios-transmissao.html" rel="next">
+<link href="../capitulos/03-modelo-tcpip-pilha.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-9f900401f590028b37e77143686e1b25.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/01-introducao-redes.html">Parte I — Fundamentos e Modelos de Rede</a></li><li class="breadcrumb-item"><a href="../capitulos/04-tipos-topologias.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Tipos de Rede e Topologias</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Manual de Redes de Computadores</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/VitorMattosDev/manual-redes" title="Código fonte" class="quarto-navigation-tool px-1" aria-label="Código fonte"><i class="bi bi-github"></i></a>
+    <a href="../Manual-de-Redes-de-Computadores.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Apresentação</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Parte I — Fundamentos e Modelos de Rede</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/01-introducao-redes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introdução às Redes de Computadores</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/02-modelo-osi.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">O Modelo OSI em Detalhe</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/03-modelo-tcpip-pilha.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">O Modelo TCP/IP, a Pilha de Protocolos e o Encapsulamento</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/04-tipos-topologias.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Tipos de Rede e Topologias</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/05-meios-transmissao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Meios de Transmissão</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/06-grandezas-desempenho.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Grandezas de Desempenho: Banda, Latência, Jitter e Throughput</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Parte II — Camada Física e Fibra Óptica</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/07-fibra-principios.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fibra Óptica: Princípios Físicos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/08-fibra-tipos-caracteristicas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/09-conectores-polimentos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/10-emendas-fusao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Emendas: Fusão e Mecânica</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Parte III — Camada de Enlace</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/11-ethernet-mac.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ethernet e Endereçamento MAC</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/12-arp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">ARP e Resolução de Endereços</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/13-switching-vlan-stp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Switching, VLANs (802.1Q) e STP/RSTP</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Parte IV — Camada de Rede e Endereçamento IP</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/14-protocolo-ip-ipv4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/15-enderecamento-ipv4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Endereçamento IPv4: Classes e Máscaras de Sub-rede</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/16-subredes-cidr-vlsm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/17-ipv6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">IPv6: Endereçamento, SLAAC e Sub-redes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/18-icmp-diagnostico.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/19-nat-cgnat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">NAT e CGNAT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/20-roteamento.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Roteamento: Estático e Dinâmico (RIP, OSPF)</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Parte V — Transporte e Aplicação</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/21-tcp-udp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Camada de Transporte: TCP e UDP</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/22-dns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">DNS</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/23-dhcp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">DHCP</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/24-http-https-tls.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">HTTP, HTTPS e TLS</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/25-outros-protocolos-aplicacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/26-qos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Qualidade de Serviço (QoS)</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Parte VI — Redes Ópticas Passivas (PON)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/27-arquitetura-fttx.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Arquitetura FTTx (FTTH, FTTB, FTTC)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/28-gpon-epon-xgspon.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/29-olt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">OLT — Optical Line Terminal</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/30-onu-ont.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">ONU e ONT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/31-splitters.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Splitters Ópticos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/32-dio-cto-rede-primaria-secundaria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">DIO, CTO e Redes Primária e Secundária</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/33-orcamento-potencia.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Orçamento de Potência Óptica (Power Budget)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/34-provisionamento-pon.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Provisionamento PON (VLANs por Cliente, Perfis, ONT)</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Parte VII — Planta Externa (OSP)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/35-cabos-opticos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Cabos Ópticos (Drop, Autossustentável, Espinha)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/36-infraestrutura-postes-ferragens.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Infraestrutura: Postes, Ferragens e Reserva Técnica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/37-fusao-campo-certificacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Fusão em Campo e Certificação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/38-documentacao-georreferenciamento.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Documentação e Georreferenciamento de Rede</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Parte VIII — Medição e Diagnóstico Óptico</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/39-instrumentos-power-meter-otdr-vfl.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/40-interpretacao-otdr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">Interpretação de Traços OTDR</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/41-localizacao-falhas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Localização de Falhas na Planta Óptica</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Parte IX — Redes via Rádio (Áreas Rurais)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/42-radio-fundamentos-propagacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Rádio: Fundamentos e Propagação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/43-ptp-ptmp-antenas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Enlaces PTP e PTMP; Antenas e Ganho</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/44-visada-fresnel-enlace.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Visada (LOS), Zona de Fresnel e Cálculo de Enlace</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/45-tecnologias-radio-isp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Tecnologias de Rádio para ISP</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Parte X — Operação de Provedor (ISP)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/46-bng-bras-pppoe-ipoe.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">BNG/BRAS, PPPoE e IPoE</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/47-radius-aaa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">RADIUS e AAA</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/48-bgp-as-peering-ix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">BGP, ASN, Peering e IX</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/49-sistemas-gerencia-monitoramento.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Gerência e Monitoramento (SNMP, Zabbix, NMS)</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Parte XI — Segurança e Confiabilidade</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/50-seguranca-redes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Segurança de Redes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/51-redundancia-protecao-anel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Redundância, Proteção e Anel Óptico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/52-ddos-mitigacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">DDoS e Mitigação</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
+ <span class="menu-text">Parte XII — Tópicos Avançados</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/53-mpls-vpns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">MPLS e VPNs (L2VPN/L3VPN, VPLS)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/54-sdn-automacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">SDN e Automação de Rede</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/55-ipv6-deployment-isp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Implantação de IPv6 no Provedor</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false">
+ <span class="menu-text">Apêndices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/glossario.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Glossário</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/referencias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Referências</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#sec-tipos-alcance" id="toc-sec-tipos-alcance" class="nav-link active" data-scroll-target="#sec-tipos-alcance"><span class="header-section-number">5.1</span> Classificação por alcance: PAN, LAN, MAN, WAN</a></li>
+  <li><a href="#sec-topologia-fisica-logica" id="toc-sec-topologia-fisica-logica" class="nav-link" data-scroll-target="#sec-topologia-fisica-logica"><span class="header-section-number">5.2</span> Topologia física vs.&nbsp;lógica</a></li>
+  <li><a href="#sec-topologias-classicas" id="toc-sec-topologias-classicas" class="nav-link" data-scroll-target="#sec-topologias-classicas"><span class="header-section-number">5.3</span> As topologias clássicas</a></li>
+  <li><a href="#sec-topologia-arvore" id="toc-sec-topologia-arvore" class="nav-link" data-scroll-target="#sec-topologia-arvore"><span class="header-section-number">5.4</span> Topologias em árvore e híbridas</a></li>
+  <li><a href="#sec-duplex" id="toc-sec-duplex" class="nav-link" data-scroll-target="#sec-duplex"><span class="header-section-number">5.5</span> Direção do fluxo: simplex, half e full-duplex</a></li>
+  <li><a href="#sec-resumo-04" id="toc-sec-resumo-04" class="nav-link" data-scroll-target="#sec-resumo-04"><span class="header-section-number">5.6</span> Resumo e checklist</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/04-tipos-topologias.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/01-introducao-redes.html">Parte I — Fundamentos e Modelos de Rede</a></li><li class="breadcrumb-item"><a href="../capitulos/04-tipos-topologias.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Tipos de Rede e Topologias</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Tipos de Rede e Topologias</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="sec-tipos-alcance" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="sec-tipos-alcance"><span class="header-section-number">5.1</span> Classificação por alcance: PAN, LAN, MAN, WAN</h2>
+<p>Redes são tradicionalmente classificadas pela <strong>abrangência geográfica</strong>, e cada faixa tem tecnologias e donos típicos diferentes:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tipo</th>
+<th>Alcance</th>
+<th>Exemplo no mundo do ISP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>PAN</strong></td>
+<td>Pessoal (metros)</td>
+<td>Bluetooth, USB</td>
+</tr>
+<tr class="even">
+<td><strong>LAN</strong></td>
+<td>Prédio/casa</td>
+<td>Rede interna do cliente, NOC, <em>datacenter</em> do POP</td>
+</tr>
+<tr class="odd">
+<td><strong>MAN</strong></td>
+<td>Cidade</td>
+<td><em>Backbone</em> metropolitano do provedor (anéis de fibra)</td>
+</tr>
+<tr class="even">
+<td><strong>WAN</strong></td>
+<td>Regional/nacional</td>
+<td>Trânsito IP, enlaces entre cidades, conexão ao IX</td>
+</tr>
+</tbody>
+</table>
+<p>Para o provedor, a distinção prática mais importante é entre <strong>rede de acesso</strong> (o que liga o assinante: PON, rádio) e <strong>rede de transporte/núcleo</strong> (o que liga os POPs entre si e à internet: anéis MAN/WAN). São projetadas com objetivos opostos: o acesso prioriza <strong>custo por assinante</strong>; o núcleo prioriza <strong>capacidade e redundância</strong>.</p>
+</section>
+<section id="sec-topologia-fisica-logica" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="sec-topologia-fisica-logica"><span class="header-section-number">5.2</span> Topologia física vs.&nbsp;lógica</h2>
+<p>Um ponto que confunde iniciantes: a <strong>topologia física</strong> (como os cabos estão fisicamente dispostos) pode diferir da <strong>topologia lógica</strong> (como os dados de fato fluem). Uma rede fisicamente em <strong>estrela</strong> (todos os cabos vão a um switch) pode ser logicamente um <strong>barramento</strong> (todos no mesmo domínio de <em>broadcast</em>). Em PON, isso é gritante: fisicamente é uma <strong>árvore</strong> (OLT → splitter → várias ONTs), mas <strong>logicamente é ponto-multiponto compartilhado</strong> — todas as ONTs ouvem o mesmo sinal <em>downstream</em>, e a OLT arbitra o <em>upstream</em> por tempo (capítulo <span class="quarto-unresolved-ref">?sec-gpon</span>).</p>
+</section>
+<section id="sec-topologias-classicas" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="sec-topologias-classicas"><span class="header-section-number">5.3</span> As topologias clássicas</h2>
+<div id="fig-topologias" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-topologias-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="333.075686pt" height="79.713315pt" viewbox="-68.014948 -68.014951 333.075686 79.713315">
+<defs>
+<path id="tz_topologias_g0-83" d="M1.857036-3.323537C1.346949-3.443088 .972354-3.849564 .972354-4.335741C.972354-4.869738 1.43462-5.371856 2.12802-5.371856C3.506849-5.371856 3.690162-4.080697 3.730012-3.777833C3.745953-3.690162 3.753923-3.634371 3.857534-3.634371C3.985056-3.634371 3.985056-3.690162 3.985056-3.841594V-5.403736C3.985056-5.531258 3.985056-5.610959 3.881445-5.610959C3.817684-5.610959 3.801743-5.587049 3.745953-5.499377L3.466999-5.053051C3.068493-5.491407 2.558406-5.610959 2.12005-5.610959C1.171606-5.610959 .470237-4.893649 .470237-4.080697C.470237-3.474969 .812951-3.140224 .964384-2.988792C1.251308-2.701868 1.514321-2.638107 2.375093-2.438854C3.060523-2.279452 3.180075-2.255542 3.443088-1.976588C3.52279-1.888917 3.722042-1.617933 3.722042-1.227397C3.722042-.67746 3.299626-.095641 2.550436-.095641C1.673724-.095641 .765131-.518057 .71731-1.625903C.70934-1.753425 .70934-1.809215 .597758-1.809215C.470237-1.809215 .470237-1.745455 .470237-1.594022V-.039851C.470237 .087671 .470237 .167372 .573848 .167372C.637609 .167372 .645579 .151432 .70137 .071731C.73325 .02391 .765131-.047821 .988294-.382565C1.490411 .063761 2.080199 .167372 2.558406 .167372C3.55467 .167372 4.224159-.621669 4.224159-1.474471C4.224159-2.16787 3.769863-2.87721 2.956912-3.068493L1.857036-3.323537Z"></path>
+<path id="tz_topologias_g0-87" d="M7.731009-4.638605C7.84259-4.97335 8.057783-5.172603 8.52802-5.180573V-5.443587C8.272976-5.419676 8.001993-5.419676 7.754919-5.419676S7.260772-5.419676 6.830386-5.443587V-5.180573C7.260772-5.180573 7.491905-4.97335 7.491905-4.758157C7.491905-4.718306 7.491905-4.702366 7.452055-4.598755L6.184807-.916563L4.845828-4.790037C4.805978-4.893649 4.805978-4.909589 4.805978-4.933499C4.805978-5.180573 5.220423-5.180573 5.451557-5.180573V-5.443587C4.774097-5.419676 4.758157-5.419676 4.351681-5.419676C4.048817-5.419676 3.714072-5.419676 3.355417-5.443587V-5.180573C3.777833-5.180573 3.905355-5.164633 3.993026-5.037111C4.064757-4.933499 4.208219-4.463263 4.208219-4.455293S4.176339-4.367621 4.176339-4.359651L2.988792-.916563L1.649813-4.798007C1.609963-4.901619 1.609963-4.917559 1.609963-4.933499C1.609963-5.180573 2.032379-5.180573 2.263512-5.180573V-5.443587C1.578082-5.419676 1.562142-5.419676 1.155666-5.419676C.852802-5.419676 .518057-5.419676 .159402-5.443587V-5.180573C.621669-5.180573 .773101-5.180573 .876712-4.877709L2.550436-.01594C2.590286 .095641 2.622167 .167372 2.749689 .167372C2.86127 .167372 2.909091 .095641 2.940971-.00797L4.343711-4.080697L5.746451-.01594C5.778331 .071731 5.810212 .167372 5.937733 .167372S6.097136 .095641 6.136986-.01594L7.731009-4.638605Z"></path>
+<path id="tz_topologias_g1-65" d="M4.393524-6.034371C4.294894-6.276463 4.160399-6.276463 3.999004-6.276463S3.703113-6.276463 3.604483-6.034371L1.33599-.645579C1.273225-.502117 1.273225-.493151 1.049066-.466252C.896638-.448319 .726276-.439352 .573848-.439352H.385554V0C.887671-.017933 1.004234-.026899 1.479452-.026899C1.829141-.026899 2.116065-.026899 2.67198 0V-.439352C2.429888-.439352 2.125031-.439352 1.873973-.537983L2.367123-1.721544H4.850809L5.388792-.439352H4.545953V0C4.859776-.026899 5.76538-.026899 6.133001-.026899C6.509589-.026899 7.271731-.026899 7.612453 0V-.439352H6.742715L4.393524-6.034371ZM3.61345-4.671482L4.662516-2.160897H2.555417L3.61345-4.671482Z"></path>
+<path id="tz_topologias_g1-66" d="M1.344956-5.711582V-.439352H.376588V0H4.635616C6.168867 0 6.939975-.798007 6.939975-1.667746C6.939975-2.447821 6.276463-3.084433 5.083935-3.218929C6.070237-3.38929 6.644085-3.945205 6.644085-4.608717C6.644085-5.433624 5.837111-6.150934 4.357659-6.150934H.376588V-5.711582H1.344956ZM2.537484-3.380324V-5.711582H4.241096C5.308095-5.711582 5.34396-4.788045 5.34396-4.608717C5.34396-3.954172 4.904608-3.380324 4.00797-3.380324H2.537484ZM2.537484-.439352V-3.021669H4.348692C4.492154-3.021669 4.967372-3.021669 5.272229-2.663014C5.532254-2.340224 5.586052-1.972603 5.586052-1.685679C5.586052-1.066999 5.227397-.439352 4.259029-.439352H2.537484Z"></path>
+<path id="tz_topologias_g1-69" d="M6.662017-2.47472H6.204732C6.007472-1.327024 5.810212-.439352 4.070735-.439352H2.645081V-2.940971H3.165131C4.043836-2.940971 4.133499-2.546451 4.133499-1.891905H4.590785V-4.42939H4.133499C4.133499-3.774844 4.052802-3.380324 3.165131-3.380324H2.645081V-5.657783H4.061768C5.487422-5.657783 5.76538-5.039103 5.908842-3.918306H6.366127L6.088169-6.097136H.376588V-5.657783H1.344956V-.439352H.376588V0H6.240598L6.662017-2.47472Z"></path>
+<path id="tz_topologias_g1-77" d="M5.030137-1.174595L2.833375-5.917808C2.725778-6.150934 2.600249-6.150934 2.411955-6.150934H.403487V-5.711582H1.371856V-.699377C1.371856-.502117 1.362889-.493151 1.111831-.466252C.896638-.439352 .878705-.439352 .636613-.439352H.403487V0C.986301-.026899 1.23736-.026899 1.622914-.026899C2.017435-.026899 2.259527-.026899 2.851308 0V-.439352H2.618182C2.37609-.439352 2.358157-.439352 2.142964-.466252C1.891905-.493151 1.882939-.502117 1.882939-.699377V-5.586052H1.891905L4.375592-.233126C4.411457-.152428 4.483188 0 4.680448 0C4.886675 0 4.94944-.143462 4.994271-.233126L7.531756-5.702615H7.540722V-.439352H6.572354V0C6.886177-.026899 7.746949-.026899 8.105604-.026899S9.333998-.026899 9.647821 0V-.439352H8.679452V-5.711582H9.647821V-6.150934H7.648319C7.460025-6.150934 7.343462-6.150934 7.235866-5.926775L5.030137-1.174595Z"></path>
+<path id="tz_topologias_g1-97" d="M4.339726-2.67198C4.339726-3.461021 3.694147-4.061768 2.313325-4.061768C1.802242-4.061768 .654545-4.043836 .654545-3.218929C.654545-2.815442 .959402-2.627148 1.23736-2.627148C1.542217-2.627148 1.820174-2.842341 1.820174-3.209963C1.820174-3.469988 1.667746-3.622416 1.640847-3.649315C1.730511-3.667248 1.945704-3.703113 2.27746-3.703113C2.923039-3.703113 3.29066-3.380324 3.29066-2.67198V-2.385056C1.802242-2.385056 .29589-1.999502 .29589-1.004234C.29589-.116563 1.416687 .053798 2.062267 .053798C2.743711 .053798 3.209963-.242092 3.452055-.663512C3.452055-.430386 3.452055 0 4.411457 0H4.850809C5.021171 0 5.1467 0 5.1467-.224159C5.1467-.439352 5.003238-.439352 4.913574-.439352C4.339726-.448319 4.339726-.537983 4.339726-.753176V-2.67198ZM3.29066-1.246326C3.29066-.304857 2.25056-.304857 2.214695-.304857C1.75741-.304857 1.380822-.600747 1.380822-1.004234C1.380822-1.300125 1.542217-1.999502 3.29066-2.080199V-1.246326Z"></path>
+<path id="tz_topologias_g1-101" d="M4.267995-1.927771C4.456289-1.927771 4.563885-1.927771 4.563885-2.178829C4.563885-2.37609 4.545953-3.165131 3.963138-3.649315C3.559651-3.981071 3.021669-4.061768 2.582316-4.061768C1.049066-4.061768 .29589-3.0934 .29589-2.017435C.29589-.842839 1.183562 .053798 2.707846 .053798C4.187298 .053798 4.563885-.896638 4.563885-1.0401C4.563885-1.219427 4.384558-1.219427 4.33076-1.219427C4.169365-1.219427 4.151432-1.165629 4.097634-1.0401C3.891407-.573848 3.344458-.331756 2.779577-.331756C1.506351-.331756 1.488418-1.488418 1.488418-1.927771H4.267995ZM1.488418-2.25056C1.506351-2.663014 1.551183-3.703113 2.582316-3.703113C3.631382-3.703113 3.667248-2.609215 3.685181-2.25056H1.488418Z"></path>
+<path id="tz_topologias_g1-104" d="M5.039103-2.734745C5.039103-3.801743 4.393524-4.034869 3.61345-4.034869C2.761644-4.034869 2.286426-3.550685 2.0533-3.183064V-6.222665L.448319-6.150934V-5.711582C.986301-5.711582 1.058032-5.711582 1.058032-5.361893V-.439352H.448319V0C1.111831-.026899 1.219427-.026899 1.578082-.026899C1.945704-.026899 2.035367-.026899 2.716812 0V-.439352H2.107098V-2.27746C2.107098-3.281694 2.932005-3.676214 3.469988-3.676214C3.81071-3.676214 3.990037-3.48792 3.990037-2.815442V-.439352H3.380324V0C4.043836-.026899 4.151432-.026899 4.510087-.026899C4.877709-.026899 4.967372-.026899 5.648817 0V-.439352H5.039103V-2.734745Z"></path>
+<path id="tz_topologias_g1-108" d="M2.071233-6.222665L.466252-6.150934V-5.711582C1.004234-5.711582 1.075965-5.711582 1.075965-5.361893V-.439352H.466252V0C1.075965-.026899 1.183562-.026899 1.569116-.026899C1.963636-.026899 2.196762-.017933 2.680946 0V-.439352H2.071233V-6.222665Z"></path>
+<path id="tz_topologias_g1-109" d="M7.989041-2.734745C7.989041-3.792777 7.352428-4.034869 6.563387-4.034869C5.630884-4.034869 5.173599-3.469988 5.003238-3.19203C4.805978-3.999004 4.016936-4.034869 3.622416-4.034869C2.510585-4.034869 2.071233-3.227895 2.008468-3.0934H1.999502V-4.034869L.448319-3.963138V-3.523786C.986301-3.523786 1.058032-3.523786 1.058032-3.174097V-.439352H.448319V0C1.111831-.026899 1.219427-.026899 1.578082-.026899C1.945704-.026899 2.035367-.026899 2.716812 0V-.439352H2.107098V-2.27746C2.107098-3.272727 2.932005-3.676214 3.469988-3.676214C3.81071-3.676214 3.999004-3.496887 3.999004-2.815442V-.439352H3.38929V0C4.052802-.026899 4.160399-.026899 4.519054-.026899C4.886675-.026899 4.976339-.026899 5.657783 0V-.439352H5.04807V-2.27746C5.04807-3.272727 5.872976-3.676214 6.410959-3.676214C6.751681-3.676214 6.939975-3.496887 6.939975-2.815442V-.439352H6.330262V0C6.993773-.026899 7.10137-.026899 7.460025-.026899C7.827646-.026899 7.91731-.026899 8.598755 0V-.439352H7.989041V-2.734745Z"></path>
+<path id="tz_topologias_g1-110" d="M5.039103-2.734745C5.039103-3.801743 4.393524-4.034869 3.61345-4.034869C2.510585-4.034869 2.071233-3.227895 2.008468-3.0934H1.999502V-4.034869L.448319-3.963138V-3.523786C.986301-3.523786 1.058032-3.523786 1.058032-3.174097V-.439352H.448319V0C1.111831-.026899 1.219427-.026899 1.578082-.026899C1.945704-.026899 2.035367-.026899 2.716812 0V-.439352H2.107098V-2.27746C2.107098-3.281694 2.932005-3.676214 3.469988-3.676214C3.81071-3.676214 3.990037-3.48792 3.990037-2.815442V-.439352H3.380324V0C4.043836-.026899 4.151432-.026899 4.510087-.026899C4.877709-.026899 4.967372-.026899 5.648817 0V-.439352H5.039103V-2.734745Z"></path>
+<path id="tz_topologias_g1-111" d="M5.003238-1.95467C5.003238-3.129265 4.178331-4.061768 2.654047-4.061768C1.075965-4.061768 .29589-3.084433 .29589-1.95467C.29589-.842839 1.102864 .053798 2.645081 .053798C4.250062 .053798 5.003238-.887671 5.003238-1.95467ZM2.654047-.331756C1.488418-.331756 1.488418-1.273225 1.488418-2.0533C1.488418-2.806476 1.488418-3.703113 2.645081-3.703113C3.81071-3.703113 3.81071-2.806476 3.81071-2.0533C3.81071-1.282192 3.81071-.331756 2.654047-.331756Z"></path>
+<path id="tz_topologias_g1-114" d="M1.972603-1.95467C1.972603-2.609215 2.214695-3.649315 3.084433-3.676214C2.985803-3.577584 2.940971-3.425156 2.940971-3.281694C2.940971-2.887173 3.254795-2.707846 3.505853-2.707846C3.792777-2.707846 4.079701-2.905106 4.079701-3.281694C4.079701-3.738979 3.61345-4.034869 3.084433-4.034869C2.456787-4.034869 2.071233-3.577584 1.873973-3.057534H1.865006V-4.034869L.367621-3.963138V-3.523786C.905604-3.523786 .977335-3.523786 .977335-3.174097V-.439352H.367621V0C1.031133-.026899 1.084932-.026899 1.515318-.026899C1.739477-.026899 2.259527-.026899 2.734745 0V-.439352H1.972603V-1.95467Z"></path>
+<path id="tz_topologias_g1-115" d="M3.559651-3.801743C3.559651-3.963138 3.559651-4.061768 3.380324-4.061768C3.29066-4.061768 3.147198-3.990037 2.985803-3.900374C2.698879-4.025903 2.349191-4.061768 2.0533-4.061768C1.775342-4.061768 .349689-4.061768 .349689-2.878207C.349689-1.936737 1.524284-1.739477 1.838107-1.685679C2.57335-1.560149 3.165131-1.461519 3.165131-.950436C3.165131-.304857 2.322291-.304857 2.125031-.304857C1.667746-.304857 1.084932-.42142 .824907-1.246326C.780075-1.398755 .771108-1.425654 .582814-1.425654C.349689-1.425654 .349689-1.371856 .349689-1.156663V-.206227C.349689-.044832 .349689 .053798 .529016 .053798C.591781 .053798 .609714 .053798 .806974-.071731L1.049066-.224159C1.470486 .053798 1.945704 .053798 2.125031 .053798C2.394022 .053798 3.828643 .053798 3.828643-1.255293C3.828643-1.712578 3.568618-1.999502 3.407223-2.133998C3.003736-2.47472 2.716812-2.519552 2.008468-2.636115C1.578082-2.707846 1.0132-2.797509 1.0132-3.200996C1.0132-3.738979 1.847073-3.738979 2.044334-3.738979C3.048568-3.738979 3.084433-3.209963 3.102366-2.96787C3.111333-2.842341 3.236862-2.842341 3.326526-2.842341C3.550685-2.842341 3.559651-2.887173 3.559651-3.102366V-3.801743Z"></path>
+<path id="tz_topologias_g1-116" d="M1.999502-3.541719H3.353425V-3.981071H1.999502V-5.693649H1.542217C1.53325-4.850809 1.111831-3.927273 .19726-3.900374V-3.541719H.950436V-1.102864C.950436-.080697 1.838107 .053798 2.394022 .053798C3.0934 .053798 3.523786-.448319 3.523786-1.102864V-1.578082H3.066501V-1.129763C3.066501-.493151 2.743711-.331756 2.519552-.331756C1.999502-.331756 1.999502-.869738 1.999502-1.084932V-3.541719Z"></path>
+</defs>
+<g id="tz_topologias_page1">
+<g stroke-miterlimit="10" transform="translate(-35.217483,-16.226626)scale(0.996264,-0.996264)">
+<g fill="#000" stroke="#000">
+<g stroke-width="0.4">
+<g transform="translate(-27.77847,42.43706)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none">
+<use x="-35.217483" y="-16.226626" href="#tz_topologias_g1-66"></use>
+<use x="-27.677782" y="-16.226626" href="#tz_topologias_g1-97"></use>
+<use x="-22.520108" y="-16.226626" href="#tz_topologias_g1-114"></use>
+<use x="-18.143482" y="-16.226626" href="#tz_topologias_g1-114"></use>
+<use x="-13.766857" y="-16.226626" href="#tz_topologias_g1-97"></use>
+<use x="-8.609183" y="-16.226626" href="#tz_topologias_g1-109"></use>
+<use x=".232554" y="-16.226626" href="#tz_topologias_g1-101"></use>
+<use x="5.101059" y="-16.226626" href="#tz_topologias_g1-110"></use>
+<use x="10.7008" y="-16.226626" href="#tz_topologias_g1-116"></use>
+<use x="14.826941" y="-16.226626" href="#tz_topologias_g1-111"></use>
+</g>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<path d="M-31.29819 0H31.29819" fill="none"></path>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M-18.49411 17.07181C-18.49411 21.00035-21.67874 24.18498-25.60728 24.18498C-29.53583 24.18498-32.72046 21.00035-32.72046 17.07181C-32.72046 13.14326-29.53583 9.95863-25.60728 9.95863C-21.67874 9.95863-18.49411 13.14326-18.49411 17.07181ZM-25.60728 17.07181"></path>
+</g>
+</g>
+<g transform="translate(-25.60728,17.07181)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g stroke-width="0.4">
+<g stroke-dasharray="3.0,3.0" stroke-dashoffset="0.0">
+<path d="M-25.60728 17.07181V0" fill="none"></path>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M-1.42273 17.07181C-1.42273 21.00035-4.60736 24.18498-8.5359 24.18498C-12.46445 24.18498-15.64908 21.00035-15.64908 17.07181C-15.64908 13.14326-12.46445 9.95863-8.5359 9.95863C-4.60736 9.95863-1.42273 13.14326-1.42273 17.07181ZM-8.5359 17.07181"></path>
+</g>
+</g>
+<g transform="translate(-8.5359,17.07181)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g stroke-width="0.4">
+<g stroke-dasharray="3.0,3.0" stroke-dashoffset="0.0">
+<path d="M-8.5359 17.07181V0" fill="none"></path>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M15.64908 17.07181C15.64908 21.00035 12.46445 24.18498 8.5359 24.18498C4.60736 24.18498 1.42273 21.00035 1.42273 17.07181C1.42273 13.14326 4.60736 9.95863 8.5359 9.95863C12.46445 9.95863 15.64908 13.14326 15.64908 17.07181ZM8.5359 17.07181"></path>
+</g>
+</g>
+<g transform="translate(8.5359,17.07181)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g stroke-width="0.4">
+<g stroke-dasharray="3.0,3.0" stroke-dashoffset="0.0">
+<path d="M8.5359 17.07181V0" fill="none"></path>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M32.72046 17.07181C32.72046 21.00035 29.53583 24.18498 25.60728 24.18498C21.67874 24.18498 18.49411 21.00035 18.49411 17.07181C18.49411 13.14326 21.67874 9.95863 25.60728 9.95863C29.53583 9.95863 32.72046 13.14326 32.72046 17.07181ZM25.60728 17.07181"></path>
+</g>
+</g>
+<g transform="translate(25.60728,17.07181)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g stroke-width="0.4">
+<g stroke-dasharray="3.0,3.0" stroke-dashoffset="0.0">
+<path d="M25.60728 17.07181V0" fill="none"></path>
+</g>
+</g>
+</g>
+<g transform="translate(74.6756,42.39955)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none">
+<use x="-35.217483" y="-16.226626" href="#tz_topologias_g1-69"></use>
+<use x="-28.254795" y="-16.226626" href="#tz_topologias_g1-115"></use>
+<use x="-24.069695" y="-16.226626" href="#tz_topologias_g1-116"></use>
+<use x="-19.943554" y="-16.226626" href="#tz_topologias_g1-114"></use>
+<use x="-15.566928" y="-16.226626" href="#tz_topologias_g1-101"></use>
+<use x="-10.698423" y="-16.226626" href="#tz_topologias_g1-108"></use>
+<use x="-7.751175" y="-16.226626" href="#tz_topologias_g1-97"></use>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#3fb618">
+<g fill="#e3f5dd">
+<g stroke="#3fb618">
+<g fill="#e3f5dd">
+<path d="M98.58453 19.91673H83.51291C82.96062 19.91673 82.51291 19.46902 82.51291 18.91673V3.84511C82.51291 3.29282 82.96062 2.84511 83.51291 2.84511H98.58453C99.13683 2.84511 99.58453 3.29282 99.58453 3.84511V18.91673C99.58453 19.46902 99.13683 19.91673 98.58453 19.91673ZM82.51291 2.84511"></path>
+</g>
+</g>
+<g transform="translate(84.32362,8.6476)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none">
+<use x="-35.217483" y="-16.226626" href="#tz_topologias_g0-83"></use>
+<use x="-30.512835" y="-16.226626" href="#tz_topologias_g0-87"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M98.1619 25.60728C98.1619 29.53583 94.97726 32.72046 91.04872 32.72046S83.93555 29.53583 83.93555 25.60728C83.93555 21.67874 87.12018 18.49411 91.04872 18.49411S98.1619 21.67874 98.1619 25.60728ZM91.04872 25.60728"></path>
+</g>
+</g>
+<g transform="translate(91.04872,25.60728)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<path d="M91.04872 20.11673V18.29411" fill="none"></path>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M73.80801 7.91289C73.80801 11.84143 70.62338 15.02606 66.69484 15.02606S59.58167 11.84143 59.58167 7.91289C59.58167 3.98434 62.7663 .79971 66.69484 .79971S73.80801 3.98434 73.80801 7.91289ZM66.69484 7.91289"></path>
+</g>
+</g>
+<g transform="translate(66.69484,7.91289)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<path d="M82.31291 10.13713L73.9347 8.94376" fill="none"></path>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M83.11064-20.71654C83.11064-16.788 79.92601-13.60336 75.99747-13.60336C72.06892-13.60336 68.8843-16.788 68.8843-20.71654S72.06892-27.82971 75.99747-27.82971C79.92601-27.82971 83.11064-24.64508 83.11064-20.71654ZM75.99747-20.71654"></path>
+</g>
+</g>
+<g transform="translate(75.99747,-20.71654)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<path d="M86.95302 2.64511L79.10213-14.09534" fill="none"></path>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M113.21315-20.71654C113.21315-16.788 110.02852-13.60336 106.09998-13.60336C102.17143-13.60336 98.9868-16.788 98.9868-20.71654S102.17143-27.82971 106.09998-27.82971C110.02852-27.82971 113.21315-24.64508 113.21315-20.71654ZM106.09998-20.71654"></path>
+</g>
+</g>
+<g transform="translate(106.09998,-20.71654)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<path d="M95.14442 2.64511L102.99532-14.09534" fill="none"></path>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M122.51578 7.91289C122.51578 11.84143 119.33115 15.02606 115.4026 15.02606C111.47406 15.02606 108.28943 11.84143 108.28943 7.91289C108.28943 3.98434 111.47406 .79971 115.4026 .79971C119.33115 .79971 122.51578 3.98434 122.51578 7.91289ZM115.4026 7.91289"></path>
+</g>
+</g>
+<g transform="translate(115.4026,7.91289)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<path d="M99.78453 10.13713L108.16275 8.94376" fill="none"></path>
+</g>
+</g>
+<g transform="translate(171.19864,42.39955)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none">
+<use x="-35.217483" y="-16.226626" href="#tz_topologias_g1-65"></use>
+<use x="-27.211478" y="-16.226626" href="#tz_topologias_g1-110"></use>
+<use x="-21.31699" y="-16.226626" href="#tz_topologias_g1-101"></use>
+<use x="-16.448485" y="-16.226626" href="#tz_topologias_g1-108"></use>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M189.21063 24.185C189.21063 28.11354 186.026 31.29817 182.09746 31.29817C178.16891 31.29817 174.98428 28.11354 174.98428 24.185C174.98428 20.25645 178.16891 17.07182 182.09746 17.07182C186.026 17.07182 189.21063 20.25645 189.21063 24.185ZM182.09746 24.185"></path>
+</g>
+</g>
+<g transform="translate(182.09746,24.185)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M166.20914 7.47353C166.20914 11.40207 163.0245 14.5867 159.09596 14.5867S151.98279 11.40207 151.98279 7.47353C151.98279 3.54498 155.16742 .36035 159.09596 .36035S166.20914 3.54498 166.20914 7.47353ZM159.09596 7.47353"></path>
+</g>
+</g>
+<g transform="translate(159.09596,7.47353)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M174.99512-19.56602C174.99512-15.63748 171.81049-12.45285 167.88194-12.45285C163.9534-12.45285 160.76877-15.63748 160.76877-19.56602C160.76877-23.49457 163.9534-26.6792 167.88194-26.6792C171.81049-26.6792 174.99512-23.49457 174.99512-19.56602ZM167.88194-19.56602"></path>
+</g>
+</g>
+<g transform="translate(167.88194,-19.56602)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M203.42615-19.56602C203.42615-15.63748 200.24152-12.45285 196.31297-12.45285C192.38443-12.45285 189.1998-15.63748 189.1998-19.56602C189.1998-23.49457 192.38443-26.6792 196.31297-26.6792C200.24152-26.6792 203.42615-23.49457 203.42615-19.56602ZM196.31297-19.56602"></path>
+</g>
+</g>
+<g transform="translate(196.31297,-19.56602)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M212.21213 7.47353C212.21213 11.40207 209.0275 14.5867 205.09895 14.5867C201.17041 14.5867 197.98578 11.40207 197.98578 7.47353C197.98578 3.54498 201.17041 .36035 205.09895 .36035C209.0275 .36035 212.21213 3.54498 212.21213 7.47353ZM205.09895 7.47353"></path>
+</g>
+</g>
+<g transform="translate(205.09895,7.47353)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<path d="M176.18106 19.88644L165.01247 11.77197M161.35588 .51834L165.62202-12.61084M175.19511-19.56602H188.9998M198.57289-12.61084L202.83904 .51834M199.18256 11.77208L188.01396 19.88655" fill="none"></path>
+</g>
+</g>
+<g transform="translate(258.48502,42.39955)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none">
+<use x="-35.217483" y="-16.226626" href="#tz_topologias_g1-77"></use>
+<use x="-25.160854" y="-16.226626" href="#tz_topologias_g1-97"></use>
+<use x="-20.00318" y="-16.226626" href="#tz_topologias_g1-108"></use>
+<use x="-17.055931" y="-16.226626" href="#tz_topologias_g1-104"></use>
+<use x="-11.161443" y="-16.226626" href="#tz_topologias_g1-97"></use>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M280.2598 24.185C280.2598 28.11354 277.07516 31.29817 273.14662 31.29817S266.03345 28.11354 266.03345 24.185C266.03345 20.25645 269.21808 17.07182 273.14662 17.07182S280.2598 20.25645 280.2598 24.185ZM273.14662 24.185"></path>
+</g>
+</g>
+<g transform="translate(273.14662,24.185)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M259.31532-12.0925C259.31532-8.16396 256.13069-4.97932 252.20215-4.97932C248.2736-4.97932 245.08897-8.16396 245.08897-12.0925S248.2736-19.20567 252.20215-19.20567C256.13069-19.20567 259.31532-16.02104 259.31532-12.0925ZM252.20215-12.0925"></path>
+</g>
+</g>
+<g transform="translate(252.20215,-12.0925)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M301.20427-12.0925C301.20427-8.16396 298.01964-4.97932 294.0911-4.97932C290.16255-4.97932 286.97792-8.16396 286.97792-12.0925S290.16255-19.20567 294.0911-19.20567C298.01964-19.20567 301.20427-16.02104 301.20427-12.0925ZM294.0911-12.0925"></path>
+</g>
+</g>
+<g transform="translate(294.0911,-12.0925)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<g stroke="#6c757d">
+<g fill="#e5f0fc">
+<path d="M280.2598 0C280.2598 3.92854 277.07516 7.11317 273.14662 7.11317S266.03345 3.92854 266.03345 0S269.21808-7.11317 273.14662-7.11317S280.2598-3.92854 280.2598 0ZM273.14662 0"></path>
+</g>
+</g>
+<g transform="translate(273.14662,0.0)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-35.217483,-16.226626)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<path d="M269.49016 17.8517L255.85861-5.7592M259.51532-12.0925H286.77792M290.43463-5.7592L276.80309 17.8517" fill="none"></path>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<path d="M273.14662 7.31317V16.87183M266.81332-3.65646L258.53545-8.43604M279.47992-3.65646L287.7578-8.43604" fill="none"></path>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-topologias-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.1: As quatro topologias clássicas. No provedor convivem todas: <strong>estrela</strong> no acesso, <strong>anel</strong> no <em>backbone</em> metropolitano e <strong>malha</strong> (parcial) no núcleo para redundância.
+</figcaption>
+</figure>
+</div>
+<ul>
+<li><strong>Barramento</strong> — um meio compartilhado por todos. Simples e barato, mas uma falha no cabo derruba tudo e as colisões limitam a escala. Praticamente extinto em LAN cabeada moderna, mas o conceito sobrevive no <strong>meio compartilhado</strong> do rádio ponto-multiponto e do <em>downstream</em> PON.</li>
+<li><strong>Estrela</strong> — todos ligam a um nó central (switch/OLT). Domina a LAN e o acesso: falha de um <em>braço</em> não afeta os demais, e o ponto central facilita gerência. O risco é o <strong>ponto único de falha</strong> no centro.</li>
+<li><strong>Anel</strong> — cada nó liga a dois vizinhos, formando um laço. Permite <strong>dois caminhos</strong> (horário/anti-horário); se um trecho rompe, o tráfego inverte o sentido. É a topologia preferida do <em>backbone</em> de ISP (capítulo <span class="quarto-unresolved-ref">?sec-redundancia</span>), normalmente com proteção tipo <strong>ERPS</strong> ou anel óptico.</li>
+<li><strong>Malha</strong> — nós interligados por vários caminhos. Máxima resiliência e custo; usada parcialmente no <strong>núcleo</strong> e entre POPs principais.</li>
+</ul>
+</section>
+<section id="sec-topologia-arvore" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="sec-topologia-arvore"><span class="header-section-number">5.4</span> Topologias em árvore e híbridas</h2>
+<p>A maioria das redes reais é <strong>híbrida</strong>. A planta de um provedor de fibra é, na essência, uma <strong>árvore</strong>: o núcleo em anel/malha; de cada POP saem OLTs; de cada <strong>porta PON</strong> sai uma fibra que se ramifica em <strong>splitters</strong> (1:8, 1:16…) até as CTOs e ONTs. Essa hierarquia em árvore é o que torna a PON econômica — <strong>uma única porta da OLT atende dezenas de assinantes</strong> —, ao custo de compartilhar banda e de uma falha no tronco afetar toda a sub-árvore abaixo.</p>
+</section>
+<section id="sec-duplex" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="sec-duplex"><span class="header-section-number">5.5</span> Direção do fluxo: simplex, half e full-duplex</h2>
+<p>Outra dimensão é <strong>quem transmite quando</strong>:</p>
+<ul>
+<li><strong>Simplex</strong> — só um sentido (ex.: difusão de TV).</li>
+<li><strong>Half-duplex</strong> — os dois sentidos, mas <strong>um de cada vez</strong> (rádios antigos, hubs; o meio compartilhado do PON <em>upstream</em> é arbitrado para evitar colisão).</li>
+<li><strong>Full-duplex</strong> — ambos os sentidos <strong>simultaneamente</strong> (Ethernet por switch, fibra com comprimentos de onda separados para <em>down</em> e <em>up</em>).</li>
+</ul>
+<p>Em GPON, <em>downstream</em> e <em>upstream</em> usam <strong>comprimentos de onda diferentes</strong> (1490 nm e 1310 nm) na mesma fibra — full-duplex por <strong>WDM</strong> —, mas o <em>upstream</em> ainda é <strong>compartilhado no tempo (TDMA)</strong> entre as ONTs.</p>
+<div class="callout-provedor">
+<p><strong>Na prática do provedor</strong></p>
+<p>A escolha de topologia mistura <strong>custo, resiliência e SLA</strong>:</p>
+<ul>
+<li><strong>Acesso (PON)</strong>: árvore/estrela é imbatível em custo por cliente, mas planeje a <strong>taxa de divisão</strong> (ex.: 1:64) sabendo que aquela porta da OLT é um domínio compartilhado — <em>overbooking</em> mal calculado vira lentidão no horário de pico.</li>
+<li><strong>Backbone</strong>: use <strong>anel de fibra</strong> entre os POPs principais. Um rompimento de cabo (a causa nº 1 de <em>downtime</em> — retroescavadeira!) não derruba a cidade, porque o anel reconverge pelo outro lado em milissegundos.</li>
+<li><strong>Clientes corporativos com SLA</strong>: ofereça <strong>dupla abordagem</strong> (duas fibras por caminhos físicos distintos) — é venda de topologia em malha em escala pequena.</li>
+</ul>
+</div>
+</section>
+<section id="sec-resumo-04" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="sec-resumo-04"><span class="header-section-number">5.6</span> Resumo e checklist</h2>
+<ul>
+<li>Classifique por alcance (<strong>PAN/LAN/MAN/WAN</strong>) e por função (<strong>acesso</strong> vs. <strong>núcleo</strong>).</li>
+<li><strong>Topologia física ≠ lógica</strong> — PON é árvore física, ponto-multiponto lógico.</li>
+<li><strong>Estrela</strong> no acesso, <strong>anel</strong> no <em>backbone</em>, <strong>malha</strong> no núcleo: cada uma troca custo por resiliência.</li>
+<li>Conheça o <strong>duplex</strong> do seu meio — em GPON é WDM (down/up por λ) com <em>upstream</em> compartilhado por tempo.</li>
+</ul>
+<p><strong>Checklist do capítulo</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox">Sei distinguir rede de acesso de rede de núcleo no meu projeto.</label></li>
+<li><label><input type="checkbox">Explico por que PON é árvore física e ponto-multiponto lógico.</label></li>
+<li><label><input type="checkbox">Justifico anel no <em>backbone</em> pela tolerância a rompimento de cabo.</label></li>
+<li><label><input type="checkbox">Entendo o impacto do meio compartilhado na taxa de divisão (<em>overbooking</em>).</label></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../capitulos/03-modelo-tcpip-pilha.html" class="pagination-link" aria-label="O Modelo TCP/IP, a Pilha de Protocolos e o Encapsulamento">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">O Modelo TCP/IP, a Pilha de Protocolos e o Encapsulamento</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../capitulos/05-meios-transmissao.html" class="pagination-link" aria-label="Meios de Transmissão">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Meios de Transmissão</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/04-tipos-topologias.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>
