@@ -2,6 +2,178 @@
 title: "Introdução às Redes de Computadores"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## O que é uma rede e por que ela importa {#sec-o-que-e-rede}
+
+Uma **rede de computadores** é um conjunto de dispositivos (computadores,
+celulares, servidores, roteadores, OLTs, antenas) interligados por um **meio de
+transmissão** — um cabo metálico, uma fibra óptica ou o ar — que trocam
+informação seguindo **regras combinadas**, os *protocolos*. Reduzido ao osso, uma
+rede existe para resolver um único problema: **levar um bit de um ponto a outro de
+forma confiável e a um custo aceitável**, e repetir isso bilhões de vezes por
+segundo.
+
+Para um **provedor de internet (ISP)** essa definição não é abstrata: é o próprio
+negócio. Quando um assinante na zona rural assiste a um vídeo, o quadro de imagem
+sai de um servidor de conteúdo em algum *datacenter*, atravessa a internet pública,
+entra na sua rede pelo **trânsito IP** ou por um **IX** (ponto de troca de
+tráfego), desce pelo *backbone* até a **OLT**, percorre a fibra óptica passando por
+**splitters** e **CTOs**, chega à **ONT** na casa do cliente — ou, onde não há
+fibra, salta de uma torre por **rádio** até a antena no telhado. Cada um desses
+saltos é uma rede, e o manual inteiro é sobre como cada um funciona.
+
+## Comunicação: do sinal ao serviço {#sec-comunicacao}
+
+Toda comunicação tem três elementos: um **emissor**, um **receptor** e um **meio**
+que os liga. Sobre o meio trafega um **sinal** — variação de tensão no cobre, pulso
+de luz na fibra, onda eletromagnética no rádio — que carrega **dados** organizados
+em **bits**. O que transforma um amontoado de bits em algo útil (uma página, uma
+chamada de voz, um boleto) é a **pilha de protocolos**, que veremos em detalhe nos
+capítulos @sec-osi-introducao (modelo OSI) e seguintes.
+
+A figura a seguir mostra, de forma simplificada, o caminho fim a fim de um pacote
+na rede de um provedor — da internet até o assinante. É o mapa mental que vamos
+detalhar parte por parte ao longo do livro.
+
+::: {#fig-visao-geral-rede}
+```{.tikz}
+%%| filename: visao-geral-rede
+%%| alt: Caminho de um pacote da internet até o assinante, passando por trânsito/IX, backbone, OLT, splitter, CTO e ONT
+\begin{tikzpicture}[
+    node distance=8mm,
+    box/.style={draw=manualgray, rounded corners=2pt, minimum height=8mm,
+                minimum width=15mm, align=center, font=\small},
+    nuvem/.style={draw=manualblue, fill=manualblue!8, rounded corners=6pt,
+                  minimum width=24mm, minimum height=12mm, align=center, font=\small},
+  ]
+  \node[nuvem] (net) {Internet};
+  \node[box, right=10mm of net] (borda) {Borda\\(trânsito/IX)};
+  \node[box, right=of borda] (back) {Backbone\\(roteadores)};
+  \node[box, right=of back] (olt) {OLT};
+  \node[box, manualgreen, right=of olt] (split) {Splitter};
+  \node[box, right=of split] (cto) {CTO};
+  \node[box, manualred, right=of cto] (ont) {ONT\\(cliente)};
+
+  \draw[vetor, manualblue] (net) -- (borda);
+  \draw[vetor] (borda) -- (back);
+  \draw[vetor] (back) -- (olt);
+  \draw[vetor] (olt) -- (split);
+  \draw[vetor] (split) -- (cto);
+  \draw[vetor, manualred] (cto) -- (ont);
+
+  \node[font=\footnotesize\itshape, manualgray, below=2mm of back] {núcleo do ISP};
+  \node[font=\footnotesize\itshape, manualgray, below=2mm of split] {rede óptica (PON)};
+\end{tikzpicture}
+```
+Visão geral do caminho fim a fim na rede de um provedor: da internet pública,
+pela borda e pelo *backbone*, até a planta óptica (OLT → splitter → CTO → ONT).
 :::
+
+## Os papéis na rede: cliente, servidor, peer {#sec-papeis}
+
+Quem fala com quem? Há dois modelos básicos:
+
+- **Cliente–servidor**: um lado (o **cliente**) pede, o outro (o **servidor**)
+  responde. É o modelo da web (navegador ↔ servidor HTTP), do DNS recursivo do
+  provedor, do RADIUS que autentica o PPPoE do assinante. A inteligência e os
+  dados ficam concentrados no servidor.
+- **Ponto a ponto (P2P)**: os dispositivos têm papéis simétricos e conversam
+  diretamente. Protocolos de roteamento como o **BGP** entre dois provedores são,
+  em essência, uma conversa entre *peers* iguais.
+
+Na prática esses modelos se misturam: o roteador do cliente é servidor DHCP para a
+casa, mas é cliente PPPoE perante o **BNG** do provedor.
+
+## Comutação: circuitos vs. pacotes {#sec-comutacao}
+
+Como o meio é compartilhado por muitas conversas, é preciso decidir **como dividi-lo**.
+Existem duas filosofias históricas:
+
+| Critério | Comutação de circuitos | Comutação de pacotes |
+|---|---|---|
+| Analogia | Telefonia antiga | Correio / encomendas |
+| Recurso | Caminho dedicado reservado | Compartilhado sob demanda |
+| Eficiência | Baixa (reserva ociosa) | Alta (estatística) |
+| Atraso | Constante | Variável (*jitter*) |
+| Exemplo | RDSI, voz TDM legada | **Toda a internet (IP)** |
+
+A internet — e portanto a rede do provedor — é **comutada por pacotes**: a
+informação é fatiada em **pacotes** que viajam de forma independente e são
+remontados no destino. Isso permite que milhares de assinantes compartilhem o mesmo
+*backbone* sem reservar capacidade fixa para cada um. O preço a pagar é a
+**variabilidade**: pacotes podem chegar fora de ordem, atrasados ou se perder — e
+boa parte deste manual (camadas de enlace, rede e transporte) trata exatamente de
+domar essa variabilidade.
+
+## Protocolos, padrões e por que eles existem {#sec-protocolos-padroes}
+
+Um **protocolo** é um acordo sobre **formato** (como os bits são organizados),
+**significado** (o que cada campo quer dizer) e **temporização** (quem fala quando)
+de uma comunicação. Sem padrões abertos, equipamentos de fabricantes diferentes não
+conversariam — uma OLT da marca X não falaria com uma ONT da marca Y. Por isso
+existem organismos como **IETF** (RFCs da internet: IP, TCP, BGP, DNS), **IEEE**
+(Ethernet 802.3 [@ieee8023], Wi-Fi 802.11), **ITU-T** (GPON, no padrão G.984
+[@itu_g984]) e, no Brasil, a **Anatel**, que regula o uso do espectro de rádio e o
+serviço de telecom. Para um tratamento didático completo dos fundamentos, ver
+também [@kurose2021] e [@tanenbaum2021].
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+Um ISP típico de cidade pequena opera, simultaneamente, **várias gerações de
+tecnologia e vários organismos de padrão**: a planta de fibra segue ITU-T (GPON);
+os *switches* do *backbone* seguem IEEE (Ethernet/VLAN); o roteamento com as
+operadoras de trânsito segue IETF (BGP); e o rádio rural depende de homologação
+Anatel na faixa de 5 GHz. Saber **qual padrão rege qual parte** evita compras
+erradas e incompatibilidades — por exemplo, misturar ONTs GPON em uma rede
+EPON simplesmente não funciona, porque são padrões diferentes (ITU-T vs. IEEE).
+:::
+
+## Largura de banda, vazão e "velocidade" {#sec-banda-vazao}
+
+No marketing fala-se em "velocidade da internet", mas tecnicamente há três coisas
+distintas que o capítulo @sec-grandezas detalha:
+
+- **Largura de banda (capacidade)**: o máximo teórico do enlace, em **bits por
+  segundo** (Mbps, Gbps). Um plano "500 Mega" é uma capacidade contratada.
+- **Vazão (*throughput*)**: o que de fato se consegue transferir, sempre ≤ banda,
+  reduzida por *overhead* de protocolos, congestionamento e perdas.
+- **Latência**: o tempo que um bit leva para ir e voltar (ida e volta = RTT). Não
+  tem relação direta com banda — um enlace de satélite pode ter banda alta e
+  latência péssima.
+
+Para o assinante que joga *online*, **latência baixa e estável** importa mais que
+banda bruta; para quem baixa arquivos grandes, é o contrário. O provedor precisa
+entregar os dois.
+
+## Como este manual está organizado {#sec-organizacao}
+
+O livro sobe a "pilha" e depois mergulha na planta do provedor:
+
+- **Partes I–III** — fundamentos, modelos (OSI, TCP/IP), camada física e de enlace.
+- **Partes IV–V** — endereçamento IP, sub-redes/CIDR, roteamento, transporte e
+  aplicação (o "cérebro lógico" da rede).
+- **Partes VI–VIII** — o coração do provedor de fibra: PON/FTTx, planta externa e
+  medição óptica.
+- **Parte IX** — rádio para áreas rurais.
+- **Partes X–XII** — operação de ISP (BNG, RADIUS, BGP), segurança e tópicos
+  avançados.
+
+Você pode pular direto para a fibra (Parte VI) se já domina os fundamentos, mas as
+pontes conceituais entre as partes são justamente o que separa quem "configura por
+receita" de quem **entende a rede**.
+
+## Resumo e checklist {#sec-resumo-01}
+
+- Rede = dispositivos + meio + **protocolos**; o objetivo é levar bits de forma
+  confiável e econômica.
+- A internet (e o ISP) é **comutada por pacotes**: eficiente, porém variável.
+- Distinga **banda**, **vazão** e **latência** — são coisas diferentes.
+- Padrões abertos (IETF, IEEE, ITU-T) e regulação (Anatel) garantem
+  interoperabilidade; saiba **qual rege cada parte** da sua rede.
+
+**Checklist do capítulo**
+
+- [ ] Sei explicar a diferença entre comutação de circuitos e de pacotes.
+- [ ] Identifico os papéis cliente/servidor/*peer* na minha rede.
+- [ ] Distingo banda contratada de vazão real e de latência.
+- [ ] Sei a qual organismo de padrão pertence cada tecnologia que opero.

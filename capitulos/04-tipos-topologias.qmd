@@ -2,6 +2,143 @@
 title: "Tipos de Rede e Topologias"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Classificação por alcance: PAN, LAN, MAN, WAN {#sec-tipos-alcance}
+
+Redes são tradicionalmente classificadas pela **abrangência geográfica**, e cada
+faixa tem tecnologias e donos típicos diferentes:
+
+| Tipo | Alcance | Exemplo no mundo do ISP |
+|---|---|---|
+| **PAN** | Pessoal (metros) | Bluetooth, USB |
+| **LAN** | Prédio/casa | Rede interna do cliente, NOC, *datacenter* do POP |
+| **MAN** | Cidade | *Backbone* metropolitano do provedor (anéis de fibra) |
+| **WAN** | Regional/nacional | Trânsito IP, enlaces entre cidades, conexão ao IX |
+
+Para o provedor, a distinção prática mais importante é entre **rede de acesso**
+(o que liga o assinante: PON, rádio) e **rede de transporte/núcleo** (o que liga os
+POPs entre si e à internet: anéis MAN/WAN). São projetadas com objetivos opostos:
+o acesso prioriza **custo por assinante**; o núcleo prioriza **capacidade e
+redundância**.
+
+## Topologia física vs. lógica {#sec-topologia-fisica-logica}
+
+Um ponto que confunde iniciantes: a **topologia física** (como os cabos estão
+fisicamente dispostos) pode diferir da **topologia lógica** (como os dados de fato
+fluem). Uma rede fisicamente em **estrela** (todos os cabos vão a um switch) pode
+ser logicamente um **barramento** (todos no mesmo domínio de *broadcast*). Em PON,
+isso é gritante: fisicamente é uma **árvore** (OLT → splitter → várias ONTs), mas
+**logicamente é ponto-multiponto compartilhado** — todas as ONTs ouvem o mesmo
+sinal *downstream*, e a OLT arbitra o *upstream* por tempo (capítulo @sec-gpon).
+
+## As topologias clássicas {#sec-topologias-classicas}
+
+::: {#fig-topologias}
+```{.tikz}
+%%| filename: topologias
+%%| alt: Topologias barramento, estrela, anel e malha lado a lado
+\begin{tikzpicture}[font=\footnotesize,
+    n/.style={draw=manualgray, circle, fill=manualblue!12, minimum size=5mm, inner sep=0pt},
+    c/.style={draw=manualgreen, fill=manualgreen!15, rounded corners=1pt, minimum size=6mm, inner sep=1pt},
+  ]
+  % Barramento
+  \node[font=\small\bfseries] at (0,1.6) {Barramento};
+  \draw[curva] (-1.1,0) -- (1.1,0);
+  \foreach \x in {-0.9,-0.3,0.3,0.9}{ \node[n] at (\x,0.6) {}; \draw[auxiliar] (\x,0.6) -- (\x,0); }
+
+  % Estrela
+  \begin{scope}[xshift=3.2cm]
+    \node[font=\small\bfseries] at (0,1.6) {Estrela};
+    \node[c] (h) at (0,0.4) {SW};
+    \foreach \a in {90,162,234,306,18}{ \node[n] (s\a) at (\a:0.9) {}; \draw[curva] (h) -- (s\a); }
+  \end{scope}
+
+  % Anel
+  \begin{scope}[xshift=6.4cm]
+    \node[font=\small\bfseries] at (0,1.6) {Anel};
+    \foreach \a in {90,162,234,306,18}{ \node[n] (r\a) at (\a:0.85) {}; }
+    \draw[curva] (r90)--(r162)--(r234)--(r306)--(r18)--(r90);
+  \end{scope}
+
+  % Malha
+  \begin{scope}[xshift=9.6cm]
+    \node[font=\small\bfseries] at (0,1.6) {Malha};
+    \foreach \a in {90,210,330}{ \node[n] (m\a) at (\a:0.85) {}; }
+    \node[n] (mc) at (0,0) {};
+    \draw[curva] (m90)--(m210)--(m330)--(m90);
+    \draw[curva] (mc)--(m90) (mc)--(m210) (mc)--(m330);
+  \end{scope}
+\end{tikzpicture}
+```
+As quatro topologias clássicas. No provedor convivem todas: **estrela** no acesso,
+**anel** no *backbone* metropolitano e **malha** (parcial) no núcleo para
+redundância.
 :::
+
+- **Barramento** — um meio compartilhado por todos. Simples e barato, mas uma falha
+  no cabo derruba tudo e as colisões limitam a escala. Praticamente extinto em LAN
+  cabeada moderna, mas o conceito sobrevive no **meio compartilhado** do rádio
+  ponto-multiponto e do *downstream* PON.
+- **Estrela** — todos ligam a um nó central (switch/OLT). Domina a LAN e o acesso:
+  falha de um *braço* não afeta os demais, e o ponto central facilita gerência. O
+  risco é o **ponto único de falha** no centro.
+- **Anel** — cada nó liga a dois vizinhos, formando um laço. Permite **dois
+  caminhos** (horário/anti-horário); se um trecho rompe, o tráfego inverte o
+  sentido. É a topologia preferida do *backbone* de ISP (capítulo
+  @sec-redundancia), normalmente com proteção tipo **ERPS** ou anel óptico.
+- **Malha** — nós interligados por vários caminhos. Máxima resiliência e custo;
+  usada parcialmente no **núcleo** e entre POPs principais.
+
+## Topologias em árvore e híbridas {#sec-topologia-arvore}
+
+A maioria das redes reais é **híbrida**. A planta de um provedor de fibra é, na
+essência, uma **árvore**: o núcleo em anel/malha; de cada POP saem OLTs; de cada
+**porta PON** sai uma fibra que se ramifica em **splitters** (1:8, 1:16…) até as
+CTOs e ONTs. Essa hierarquia em árvore é o que torna a PON econômica — **uma única
+porta da OLT atende dezenas de assinantes** —, ao custo de compartilhar banda e de
+uma falha no tronco afetar toda a sub-árvore abaixo.
+
+## Direção do fluxo: simplex, half e full-duplex {#sec-duplex}
+
+Outra dimensão é **quem transmite quando**:
+
+- **Simplex** — só um sentido (ex.: difusão de TV).
+- **Half-duplex** — os dois sentidos, mas **um de cada vez** (rádios antigos, hubs;
+  o meio compartilhado do PON *upstream* é arbitrado para evitar colisão).
+- **Full-duplex** — ambos os sentidos **simultaneamente** (Ethernet por switch,
+  fibra com comprimentos de onda separados para *down* e *up*).
+
+Em GPON, *downstream* e *upstream* usam **comprimentos de onda diferentes**
+(1490 nm e 1310 nm) na mesma fibra — full-duplex por **WDM** —, mas o *upstream*
+ainda é **compartilhado no tempo (TDMA)** entre as ONTs.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+A escolha de topologia mistura **custo, resiliência e SLA**:
+
+- **Acesso (PON)**: árvore/estrela é imbatível em custo por cliente, mas planeje
+  a **taxa de divisão** (ex.: 1:64) sabendo que aquela porta da OLT é um domínio
+  compartilhado — *overbooking* mal calculado vira lentidão no horário de pico.
+- **Backbone**: use **anel de fibra** entre os POPs principais. Um rompimento de
+  cabo (a causa nº 1 de *downtime* — retroescavadeira!) não derruba a cidade,
+  porque o anel reconverge pelo outro lado em milissegundos.
+- **Clientes corporativos com SLA**: ofereça **dupla abordagem** (duas fibras por
+  caminhos físicos distintos) — é venda de topologia em malha em escala pequena.
+:::
+
+## Resumo e checklist {#sec-resumo-04}
+
+- Classifique por alcance (**PAN/LAN/MAN/WAN**) e por função (**acesso** vs.
+  **núcleo**).
+- **Topologia física ≠ lógica** — PON é árvore física, ponto-multiponto lógico.
+- **Estrela** no acesso, **anel** no *backbone*, **malha** no núcleo: cada uma
+  troca custo por resiliência.
+- Conheça o **duplex** do seu meio — em GPON é WDM (down/up por λ) com *upstream*
+  compartilhado por tempo.
+
+**Checklist do capítulo**
+
+- [ ] Sei distinguir rede de acesso de rede de núcleo no meu projeto.
+- [ ] Explico por que PON é árvore física e ponto-multiponto lógico.
+- [ ] Justifico anel no *backbone* pela tolerância a rompimento de cabo.
+- [ ] Entendo o impacto do meio compartilhado na taxa de divisão (*overbooking*).

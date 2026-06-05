@@ -2,12 +2,13 @@ project:
   type: book
   output-dir: _book
 
+lang: pt-BR
+
 book:
   title: "Manual de Redes de Computadores"
   subtitle: "Do básico ao avançado, com foco em redes ópticas (FTTx/PON) e rádio em áreas rurais"
   author: "Provedor de Fibra Óptica"
   date: today
-  lang: pt-BR
   search: true
   repo-url: https://github.com/SEU-USUARIO/manual-redes
   repo-actions: [edit, issue]

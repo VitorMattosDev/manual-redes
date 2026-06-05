@@ -2,6 +2,165 @@
 title: "O Modelo TCP/IP, a Pilha de Protocolos e o Encapsulamento"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Do modelo de referência ao modelo que roda {#sec-tcpip-introducao}
+
+O OSI (capítulo @sec-osi-introducao) é o **mapa conceitual**; o **modelo TCP/IP** é
+o que de fato roda na internet e na sua rede. Ele nasceu da prática (ARPANET,
+décadas de 1970–80) e por isso é mais enxuto: **quatro camadas**. A correspondência
+com o OSI é direta e vale memorizar, porque os dois vocabulários convivem no dia a
+dia.
+
+| TCP/IP (4 camadas) | OSI correspondente | Exemplos |
+|---|---|---|
+| **Aplicação** | 7 + 6 + 5 | HTTP, DNS, DHCP, TLS, SNMP |
+| **Transporte** | 4 | TCP, UDP |
+| **Internet** | 3 | IP, ICMP, (roteamento) |
+| **Acesso à rede** | 2 + 1 | Ethernet, PPPoE, fibra, rádio |
+
+A filosofia do TCP/IP é a **"cintura estreita" (*hourglass*)**: muitos protocolos
+de aplicação em cima, muitas tecnologias de meio embaixo, e **um único IP no
+meio** unindo tudo. É por isso que o mesmo IP roda sobre fibra, rádio, 4G ou
+satélite sem que a aplicação perceba.
+
+::: {#fig-ampulheta-ip}
+```{.tikz}
+%%| filename: ampulheta-ip
+%%| alt: Modelo ampulheta do TCP/IP, com IP na cintura estreita unindo aplicações e meios
+\begin{tikzpicture}[font=\small]
+  % topo: aplicações
+  \fill[manualblue!12] (-3.2,2.6) -- (3.2,2.6) -- (0.8,0.8) -- (-0.8,0.8) -- cycle;
+  \draw[manualgray] (-3.2,2.6) -- (3.2,2.6) -- (0.8,0.8) -- (-0.8,0.8) -- cycle;
+  \node at (0,2.15) {HTTP \quad DNS \quad SMTP \quad SNMP};
+  \node[font=\footnotesize, manualgray] at (0,1.4) {muitas aplicações};
+
+  % cintura: IP
+  \fill[manualgreen!18] (-0.8,0.8) rectangle (0.8,-0.8);
+  \draw[manualgray] (-0.8,0.8) rectangle (0.8,-0.8);
+  \node[manualgreen] at (0,0) {\textbf{IP}};
+
+  % base: meios
+  \fill[manualyellow!18] (-3.2,-2.6) -- (3.2,-2.6) -- (0.8,-0.8) -- (-0.8,-0.8) -- cycle;
+  \draw[manualgray] (-3.2,-2.6) -- (3.2,-2.6) -- (0.8,-0.8) -- (-0.8,-0.8) -- cycle;
+  \node[font=\footnotesize, manualgray] at (0,-1.4) {muitos meios};
+  \node at (0,-2.15) {Ethernet \quad PPPoE \quad Fibra \quad Rádio};
+\end{tikzpicture}
+```
+O modelo "ampulheta": o **IP** é a cintura estreita que une qualquer aplicação a
+qualquer meio físico. Trocar fibra por rádio não muda nada acima do IP.
 :::
+
+## TCP e UDP: as duas portas de saída do transporte {#sec-tcpip-transporte}
+
+A camada de transporte multiplexa conversas por **portas** e oferece dois serviços:
+
+- **TCP** — confiável e ordenado. Estabelece conexão (*3-way handshake*),
+  numera bytes, retransmite o que se perde e controla o ritmo (congestionamento).
+  Usado por web, e-mail, SSH, BGP.
+- **UDP** — "dispara e esquece". Sem conexão, sem retransmissão, baixíssimo
+  *overhead*. Usado por DNS, DHCP, voz (VoIP/RTP) e vídeo ao vivo, onde chegar
+  *na hora* vale mais que chegar *completo*.
+
+O capítulo @sec-tcp-udp detalha cada um; aqui basta fixar a escolha de projeto.
+
+## O caminho de um pacote pela pilha {#sec-tcpip-caminho}
+
+Vamos seguir um clique do assinante: ele abre `https://exemplo.com.br`. O que
+acontece, camada por camada, **na máquina do cliente** (envio):
+
+1. **Aplicação** — o navegador resolve o nome via **DNS** (uma consulta UDP ao
+   resolvedor recursivo do provedor) e monta a requisição **HTTP** dentro de
+   **TLS**.
+2. **Transporte** — o TLS/HTTP é colocado em **segmentos TCP**, destino porta
+   **443**, origem uma porta efêmera (ex.: 51324).
+3. **Internet** — cada segmento ganha um **cabeçalho IP**: origem = IP do cliente
+   (ou o IP público após NAT/CGNAT — capítulo @sec-nat-cgnat), destino = IP do
+   servidor. Vira **pacote**.
+4. **Acesso à rede** — o pacote é embrulhado em um **quadro PPPoE/Ethernet** para
+   subir até o **BNG** do provedor, e a OLT/ONT o transporta pela fibra como
+   **luz**.
+
+No caminho, **cada roteador** abre só até a **camada 3**, lê o IP de destino,
+consulta a tabela de rotas e reescreve o cabeçalho de camada 2 para o próximo
+salto. **O conteúdo de transporte e aplicação não é tocado pelos roteadores** —
+essa é a beleza do modelo. No servidor, a pilha sobe na ordem inversa até entregar
+o `GET` à aplicação.
+
+## Encapsulamento e desencapsulamento {#sec-tcpip-encapsulamento}
+
+**Encapsular** é embrulhar a PDU da camada de cima como *payload* da camada de
+baixo, prefixando um cabeçalho. A figura mostra os "embrulhos sucessivos":
+
+::: {#fig-encapsulamento}
+```{.tikz}
+%%| filename: encapsulamento
+%%| alt: Encapsulamento sucessivo: dados HTTP dentro de TCP dentro de IP dentro de Ethernet
+\begin{tikzpicture}[font=\footnotesize, node distance=0pt,
+    h/.style={draw=manualgray, minimum height=8mm, align=center},
+  ]
+  % linha 4 - app
+  \node[h, fill=manualblue!12, minimum width=30mm] (app) at (0,3) {Dados (HTTP)};
+
+  % linha 3 - tcp
+  \node[h, fill=manualgreen!15, minimum width=12mm] (tcph) at (-1.5,2) {TCP};
+  \node[h, fill=manualblue!12, minimum width=30mm, right=0pt of tcph] (tcpd) {Dados (HTTP)};
+
+  % linha 2 - ip
+  \node[h, fill=manualyellow!18, minimum width=12mm] (iph) at (-3.0,1) {IP};
+  \node[h, fill=manualgreen!15, minimum width=12mm, right=0pt of iph] (iph2) {TCP};
+  \node[h, fill=manualblue!12, minimum width=30mm, right=0pt of iph2] (ipd) {Dados (HTTP)};
+
+  % linha 1 - eth
+  \node[h, fill=manualred!12, minimum width=12mm] (ethh) at (-4.5,0) {Eth};
+  \node[h, fill=manualyellow!18, minimum width=12mm, right=0pt of ethh] (ethip) {IP};
+  \node[h, fill=manualgreen!15, minimum width=12mm, right=0pt of ethip] (ethtcp) {TCP};
+  \node[h, fill=manualblue!12, minimum width=30mm, right=0pt of ethtcp] (ethd) {Dados (HTTP)};
+  \node[h, fill=manualred!12, minimum width=10mm, right=0pt of ethd] (fcs) {FCS};
+
+  \node[anchor=west, manualgray] at (3.6,3) {segmento};
+  \node[anchor=west, manualgray] at (3.6,1) {pacote};
+  \node[anchor=west, manualgray] at (5.0,0) {quadro};
+\end{tikzpicture}
+```
+Cada camada embrulha a anterior: os dados HTTP viram *payload* do TCP (segmento),
+que vira *payload* do IP (pacote), que vira *payload* do Ethernet (quadro).
+:::
+
+Esse aninhamento também explica o **MTU** e a **fragmentação**: o quadro Ethernet
+tem um tamanho máximo (tipicamente 1500 bytes de *payload*). Como PPPoE rouba 8
+bytes, a **MSS** do TCP precisa cair (ex.: para 1492) ou o cliente sofre com sites
+que "não abrem" — um problema clássico de provedor tratado no capítulo
+@sec-bng-pppoe.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+O encapsulamento não é teoria — ele **empilha custos de cabeçalho** que o NOC
+precisa conhecer:
+
+- **PPPoE** adiciona 8 bytes; sobre Ethernet (1500), sobra **1492** de MTU. Se o
+  *MSS clamping* não estiver configurado no BNG, clientes reclamam que "alguns
+  sites travam" (pacotes grandes com *Don't Fragment* são descartados).
+- **VLAN 802.1Q** adiciona 4 bytes por *tag*; **Q-in-Q** (duas *tags*), 8. Em
+  redes onde se dá uma VLAN por cliente até a OLT, é preciso garantir
+  *jumbo frames* (MTU 1600+) nos *uplinks* para não fragmentar.
+- Um `ping -f -l <tamanho>` (não fragmentar) é a ferramenta de campo para
+  descobrir o MTU real de ponta a ponta quando um cliente reclama de lentidão
+  seletiva.
+:::
+
+## Resumo e checklist {#sec-resumo-03}
+
+- O TCP/IP tem **4 camadas**; o **IP** é a cintura estreita que une tudo.
+- **TCP** = confiável/ordenado; **UDP** = leve/sem garantias — escolha conforme a
+  aplicação.
+- Um pacote **desce** a pilha ganhando cabeçalhos e **sobe** perdendo-os;
+  roteadores só leem até a **camada 3**.
+- Cada encapsulamento **consome MTU** — PPPoE e VLANs reduzem o *payload* útil e
+  exigem ajuste de MSS/MTU.
+
+**Checklist do capítulo**
+
+- [ ] Mapeio as 4 camadas TCP/IP nas 7 do OSI.
+- [ ] Sei descrever o caminho de um pacote da aplicação até a luz na fibra.
+- [ ] Entendo por que PPPoE/VLAN reduzem o MTU e como isso afeta o cliente.
+- [ ] Sei usar `ping` com *Don't Fragment* para medir MTU fim a fim.

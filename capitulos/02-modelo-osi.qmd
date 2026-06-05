@@ -2,6 +2,165 @@
 title: "O Modelo OSI em Detalhe"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Por que estudar um modelo de camadas {#sec-osi-introducao}
+
+O **modelo OSI** (*Open Systems Interconnection*), publicado pela ISO/ITU-T,
+divide a comunicação em **sete camadas**, cada uma com uma responsabilidade bem
+definida. Ele quase nunca aparece "puro" em um equipamento real — a internet roda
+sobre o modelo TCP/IP (capítulo @sec-tcpip-introducao) —, mas o OSI continua sendo
+a **língua franca** de quem opera redes: quando um técnico diz "o problema é de
+camada 1", "isso é roteamento de camada 3" ou "vamos abrir uma VLAN, é camada 2",
+ele está falando OSI.
+
+A grande ideia é o **encapsulamento em camadas**: cada camada conversa logicamente
+com a **mesma camada** do outro lado, mas fisicamente entrega seus dados para a
+camada de baixo, que adiciona seu próprio cabeçalho. Isso cria **independência** —
+você pode trocar a fibra por rádio (camada 1) sem mexer no IP (camada 3), e trocar
+o IPv4 por IPv6 (camada 3) sem reescrever o navegador (camada 7).
+
+::: {#fig-pilha-osi}
+```{.tikz}
+%%| filename: pilha-osi
+%%| alt: As sete camadas do modelo OSI empilhadas, com a PDU de cada camada e exemplos
+\begin{tikzpicture}[
+    cam/.style={draw=manualgray, minimum width=42mm, minimum height=8mm,
+                align=center, font=\small},
+  ]
+  \node[cam, fill=manualblue!12] (l7) at (0,0)   {7 · Aplicação};
+  \node[cam, fill=manualblue!10] (l6) at (0,-0.9){6 · Apresentação};
+  \node[cam, fill=manualblue!8]  (l5) at (0,-1.8){5 · Sessão};
+  \node[cam, fill=manualgreen!12](l4) at (0,-2.7){4 · Transporte};
+  \node[cam, fill=manualgreen!10](l3) at (0,-3.6){3 · Rede};
+  \node[cam, fill=manualyellow!18](l2) at (0,-4.5){2 · Enlace};
+  \node[cam, fill=manualyellow!28](l1) at (0,-5.4){1 · Física};
+
+  \node[font=\footnotesize, anchor=west] at (2.6,0)   {PDU: dados — HTTP, DNS};
+  \node[font=\footnotesize, anchor=west] at (2.6,-0.9){TLS, codificação};
+  \node[font=\footnotesize, anchor=west] at (2.6,-1.8){sessões, RPC};
+  \node[font=\footnotesize, anchor=west] at (2.6,-2.7){\textbf{segmento} — TCP/UDP};
+  \node[font=\footnotesize, anchor=west] at (2.6,-3.6){\textbf{pacote} — IP, roteamento};
+  \node[font=\footnotesize, anchor=west] at (2.6,-4.5){\textbf{quadro} — Ethernet, MAC};
+  \node[font=\footnotesize, anchor=west] at (2.6,-5.4){\textbf{bits} — fibra, rádio, cobre};
+
+  \draw[vetor, manualred] (-3.0,-5.7) -- (-3.0,0.3) node[midway, left, font=\footnotesize, align=center, rotate=90, anchor=south] {recepção (sobe)};
+  \draw[vetor, manualblue] (-2.6,0.3) -- (-2.6,-5.7);
+  \node[font=\footnotesize, manualblue, left] at (-2.6,-2.7) {};
+\end{tikzpicture}
+```
+As sete camadas do OSI, a **PDU** (unidade de dados) de cada uma e exemplos. No
+envio, os dados descem a pilha ganhando cabeçalhos; na recepção, sobem perdendo-os.
 :::
+
+## A unidade de dados de cada camada (PDU) {#sec-osi-pdu}
+
+Cada camada manipula uma **PDU** (*Protocol Data Unit*) com nome próprio. Conhecer
+esses nomes evita confusão no dia a dia:
+
+| Camada | Nome | PDU | Endereço usado |
+|---|---|---|---|
+| 7–5 | Aplicação/Apresentação/Sessão | **dados** | nome/URL |
+| 4 | Transporte | **segmento** (TCP) / datagrama (UDP) | porta |
+| 3 | Rede | **pacote** (datagrama) | endereço IP |
+| 2 | Enlace | **quadro** (*frame*) | endereço MAC |
+| 1 | Física | **bits** / símbolos | — |
+
+## Camada 1 — Física {#sec-osi-l1}
+
+Trata da **transmissão de bits crus** pelo meio: níveis de tensão, comprimento de
+onda da luz, frequência de rádio, conectores, pinagem, codificação de linha. Não
+sabe o que é um "pacote" — só liga e desliga sinais. **Tudo que se mede com
+power-meter, OTDR ou analisador de espectro é camada 1.** Um conector sujo, uma
+fibra rompida, uma fusão com alta perda ou uma antena desalinhada são **problemas
+de camada 1** — e, na operação de um ISP, são a maioria das chamadas de suporte.
+
+## Camada 2 — Enlace de dados {#sec-osi-l2}
+
+Organiza os bits em **quadros** e cuida da entrega **dentro de um mesmo segmento de
+rede** (um enlace, uma LAN). Suas funções: **endereçamento físico (MAC)**,
+**detecção de erros** (FCS/CRC), **controle de acesso ao meio** e, em redes
+comutadas, **comutação por MAC** e **VLANs**. É aqui que vivem **Ethernet**,
+**PPP/PPPoE** e o conceito de **domínio de broadcast**. Subdivide-se em **LLC**
+(interface com a camada de cima) e **MAC** (acesso ao meio). Switches operam
+nesta camada — capítulos @sec-ethernet e @sec-switching detalham.
+
+## Camada 3 — Rede {#sec-osi-l3}
+
+Responsável pelo **endereçamento lógico (IP)** e pelo **roteamento**: levar um
+**pacote** de uma rede a outra, possivelmente atravessando muitos enlaces e
+domínios. Aqui estão **IP (v4 e v6)**, **ICMP**, e os protocolos de roteamento
+(**OSPF**, **BGP**). A diferença essencial para a camada 2: o MAC só funciona
+*dentro* de um enlace; o IP é **fim a fim**, atravessando o mundo. Toda a Parte IV
+do manual mora nesta camada.
+
+## Camada 4 — Transporte {#sec-osi-l4}
+
+Cria uma **conversa fim a fim entre processos** (não entre máquinas — entre
+*programas*), identificados por **portas**. Oferece dois serviços clássicos:
+
+- **TCP** — confiável, orientado a conexão, com controle de fluxo e
+  retransmissão. O navegador, o e-mail e o SSH usam TCP.
+- **UDP** — leve, sem garantias, ideal para voz, vídeo ao vivo e DNS.
+
+O capítulo @sec-tcp-udp aprofunda o *3-way handshake* e o controle de
+congestionamento.
+
+## Camadas 5, 6 e 7 — Sessão, Apresentação, Aplicação {#sec-osi-l567}
+
+No mundo OSI essas três são separadas; no mundo TCP/IP elas se fundem em uma única
+**camada de aplicação**:
+
+- **Sessão (5)**: abre, mantém e encerra diálogos entre aplicações.
+- **Apresentação (6)**: tradução, codificação e **criptografia** — é onde o
+  **TLS** conceitualmente se encaixa, cifrando o HTTPS.
+- **Aplicação (7)**: os protocolos que o usuário vê — **HTTP/HTTPS, DNS, DHCP,
+  SMTP, SNMP, NTP**. É a camada de serviço; tudo abaixo existe para servi-la.
+
+## Encapsulamento na prática: o que vira o quê {#sec-osi-encapsulamento}
+
+Quando você acessa um site, o dado desce a pilha ganhando cabeçalhos:
+
+1. **Aplicação**: monta a requisição HTTP `GET /`.
+2. **Transporte**: prefixa um cabeçalho TCP (porta origem aleatória → porta 443) →
+   vira **segmento**.
+3. **Rede**: prefixa o cabeçalho IP (IP de origem → IP do servidor) → vira
+   **pacote**.
+4. **Enlace**: prefixa o cabeçalho Ethernet (MAC origem → MAC do gateway) e o FCS
+   no fim → vira **quadro**.
+5. **Física**: o quadro vira **bits**/luz na fibra.
+
+No destino, o processo se inverte: cada camada lê e remove seu cabeçalho ("desencapsula")
+e entrega o miolo à camada de cima.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+O modelo OSI é a **ferramenta de diagnóstico número um** do NOC. A regra de ouro é
+**diagnosticar de baixo para cima**:
+
+1. **Camada 1** — A ONT está com sinal? Potência óptica dentro do orçamento
+   (ex.: −8 a −27 dBm em GPON)? LED de *LOS* aceso indica fibra/conector. Sem luz,
+   nada acima funciona.
+2. **Camada 2** — A ONT autenticou na OLT? A VLAN do cliente está correta no
+   *uplink*? *MAC flapping* no switch?
+3. **Camada 3** — O cliente pegou IP? `ping` no gateway responde? Rota existe?
+4. **Camada 4–7** — PPPoE subiu? DNS resolve? HTTPS abre?
+
+Pular etapas custa caro: trocar a ONT (camada 1) quando o problema é a VLAN do
+*uplink* (camada 2) é desperdício de visita técnica. **Suba a pilha só depois de
+fechar a camada de baixo.**
+:::
+
+## Resumo e checklist {#sec-resumo-02}
+
+- O OSI tem **7 camadas**; cada uma tem uma **PDU** e uma responsabilidade.
+- Decore o trio central: **L3 = pacote/IP/roteamento**, **L2 = quadro/MAC/switch**,
+  **L4 = segmento/porta/TCP-UDP**.
+- **Encapsulamento**: descendo, cada camada adiciona cabeçalho; subindo, remove.
+- Diagnostique **de baixo para cima** — a maioria das falhas de ISP é **camada 1**.
+
+**Checklist do capítulo**
+
+- [ ] Sei nomear a PDU de cada camada.
+- [ ] Diferencio o papel do endereço **MAC** (L2) do endereço **IP** (L3).
+- [ ] Consigo classificar um sintoma de cliente na camada OSI correta.
+- [ ] Entendo por que TLS/HTTPS é tratado como apresentação/aplicação.

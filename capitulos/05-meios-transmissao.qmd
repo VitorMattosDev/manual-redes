@@ -2,6 +2,149 @@
 title: "Meios de Transmissão"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## O meio é a camada 1 {#sec-meios-introducao}
+
+O **meio de transmissão** é o caminho físico por onde o sinal viaja. É a base de
+tudo (camada 1, capítulo @sec-osi-l1): se o meio degrada, nenhuma esperteza das
+camadas superiores recupera o que se perdeu sem custo. Há três famílias —
+**guiados metálicos** (cobre), **guiados ópticos** (fibra) e **não guiados**
+(rádio/ar) — e um provedor moderno usa as três: cobre dentro do POP e na casa do
+cliente, **fibra** no acesso e no *backbone*, e **rádio** onde a fibra não chega.
+
+::: {#fig-meios-comparacao}
+```{.tikz}
+%%| filename: meios-comparacao
+%%| alt: Corte de cabo de par trançado, fibra óptica e propagação de rádio por antena
+\begin{tikzpicture}[font=\footnotesize]
+  % Par trançado
+  \node[font=\small\bfseries, manualblue] at (0,1.7) {Par trançado};
+  \draw[curva, manualred] (-1,0.2) sin (-0.6,0.6) cos (-0.2,0.2) sin (0.2,-0.2) cos (0.6,0.2);
+  \draw[curva, manualblue] (-1,0.4) sin (-0.6,0) cos (-0.2,0.4) sin (0.2,0.8) cos (0.6,0.4);
+  \node[manualgray] at (0,-0.4) {2 fios em hélice};
+
+  % Fibra
+  \begin{scope}[xshift=3.6cm]
+    \node[font=\small\bfseries, manualblue] at (0,1.7) {Fibra óptica};
+    \draw[manualgray, fill=manualyellow!15] (-1.1,-0.05) rectangle (1.1,0.45);
+    \draw[curva, manualred] (-1.1,0.2) -- (-0.4,0.4) -- (0.3,0.0) -- (1.0,0.4);
+    \node[manualgray] at (0,-0.45) {luz por reflexão total};
+  \end{scope}
+
+  % Rádio
+  \begin{scope}[xshift=7.2cm]
+    \node[font=\small\bfseries, manualblue] at (0,1.7) {Rádio};
+    \draw[curva] (-0.9,-0.2) -- (-0.9,0.6);
+    \node[ponto] at (-0.9,0.6) {};
+    \foreach \r in {0.35,0.7,1.05}{ \draw[destaque] (-0.9,0.6) ++(-30:\r) arc (-30:30:\r); }
+    \node[manualgray] at (0.1,-0.45) {ondas no ar};
+  \end{scope}
+\end{tikzpicture}
+```
+As três famílias de meio: par metálico (sinal elétrico), fibra (luz guiada por
+reflexão total) e rádio (onda eletromagnética irradiada no ar).
 :::
+
+## Meios metálicos: par trançado e coaxial {#sec-meios-metalicos}
+
+O **par trançado** (UTP/STP) é o cabo de rede clássico (RJ-45). O trançamento
+**cancela ruído** por indução mútua; quanto mais voltas e melhor a blindagem, maior
+a categoria e a frequência suportada:
+
+| Categoria | Banda | Uso típico |
+|---|---|---|
+| Cat5e | 100 MHz | Gigabit Ethernet até 100 m |
+| Cat6 | 250 MHz | 1–10 Gbps (10G em ~55 m) |
+| Cat6a | 500 MHz | 10 Gbps até 100 m |
+
+Limitações do cobre: **alcance curto (~100 m)**, sensível a **EMI** (interferência
+eletromagnética), e atenuação que cresce com a frequência. O **coaxial** sobrevive
+em alguns acessos HFC e em RF de antenas, mas no acesso de fibra do provedor o par
+trançado fica restrito ao **patch interno** (ONT → roteador, *racks* do POP).
+
+## Fibra óptica: o meio do provedor {#sec-meios-fibra}
+
+A **fibra** guia **luz** por **reflexão interna total** dentro de um núcleo de
+sílica envolto por uma casca de índice menor. Suas vantagens são decisivas para um
+ISP:
+
+- **Banda gigantesca** (Tbps por fibra com WDM) e **alcance** de dezenas de km sem
+  repetidor.
+- **Imune a EMI** e a raios (dielétrica) — ótima em planta externa e zona rural.
+- **Baixíssima atenuação**: ~0,35 dB/km em 1310 nm e ~0,20–0,25 dB/km em 1550 nm.
+
+A fibra se divide em **monomodo (SMF)** — núcleo ~9 µm, longas distâncias, é a usada
+em PON e *backbone* — e **multimodo (MMF)** — núcleo ~50/62,5 µm, curtas distâncias
+intra-POP. As **janelas de transmissão** (faixas de menor atenuação) são o motivo
+de GPON usar 1490 nm (down), 1310 nm (up) e reservar 1550 nm para overlay de TV/RF:
+
+| Janela | Comprimento de onda | Característica |
+|---|---|---|
+| 1ª | 850 nm | multimodo, curto alcance |
+| 2ª | 1310 nm | baixa dispersão; *upstream* GPON |
+| 3ª | 1550 nm | menor atenuação; *backbone*/DWDM, RF overlay |
+
+Toda a Parte II aprofunda a fibra; aqui ela entra como **o meio padrão do acesso**.
+
+## Meios não guiados: o rádio {#sec-meios-radio}
+
+No **rádio**, a informação modula uma **onda eletromagnética** que se propaga pelo
+ar. É a solução para áreas rurais onde puxar fibra é inviável economicamente. O
+meio é **compartilhado e aberto**, o que traz características próprias:
+
+- A propagação depende de **frequência**, **potência (EIRP)**, **antenas** e
+  **linha de visada** — precisa de **zona de Fresnel** livre (capítulo
+  @sec-fresnel).
+- Sofre com **interferência**, **clima** (chuva atenua mais em frequências altas) e
+  **obstáculos** (árvores, relevo).
+- A banda disponível é **regulada** (Anatel). As faixas mais usadas por WISPs:
+
+| Faixa | Uso típico | Observação |
+|---|---|---|
+| 2,4 GHz | PtMP longo alcance | congestionada, mais penetrante |
+| 5 GHz | PtP/PtMP padrão WISP | bom equilíbrio alcance/banda |
+| ≥ 11 GHz licenciado | *backhaul* PtP | alta banda, exige visada limpa |
+
+A Parte IX trata rádio em profundidade. O ponto aqui: rádio **complementa** a fibra
+no provedor — fibra onde dá, rádio onde não dá.
+
+## Comparando os três meios {#sec-meios-comparacao-tabela}
+
+| Critério | Par trançado | Fibra | Rádio |
+|---|---|---|---|
+| Banda | até ~10 Gbps | Tbps | dezenas/centenas de Mbps |
+| Alcance | ~100 m | dezenas de km | km (com visada) |
+| Imunidade a ruído | baixa | altíssima | baixa (meio aberto) |
+| Custo de implantação | baixo (interno) | médio-alto | baixo onde não há postes |
+| Segurança física | média | alta (difícil grampear) | baixa (sinal no ar) |
+| Onde no ISP | patch interno | acesso + núcleo | acesso rural |
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+A decisão **fibra vs. rádio** é, no fundo, **econômica e geográfica**:
+
+- **Urbano/adensado** → fibra (GPON). O custo por assinante despenca com a
+  densidade; a árvore PON paga-se rápido.
+- **Rural/disperso** → rádio a partir de uma **torre alimentada por fibra**
+  (*backhaul* de fibra até a torre, distribuição por rádio). Assim você leva a
+  capacidade da fibra para perto do cliente e gasta rádio só no último salto.
+- **Regra de campo**: a **atenuação óptica se mede e se prevê** (orçamento de
+  potência, capítulo @sec-orcamento), enquanto o **rádio varia com clima e
+  interferência** — por isso dimensione o enlace de rádio com **margem de
+  desvanecimento** folgada (≥ 10–20 dB), nunca no limite.
+:::
+
+## Resumo e checklist {#sec-resumo-05}
+
+- Três famílias: **cobre** (curto, barato, sensível a EMI), **fibra** (banda e
+  alcance enormes, imune a ruído) e **rádio** (alcance sem cabo, mas meio aberto).
+- Fibra é **monomodo** no acesso/núcleo; conheça as **janelas** (1310/1490/1550 nm).
+- Rádio é **regulado** e depende de visada/Fresnel, potência e antena.
+- A escolha de meio é decisão de **custo × geografia × SLA**.
+
+**Checklist do capítulo**
+
+- [ ] Sei por que fibra monomodo é o padrão do acesso e do *backbone*.
+- [ ] Associo cada janela de transmissão ao seu uso em GPON.
+- [ ] Justifico rádio com *backhaul* de fibra em área rural.
+- [ ] Dimensiono rádio com margem de desvanecimento, não no limite.

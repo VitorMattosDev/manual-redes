@@ -2,5 +2,196 @@
 title: "Glossário"
 ---
 
-Lista de siglas e termos (OSI, TCP/IP, CIDR, VLSM, NAT/CGNAT, OLT, ONU/ONT, CTO,
-DIO, GPON, XGS-PON, splitter, power budget, OTDR, PPPoE, BNG, BGP, IX, etc.). A preencher.
+Siglas e termos usados ao longo do manual. O glossário cresce a cada parte; os
+termos abaixo cobrem os fundamentos (Partes I–III) e os principais conceitos de
+provedor que já aparecem nas pontes conceituais.
+
+## A
+
+**Anatel** — Agência Nacional de Telecomunicações; regula espectro de rádio e o
+serviço de telecom no Brasil.
+
+**ARP** — *Address Resolution Protocol*; descobre o MAC associado a um IP na mesma
+rede local (camada 2/3).
+
+**ASN** — *Autonomous System Number*; identificador único de um sistema autônomo no
+roteamento BGP.
+
+## B
+
+**Backbone** — rede de núcleo/transporte que interliga POPs e a internet.
+
+**BDP** — *Bandwidth-Delay Product* (produto banda-atraso); banda × RTT, limita a
+vazão de uma única conexão TCP.
+
+**BGP** — *Border Gateway Protocol*; protocolo de roteamento entre sistemas
+autônomos (provedores).
+
+**BNG / BRAS** — *Broadband Network Gateway*; concentra e autentica os assinantes
+(PPPoE/IPoE), aplica políticas e velocidade.
+
+**Bufferbloat** — inchaço de filas que dispara a latência quando o enlace satura.
+
+## C
+
+**CGNAT** — *Carrier-Grade NAT*; NAT em larga escala que compartilha um IPv4
+público entre muitos assinantes.
+
+**CIDR** — *Classless Inter-Domain Routing*; endereçamento por prefixo (ex.: /24)
+sem classes.
+
+**CTO / CEO** — Caixa de Terminação/Emenda Óptica; ponto da rede secundária onde os
+*drops* dos clientes se conectam, normalmente após um *splitter*.
+
+## D
+
+**dBm** — potência em decibéis referida a 1 mW; unidade de medida óptica (ex.: ONT
+com −20 dBm de recepção).
+
+**DIO** — Distribuidor Interno Óptico; bastidor de organização/conexão das fibras
+no POP/OLT.
+
+**DNS** — *Domain Name System*; traduz nomes (exemplo.com.br) em endereços IP.
+
+**Drop** — cabo de fibra que liga a CTO à ONT do assinante.
+
+**Duplex** — sentido do fluxo: simplex (um), half (alternado), full (simultâneo).
+
+## E
+
+**EIRP** — *Effective Isotropic Radiated Power*; potência efetiva irradiada por uma
+antena (potência + ganho − perdas).
+
+**Encapsulamento** — embrulhar a PDU de uma camada como *payload* da camada
+inferior, prefixando cabeçalho.
+
+**Ethernet** — padrão IEEE 802.3 de camada 2 (quadros, MAC) dominante em LAN.
+
+## F
+
+**FCS** — *Frame Check Sequence*; CRC de detecção de erro no fim do quadro Ethernet.
+
+**Fresnel (zona de)** — elipsoide ao redor da linha de visada de rádio que deve
+ficar livre de obstáculos.
+
+**FTTx** — *Fiber To The x* (Home, Building…); arquiteturas de fibra até o cliente.
+
+## G
+
+**Goodput** — vazão de dados úteis da aplicação, descontados todos os cabeçalhos.
+
+**GPON** — *Gigabit PON* (ITU-T G.984); ~2,5 Gbps down / 1,25 Gbps up
+compartilhados.
+
+## I
+
+**ICMP** — protocolo de controle/diagnóstico da camada 3 (base de `ping` e
+`traceroute`).
+
+**IP** — *Internet Protocol*; endereçamento lógico e roteamento (camada 3), em
+versões IPv4 e IPv6.
+
+**ISP** — *Internet Service Provider*; provedor de acesso à internet.
+
+**IX / IXP** — *Internet Exchange*; ponto de troca de tráfego (no Brasil, IX.br)
+onde provedores fazem *peering*.
+
+## J
+
+**Jitter** — variação da latência entre pacotes; crítico para voz/vídeo.
+
+## L
+
+**LAN / MAN / WAN** — redes local / metropolitana / de longa distância.
+
+**Latência** — tempo de propagação fim a fim; **RTT** é a ida e volta.
+
+## M
+
+**MAC** — *Media Access Control*; endereço físico de camada 2 (48 bits).
+
+**MSS** — *Maximum Segment Size*; maior bloco de dados em um segmento TCP.
+
+**MTU** — *Maximum Transmission Unit*; maior *payload* de um quadro (ex.: 1500 B
+em Ethernet, 1492 com PPPoE).
+
+## N
+
+**NAT** — *Network Address Translation*; tradução de endereços IP (ver CGNAT).
+
+## O
+
+**OLT** — *Optical Line Terminal*; equipamento no POP que origina a rede PON.
+
+**ONT / ONU** — *Optical Network Terminal/Unit*; equipamento na ponta do assinante.
+
+**OSI** — modelo de referência de 7 camadas (ISO/ITU-T).
+
+**OTDR** — *Optical Time-Domain Reflectometer*; instrumento que mapeia perdas e
+eventos ao longo da fibra.
+
+**Overbooking** — razão entre banda contratada somada e banda real disponível
+(compartilhamento estatístico).
+
+## P
+
+**PDU** — *Protocol Data Unit*; unidade de dados de uma camada (segmento, pacote,
+quadro, bits).
+
+**POP** — *Point of Presence*; site do provedor que abriga OLTs, roteadores e
+*uplinks*.
+
+**PON** — *Passive Optical Network*; rede óptica passiva (sem energia entre OLT e
+ONT), em árvore via *splitters*.
+
+**Power budget** — orçamento de potência óptica: potência de TX menos todas as
+perdas, comparada à sensibilidade do RX.
+
+**PPPoE** — *PPP over Ethernet*; encapsula sessões de assinante autenticadas pelo
+BNG/RADIUS.
+
+## R
+
+**RADIUS** — protocolo de AAA (autenticação, autorização, contabilização) dos
+assinantes.
+
+**Rede primária / secundária** — trecho da planta da OLT/DIO até o primeiro
+*splitter* (primária) e deste até as CTOs/clientes (secundária).
+
+**RTT** — *Round-Trip Time*; latência de ida e volta (o que o `ping` mede).
+
+## S
+
+**Splitter** — divisor óptico passivo (1:8, 1:16, 1:64…), balanceado ou
+desbalanceado.
+
+**STP** — *Spanning Tree Protocol*; evita laços em redes Ethernet comutadas.
+
+## T
+
+**TCP** — transporte confiável, orientado a conexão (*3-way handshake*).
+
+**TDMA** — *Time Division Multiple Access*; arbitragem do *upstream* PON por tempo.
+
+**TLS** — *Transport Layer Security*; criptografia que protege o HTTPS.
+
+## U
+
+**UDP** — transporte leve, sem conexão nem garantias (DNS, voz, vídeo ao vivo).
+
+## V
+
+**VLAN** — rede local virtual (IEEE 802.1Q); segmenta a camada 2, ex.: uma VLAN por
+cliente.
+
+**VLSM** — *Variable Length Subnet Mask*; máscaras de tamanho variável para usar IPs
+com eficiência.
+
+## W
+
+**WDM** — *Wavelength Division Multiplexing*; múltiplos comprimentos de onda na
+mesma fibra (ex.: down/up em GPON).
+
+## X
+
+**XGS-PON** — PON simétrica de 10 Gbps (ITU-T G.9807.1), sucessora da GPON.

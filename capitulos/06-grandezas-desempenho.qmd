@@ -2,6 +2,147 @@
 title: "Grandezas de Desempenho: Banda, Latência, Jitter e Throughput"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## O que medimos e por quê {#sec-grandezas}
+
+"A internet está lenta" é a reclamação mais comum — e a mais ambígua — que um ISP
+recebe. Diagnosticá-la exige separar **grandezas distintas** que o usuário funde em
+uma só palavra. Este capítulo define cada uma com rigor, mostra como se combinam e
+ensina a **calcular**, porque no provedor desempenho é contrato (SLA) e é dinheiro.
+
+As quatro grandezas-chave são **largura de banda**, **vazão**, **latência** e
+**jitter**, somadas à **perda de pacotes**. Banda e latência são **independentes**:
+um enlace pode ter muita banda e muita latência (satélite), ou pouca banda e pouca
+latência (um rádio curto e modesto).
+
+## Largura de banda vs. vazão (throughput) {#sec-banda-throughput}
+
+- **Largura de banda (capacidade)** é o **teto** do canal, em bits por segundo. É
+  o "500 Mega" do plano. Cuidado com unidades: redes usam **bits** (Mb, Gb);
+  armazenamento usa **bytes** (MB, GB). **1 byte = 8 bits**, então baixar um
+  arquivo de 500 MB num link de 500 Mbps leva, no mínimo,
+  `500 MB × 8 = 4000 Mb ÷ 500 Mbps = 8 s` (ideal, sem *overhead*).
+- **Vazão (*throughput*)** é o que **realmente** trafega, sempre ≤ banda. É
+  corroída por cabeçalhos de protocolo, retransmissões, congestionamento e pela
+  própria dinâmica do TCP.
+- A **goodput** é mais estrita ainda: só os **dados úteis** da aplicação, sem
+  contar cabeçalhos. Num link de 1000 Mbps, o *overhead* Ethernet+IP+TCP derruba a
+  goodput para ~940 Mbps mesmo em condições perfeitas.
+
+## Latência e seus quatro componentes {#sec-latencia}
+
+**Latência** é o tempo que um bit leva da origem ao destino; o **RTT** (*round-trip
+time*) é a ida e volta — o que o `ping` mede. A latência fim a fim é a **soma de
+quatro atrasos** em cada salto:
+
+| Componente | Causa | Como reduzir |
+|---|---|---|
+| **Propagação** | distância ÷ velocidade no meio | caminho mais curto / IX local |
+| **Transmissão** | tamanho do quadro ÷ banda | mais banda |
+| **Processamento** | roteador inspecionar o pacote | hardware melhor |
+| **Enfileiramento** | filas em congestionamento | QoS, mais capacidade |
+
+A **propagação** tem um limite físico: a luz na fibra anda a ~200.000 km/s (≈ 2/3
+de *c*), ou seja **~5 µs/km**. Um enlace de 100 km adiciona ~0,5 ms só de ida —
+1 ms no RTT — e **nenhuma banda no mundo reduz isso**. Por isso aproximar conteúdo
+(CDNs, *cache*, peering em IX local) é a única forma de baixar latência de verdade.
+
+::: {#fig-bufferbloat}
+```{.tikz}
+%%| filename: latencia-fila
+%%| alt: Gráfico de latência subindo abruptamente quando a utilização do enlace se aproxima de 100 por cento
+\begin{tikzpicture}
+\begin{axis}[
+    width=9cm, height=5.2cm,
+    xlabel={Utilização do enlace (\%)},
+    ylabel={Latência (ms)},
+    xmin=0, xmax=100, ymin=0, ymax=60,
+    domain=0:97, samples=120,
+    axis lines=left, font=\small,
+    every axis plot/.append style={very thick},
+  ]
+  \addplot[manualblue] {5 + 5*(x/100)/(1-(x/100))};
+  \addplot[auxiliar, domain=0:100] coordinates {(85,0) (85,60)};
+  \node[manualred, font=\footnotesize, anchor=west] at (axis cs:55,45) {bufferbloat};
+\end{axis}
+\end{tikzpicture}
+```
+Latência em função da utilização: estável enquanto há folga, mas **dispara** quando
+o enlace satura (filas enchem) — o fenômeno do *bufferbloat*. Por isso se dimensiona
+para usar ~70–80% no pico, não 100%.
 :::
+
+## Jitter e perda de pacotes {#sec-jitter-perda}
+
+- **Jitter** é a **variação** da latência entre pacotes. Para download é quase
+  irrelevante; para **voz e vídeo ao vivo** é crítico — um jitter alto causa cortes
+  e robotização, mesmo com latência média baixa. Mitiga-se com *jitter buffer* e
+  **QoS** (capítulo @sec-qos).
+- **Perda de pacotes** é a fração que não chega. No TCP, perda dispara
+  retransmissão e o controle de congestionamento **reduz a janela**, derrubando a
+  vazão — daí "1% de perda" parecer pouco mas **destruir** a velocidade percebida.
+  No UDP (voz), perda vira ruído/corte direto.
+
+## Calculando o desempenho percebido {#sec-grandezas-calculo}
+
+**Exemplo 1 — tempo de download.** Cliente de 300 Mbps baixa um jogo de 60 GB.
+Ignorando *overhead*: `60 GB × 8 = 480 Gb = 480000 Mb`; `480000 ÷ 300 = 1600 s ≈
+26,7 min`. Com goodput real (~92%), some ~9% → ~29 min. Útil para gerenciar a
+expectativa no suporte.
+
+**Exemplo 2 — limite do TCP pela latência (BDP).** A vazão máxima de **uma única
+conexão TCP** é limitada pela janela de recepção e pelo RTT:
+$$\text{Vazão}_{\max} = \frac{\text{Janela}}{\text{RTT}}.$$
+Com janela padrão de 64 KB e RTT de 80 ms (link a um servidor distante):
+`65536 B × 8 ÷ 0,080 s ≈ 6,55 Mbps` — **por conexão**! É por isso que um cliente de
+300 Mbps às vezes vê só alguns Mbps baixando de um servidor longínquo de fluxo
+único: o gargalo é o **produto banda-atraso (BDP)**, não o plano. A solução é
+*window scaling* [@rfc7323] e múltiplas conexões.
+
+**Exemplo 3 — overbooking de uma PON.** Uma porta GPON entrega ~2,5 Gbps
+*downstream* compartilhados. Com 64 ONTs de 300 Mbps, a soma contratada é
+`64 × 300 = 19,2 Gbps` — *overbooking* de ~7,7:1. Funciona porque nem todos usam o
+pico ao mesmo tempo, mas exige **monitorar a ocupação real** para não estourar no
+horário nobre (capítulo @sec-gpon).
+
+## Como medir na prática {#sec-grandezas-medir}
+
+| Grandeza | Ferramenta | Observação |
+|---|---|---|
+| Latência/RTT/perda | `ping`, `mtr` | `mtr` mostra salto a salto |
+| Caminho/saltos | `traceroute` / `tracert` | localiza onde dói |
+| Vazão | `iperf3`, *speedtest* | use servidor próximo (IX) |
+| Jitter | `iperf3 -u`, sondas | crítico para VoIP |
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+O kit de diagnóstico de SLA do NOC:
+
+- **Speedtest baixo, ping bom** → provável gargalo de **capacidade** ou
+  *overbooking* na PON/uplink; ou cliente testando contra servidor distante (peça
+  para usar um servidor no **IX local**).
+- **Ping alto e instável (jitter)** → **bufferbloat** num link saturado, Wi-Fi do
+  cliente ruim, ou rádio com interferência. `mtr` por 100 pacotes revela o salto
+  culpado.
+- **Perda intermitente** → no acesso óptico, suspeite de **camada 1** (potência no
+  limite, conector sujo); no rádio, de **interferência/Fresnel obstruída**.
+- **Regra de ouro de capacidade**: planeje *uplinks* e portas PON para **≤ 70–80%
+  no pico**. Acima disso, a latência dispara (vide figura) e o cliente sente
+  "lentidão" mesmo com banda contratada disponível na média.
+:::
+
+## Resumo e checklist {#sec-resumo-06}
+
+- **Banda ≠ vazão ≠ latência ≠ jitter** — diagnostique cada uma separadamente.
+- Propagação na fibra é **~5 µs/km**; latência só cai aproximando conteúdo
+  (CDN/IX), nunca com mais banda.
+- Latência **dispara perto da saturação** (*bufferbloat*); dimensione para ~70–80%.
+- Uma única conexão TCP é limitada pelo **BDP** (Janela ÷ RTT) — atenção a
+  servidores distantes.
+
+**Checklist do capítulo**
+
+- [ ] Converto entre bits e bytes e estimo tempo de download.
+- [ ] Explico os quatro componentes da latência e qual é irredutível.
+- [ ] Calculo a vazão máxima de uma conexão TCP pelo RTT (BDP).
+- [ ] Uso `ping`/`mtr`/`iperf3` para isolar o sintoma na grandeza certa.
