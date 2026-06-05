@@ -27,10 +27,15 @@ jobs:
         run: |
           # No runner Linux o tlmgr do TinyTeX é um SYMLINK; por isso NÃO usar
           # "-type f" (excluiria o link). command -v também falha se o bin não
-          # entrou no PATH. Achamos o link, pomos seu diretório no PATH e rodamos.
+          # entrou no PATH. Achamos o link e pegamos o diretório bin.
           TLMGR=$(command -v tlmgr || find "$HOME" -name tlmgr 2>/dev/null | head -n1)
-          echo "tlmgr em: $TLMGR"
-          export PATH="$(dirname "$TLMGR"):$PATH"
+          BIN=$(dirname "$TLMGR")
+          echo "tlmgr em: $TLMGR (bin: $BIN)"
+          export PATH="$BIN:$PATH"
+          # CRÍTICO (CLAUDE.md §0): persistir o bin do TinyTeX no PATH dos próximos
+          # passos, senão o render falha com "pdflatex/dvisvgm not found" — a
+          # extensão TikZ chama pdflatex/dvisvgm PELO NOME.
+          echo "$BIN" >> "$GITHUB_PATH"
           tlmgr install standalone pgf pgfplots dvisvgm xcolor amsmath amsfonts
 
       # SEM ISTO o mermaid (mapa de pré-requisitos do index.qmd) trava o render
