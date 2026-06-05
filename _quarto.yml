@@ -10,7 +10,7 @@ book:
   author: "Provedor de Fibra Óptica"
   date: today
   search: true
-  repo-url: https://github.com/SEU-USUARIO/manual-redes
+  repo-url: https://github.com/VitorMattosDev/manual-redes
   repo-actions: [edit, issue]
   downloads: [pdf]
   sidebar:
