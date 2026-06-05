@@ -1,0 +1,6 @@
+---
+title: "Glossário"
+---
+
+Lista de siglas e termos (OSI, TCP/IP, CIDR, VLSM, NAT/CGNAT, OLT, ONU/ONT, CTO,
+DIO, GPON, XGS-PON, splitter, power budget, OTDR, PPPoE, BNG, BGP, IX, etc.). A preencher.

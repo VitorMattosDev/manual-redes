@@ -1,0 +1,148 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Manual de Redes de Computadores"
+  subtitle: "Do básico ao avançado, com foco em redes ópticas (FTTx/PON) e rádio em áreas rurais"
+  author: "Provedor de Fibra Óptica"
+  date: today
+  lang: pt-BR
+  search: true
+  repo-url: https://github.com/SEU-USUARIO/manual-redes
+  repo-actions: [edit, issue]
+  downloads: [pdf]
+  sidebar:
+    style: docked
+    collapse-level: 1
+  chapters:
+    - index.qmd
+
+    - part: "Parte I — Fundamentos e Modelos de Rede"
+      chapters:
+        - capitulos/01-introducao-redes.qmd
+        - capitulos/02-modelo-osi.qmd
+        - capitulos/03-modelo-tcpip-pilha.qmd
+        - capitulos/04-tipos-topologias.qmd
+        - capitulos/05-meios-transmissao.qmd
+        - capitulos/06-grandezas-desempenho.qmd
+
+    - part: "Parte II — Camada Física e Fibra Óptica"
+      chapters:
+        - capitulos/07-fibra-principios.qmd
+        - capitulos/08-fibra-tipos-caracteristicas.qmd
+        - capitulos/09-conectores-polimentos.qmd
+        - capitulos/10-emendas-fusao.qmd
+
+    - part: "Parte III — Camada de Enlace"
+      chapters:
+        - capitulos/11-ethernet-mac.qmd
+        - capitulos/12-arp.qmd
+        - capitulos/13-switching-vlan-stp.qmd
+
+    - part: "Parte IV — Camada de Rede e Endereçamento IP"
+      chapters:
+        - capitulos/14-protocolo-ip-ipv4.qmd
+        - capitulos/15-enderecamento-ipv4.qmd
+        - capitulos/16-subredes-cidr-vlsm.qmd
+        - capitulos/17-ipv6.qmd
+        - capitulos/18-icmp-diagnostico.qmd
+        - capitulos/19-nat-cgnat.qmd
+        - capitulos/20-roteamento.qmd
+
+    - part: "Parte V — Transporte e Aplicação"
+      chapters:
+        - capitulos/21-tcp-udp.qmd
+        - capitulos/22-dns.qmd
+        - capitulos/23-dhcp.qmd
+        - capitulos/24-http-https-tls.qmd
+        - capitulos/25-outros-protocolos-aplicacao.qmd
+        - capitulos/26-qos.qmd
+
+    - part: "Parte VI — Redes Ópticas Passivas (PON)"
+      chapters:
+        - capitulos/27-arquitetura-fttx.qmd
+        - capitulos/28-gpon-epon-xgspon.qmd
+        - capitulos/29-olt.qmd
+        - capitulos/30-onu-ont.qmd
+        - capitulos/31-splitters.qmd
+        - capitulos/32-dio-cto-rede-primaria-secundaria.qmd
+        - capitulos/33-orcamento-potencia.qmd
+        - capitulos/34-provisionamento-pon.qmd
+
+    - part: "Parte VII — Planta Externa (OSP)"
+      chapters:
+        - capitulos/35-cabos-opticos.qmd
+        - capitulos/36-infraestrutura-postes-ferragens.qmd
+        - capitulos/37-fusao-campo-certificacao.qmd
+        - capitulos/38-documentacao-georreferenciamento.qmd
+
+    - part: "Parte VIII — Medição e Diagnóstico Óptico"
+      chapters:
+        - capitulos/39-instrumentos-power-meter-otdr-vfl.qmd
+        - capitulos/40-interpretacao-otdr.qmd
+        - capitulos/41-localizacao-falhas.qmd
+
+    - part: "Parte IX — Redes via Rádio (Áreas Rurais)"
+      chapters:
+        - capitulos/42-radio-fundamentos-propagacao.qmd
+        - capitulos/43-ptp-ptmp-antenas.qmd
+        - capitulos/44-visada-fresnel-enlace.qmd
+        - capitulos/45-tecnologias-radio-isp.qmd
+
+    - part: "Parte X — Operação de Provedor (ISP)"
+      chapters:
+        - capitulos/46-bng-bras-pppoe-ipoe.qmd
+        - capitulos/47-radius-aaa.qmd
+        - capitulos/48-bgp-as-peering-ix.qmd
+        - capitulos/49-sistemas-gerencia-monitoramento.qmd
+
+    - part: "Parte XI — Segurança e Confiabilidade"
+      chapters:
+        - capitulos/50-seguranca-redes.qmd
+        - capitulos/51-redundancia-protecao-anel.qmd
+        - capitulos/52-ddos-mitigacao.qmd
+
+    - part: "Parte XII — Tópicos Avançados"
+      chapters:
+        - capitulos/53-mpls-vpns.qmd
+        - capitulos/54-sdn-automacao.qmd
+        - capitulos/55-ipv6-deployment-isp.qmd
+
+  appendices:
+    - capitulos/glossario.qmd
+    - capitulos/referencias.qmd
+
+bibliography: referencias.bib
+
+# IMPORTANTE: o filtro danmackinlay/tikz precisa vir ANTES do quarto.
+filters:
+  - danmackinlay/tikz
+  - quarto
+
+# Renderiza as figuras TikZ como SVG via dvisvgm (melhor no HTML; cada figura
+# compila por pdflatex -> dvisvgm; exige TeX mesmo só para o HTML).
+tikz:
+  svg-engine: dvisvgm
+  cache: true
+
+format:
+  html:
+    # styles.css entra como CAMADA SCSS aqui -> ele PRECISA ter o marcador
+    # /*-- scss:rules --*/ na primeira linha, senão TODO o render quebra.
+    theme: [cosmo, styles.css]
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    number-sections: true
+  pdf:
+    documentclass: scrreprt
+    papersize: a4
+    toc: true
+    number-sections: true
+    colorlinks: true
+    keep-tex: false
+    include-in-header:
+      text: |
+        \usepackage{booktabs}
+        \usepackage{longtable}

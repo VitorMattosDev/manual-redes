@@ -1,0 +1,7 @@
+---
+title: "Visada (LOS), Zona de Fresnel e Cálculo de Enlace"
+---
+
+::: {.callout-note}
+Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+:::

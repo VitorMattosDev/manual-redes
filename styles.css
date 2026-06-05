@@ -1,0 +1,35 @@
+/*-- scss:rules --*/
+
+/* Marcador de camada SCSS acima é OBRIGATÓRIO: styles.css está em theme:
+   no _quarto.yml; sem o marcador o Quarto >= 1.9 quebra TODO o render com
+   "doesn't contain at least one layer boundary". Não remova a 1ª linha. */
+
+:root {
+  --manual-blue: #1f5673;
+  --manual-red: #c0392b;
+  --manual-green: #2e7d32;
+  --manual-yellow: #d4a017;
+  --manual-gray: #5f6b6d;
+}
+
+h1, h2, h3 {
+  color: var(--manual-blue);
+}
+
+/* Caixas de destaque para boxes "na prática do provedor" */
+.callout-provedor {
+  border-left: 4px solid var(--manual-blue);
+  background: #f4f8fb;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+figure svg {
+  max-width: 100%;
+  height: auto;
+}
+
+table {
+  font-size: 0.95rem;
+}

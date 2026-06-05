@@ -1,0 +1,7 @@
+---
+title: "O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL"
+---
+
+::: {.callout-note}
+Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+:::

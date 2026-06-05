@@ -1,0 +1,7 @@
+---
+title: "Implantação de IPv6 no Provedor"
+---
+
+::: {.callout-note}
+Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+:::

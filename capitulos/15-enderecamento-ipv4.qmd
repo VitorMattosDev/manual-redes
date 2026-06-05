@@ -1,0 +1,7 @@
+---
+title: "Endereçamento IPv4: Classes e Máscaras de Sub-rede"
+---
+
+::: {.callout-note}
+Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+:::

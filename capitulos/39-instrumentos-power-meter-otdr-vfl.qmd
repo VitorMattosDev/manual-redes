@@ -1,0 +1,7 @@
+---
+title: "Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz"
+---
+
+::: {.callout-note}
+Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+:::

@@ -1,0 +1,42 @@
+name: Publicar Manual de Redes
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Quarto (com TinyTeX)
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          tinytex: true
+
+      # Pacotes LaTeX exigidos pelas figuras TikZ (pdflatex -> dvisvgm).
+      # O tlmgr pode não estar no PATH logo após o setup; localizamos antes.
+      - name: Instalar pacotes LaTeX das figuras
+        run: |
+          TLMGR=$(command -v tlmgr || find "$HOME" -name tlmgr -type f 2>/dev/null | head -n1)
+          echo "tlmgr em: $TLMGR"
+          "$TLMGR" install standalone pgf pgfplots dvisvgm xcolor amsmath amsfonts
+
+      # SEM ISTO o mermaid (mapa de pré-requisitos do index.qmd) trava o render
+      # do PDF no runner Ubuntu por falta de Chromium headless.
+      - name: Instalar chrome-headless-shell (mermaid no PDF)
+        run: quarto install chrome-headless-shell
+
+      - name: Render e publish (gh-pages)
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

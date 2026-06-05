@@ -1,0 +1,41 @@
+---
+title: "Apresentação"
+---
+
+# Manual de Redes de Computadores {.unnumbered}
+
+Este manual cobre redes de computadores **do básico ao avançado**, com foco
+prático na operação de um **provedor de internet (ISP)** que atende por
+**fibra óptica (FTTx/PON)** e também por **rádio em áreas rurais**.
+
+A ideia é sair dos fundamentos (modelos OSI/TCP-IP, endereçamento, roteamento)
+e chegar ao dia a dia da planta óptica — **OLT, DIO, splitter, CTO, ONT/ONU**,
+orçamento de potência, OTDR — e à operação do provedor (PPPoE, BNG, BGP, IX),
+sem pular as pontes conceituais entre uma coisa e outra.
+
+## Como ler
+
+As partes têm dependências leves entre si. O mapa abaixo mostra uma ordem
+sugerida — você pode ir direto às partes de fibra (VI–VIII) se já domina os
+fundamentos, mas elas fazem mais sentido depois das Partes I e II.
+
+```{mermaid}
+flowchart TD
+  I["I · Fundamentos"] --> II["II · Física e Fibra"]
+  I --> III["III · Enlace"]
+  III --> IV["IV · Rede"]
+  IV --> V["V · Transporte e Aplicação"]
+  II --> VI["VI · PON / FTTx"]
+  VI --> VII["VII · Planta Externa (OSP)"]
+  VII --> VIII["VIII · Medição Óptica"]
+  II --> IX["IX · Rádio Rural"]
+  V --> X["X · Operação de ISP"]
+  VI --> X
+  X --> XI["XI · Segurança e Confiabilidade"]
+  X --> XII["XII · Avançado"]
+```
+
+## Convenções
+
+- Caixas **"Na prática do provedor"** trazem o uso real de cada conceito na rede.
+- Figuras técnicas são desenhadas em TikZ; siglas estão no **Glossário** ao final.
