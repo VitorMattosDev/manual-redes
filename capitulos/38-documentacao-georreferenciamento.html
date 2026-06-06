@@ -610,8 +610,19 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#sec-doc-georref" id="toc-sec-doc-georref" class="nav-link active" data-scroll-target="#sec-doc-georref"><span class="header-section-number">39.1</span> A planta que ninguém vê — e que salva a operação</a></li>
+  <li><a href="#sec-doc-o-que" id="toc-sec-doc-o-que" class="nav-link" data-scroll-target="#sec-doc-o-que"><span class="header-section-number">39.2</span> O que documentar</a></li>
+  <li><a href="#sec-doc-geo" id="toc-sec-doc-geo" class="nav-link" data-scroll-target="#sec-doc-geo"><span class="header-section-number">39.3</span> Georreferenciamento: a planta no mapa</a></li>
+  <li><a href="#sec-doc-ferramentas" id="toc-sec-doc-ferramentas" class="nav-link" data-scroll-target="#sec-doc-ferramentas"><span class="header-section-number">39.4</span> Ferramentas</a></li>
+  <li><a href="#sec-doc-disciplina" id="toc-sec-doc-disciplina" class="nav-link" data-scroll-target="#sec-doc-disciplina"><span class="header-section-number">39.5</span> Disciplina: documentar é processo</a></li>
+  <li><a href="#sec-resumo-38" id="toc-sec-resumo-38" class="nav-link" data-scroll-target="#sec-resumo-38"><span class="header-section-number">39.6</span> Resumo e checklist</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/38-documentacao-georreferenciamento.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -635,21 +646,359 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="sec-doc-georref" class="level2" data-number="39.1">
+<h2 data-number="39.1" class="anchored" data-anchor-id="sec-doc-georref"><span class="header-section-number">39.1</span> A planta que ninguém vê — e que salva a operação</h2>
+<p>Uma rede óptica de provedor tem milhares de elementos espalhados pela cidade: postes, CEOs, CTOs, splitters, fusões, fibras por cor. <strong>Onde está cada coisa? Qual fibra vai para qual cliente? Que splitter alimenta aquela CTO?</strong> Sem <strong>documentação</strong> e <strong>georreferenciamento</strong>, cada reparo vira investigação, cada expansão vira adivinhação, e o tempo de reestabelecimento (e a insatisfação do cliente) explode. Documentar <strong>não é burocracia: é a ferramenta operacional nº 1</strong> que torna tudo o que vimos nas Partes VI–VII utilizável no dia a dia.</p>
+</section>
+<section id="sec-doc-o-que" class="level2" data-number="39.2">
+<h2 data-number="39.2" class="anchored" data-anchor-id="sec-doc-o-que"><span class="header-section-number">39.2</span> O que documentar</h2>
+<p>A documentação cobre <strong>três camadas</strong> de informação:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Camada</th>
+<th>O que registra</th>
+<th>Exemplos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Física/geográfica</strong></td>
+<td>onde está</td>
+<td>postes, caixas, rotas de cabo (coordenadas)</td>
+</tr>
+<tr class="even">
+<td><strong>Lógica/conectividade</strong></td>
+<td>o que liga a quê</td>
+<td>fibra X (cor) → splitter → porta → cliente</td>
+</tr>
+<tr class="odd">
+<td><strong>Operacional</strong></td>
+<td>medições e histórico</td>
+<td>baseline OTDR, perda, data de fusão, reparos</td>
+</tr>
+</tbody>
+</table>
+<p>Juntas, elas respondem em segundos: “o cliente Y está em qual CTO, qual porta de splitter, qual fibra, e qual era o Rx esperado?”.</p>
+</section>
+<section id="sec-doc-geo" class="level2" data-number="39.3">
+<h2 data-number="39.3" class="anchored" data-anchor-id="sec-doc-geo"><span class="header-section-number">39.3</span> Georreferenciamento: a planta no mapa</h2>
+<p><strong>Georreferenciar</strong> é colocar cada elemento em <strong>coordenadas reais</strong> sobre um mapa (GIS). Isso permite:</p>
+<div id="fig-georref" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-georref-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="212.996822pt" height="129.871651pt" viewbox="-68.014948 -68.014945 212.996822 129.871651">
+<defs>
+<path id="tz_georref_mapa_g0-49" d="M2.502615-5.076961C2.502615-5.292154 2.486675-5.300125 2.271482-5.300125C1.944707-4.98132 1.522291-4.790037 .765131-4.790037V-4.527024C.980324-4.527024 1.41071-4.527024 1.872976-4.742217V-.653549C1.872976-.358655 1.849066-.263014 1.091905-.263014H.812951V0C1.139726-.02391 1.825156-.02391 2.183811-.02391S3.235866-.02391 3.56264 0V-.263014H3.283686C2.526526-.263014 2.502615-.358655 2.502615-.653549V-5.076961Z"></path>
+<path id="tz_georref_mapa_g0-50" d="M2.247572-1.625903C2.375093-1.745455 2.709838-2.008468 2.83736-2.12005C3.331507-2.574346 3.801743-3.012702 3.801743-3.737983C3.801743-4.686426 3.004732-5.300125 2.008468-5.300125C1.052055-5.300125 .422416-4.574844 .422416-3.865504C.422416-3.474969 .73325-3.419178 .844832-3.419178C1.012204-3.419178 1.259278-3.53873 1.259278-3.841594C1.259278-4.25604 .860772-4.25604 .765131-4.25604C.996264-4.837858 1.530262-5.037111 1.920797-5.037111C2.662017-5.037111 3.044583-4.407472 3.044583-3.737983C3.044583-2.909091 2.462765-2.303362 1.522291-1.338979L.518057-.302864C.422416-.215193 .422416-.199253 .422416 0H3.57061L3.801743-1.42665H3.55467C3.53076-1.267248 3.466999-.868742 3.371357-.71731C3.323537-.653549 2.717808-.653549 2.590286-.653549H1.171606L2.247572-1.625903Z"></path>
+<path id="tz_georref_mapa_g0-67" d="M5.634869-5.403736C5.634869-5.531258 5.634869-5.610959 5.531258-5.610959C5.475467-5.610959 5.467497-5.602989 5.395766-5.499377L4.98929-4.909589C4.702366-5.220423 4.176339-5.610959 3.411208-5.610959C1.809215-5.610959 .470237-4.327771 .470237-2.725778C.470237-1.115816 1.801245 .167372 3.419178 .167372C4.758157 .167372 5.634869-.892653 5.634869-1.865006C5.634869-1.944707 5.634869-2.016438 5.507347-2.016438C5.419676-2.016438 5.395766-1.976588 5.387796-1.896887C5.324035-.669489 4.335741-.095641 3.490909-.095641C2.81345-.095641 1.299128-.510087 1.299128-2.725778C1.299128-4.869738 2.733748-5.347945 3.490909-5.347945C4.2401-5.347945 5.164633-4.813948 5.371856-3.443088C5.379826-3.379328 5.387796-3.323537 5.499377-3.323537C5.634869-3.323537 5.634869-3.379328 5.634869-3.53076V-5.403736Z"></path>
+<path id="tz_georref_mapa_g0-69" d="M5.515318-2.072229H5.268244C5.061021-.876712 4.893649-.263014 3.459029-.263014H2.271482C1.904857-.263014 1.888917-.318804 1.888917-.589788V-2.685928H2.662017C3.451059-2.685928 3.56264-2.446824 3.56264-1.753425H3.809714V-3.881445H3.56264C3.56264-3.188045 3.451059-2.948941 2.662017-2.948941H1.888917V-4.829888C1.888917-5.100872 1.904857-5.156663 2.271482-5.156663H3.403238C4.726276-5.156663 4.893649-4.678456 5.037111-3.610461H5.284184L5.053051-5.419676H.350685V-5.156663H.526027C1.139726-5.156663 1.155666-5.068991 1.155666-4.774097V-.645579C1.155666-.350685 1.139726-.263014 .526027-.263014H.350685V0H5.164633L5.515318-2.072229Z"></path>
+<path id="tz_georref_mapa_g0-79" d="M6.105106-2.701868C6.105106-4.303861 4.837858-5.610959 3.291656-5.610959C1.721544-5.610959 .470237-4.29589 .470237-2.701868C.470237-1.075965 1.769365 .167372 3.283686 .167372C4.829888 .167372 6.105106-1.091905 6.105106-2.701868ZM3.291656-.095641C2.422914-.095641 1.299128-.820922 1.299128-2.82142C1.299128-4.726276 2.462765-5.363885 3.283686-5.363885C4.144458-5.363885 5.276214-4.694396 5.276214-2.82142C5.276214-.797011 4.128518-.095641 3.291656-.095641Z"></path>
+<path id="tz_georref_mapa_g0-80" d="M1.904857-2.486675H3.355417C4.335741-2.486675 5.284184-3.116314 5.284184-3.953176C5.284184-4.734247 4.439352-5.443587 3.291656-5.443587H.366625V-5.180573H.541968C1.155666-5.180573 1.171606-5.092902 1.171606-4.798007V-.645579C1.171606-.350685 1.155666-.263014 .541968-.263014H.366625V0C1.044085-.02391 1.060025-.02391 1.538232-.02391S2.032379-.02391 2.709838 0V-.263014H2.534496C1.920797-.263014 1.904857-.350685 1.904857-.645579V-2.486675ZM1.880946-2.725778V-4.853798C1.880946-5.124782 1.896887-5.180573 2.263512-5.180573H3.092403C4.455293-5.180573 4.455293-4.311831 4.455293-3.953176C4.455293-3.602491 4.455293-2.725778 3.092403-2.725778H1.880946Z"></path>
+<path id="tz_georref_mapa_g0-84" d="M5.642839-5.387796H.462267L.302864-3.57858H.549938C.661519-4.925529 .844832-5.124782 2.064259-5.124782C2.215691-5.124782 2.462765-5.124782 2.526526-5.108842C2.677958-5.076961 2.685928-4.99726 2.685928-4.798007V-.653549C2.685928-.374595 2.685928-.263014 1.857036-.263014H1.554172V0C1.849066-.02391 2.709838-.02391 3.052553-.02391S4.25604-.02391 4.550934 0V-.263014H4.24807C3.419178-.263014 3.419178-.374595 3.419178-.653549V-4.798007C3.419178-4.98132 3.419178-5.076961 3.58655-5.108842C3.658281-5.124782 3.889415-5.124782 4.040847-5.124782C5.260274-5.124782 5.443587-4.925529 5.555168-3.57858H5.802242L5.642839-5.387796Z"></path>
+</defs>
+<g id="tz_georref_mapa_page1">
+<g stroke-miterlimit="10" transform="translate(-67.815698,61.657456)scale(0.996264,-0.996264)">
+<g fill="#000" stroke="#000">
+<g stroke-width="0.4">
+<g fill="#6c757d" stroke="#6c757d">
+<g stroke-width="0.4">
+<g stroke-dasharray="3.0,3.0" stroke-dashoffset="0.0">
+<path d="M0 0H213.39557M0 42.67911H213.39557M0 85.35822H213.39557M0 128.03732H213.39557M0 0V128.03734M42.67911 0V128.03734M85.35822 0V128.03734M128.03732 0V128.03734M170.71643 0V128.03734M213.39554 0V128.03734M213.39557 128.03734" fill="none"></path>
+</g>
+</g>
+</g>
+<g stroke="#3fb618">
+<g fill="#e1f4da">
+<g stroke="#3fb618">
+<g fill="#e1f4da">
+<path d="M23.3126 122.34679H5.14012C4.58783 122.34679 4.14012 121.89908 4.14012 121.34679V106.27516C4.14012 105.72287 4.58783 105.27516 5.14012 105.27516H23.3126C23.8649 105.27516 24.3126 105.72287 24.3126 106.27516V121.34679C24.3126 121.89908 23.8649 122.34679 23.3126 122.34679ZM4.14012 105.27516"></path>
+</g>
+</g>
+<g transform="translate(5.14012,111.07765)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.815698,61.657456)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none">
+<use x="-67.815698" y="61.657456" href="#tz_georref_mapa_g0-80"></use>
+<use x="-62.056655" y="61.657456" href="#tz_georref_mapa_g0-79"></use>
+<use x="-55.470149" y="61.657456" href="#tz_georref_mapa_g0-80"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#d7433b">
+<g fill="#fbe9e8">
+<g stroke="#d7433b">
+<g fill="#fbe9e8">
+<path d="M75.09282 78.24506H95.62364V92.47141H75.09282Z"></path>
+</g>
+</g>
+<g transform="translate(76.09282,82.62491)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.815698,61.657456)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none">
+<use x="-67.815698" y="61.657456" href="#tz_georref_mapa_g0-67"></use>
+<use x="-61.699657" y="61.657456" href="#tz_georref_mapa_g0-69"></use>
+<use x="-55.940613" y="61.657456" href="#tz_georref_mapa_g0-79"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#ffe7d6">
+<g stroke="#6c757d">
+<g fill="#ffe7d6">
+<path d="M115.46773 106.6978H140.60695V120.92415H115.46773Z"></path>
+</g>
+</g>
+<g transform="translate(116.46773,111.07765)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.815698,61.657456)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none">
+<use x="-67.815698" y="61.657456" href="#tz_georref_mapa_g0-67"></use>
+<use x="-61.699657" y="61.657456" href="#tz_georref_mapa_g0-84"></use>
+<use x="-55.583615" y="61.657456" href="#tz_georref_mapa_g0-79"></use>
+<use x="-48.997108" y="61.657456" href="#tz_georref_mapa_g0-49"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g stroke="#6c757d">
+<g fill="#ffe7d6">
+<g stroke="#6c757d">
+<g fill="#ffe7d6">
+<path d="M129.6941 35.56593H154.83332V49.79228H129.6941Z"></path>
+</g>
+</g>
+<g transform="translate(130.6941,39.94579)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.815698,61.657456)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none">
+<use x="-67.815698" y="61.657456" href="#tz_georref_mapa_g0-67"></use>
+<use x="-61.699657" y="61.657456" href="#tz_georref_mapa_g0-84"></use>
+<use x="-55.583615" y="61.657456" href="#tz_georref_mapa_g0-79"></use>
+<use x="-48.997108" y="61.657456" href="#tz_georref_mapa_g0-50"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<g fill="#3fb618" stroke="#3fb618">
+<path d="M24.5126 109.69733L74.89282 89.54272" fill="none"></path>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<g fill="#3fb618" stroke="#3fb618">
+<path d="M95.82364 92.3325L117.06926 106.4978" fill="none"></path>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<g fill="#3fb618" stroke="#3fb618">
+<path d="M95.10942 78.04506L132.51643 49.99228" fill="none"></path>
+</g>
+</g>
+</g>
+<g fill="#2780e3">
+<g fill="#2780e3">
+<path d="M115.93231 128.03734C115.93231 129.20892 114.98256 130.15868 113.81097 130.15868C112.63939 130.15868 111.68964 129.20892 111.68964 128.03734C111.68964 126.86575 112.63939 125.916 113.81097 125.916C114.98256 125.916 115.93231 126.86575 115.93231 128.03734ZM113.81097 128.03734" stroke="none"></path>
+</g>
+<g transform="translate(113.81097,128.03734)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.815698,61.657456)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g stroke-width="0.4">
+<g stroke-dasharray="3.0,3.0" stroke-dashoffset="0.0">
+<path d="M120.7253 121.12415L113.81097 128.03734" fill="none"></path>
+</g>
+</g>
+</g>
+<g fill="#2780e3">
+<g fill="#2780e3">
+<path d="M144.38506 122.34688C144.38506 123.51846 143.4353 124.46822 142.26372 124.46822C141.09213 124.46822 140.14238 123.51846 140.14238 122.34688S141.09213 120.22554 142.26372 120.22554C143.4353 120.22554 144.38506 121.1753 144.38506 122.34688ZM142.26372 122.34688" stroke="none"></path>
+</g>
+<g transform="translate(142.26372,122.34688)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.815698,61.657456)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g stroke-width="0.4">
+<g stroke-dasharray="3.0,3.0" stroke-dashoffset="0.0">
+<path d="M140.22466 121.12415L142.26372 122.34688" fill="none"></path>
+</g>
+</g>
+</g>
+<g fill="#2780e3">
+<g fill="#2780e3">
+<path d="M135.84914 102.43004C135.84914 103.60162 134.89938 104.55138 133.7278 104.55138C132.55621 104.55138 131.60646 103.60162 131.60646 102.43004C131.60646 101.25845 132.55621 100.3087 133.7278 100.3087C134.89938 100.3087 135.84914 101.25845 135.84914 102.43004ZM133.7278 102.43004" stroke="none"></path>
+</g>
+<g transform="translate(133.7278,102.43004)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.815698,61.657456)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g stroke-width="0.4">
+<g stroke-dasharray="3.0,3.0" stroke-dashoffset="0.0">
+<path d="M131.69359 106.4978L133.7278 102.43004" fill="none"></path>
+</g>
+</g>
+</g>
+<g fill="#2780e3">
+<g fill="#2780e3">
+<path d="M161.45686 34.1432C161.45686 35.31479 160.50711 36.26454 159.33553 36.26454C158.16394 36.26454 157.21419 35.31479 157.21419 34.1432C157.21419 32.97162 158.16394 32.02187 159.33553 32.02187C160.50711 32.02187 161.45686 32.97162 161.45686 34.1432ZM159.33553 34.1432" stroke="none"></path>
+</g>
+<g transform="translate(159.33553,34.1432)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.815698,61.657456)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g stroke-width="0.4">
+<g stroke-dasharray="3.0,3.0" stroke-dashoffset="0.0">
+<path d="M155.03333 36.29587L159.33553 34.1432" fill="none"></path>
+</g>
+</g>
+</g>
+<g fill="#2780e3">
+<g fill="#2780e3">
+<path d="M127.31323 28.45274C127.31323 29.62433 126.36348 30.57408 125.1919 30.57408C124.02031 30.57408 123.07056 29.62433 123.07056 28.45274C123.07056 27.28116 124.02031 26.3314 125.1919 26.3314C126.36348 26.3314 127.31323 27.28116 127.31323 28.45274ZM125.1919 28.45274" stroke="none"></path>
+</g>
+<g transform="translate(125.1919,28.45274)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.815698,61.657456)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g stroke-width="0.4">
+<g stroke-dasharray="3.0,3.0" stroke-dashoffset="0.0">
+<path d="M133.48917 35.36594L125.1919 28.45274" fill="none"></path>
+</g>
+</g>
+</g>
+<g fill="#2780e3">
+<g fill="#2780e3">
+<path d="M150.07552 56.90549C150.07552 58.07707 149.12576 59.02682 147.95418 59.02682S145.83284 58.07707 145.83284 56.90549C145.83284 55.7339 146.7826 54.78415 147.95418 54.78415S150.07552 55.7339 150.07552 56.90549ZM147.95418 56.90549" stroke="none"></path>
+</g>
+<g transform="translate(147.95418,56.90549)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.815698,61.657456)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g stroke-width="0.4">
+<g stroke-dasharray="3.0,3.0" stroke-dashoffset="0.0">
+<path d="M145.18849 49.99228L147.95418 56.90549" fill="none"></path>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>
 </div>
-<div class="callout-title-container flex-fill">
-Nota
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-georref-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;39.1: Planta georreferenciada: POP, rota de cabo, CEO e CTOs em coordenadas reais, com os clientes ligados a cada CTO. O mapa responde “quem é afetado se este trecho cair?”.
+</figcaption>
+</figure>
 </div>
+<ul>
+<li><strong>Localizar</strong> fisicamente a falha (a CTO está nesta esquina, a 320 m do POP pela rota X).</li>
+<li><strong>Calcular impacto:</strong> um rompimento neste trecho afeta <strong>estas</strong> CTOs e <strong>estes</strong> clientes.</li>
+<li><strong>Planejar expansão:</strong> onde há capacidade (porta de splitter/fibra livre) perto de um novo cliente.</li>
+<li><strong>Despachar a equipe</strong> direto ao ponto certo.</li>
+</ul>
+</section>
+<section id="sec-doc-ferramentas" class="level2" data-number="39.4">
+<h2 data-number="39.4" class="anchored" data-anchor-id="sec-doc-ferramentas"><span class="header-section-number">39.4</span> Ferramentas</h2>
+<ul>
+<li><strong>GIS / software de planta óptica</strong> (ex.: sistemas dedicados de OSP) que modelam conectividade <strong>e</strong> geografia.</li>
+<li><strong>Mapas</strong> (camadas sobre base cartográfica) com postes, caixas e rotas.</li>
+<li><strong>Integração com OSS/sistema de gestão</strong> e com a OLT — idealmente o cadastro do cliente liga ao ponto físico (CTO/porta) e ao lógico (VLAN, ONT SN — capítulo <a href="34-provisionamento-pon.html#sec-provisionamento" class="quarto-xref"><span>Seção 35.1</span></a>).</li>
+<li><strong>Diagrama esquemático</strong> (a “árvore” lógica OLT→splitter→CTO→cliente) além do mapa.</li>
+</ul>
+</section>
+<section id="sec-doc-disciplina" class="level2" data-number="39.5">
+<h2 data-number="39.5" class="anchored" data-anchor-id="sec-doc-disciplina"><span class="header-section-number">39.5</span> Disciplina: documentar é processo</h2>
+<p>A documentação só vale se estiver <strong>atualizada</strong>. Isso exige <strong>processo</strong>:</p>
+<ul>
+<li><strong>As-built:</strong> toda obra/instalação atualiza a planta <strong>ao concluir</strong> (não “depois”).</li>
+<li><strong>Padrões de nomenclatura</strong> consistentes (CEO/CTO/fibra/porta) — capítulo
+<ol class="example" type="1">
+<li></li>
+</ol></li>
+<li><strong>Ligação ao chamado:</strong> ao reparar, registrar o que mudou (nova fusão, troca de fibra) de volta na planta.</li>
+<li><strong>Baseline</strong> (OTDR/perda, capítulo <a href="37-fusao-campo-certificacao.html#sec-fusao-campo" class="quarto-xref"><span>Seção 38.1</span></a>) anexado ao trecho.</li>
+</ul>
+<p>Documentação desatualizada é <strong>pior que nenhuma</strong> — induz a equipe ao erro.</p>
+<div class="callout-provedor">
+<p><strong>Na prática do provedor</strong></p>
+<ul>
+<li><strong>Documente desde o cliente nº 1.</strong> Começar “depois que crescer” nunca acontece, e recadastrar uma planta existente é caríssimo. Cadastro físico + lógico desde o início.</li>
+<li><strong>Cliente ↔︎ CTO ↔︎ porta ↔︎ fibra ↔︎ ONT(SN) ↔︎ VLAN:</strong> essa cadeia ligada é o que faz o suporte resolver rápido — “cliente caiu” vira “qual CTO/splitter, quem mais foi afetado, qual o Rx esperado”.</li>
+<li><strong>Impacto de falha em 1 clique:</strong> com georreferenciamento, um rompimento mostra <strong>quantos e quais</strong> clientes caíram — prioriza reparo e comunica proativamente.</li>
+<li><strong>As-built obrigatório:</strong> instalação/obra só “fecha” quando a planta foi atualizada. Coloque isso no processo da equipe, não na boa vontade.</li>
+<li><strong>Backup da base de planta</strong> (GIS/OSS) é tão crítico quanto backup de configuração: perder a documentação é perder a operação.</li>
+</ul>
 </div>
-<div class="callout-body-container callout-body">
-<p>Capítulo a ser desenvolvido pelo Claude Code (ver <code>PROMPT-CLAUDE-CODE.md</code> e <code>CLAUDE.md</code>).</p>
-</div>
-</div>
+</section>
+<section id="sec-resumo-38" class="level2" data-number="39.6">
+<h2 data-number="39.6" class="anchored" data-anchor-id="sec-resumo-38"><span class="header-section-number">39.6</span> Resumo e checklist</h2>
+<ul>
+<li>Documente três camadas: <strong>física/geográfica</strong>, <strong>lógica/conectividade</strong> e <strong>operacional</strong> (baseline).</li>
+<li><strong>Georreferenciar</strong> (GIS) permite localizar falhas, calcular impacto, planejar e despachar.</li>
+<li>Ligue <strong>cliente ↔︎ CTO ↔︎ porta ↔︎ fibra ↔︎ ONT ↔︎ VLAN</strong> — a cadeia que acelera o suporte.</li>
+<li>Mantenha por <strong>processo</strong> (as-built ao concluir); documentação desatualizada é pior que nenhuma.</li>
+</ul>
+<p><strong>Checklist do capítulo</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox">Registro física, lógica e operacional de cada elemento.</label></li>
+<li><label><input type="checkbox">Georreferencio postes/CEOs/CTOs/rotas e clientes por CTO.</label></li>
+<li><label><input type="checkbox">Ligo o cadastro do cliente ao ponto físico e lógico da rede.</label></li>
+<li><label><input type="checkbox">Atualizo a planta por processo (as-built) e faço backup da base.</label></li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1069,4 +1418,4 @@ Nota
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/38-documentacao-georreferenciamento.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/38-documentacao-georreferenciamento.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>

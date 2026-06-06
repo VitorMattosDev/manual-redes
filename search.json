@@ -804,7 +804,7 @@
     "href": "capitulos/10-emendas-fusao.html#sec-emendas-caixas",
     "title": "11  Emendas: Fusão e Mecânica",
     "section": "11.6 Caixas de emenda e organização",
-    "text": "11.6 Caixas de emenda e organização\nA emenda mora em uma caixa de emenda óptica (CEO) ou na CTO (capítulo Seção 33.1). Regras de acomodação que evitam perda e retrabalho:\n\nRaio de curvatura respeitado nas bandejas (curva fechada = macrobending = perda).\nReserva técnica (sobra de fibra) para refazer emendas no futuro sem precisar de cabo novo.\nIdentificação de cada fibra/tubo por cor (padrão de cores do cabo) — essencial para achar a fibra certa anos depois.\nVedação contra umidade; caixa aberta na rua = água = corrosão e perda.\n\n\nNa prática do provedor\n\nCalibre o clivador e troque a lâmina no intervalo recomendado. Mais fusões ruins vêm de clivagem do que da própria fusora.\nLimpe os eletrodos e faça a manutenção periódica da fusora; eletrodo gasto eleva a perda de todas as emendas do dia.\nMeta de campo: ≤ 0,1 dB por fusão; em rede primária, refaça acima de 0,1 dB — ali a emenda multiplica impacto por todos os clientes a jusante.\nDocumente cada emenda (caixa, bandeja, posição, fibra) no georreferenciamento (capítulo ?sec-doc-georref). Sem isso, o próximo reparo vira caça ao tesouro.\nTenha kit de emenda mecânica no carro só para emergência (rompimento à noite, sem fusora disponível) e substitua por fusão assim que possível.",
+    "text": "11.6 Caixas de emenda e organização\nA emenda mora em uma caixa de emenda óptica (CEO) ou na CTO (capítulo Seção 33.1). Regras de acomodação que evitam perda e retrabalho:\n\nRaio de curvatura respeitado nas bandejas (curva fechada = macrobending = perda).\nReserva técnica (sobra de fibra) para refazer emendas no futuro sem precisar de cabo novo.\nIdentificação de cada fibra/tubo por cor (padrão de cores do cabo) — essencial para achar a fibra certa anos depois.\nVedação contra umidade; caixa aberta na rua = água = corrosão e perda.\n\n\nNa prática do provedor\n\nCalibre o clivador e troque a lâmina no intervalo recomendado. Mais fusões ruins vêm de clivagem do que da própria fusora.\nLimpe os eletrodos e faça a manutenção periódica da fusora; eletrodo gasto eleva a perda de todas as emendas do dia.\nMeta de campo: ≤ 0,1 dB por fusão; em rede primária, refaça acima de 0,1 dB — ali a emenda multiplica impacto por todos os clientes a jusante.\nDocumente cada emenda (caixa, bandeja, posição, fibra) no georreferenciamento (capítulo Seção 39.1). Sem isso, o próximo reparo vira caça ao tesouro.\nTenha kit de emenda mecânica no carro só para emergência (rompimento à noite, sem fusora disponível) e substitua por fusão assim que possível.",
     "crumbs": [
       "Parte II — Camada Física e Fibra Óptica",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Emendas: Fusão e Mecânica</span>"
@@ -1948,7 +1948,7 @@
     "href": "capitulos/27-arquitetura-fttx.html#sec-fttx-caminho",
     "title": "28  Arquitetura FTTx (FTTH, FTTB, FTTC)",
     "section": "28.4 O caminho físico fim a fim",
-    "text": "28.4 O caminho físico fim a fim\nNa arquitetura PON/FTTH, a fibra percorre uma árvore (capítulo Seção 5.3):\n\nOLT (no POP, capítulo Seção 30.1) origina a PON; cada porta PON atende uma árvore.\nDIO (Distribuidor Interno Óptico, capítulo Seção 33.1) organiza as fibras no POP.\nRede primária — cabo de tronco da OLT/DIO até o primeiro ponto de divisão.\nSplitter — divide o sinal (1:8, 1:16…) — pode haver cascata (capítulo Seção 32.1).\nCTO (Caixa de Terminação Óptica) — onde os drops dos clientes se conectam (rede secundária).\nDrop — cabo da CTO até a casa.\nONT/ONU — equipamento na ponta do assinante (capítulo Seção 31.1).\n\nCada elemento desse caminho consome dB, e a soma tem de caber no orçamento de potência (capítulo Seção 34.1) — é a costura entre arquitetura e física.\n\nNa prática do provedor\n\nPadronize FTTH+GPON no acesso urbano e FTTA (fibra na torre) para levar capacidade ao rádio rural — assim o último salto rural é rádio, mas alimentado por fibra.\nProjete a árvore pensando no orçamento: a taxa de divisão total (ex.: 1:64) e a distância definem se o cliente mais distante fecha o link (capítulo Seção 34.1). Não “estique” a árvore sem refazer a conta.\nReserva e expansão: deixe fibras de reserva no tronco e portas livres no splitter/CTO; crescer depois sem reserva é refazer planta.\nFTTB em prédios: leve a fibra ao condomínio e resolva o vertical conforme o caso (ONT por apto é o ideal; switch interno é compromisso).\nDocumente a árvore (OLT→porta→splitter→CTO→cliente) no georreferenciamento (capítulo ?sec-doc-georref) desde o dia 1 — sem isso, manutenção vira caos.",
+    "text": "28.4 O caminho físico fim a fim\nNa arquitetura PON/FTTH, a fibra percorre uma árvore (capítulo Seção 5.3):\n\nOLT (no POP, capítulo Seção 30.1) origina a PON; cada porta PON atende uma árvore.\nDIO (Distribuidor Interno Óptico, capítulo Seção 33.1) organiza as fibras no POP.\nRede primária — cabo de tronco da OLT/DIO até o primeiro ponto de divisão.\nSplitter — divide o sinal (1:8, 1:16…) — pode haver cascata (capítulo Seção 32.1).\nCTO (Caixa de Terminação Óptica) — onde os drops dos clientes se conectam (rede secundária).\nDrop — cabo da CTO até a casa.\nONT/ONU — equipamento na ponta do assinante (capítulo Seção 31.1).\n\nCada elemento desse caminho consome dB, e a soma tem de caber no orçamento de potência (capítulo Seção 34.1) — é a costura entre arquitetura e física.\n\nNa prática do provedor\n\nPadronize FTTH+GPON no acesso urbano e FTTA (fibra na torre) para levar capacidade ao rádio rural — assim o último salto rural é rádio, mas alimentado por fibra.\nProjete a árvore pensando no orçamento: a taxa de divisão total (ex.: 1:64) e a distância definem se o cliente mais distante fecha o link (capítulo Seção 34.1). Não “estique” a árvore sem refazer a conta.\nReserva e expansão: deixe fibras de reserva no tronco e portas livres no splitter/CTO; crescer depois sem reserva é refazer planta.\nFTTB em prédios: leve a fibra ao condomínio e resolva o vertical conforme o caso (ONT por apto é o ideal; switch interno é compromisso).\nDocumente a árvore (OLT→porta→splitter→CTO→cliente) no georreferenciamento (capítulo Seção 39.1) desde o dia 1 — sem isso, manutenção vira caos.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>28</span>  <span class='chapter-title'>Arquitetura FTTx (FTTH, FTTB, FTTC)</span>"
@@ -2289,7 +2289,7 @@
     "href": "capitulos/32-dio-cto-rede-primaria-secundaria.html#sec-cto-drop",
     "title": "33  DIO, CTO e Redes Primária e Secundária",
     "section": "33.6 Drop e cabo AS",
-    "text": "33.6 Drop e cabo AS\n\nDrop — o cabo (geralmente flat/auto-sustentado de 1–2 fibras, G.657) que liga a CTO à ONT na casa. É o trecho mais sujeito a dobras e tração — causa nº 1 de degradação óptica (capítulo Seção 8.1).\nCabo AS (auto-sustentado) — cabo com elemento de tração que se sustenta entre postes sem cordoalha separada, muito usado na rede aérea (primária e secundária) do ISP. Simplifica a planta aérea.\n\n\nNa prática do provedor\n\nIdentifique tudo: DIO, CEO, CTO e cada fibra/porta. Uma planta sem identificação consistente (e sem o georreferenciamento, capítulo ?sec-doc-georref) transforma cada reparo em caça ao tesouro e multiplica o tempo de reestabelecimento.\nReserva técnica em toda caixa: sobra de fibra na CEO/CTO para refazer fusões e portas livres na CTO para novos clientes. Planta sem reserva = retrabalho a cada expansão.\nDrop é o elo fraco: instale com raio de curvatura respeitado e sem tração excessiva; oriente o cliente a não prender/dobrar. Cliente que “cai quando esquenta” costuma ter drop dobrado (macrobending).\nCTO no ponto certo: posicione CTOs para minimizar comprimento de drop e equilibrar o orçamento (capítulo Seção 34.1). CTO longe demais = drop longo = perda e tração.\nVedação: caixa aberta/malvedada na rua = umidade = corrosão e perda. Feche e vede sempre.",
+    "text": "33.6 Drop e cabo AS\n\nDrop — o cabo (geralmente flat/auto-sustentado de 1–2 fibras, G.657) que liga a CTO à ONT na casa. É o trecho mais sujeito a dobras e tração — causa nº 1 de degradação óptica (capítulo Seção 8.1).\nCabo AS (auto-sustentado) — cabo com elemento de tração que se sustenta entre postes sem cordoalha separada, muito usado na rede aérea (primária e secundária) do ISP. Simplifica a planta aérea.\n\n\nNa prática do provedor\n\nIdentifique tudo: DIO, CEO, CTO e cada fibra/porta. Uma planta sem identificação consistente (e sem o georreferenciamento, capítulo Seção 39.1) transforma cada reparo em caça ao tesouro e multiplica o tempo de reestabelecimento.\nReserva técnica em toda caixa: sobra de fibra na CEO/CTO para refazer fusões e portas livres na CTO para novos clientes. Planta sem reserva = retrabalho a cada expansão.\nDrop é o elo fraco: instale com raio de curvatura respeitado e sem tração excessiva; oriente o cliente a não prender/dobrar. Cliente que “cai quando esquenta” costuma ter drop dobrado (macrobending).\nCTO no ponto certo: posicione CTOs para minimizar comprimento de drop e equilibrar o orçamento (capítulo Seção 34.1). CTO longe demais = drop longo = perda e tração.\nVedação: caixa aberta/malvedada na rua = umidade = corrosão e perda. Feche e vede sempre.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>33</span>  <span class='chapter-title'>DIO, CTO e Redes Primária e Secundária</span>"
@@ -2454,7 +2454,62 @@
     "href": "capitulos/35-cabos-opticos.html",
     "title": "36  Cabos Ópticos (Drop, Autossustentável, Espinha)",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "36.1 O cabo certo para cada trecho\nA fibra (capítulo Seção 9.1) precisa de um cabo que a proteja e a leve do POP até a casa do cliente, atravessando postes, dutos e fachadas. Escolher o cabo errado encarece a obra ou gera falhas: um cabo sem sustentação na rede aérea, um drop rígido demais no intradomiciliar, ou contagem de fibras insuficiente no tronco. Este capítulo cobre os tipos de cabo da planta externa (OSP) e onde cada um se aplica, completando a visão física da Parte VI.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>36</span>  <span class='chapter-title'>Cabos Ópticos (Drop, Autossustentável, Espinha)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/35-cabos-opticos.html#sec-cabos-anatomia",
+    "href": "capitulos/35-cabos-opticos.html#sec-cabos-anatomia",
+    "title": "36  Cabos Ópticos (Drop, Autossustentável, Espinha)",
+    "section": "36.2 Anatomia de um cabo óptico",
+    "text": "36.2 Anatomia de um cabo óptico\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 36.1: Corte típico: fibras (identificadas por cor) dentro de tubos loose, ao redor de um elemento de tração central, tudo sob uma capa de proteção.\n\n\n\nElementos comuns:\n\nFibras — identificadas pelo padrão de cores (azul, laranja, verde, marrom…), essencial para emendar a fibra certa (capítulo Seção 11.1).\nTubos (loose tube) — alojam as fibras com folga, protegendo de tração/umidade; cabos tight buffer são mais para uso interno.\nElemento de tração — fio/fibra de aramida ou aço que aguenta o esforço mecânico (vão entre postes).\nCapa — PE para externo (UV, água); LSZH para interno (baixa fumaça).\nGeleia/elemento bloqueador de água em cabos externos.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>36</span>  <span class='chapter-title'>Cabos Ópticos (Drop, Autossustentável, Espinha)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/35-cabos-opticos.html#sec-cabos-tipos",
+    "href": "capitulos/35-cabos-opticos.html#sec-cabos-tipos",
+    "title": "36  Cabos Ópticos (Drop, Autossustentável, Espinha)",
+    "section": "36.3 Tipos por aplicação",
+    "text": "36.3 Tipos por aplicação\n\n\n\n\n\n\n\n\nCabo\nOnde\nCaracterísticas\n\n\n\n\nDrop (flat)\nCTO → casa\n1–2 fibras G.657, com fio de aço/aramida, fácil de manusear\n\n\nAutossustentável (AS/ASU)\nrede aérea (postes)\ntem sustentação própria, dispensa cordoalha; espinha de peixe\n\n\nEspinha / lançamento por cordoalha\nrede aérea\npreso a uma cordoalha de aço separada\n\n\nSubterrâneo / dutado\ndutos, túneis\nreforço contra esmagamento/roedores\n\n\nCFOA / alta contagem\ntronco/primária\ndezenas a centenas de fibras\n\n\n\n\nDrop: o trecho final (capítulo Seção 33.1), G.657 (insensível a curvatura); o elo mais frágil — instale sem dobra/tração.\nAS (autossustentável): o cavalo de batalha da rede aérea do ISP — leva a primária/secundária entre postes sem cordoalha separada, identificado pelo formato em “8” (mensageiro integrado) ou redondo com aramida.\nAlta contagem (espinha): o tronco que sai do POP, com muitas fibras para servir bairros inteiros (capítulo Seção 28.1).",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>36</span>  <span class='chapter-title'>Cabos Ópticos (Drop, Autossustentável, Espinha)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/35-cabos-opticos.html#sec-cabos-contagem",
+    "href": "capitulos/35-cabos-opticos.html#sec-cabos-contagem",
+    "title": "36  Cabos Ópticos (Drop, Autossustentável, Espinha)",
+    "section": "36.4 Contagem de fibras e reserva",
+    "text": "36.4 Contagem de fibras e reserva\nDimensionar a contagem é planejamento de longo prazo: puxar cabo é caro, então sobre-dimensiona-se. Um tronco que hoje precisa de 12 fibras costuma ser lançado com 24/48 para crescimento e reserva. Regra prática: separe fibras para serviço atual + expansão + reserva técnica (reparo). Cabo sem fibra sobrando obriga a nova obra a cada crescimento.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>36</span>  <span class='chapter-title'>Cabos Ópticos (Drop, Autossustentável, Espinha)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/35-cabos-opticos.html#sec-cabos-cores",
+    "href": "capitulos/35-cabos-opticos.html#sec-cabos-cores",
+    "title": "36  Cabos Ópticos (Drop, Autossustentável, Espinha)",
+    "section": "36.5 Padrão de cores",
+    "text": "36.5 Padrão de cores\nO código de cores identifica fibras e tubos de forma padronizada (azul, laranja, verde, marrom, cinza, branco, vermelho, preto, amarelo, violeta, rosa, aqua). Saber a sequência é o que permite, anos depois, achar a fibra certa numa CEO com dezenas de fibras. Combine com a documentação (capítulo Seção 39.1): cor + posição + registro = reparo rápido.\n\nNa prática do provedor\n\nPadronize por trecho: AS na rede aérea (primária/secundária), drop G.657 no cliente, alta contagem no tronco. Menos SKUs, menos erro de campo.\nSobre-dimensione o tronco: lance 2–4× a fibra necessária hoje. O custo extra do cabo é pequeno perto do custo de relançar depois (mão de obra, autorização de poste, trânsito).\nRespeite tração e raio de curvatura no lançamento — esticar demais o cabo aéreo ou dobrar no fechamento da CTO gera macrobending (capítulo\n\ne perda que só aparece semanas depois.\n\nAluguel de poste é gargalo: o cabo AS reduz ferragens, mas o ponto de fixação no poste depende de acordo com a concessionária de energia (capítulo Seção 37.1). Planeje a ocupação.\nCor + documentação sempre: sem o código de cores registrado, uma CEO de 48 fibras vira loteria no próximo reparo.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>36</span>  <span class='chapter-title'>Cabos Ópticos (Drop, Autossustentável, Espinha)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/35-cabos-opticos.html#sec-resumo-35",
+    "href": "capitulos/35-cabos-opticos.html#sec-resumo-35",
+    "title": "36  Cabos Ópticos (Drop, Autossustentável, Espinha)",
+    "section": "36.6 Resumo e checklist",
+    "text": "36.6 Resumo e checklist\n\nO cabo protege e transporta a fibra; escolha por trecho: drop (cliente), AS (aéreo), alta contagem (tronco), dutado (subterrâneo).\nConheça a anatomia (fibras por cor, tubos loose, tração, capa) e o padrão de cores.\nSobre-dimensione a contagem do tronco (expansão + reserva).\nRespeite tração/curvatura no lançamento para não criar perda futura.\n\nChecklist do capítulo\n\nSeleciono o tipo de cabo certo para cada trecho da planta.\nIdentifico fibras/tubos pelo código de cores.\nDimensiono a contagem do tronco com folga de expansão e reserva.\nLanço o cabo respeitando tração e raio de curvatura.",
     "crumbs": [
       "Parte VII — Planta Externa (OSP)",
       "<span class='chapter-number'>36</span>  <span class='chapter-title'>Cabos Ópticos (Drop, Autossustentável, Espinha)</span>"
@@ -2465,7 +2520,62 @@
     "href": "capitulos/36-infraestrutura-postes-ferragens.html",
     "title": "37  Infraestrutura: Postes, Ferragens e Reserva Técnica",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "37.1 A obra civil que sustenta a fibra\nA fibra mais bem emendada do mundo não serve de nada pendurada errado. A planta externa (OSP) é, em boa parte, obra de campo: fixar cabos em postes, usar as ferragens corretas, manter reserva técnica, respeitar alturas e o compartilhamento com a rede elétrica. Fazer isso bem é o que evita rompimentos, multas da concessionária e a “rede aranha” perigosa. Este capítulo cobre a infraestrutura aérea — a mais comum no ISP brasileiro — e seus cuidados.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>37</span>  <span class='chapter-title'>Infraestrutura: Postes, Ferragens e Reserva Técnica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/36-infraestrutura-postes-ferragens.html#sec-infra-aereo-subterraneo",
+    "href": "capitulos/36-infraestrutura-postes-ferragens.html#sec-infra-aereo-subterraneo",
+    "title": "37  Infraestrutura: Postes, Ferragens e Reserva Técnica",
+    "section": "37.2 Aéreo vs. subterrâneo",
+    "text": "37.2 Aéreo vs. subterrâneo\n\n\n\n\n\n\n\n\nCritério\nAéreo (postes)\nSubterrâneo (dutos)\n\n\n\n\nCusto de implantação\nbaixo\nalto\n\n\nVelocidade de obra\nrápida\nlenta\n\n\nExposição a danos\nalta (carro, poda, vento)\nbaixa\n\n\nEstética/regulação\n“rede aranha”, pressão regulatória\nlimpo, exigido em áreas nobres\n\n\nManutenção\nfácil acesso\nexige infraestrutura\n\n\n\nNo Brasil, a esmagadora maioria do ISP regional é aéreo, usando os postes da concessionária de energia mediante contrato de compartilhamento. Subterrâneo aparece em centros, condomínios e onde a regulação exige.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>37</span>  <span class='chapter-title'>Infraestrutura: Postes, Ferragens e Reserva Técnica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/36-infraestrutura-postes-ferragens.html#sec-infra-postes",
+    "href": "capitulos/36-infraestrutura-postes-ferragens.html#sec-infra-postes",
+    "title": "37  Infraestrutura: Postes, Ferragens e Reserva Técnica",
+    "section": "37.3 Postes e a faixa de ocupação",
+    "text": "37.3 Postes e a faixa de ocupação\nO poste é compartilhado em faixas de altura, da elétrica (alta, perigosa) à de telecom (baixa):\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n \n \n \n \n \n \n\n\n\n \n \n \n \n \n \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n \n \n \n \n \n \n\n\n\n \n \n \n \n \n \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 37.1: Faixas do poste: energia no topo (zona perigosa), zona de segurança e a faixa de telecom abaixo, sempre acima da altura mínima ao solo (maior sobre vias de veículos).\n\n\n\nRegras práticas: respeitar a zona de segurança para a rede elétrica (risco de morte e de indução), manter altura mínima ao solo (maior sobre ruas que sobre calçadas), e não sobrecarregar o poste (peso/esforço somados de todos os ocupantes).",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>37</span>  <span class='chapter-title'>Infraestrutura: Postes, Ferragens e Reserva Técnica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/36-infraestrutura-postes-ferragens.html#sec-infra-ferragens",
+    "href": "capitulos/36-infraestrutura-postes-ferragens.html#sec-infra-ferragens",
+    "title": "37  Infraestrutura: Postes, Ferragens e Reserva Técnica",
+    "section": "37.4 Ferragens essenciais",
+    "text": "37.4 Ferragens essenciais\nAs ferragens fixam e organizam o cabo no poste:\n\nAlça pré-formada / esticador — prende o cabo AS ao poste, ajustando a tensão do vão.\nSuporte/abraçadeira (cinta) — fixa a ferragem ao poste.\nReserva (rolo de fibra) — organiza a sobra de cabo.\nIdentificação (plaqueta) — etiqueta o cabo/ISP no poste (exigência comum).\n\nUsar a ferragem certa e a tensão adequada evita que o vão fique baixo demais (risco) ou esticado demais (perda por tração — capítulo Seção 8.1).",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>37</span>  <span class='chapter-title'>Infraestrutura: Postes, Ferragens e Reserva Técnica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/36-infraestrutura-postes-ferragens.html#sec-infra-reserva",
+    "href": "capitulos/36-infraestrutura-postes-ferragens.html#sec-infra-reserva",
+    "title": "37  Infraestrutura: Postes, Ferragens e Reserva Técnica",
+    "section": "37.5 Reserva técnica",
+    "text": "37.5 Reserva técnica\nA reserva técnica é a sobra de cabo deixada em pontos estratégicos (em postes, perto de CEOs/CTOs), enrolada em suporte próprio. Para que serve:\n\nRefazer emendas sem precisar de cabo novo (capítulo Seção 11.1).\nReposicionar caixas/postes.\nReparar rompimentos (puxar cabo de uma ponta).\n\nRegra: deixe reserva em toda CEO/CTO e em vãos longos. Reserva insuficiente transforma um reparo de 1 hora em uma obra de relançamento.\n\nNa prática do provedor\n\nContrato de compartilhamento de postes com a concessionária é pré-requisito legal — ocupar poste sem acordo gera multa e remoção. Planeje a ocupação e a identificação (plaqueta) dos seus cabos.\nZona de segurança da elétrica é questão de vida. Equipe treinada, NR-10/NR-35 quando aplicável, e nunca invadir a faixa de energia. Indução e contato são fatais.\nReserva técnica generosa em CEO/CTO e vãos longos: é o que diferencia um reparo rápido de uma obra. Padronize o tamanho do laço de reserva.\nCombata a “rede aranha”: cabo frouxo, baixo ou mal fixado é rompimento certo (caminhão, poda, vento) — a causa nº 1 de queda em massa junto com retroescavadeira no subterrâneo. Tensão e altura corretas previnem.\nDocumente o que está em cada poste (capítulo Seção 39.1): qual cabo, qual CTO, qual reserva — sem isso, manutenção noturna vira pesadelo.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>37</span>  <span class='chapter-title'>Infraestrutura: Postes, Ferragens e Reserva Técnica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/36-infraestrutura-postes-ferragens.html#sec-resumo-36",
+    "href": "capitulos/36-infraestrutura-postes-ferragens.html#sec-resumo-36",
+    "title": "37  Infraestrutura: Postes, Ferragens e Reserva Técnica",
+    "section": "37.6 Resumo e checklist",
+    "text": "37.6 Resumo e checklist\n\nA planta é majoritariamente aérea, em postes compartilhados (contrato com a concessionária).\nRespeite faixa de telecom, zona de segurança da elétrica e altura ao solo.\nUse as ferragens corretas com tensão adequada (nem baixo, nem esticado).\nReserva técnica em CEO/CTO e vãos longos é o que torna o reparo rápido.\n\nChecklist do capítulo\n\nSei as faixas do poste e a zona de segurança da rede elétrica.\nEscolho e tensiono as ferragens corretamente.\nDeixo reserva técnica padronizada em caixas e vãos longos.\nOpero com contrato de compartilhamento e identificação dos cabos.",
     "crumbs": [
       "Parte VII — Planta Externa (OSP)",
       "<span class='chapter-number'>37</span>  <span class='chapter-title'>Infraestrutura: Postes, Ferragens e Reserva Técnica</span>"
@@ -2476,7 +2586,62 @@
     "href": "capitulos/37-fusao-campo-certificacao.html",
     "title": "38  Fusão em Campo e Certificação",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "38.1 Da bancada para o poste\nA técnica de fusão (capítulo Seção 11.1) é a mesma na bancada e no campo, mas o campo acrescenta hostilidade: trabalho na altura do poste ou no chão, poeira, sol, umidade, pressa. E acrescenta uma etapa que define se a planta entra em produção com qualidade: a certificação — medir e registrar que cada trecho/emenda está dentro do especificado. Fusão de campo bem-feita + certificação documentada é o que permite ligar o cliente com confiança e ter referência para futuros reparos.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>38</span>  <span class='chapter-title'>Fusão em Campo e Certificação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/37-fusao-campo-certificacao.html#sec-fusao-campo-praticas",
+    "href": "capitulos/37-fusao-campo-certificacao.html#sec-fusao-campo-praticas",
+    "title": "38  Fusão em Campo e Certificação",
+    "section": "38.2 Boas práticas de fusão em campo",
+    "text": "38.2 Boas práticas de fusão em campo\nO que muda em relação à bancada:\n\nLimpeza é mais difícil e mais crítica: poeira do poste/rua contamina clivagem e eletrodos. Trabalhe abrigado (tenda/van), limpe sempre.\nClivador calibrado e lâmina em dia: a clivagem a 90° (capítulo\n\né o fator nº 1 da perda — em campo, degrada rápido.\n\nEletrodos limpos: poeira eleva a perda de todas as emendas do dia; faça a manutenção da fusora.\nAcomodação na caixa (CEO/CTO): respeite raio de curvatura nas bandejas, deixe reserva e vede contra umidade (capítulo Seção 11.6).\nIdentifique cada fibra (cor/posição) antes de fechar.\n\nA meta continua ≤ 0,1 dB por fusão; em rede primária (afeta muitos clientes), seja rigoroso e refaça acima disso.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>38</span>  <span class='chapter-title'>Fusão em Campo e Certificação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/37-fusao-campo-certificacao.html#sec-fusao-certificacao",
+    "href": "capitulos/37-fusao-campo-certificacao.html#sec-fusao-certificacao",
+    "title": "38  Fusão em Campo e Certificação",
+    "section": "38.3 Por que certificar",
+    "text": "38.3 Por que certificar\nA estimativa da fusora não basta para entregar a planta. Certificar é medir com instrumento e registrar o resultado, criando a linha de base (baseline):\n\nProva que o trecho foi entregue dentro do orçamento (capítulo Seção 34.1).\nVira referência para comparar quando houver problema (mudou em relação ao baseline? há evento novo).\nDocumenta para o cliente corporativo/SLA e para a própria operação.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>38</span>  <span class='chapter-title'>Fusão em Campo e Certificação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/37-fusao-campo-certificacao.html#sec-fusao-testes",
+    "href": "capitulos/37-fusao-campo-certificacao.html#sec-fusao-testes",
+    "title": "38  Fusão em Campo e Certificação",
+    "section": "38.4 Os dois testes de certificação",
+    "text": "38.4 Os dois testes de certificação\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 38.1: Dois testes complementares: a perda de inserção (fonte + power-meter) dá a perda total fim a fim; o OTDR mapeia e mede cada evento ao longo da fibra.\n\n\n\n\nPerda de inserção (fonte de luz + power-meter): mede a atenuação total do enlace em dB, no comprimento de onda de operação. É o teste que diz “o enlace fecha o orçamento?”. Simples e definitivo para o número global.\nOTDR (Optical Time-Domain Reflectometer): envia pulsos e analisa o retroespalhamento, localizando e medindo cada evento (fusão, conector, splitter, curvatura, ruptura) e a distância de cada um (capítulos ?sec-otdr e 2). É o teste que diz “onde está e quanto perde cada ponto?”.\n\nOs dois são complementares: o power-meter dá a verdade do total; o OTDR mostra a anatomia do trecho. Para certificar PON, mede-se nos λ relevantes (1310/1490/1550).",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>38</span>  <span class='chapter-title'>Fusão em Campo e Certificação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/37-fusao-campo-certificacao.html#sec-fusao-laudo",
+    "href": "capitulos/37-fusao-campo-certificacao.html#sec-fusao-laudo",
+    "title": "38  Fusão em Campo e Certificação",
+    "section": "38.5 O laudo de certificação",
+    "text": "38.5 O laudo de certificação\nCertificar gera um registro que deve conter: trecho/identificação, data, comprimentos de onda, perda total medida vs. orçamento previsto, traço/eventos do OTDR e o baseline arquivado. Esse laudo, ligado ao georreferenciamento (capítulo Seção 39.1), é o que torna o próximo reparo rápido.\n\nNa prática do provedor\n\nCertifique a rede primária sempre. Ela afeta dezenas/centenas de clientes; medir total (power-meter) e OTDR antes de produzir evita um chamado em massa por uma fusão ruim no tronco.\nGuarde o baseline (OTDR + perda total) de cada trecho. Quando algo degradar, você compara com o baseline e acha o evento novo em minutos (capítulo\n\n— em vez de medir do zero.\n\nKit de campo do fusionista: fusora + clivador calibrado (lâmina nova), álcool e lenços, microscópio de inspeção (capítulo Seção 10.1), power-meter, OTDR, VFL (localizador visual). Sem inspeção e medição, você “conserta às cegas”.\nRefaça acima de 0,1 dB em primária; em drop de cliente, a meta é o Rx na ONT dentro da faixa (capítulo Seção 31.4).\nTenda/abrigo para fusão em campo: poeira é inimiga da clivagem e dos eletrodos — fusão a céu aberto e ventando rende emenda ruim.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>38</span>  <span class='chapter-title'>Fusão em Campo e Certificação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/37-fusao-campo-certificacao.html#sec-resumo-37",
+    "href": "capitulos/37-fusao-campo-certificacao.html#sec-resumo-37",
+    "title": "38  Fusão em Campo e Certificação",
+    "section": "38.6 Resumo e checklist",
+    "text": "38.6 Resumo e checklist\n\nFusão de campo = mesma técnica da bancada + disciplina contra poeira/umidade e acomodação correta.\nCertificar = medir e registrar; cria o baseline que prova o orçamento e acelera reparos.\nDois testes complementares: perda de inserção (total) e OTDR (evento a evento).\nLaudo + georreferenciamento tornam o próximo reparo rápido.\n\nChecklist do capítulo\n\nFaço fusão de campo abrigado, com clivador/eletrodos em dia.\nCertifico com power-meter (total) e OTDR (eventos) nos λ corretos.\nArquivo o baseline de cada trecho.\nPriorizo certificação rigorosa na rede primária.",
     "crumbs": [
       "Parte VII — Planta Externa (OSP)",
       "<span class='chapter-number'>38</span>  <span class='chapter-title'>Fusão em Campo e Certificação</span>"
@@ -2487,7 +2652,62 @@
     "href": "capitulos/38-documentacao-georreferenciamento.html",
     "title": "39  Documentação e Georreferenciamento de Rede",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "39.1 A planta que ninguém vê — e que salva a operação\nUma rede óptica de provedor tem milhares de elementos espalhados pela cidade: postes, CEOs, CTOs, splitters, fusões, fibras por cor. Onde está cada coisa? Qual fibra vai para qual cliente? Que splitter alimenta aquela CTO? Sem documentação e georreferenciamento, cada reparo vira investigação, cada expansão vira adivinhação, e o tempo de reestabelecimento (e a insatisfação do cliente) explode. Documentar não é burocracia: é a ferramenta operacional nº 1 que torna tudo o que vimos nas Partes VI–VII utilizável no dia a dia.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>39</span>  <span class='chapter-title'>Documentação e Georreferenciamento de Rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/38-documentacao-georreferenciamento.html#sec-doc-o-que",
+    "href": "capitulos/38-documentacao-georreferenciamento.html#sec-doc-o-que",
+    "title": "39  Documentação e Georreferenciamento de Rede",
+    "section": "39.2 O que documentar",
+    "text": "39.2 O que documentar\nA documentação cobre três camadas de informação:\n\n\n\n\n\n\n\n\nCamada\nO que registra\nExemplos\n\n\n\n\nFísica/geográfica\nonde está\npostes, caixas, rotas de cabo (coordenadas)\n\n\nLógica/conectividade\no que liga a quê\nfibra X (cor) → splitter → porta → cliente\n\n\nOperacional\nmedições e histórico\nbaseline OTDR, perda, data de fusão, reparos\n\n\n\nJuntas, elas respondem em segundos: “o cliente Y está em qual CTO, qual porta de splitter, qual fibra, e qual era o Rx esperado?”.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>39</span>  <span class='chapter-title'>Documentação e Georreferenciamento de Rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/38-documentacao-georreferenciamento.html#sec-doc-geo",
+    "href": "capitulos/38-documentacao-georreferenciamento.html#sec-doc-geo",
+    "title": "39  Documentação e Georreferenciamento de Rede",
+    "section": "39.3 Georreferenciamento: a planta no mapa",
+    "text": "39.3 Georreferenciamento: a planta no mapa\nGeorreferenciar é colocar cada elemento em coordenadas reais sobre um mapa (GIS). Isso permite:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 39.1: Planta georreferenciada: POP, rota de cabo, CEO e CTOs em coordenadas reais, com os clientes ligados a cada CTO. O mapa responde “quem é afetado se este trecho cair?”.\n\n\n\n\nLocalizar fisicamente a falha (a CTO está nesta esquina, a 320 m do POP pela rota X).\nCalcular impacto: um rompimento neste trecho afeta estas CTOs e estes clientes.\nPlanejar expansão: onde há capacidade (porta de splitter/fibra livre) perto de um novo cliente.\nDespachar a equipe direto ao ponto certo.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>39</span>  <span class='chapter-title'>Documentação e Georreferenciamento de Rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/38-documentacao-georreferenciamento.html#sec-doc-ferramentas",
+    "href": "capitulos/38-documentacao-georreferenciamento.html#sec-doc-ferramentas",
+    "title": "39  Documentação e Georreferenciamento de Rede",
+    "section": "39.4 Ferramentas",
+    "text": "39.4 Ferramentas\n\nGIS / software de planta óptica (ex.: sistemas dedicados de OSP) que modelam conectividade e geografia.\nMapas (camadas sobre base cartográfica) com postes, caixas e rotas.\nIntegração com OSS/sistema de gestão e com a OLT — idealmente o cadastro do cliente liga ao ponto físico (CTO/porta) e ao lógico (VLAN, ONT SN — capítulo Seção 35.1).\nDiagrama esquemático (a “árvore” lógica OLT→splitter→CTO→cliente) além do mapa.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>39</span>  <span class='chapter-title'>Documentação e Georreferenciamento de Rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/38-documentacao-georreferenciamento.html#sec-doc-disciplina",
+    "href": "capitulos/38-documentacao-georreferenciamento.html#sec-doc-disciplina",
+    "title": "39  Documentação e Georreferenciamento de Rede",
+    "section": "39.5 Disciplina: documentar é processo",
+    "text": "39.5 Disciplina: documentar é processo\nA documentação só vale se estiver atualizada. Isso exige processo:\n\nAs-built: toda obra/instalação atualiza a planta ao concluir (não “depois”).\nPadrões de nomenclatura consistentes (CEO/CTO/fibra/porta) — capítulo\n\n\n\nLigação ao chamado: ao reparar, registrar o que mudou (nova fusão, troca de fibra) de volta na planta.\nBaseline (OTDR/perda, capítulo Seção 38.1) anexado ao trecho.\n\nDocumentação desatualizada é pior que nenhuma — induz a equipe ao erro.\n\nNa prática do provedor\n\nDocumente desde o cliente nº 1. Começar “depois que crescer” nunca acontece, e recadastrar uma planta existente é caríssimo. Cadastro físico + lógico desde o início.\nCliente ↔︎ CTO ↔︎ porta ↔︎ fibra ↔︎ ONT(SN) ↔︎ VLAN: essa cadeia ligada é o que faz o suporte resolver rápido — “cliente caiu” vira “qual CTO/splitter, quem mais foi afetado, qual o Rx esperado”.\nImpacto de falha em 1 clique: com georreferenciamento, um rompimento mostra quantos e quais clientes caíram — prioriza reparo e comunica proativamente.\nAs-built obrigatório: instalação/obra só “fecha” quando a planta foi atualizada. Coloque isso no processo da equipe, não na boa vontade.\nBackup da base de planta (GIS/OSS) é tão crítico quanto backup de configuração: perder a documentação é perder a operação.",
+    "crumbs": [
+      "Parte VII — Planta Externa (OSP)",
+      "<span class='chapter-number'>39</span>  <span class='chapter-title'>Documentação e Georreferenciamento de Rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/38-documentacao-georreferenciamento.html#sec-resumo-38",
+    "href": "capitulos/38-documentacao-georreferenciamento.html#sec-resumo-38",
+    "title": "39  Documentação e Georreferenciamento de Rede",
+    "section": "39.6 Resumo e checklist",
+    "text": "39.6 Resumo e checklist\n\nDocumente três camadas: física/geográfica, lógica/conectividade e operacional (baseline).\nGeorreferenciar (GIS) permite localizar falhas, calcular impacto, planejar e despachar.\nLigue cliente ↔︎ CTO ↔︎ porta ↔︎ fibra ↔︎ ONT ↔︎ VLAN — a cadeia que acelera o suporte.\nMantenha por processo (as-built ao concluir); documentação desatualizada é pior que nenhuma.\n\nChecklist do capítulo\n\nRegistro física, lógica e operacional de cada elemento.\nGeorreferencio postes/CEOs/CTOs/rotas e clientes por CTO.\nLigo o cadastro do cliente ao ponto físico e lógico da rede.\nAtualizo a planta por processo (as-built) e faço backup da base.",
     "crumbs": [
       "Parte VII — Planta Externa (OSP)",
       "<span class='chapter-number'>39</span>  <span class='chapter-title'>Documentação e Georreferenciamento de Rede</span>"

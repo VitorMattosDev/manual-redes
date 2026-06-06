@@ -610,8 +610,19 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#sec-cabos-opticos" id="toc-sec-cabos-opticos" class="nav-link active" data-scroll-target="#sec-cabos-opticos"><span class="header-section-number">36.1</span> O cabo certo para cada trecho</a></li>
+  <li><a href="#sec-cabos-anatomia" id="toc-sec-cabos-anatomia" class="nav-link" data-scroll-target="#sec-cabos-anatomia"><span class="header-section-number">36.2</span> Anatomia de um cabo óptico</a></li>
+  <li><a href="#sec-cabos-tipos" id="toc-sec-cabos-tipos" class="nav-link" data-scroll-target="#sec-cabos-tipos"><span class="header-section-number">36.3</span> Tipos por aplicação</a></li>
+  <li><a href="#sec-cabos-contagem" id="toc-sec-cabos-contagem" class="nav-link" data-scroll-target="#sec-cabos-contagem"><span class="header-section-number">36.4</span> Contagem de fibras e reserva</a></li>
+  <li><a href="#sec-cabos-cores" id="toc-sec-cabos-cores" class="nav-link" data-scroll-target="#sec-cabos-cores"><span class="header-section-number">36.5</span> Padrão de cores</a></li>
+  <li><a href="#sec-resumo-35" id="toc-sec-resumo-35" class="nav-link" data-scroll-target="#sec-resumo-35"><span class="header-section-number">36.6</span> Resumo e checklist</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/35-cabos-opticos.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -635,21 +646,314 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="sec-cabos-opticos" class="level2" data-number="36.1">
+<h2 data-number="36.1" class="anchored" data-anchor-id="sec-cabos-opticos"><span class="header-section-number">36.1</span> O cabo certo para cada trecho</h2>
+<p>A fibra (capítulo <a href="08-fibra-tipos-caracteristicas.html#sec-fibra-tipos" class="quarto-xref"><span>Seção 9.1</span></a>) precisa de um <strong>cabo</strong> que a proteja e a leve do POP até a casa do cliente, atravessando postes, dutos e fachadas. Escolher o cabo errado encarece a obra ou gera falhas: um cabo sem sustentação na rede aérea, um <em>drop</em> rígido demais no intradomiciliar, ou contagem de fibras insuficiente no tronco. Este capítulo cobre os <strong>tipos de cabo da planta externa (OSP)</strong> e onde cada um se aplica, completando a visão física da Parte VI.</p>
+</section>
+<section id="sec-cabos-anatomia" class="level2" data-number="36.2">
+<h2 data-number="36.2" class="anchored" data-anchor-id="sec-cabos-anatomia"><span class="header-section-number">36.2</span> Anatomia de um cabo óptico</h2>
+<div id="fig-cabo-anatomia" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cabo-anatomia-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="184.627029pt" height="102.445848pt" viewbox="-68.014948 -68.014951 184.627029 102.445848">
+<defs>
+<path id="tz_cabo_anatomia_g0-12" d="M2.765629-3.459029C2.677958-3.451059 2.638107-3.451059 2.622167-3.443088S2.590286-3.435118 2.478705-3.435118H1.44259V-4.303861C1.44259-5.092902 2.183811-5.387796 2.677958-5.387796C2.917061-5.387796 3.156164-5.332005 3.355417-5.180573C3.339477-5.180573 3.028643-5.116812 3.028643-4.790037C3.028643-4.534994 3.235866-4.407472 3.411208-4.407472C3.52279-4.407472 3.793773-4.479203 3.793773-4.805978C3.793773-5.228394 3.379328-5.610959 2.701868-5.610959C1.920797-5.610959 .884682-5.220423 .884682-4.311831V-3.435118H.231133V-3.172105H.884682V-.621669C.884682-.263014 .789041-.263014 .278954-.263014V0C.589788-.02391 1.036115-.02391 1.171606-.02391C1.331009-.02391 1.761395-.02391 2.072229 0V-.263014C1.562142-.263014 1.466501-.263014 1.466501-.621669V-3.172105H2.83736C3.172105-3.172105 3.227895-3.076463 3.227895-2.741719V-.621669C3.227895-.263014 3.132254-.263014 2.622167-.263014V0C2.933001-.02391 3.379328-.02391 3.514819-.02391C3.674222-.02391 4.104608-.02391 4.415442 0V-.263014C3.905355-.263014 3.809714-.263014 3.809714-.621669V-3.53076L2.765629-3.459029Z"></path>
+<path id="tz_cabo_anatomia_g0-24" d="M2.414944 .167372H1.809215V.557908C2.351183 .565878 2.518555 .797011 2.518555 .980324C2.518555 1.251308 2.207721 1.41071 1.370859 1.41071H1.099875V1.633873H1.474471C1.578082 1.633873 2.12802 1.625903 2.478705 1.546202C2.797509 1.474471 3.124284 1.338979 3.124284 .980324C3.124284 .557908 2.677958 .430386 2.414944 .382565V.167372Z"></path>
+<path id="tz_cabo_anatomia_g0-40" d="M2.654047 1.992528C2.717808 1.992528 2.81345 1.992528 2.81345 1.896887C2.81345 1.865006 2.805479 1.857036 2.701868 1.753425C1.609963 .72528 1.338979-.757161 1.338979-1.992528C1.338979-4.28792 2.287422-5.363885 2.693898-5.730511C2.805479-5.834122 2.81345-5.842092 2.81345-5.881943S2.781569-5.977584 2.701868-5.977584C2.574346-5.977584 2.175841-5.571108 2.11208-5.499377C1.044085-4.383562 .820922-2.948941 .820922-1.992528C.820922-.207223 1.570112 1.227397 2.654047 1.992528Z"></path>
+<path id="tz_cabo_anatomia_g0-41" d="M2.462765-1.992528C2.462765-2.749689 2.335243-3.658281 1.841096-4.598755C1.45056-5.332005 .72528-5.977584 .581818-5.977584C.502117-5.977584 .478207-5.921793 .478207-5.881943C.478207-5.850062 .478207-5.834122 .573848-5.738481C1.689664-4.678456 1.944707-3.219925 1.944707-1.992528C1.944707 .294894 .996264 1.378829 .589788 1.745455C.486177 1.849066 .478207 1.857036 .478207 1.896887S.502117 1.992528 .581818 1.992528C.70934 1.992528 1.107846 1.586052 1.171606 1.514321C2.239601 .398506 2.462765-1.036115 2.462765-1.992528Z"></path>
+<path id="tz_cabo_anatomia_g0-69" d="M5.515318-2.072229H5.268244C5.061021-.876712 4.893649-.263014 3.459029-.263014H2.271482C1.904857-.263014 1.888917-.318804 1.888917-.589788V-2.685928H2.662017C3.451059-2.685928 3.56264-2.446824 3.56264-1.753425H3.809714V-3.881445H3.56264C3.56264-3.188045 3.451059-2.948941 2.662017-2.948941H1.888917V-4.829888C1.888917-5.100872 1.904857-5.156663 2.271482-5.156663H3.403238C4.726276-5.156663 4.893649-4.678456 5.037111-3.610461H5.284184L5.053051-5.419676H.350685V-5.156663H.526027C1.139726-5.156663 1.155666-5.068991 1.155666-4.774097V-.645579C1.155666-.350685 1.139726-.263014 .526027-.263014H.350685V0H5.164633L5.515318-2.072229Z"></path>
+<path id="tz_cabo_anatomia_g0-80" d="M1.904857-2.486675H3.355417C4.335741-2.486675 5.284184-3.116314 5.284184-3.953176C5.284184-4.734247 4.439352-5.443587 3.291656-5.443587H.366625V-5.180573H.541968C1.155666-5.180573 1.171606-5.092902 1.171606-4.798007V-.645579C1.171606-.350685 1.155666-.263014 .541968-.263014H.366625V0C1.044085-.02391 1.060025-.02391 1.538232-.02391S2.032379-.02391 2.709838 0V-.263014H2.534496C1.920797-.263014 1.904857-.350685 1.904857-.645579V-2.486675ZM1.880946-2.725778V-4.853798C1.880946-5.124782 1.896887-5.180573 2.263512-5.180573H3.092403C4.455293-5.180573 4.455293-4.311831 4.455293-3.953176C4.455293-3.602491 4.455293-2.725778 3.092403-2.725778H1.880946Z"></path>
+<path id="tz_cabo_anatomia_g0-97" d="M3.347447-2.375093C3.347447-3.156164 2.590286-3.55467 1.865006-3.55467C1.203487-3.55467 .613699-3.299626 .613699-2.773599C.613699-2.534496 .781071-2.391034 .988294-2.391034C1.211457-2.391034 1.362889-2.550436 1.362889-2.765629C1.362889-2.956912 1.243337-3.092403 1.067995-3.132254C1.362889-3.331507 1.793275-3.331507 1.849066-3.331507C2.295392-3.331507 2.741719-3.020672 2.741719-2.367123V-2.12005C2.279452-2.096139 1.745455-2.072229 1.187547-1.841096C.486177-1.538232 .350685-1.075965 .350685-.812951C.350685-.127522 1.155666 .079701 1.705604 .079701C2.287422 .079701 2.646077-.247073 2.82142-.565878C2.86127-.263014 3.068493 .039851 3.419178 .039851C3.498879 .039851 4.176339 .00797 4.176339-.71731V-1.155666H3.929265V-.71731C3.929265-.390535 3.809714-.263014 3.642341-.263014C3.347447-.263014 3.347447-.629639 3.347447-.71731V-2.375093ZM2.741719-1.123786C2.741719-.350685 2.088169-.143462 1.769365-.143462C1.354919-.143462 1.004234-.422416 1.004234-.804981C1.004234-1.331009 1.498381-1.872976 2.741719-1.912827V-1.123786Z"></path>
+<path id="tz_cabo_anatomia_g0-98" d="M1.466501-5.531258L.278954-5.443587V-5.180573C.820922-5.180573 .884682-5.124782 .884682-4.734247V0H1.131756L1.41868-.494147C1.609963-.223163 1.984558 .079701 2.526526 .079701C3.53873 .079701 4.415442-.70137 4.415442-1.721544C4.415442-2.725778 3.594521-3.514819 2.622167-3.514819C1.992528-3.514819 1.601993-3.172105 1.466501-3.028643V-5.531258ZM1.490411-2.518555C1.490411-2.669988 1.490411-2.685928 1.609963-2.82939C1.841096-3.124284 2.215691-3.291656 2.574346-3.291656C2.988792-3.291656 3.299626-3.044583 3.459029-2.805479C3.594521-2.590286 3.706102-2.311333 3.706102-1.729514C3.706102-1.546202 3.706102-.980324 3.419178-.605729C3.132254-.247073 2.757659-.143462 2.494645-.143462C2.11208-.143462 1.793275-.342715 1.586052-.653549C1.490411-.804981 1.490411-.812951 1.490411-.964384V-2.518555Z"></path>
+<path id="tz_cabo_anatomia_g0-99" d="M2.933001-3.164134C2.709838-3.092403 2.677958-2.909091 2.677958-2.81345C2.677958-2.598257 2.82939-2.438854 3.052553-2.438854C3.259776-2.438854 3.427148-2.582316 3.427148-2.82142C3.427148-3.315567 2.885181-3.55467 2.13599-3.55467C1.028144-3.55467 .278954-2.669988 .278954-1.721544C.278954-.70934 1.107846 .079701 2.11208 .079701C3.235866 .079701 3.514819-.860772 3.514819-.956413S3.411208-1.052055 3.387298-1.052055C3.331507-1.052055 3.291656-1.044085 3.267746-.964384C3.211955-.797011 2.988792-.167372 2.191781-.167372C1.697634-.167372 .988294-.549938 .988294-1.729514C.988294-2.87721 1.578082-3.307597 2.1599-3.307597C2.231631-3.307597 2.654047-3.307597 2.933001-3.164134Z"></path>
+<path id="tz_cabo_anatomia_g0-100" d="M2.622167-5.443587V-5.180573C3.164134-5.180573 3.227895-5.124782 3.227895-4.734247V-3.052553C2.948941-3.355417 2.574346-3.514819 2.1599-3.514819C1.163636-3.514819 .278954-2.741719 .278954-1.713574C.278954-.73325 1.075965 .079701 2.080199 .079701C2.550436 .079701 2.940971-.143462 3.203985-.422416V.079701L4.415442 0V-.263014C3.873474-.263014 3.809714-.318804 3.809714-.70934V-5.531258L2.622167-5.443587ZM3.203985-.988294C3.203985-.844832 3.203985-.812951 3.084433-.653549C2.86127-.334745 2.494645-.143462 2.12005-.143462C1.753425-.143462 1.43462-.334745 1.243337-.629639C1.028144-.940473 .988294-1.331009 .988294-1.705604C.988294-2.16787 1.060025-2.494645 1.243337-2.773599C1.43462-3.068493 1.793275-3.291656 2.199751-3.291656C2.582316-3.291656 2.964882-3.100374 3.203985-2.685928V-.988294Z"></path>
+<path id="tz_cabo_anatomia_g0-101" d="M3.291656-1.817186C3.466999-1.817186 3.514819-1.817186 3.514819-2.000498C3.514819-2.709838 3.124284-3.55467 2.000498-3.55467C1.012204-3.55467 .239103-2.733748 .239103-1.745455C.239103-.71731 1.099875 .079701 2.10411 .079701C3.116314 .079701 3.514819-.773101 3.514819-.956413C3.514819-.988294 3.490909-1.067995 3.387298-1.067995C3.299626-1.067995 3.283686-1.012204 3.267746-.964384C2.980822-.191283 2.295392-.167372 2.15193-.167372C1.793275-.167372 1.42665-.334745 1.187547-.70137S.948443-1.578082 .948443-1.817186H3.291656ZM.956413-2.024408C1.028144-3.140224 1.705604-3.331507 2.000498-3.331507C2.933001-3.331507 2.964882-2.207721 2.972852-2.024408H.956413Z"></path>
+<path id="tz_cabo_anatomia_g0-108" d="M1.522291-5.531258L.334745-5.443587V-5.180573C.876712-5.180573 .940473-5.124782 .940473-4.734247V-.621669C.940473-.263014 .844832-.263014 .334745-.263014V0C.645579-.02391 1.091905-.02391 1.227397-.02391C1.3868-.02391 1.817186-.02391 2.12802 0V-.263014C1.617933-.263014 1.522291-.263014 1.522291-.621669V-5.531258Z"></path>
+<path id="tz_cabo_anatomia_g0-109" d="M6.224658-2.414944C6.224658-3.060523 5.945704-3.514819 5.076961-3.514819C4.343711-3.514819 3.977086-3.012702 3.849564-2.781569C3.706102-3.355417 3.251806-3.514819 2.733748-3.514819C1.960648-3.514819 1.594022-2.964882 1.490411-2.749689H1.482441V-3.514819L.326775-3.427148V-3.164134C.868742-3.164134 .932503-3.108344 .932503-2.717808V-.621669C.932503-.263014 .836862-.263014 .326775-.263014V0C.669489-.02391 1.020174-.02391 1.235367-.02391C1.466501-.02391 1.801245-.02391 2.14396 0V-.263014C1.633873-.263014 1.538232-.263014 1.538232-.621669V-2.064259C1.538232-2.901121 2.16787-3.291656 2.669988-3.291656C3.188045-3.291656 3.275716-2.885181 3.275716-2.446824V-.621669C3.275716-.263014 3.180075-.263014 2.669988-.263014V0C3.012702-.02391 3.363387-.02391 3.57858-.02391C3.809714-.02391 4.144458-.02391 4.487173 0V-.263014C3.977086-.263014 3.881445-.263014 3.881445-.621669V-2.064259C3.881445-2.901121 4.511083-3.291656 5.0132-3.291656C5.531258-3.291656 5.618929-2.885181 5.618929-2.446824V-.621669C5.618929-.263014 5.523288-.263014 5.0132-.263014V0C5.355915-.02391 5.7066-.02391 5.921793-.02391C6.152927-.02391 6.487671-.02391 6.830386 0V-.263014C6.320299-.263014 6.224658-.263014 6.224658-.621669V-2.414944Z"></path>
+<path id="tz_cabo_anatomia_g0-110" d="M3.873474-2.414944C3.873474-3.084433 3.57061-3.514819 2.733748-3.514819C1.944707-3.514819 1.586052-2.940971 1.490411-2.749689H1.482441V-3.514819L.326775-3.427148V-3.164134C.868742-3.164134 .932503-3.108344 .932503-2.717808V-.621669C.932503-.263014 .836862-.263014 .326775-.263014V0C.669489-.02391 1.020174-.02391 1.235367-.02391C1.466501-.02391 1.801245-.02391 2.14396 0V-.263014C1.633873-.263014 1.538232-.263014 1.538232-.621669V-2.064259C1.538232-2.901121 2.175841-3.291656 2.662017-3.291656S3.267746-2.948941 3.267746-2.446824V-.621669C3.267746-.263014 3.172105-.263014 2.662017-.263014V0C3.004732-.02391 3.355417-.02391 3.57061-.02391C3.801743-.02391 4.136488-.02391 4.479203 0V-.263014C3.969116-.263014 3.873474-.263014 3.873474-.621669V-2.414944Z"></path>
+<path id="tz_cabo_anatomia_g0-111" d="M3.985056-1.697634C3.985056-2.693898 3.164134-3.55467 2.11208-3.55467S.239103-2.693898 .239103-1.697634S1.091905 .079701 2.11208 .079701C3.140224 .079701 3.985056-.70137 3.985056-1.697634ZM2.11208-.167372C1.681694-.167372 1.346949-.374595 1.171606-.653549C.972354-.980324 .948443-1.370859 .948443-1.769365C.948443-2.072229 .948443-2.550436 1.195517-2.893151C1.40274-3.172105 1.737484-3.331507 2.11208-3.331507C2.526526-3.331507 2.86924-3.132254 3.052553-2.8533C3.267746-2.518555 3.275716-2.088169 3.275716-1.769365C3.275716-1.40274 3.259776-.964384 3.036613-.629639C2.82142-.310834 2.462765-.167372 2.11208-.167372Z"></path>
+<path id="tz_cabo_anatomia_g0-112" d="M2.096139 1.283188C1.586052 1.283188 1.490411 1.283188 1.490411 .924533V-.390535C1.865006 .01594 2.271482 .079701 2.526526 .079701C3.53873 .079701 4.415442-.70137 4.415442-1.721544C4.415442-2.717808 3.610461-3.514819 2.646077-3.514819C2.335243-3.514819 1.872976-3.435118 1.466501-3.020672V-3.514819L.278954-3.427148V-3.164134C.844832-3.164134 .884682-3.116314 .884682-2.781569V.924533C.884682 1.283188 .789041 1.283188 .278954 1.283188V1.546202C.621669 1.522291 .972354 1.522291 1.187547 1.522291C1.41868 1.522291 1.753425 1.522291 2.096139 1.546202V1.283188ZM1.490411-2.654047C1.673724-2.972852 2.072229-3.267746 2.574346-3.267746C3.188045-3.267746 3.706102-2.590286 3.706102-1.721544C3.706102-.804981 3.132254-.143462 2.486675-.143462C2.207721-.143462 1.841096-.263014 1.586052-.661519C1.490411-.797011 1.490411-.804981 1.490411-.956413V-2.654047Z"></path>
+<path id="tz_cabo_anatomia_g0-114" d="M1.466501-1.817186C1.466501-2.414944 1.713574-3.275716 2.478705-3.291656C2.430884-3.259776 2.351183-3.196015 2.351183-3.012702C2.351183-2.765629 2.542466-2.654047 2.701868-2.654047C2.893151-2.654047 3.060523-2.781569 3.060523-3.012702C3.060523-3.291656 2.805479-3.514819 2.454795-3.514819C1.936737-3.514819 1.586052-3.124284 1.41868-2.677958H1.41071V-3.514819L.278954-3.427148V-3.164134C.820922-3.164134 .884682-3.108344 .884682-2.717808V-.621669C.884682-.263014 .789041-.263014 .278954-.263014V0C.589788-.02391 1.028144-.02391 1.219427-.02391C1.689664-.02391 1.705604-.02391 2.223661 0V-.263014H2.064259C1.482441-.263014 1.466501-.350685 1.466501-.637609V-1.817186Z"></path>
+<path id="tz_cabo_anatomia_g0-115" d="M2.83736-3.347447C2.83736-3.474969 2.83736-3.55467 2.733748-3.55467C2.693898-3.55467 2.669988-3.55467 2.542466-3.427148C2.526526-3.419178 2.454795-3.347447 2.430884-3.347447C2.422914-3.347447 2.406974-3.347447 2.359153-3.379328C2.231631-3.466999 2.000498-3.55467 1.641843-3.55467C.526027-3.55467 .278954-2.948941 .278954-2.566376C.278954-2.16787 .573848-1.936737 .597758-1.912827C.916563-1.673724 1.099875-1.641843 1.633873-1.546202C2.008468-1.474471 2.622167-1.362889 2.622167-.820922C2.622167-.510087 2.414944-.143462 1.681694-.143462C.876712-.143462 .645579-.765131 .541968-1.187547C.510087-1.291158 .502117-1.331009 .406476-1.331009C.278954-1.331009 .278954-1.267248 .278954-1.115816V-.127522C.278954 0 .278954 .079701 .382565 .079701C.430386 .079701 .438356 .071731 .581818-.079701C.621669-.119552 .70934-.223163 .749191-.263014C1.107846 .063761 1.482441 .079701 1.689664 .079701C2.701868 .079701 3.052553-.502117 3.052553-1.028144C3.052553-1.41071 2.82142-1.968618 1.872976-2.14396C1.809215-2.1599 1.362889-2.239601 1.331009-2.239601C1.083935-2.295392 .70934-2.462765 .70934-2.781569C.70934-3.020672 .884682-3.355417 1.641843-3.355417C2.534496-3.355417 2.574346-2.701868 2.590286-2.478705C2.598257-2.414944 2.654047-2.391034 2.709838-2.391034C2.83736-2.391034 2.83736-2.446824 2.83736-2.598257V-3.347447Z"></path>
+<path id="tz_cabo_anatomia_g0-116" d="M1.482441-3.172105H2.669988V-3.435118H1.482441V-4.901619H1.235367C1.227397-4.176339 .900623-3.419178 .159402-3.395268V-3.172105H.876712V-.996264C.876712-.063761 1.594022 .079701 1.960648 .079701C2.494645 .079701 2.81345-.398506 2.81345-.996264V-1.44259H2.566376V-1.012204C2.566376-.462267 2.319303-.167372 2.016438-.167372C1.482441-.167372 1.482441-.852802 1.482441-.980324V-3.172105Z"></path>
+<path id="tz_cabo_anatomia_g0-117" d="M2.662017-3.427148V-3.164134C3.203985-3.164134 3.267746-3.108344 3.267746-2.717808V-1.331009C3.267746-.645579 2.8533-.143462 2.255542-.143462C1.570112-.143462 1.538232-.486177 1.538232-.884682V-3.514819L.326775-3.427148V-3.164134C.932503-3.164134 .932503-3.140224 .932503-2.430884V-1.235367C.932503-.661519 .932503 .079701 2.207721 .079701C2.956912 .079701 3.243836-.494147 3.283686-.565878H3.291656V.079701L4.479203 0V-.263014C3.937235-.263014 3.873474-.318804 3.873474-.70934V-3.514819L2.662017-3.427148Z"></path>
+<path id="tz_cabo_anatomia_g0-126" d="M3.355417-5.347945C3.028643-4.98929 2.781569-4.98929 2.693898-4.98929C2.510585-4.98929 2.343213-5.068991 2.15193-5.172603C1.936737-5.276214 1.793275-5.347945 1.609963-5.347945C1.299128-5.347945 1.139726-5.180573 .70934-4.710336L.868742-4.558904C1.195517-4.917559 1.44259-4.917559 1.530262-4.917559C1.713574-4.917559 1.880946-4.837858 2.072229-4.734247C2.287422-4.630635 2.430884-4.558904 2.614197-4.558904C2.925031-4.558904 3.084433-4.726276 3.514819-5.196513L3.355417-5.347945Z"></path>
+</defs>
+<g id="tz_cabo_anatomia_page1">
+<g stroke-miterlimit="10" transform="translate(-16.792026,-16.792026)scale(0.996264,-0.996264)">
+<g fill="#000" stroke="#000">
+<g stroke-width="0.4">
+<g fill="#6c757d" stroke="#6c757d">
+<g fill="#eeeff0">
+<path d="M51.21501 0C51.21501 28.28563 28.28563 51.21501 0 51.21501S-51.21501 28.28563-51.21501 0S-28.28563-51.21501 0-51.21501S51.21501-28.28563 51.21501 0ZM0 0"></path>
+</g>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g fill="#6c757d" stroke="#6c757d">
+</g>
+<g transform="translate(60.43846,37.83366)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-16.792026,-16.792026)scale(-1,-1)">
+<g fill="#6c757d">
+<g stroke="none">
+<g fill="#6c757d">
+<use x="-16.792026" y="-16.792026" href="#tz_cabo_anatomia_g0-99"></use>
+<use x="-13.028308" y="-16.792026" href="#tz_cabo_anatomia_g0-97"></use>
+<use x="-8.794125" y="-16.792026" href="#tz_cabo_anatomia_g0-112"></use>
+<use x="-4.089477" y="-16.792026" href="#tz_cabo_anatomia_g0-97"></use>
+<use x="2.967494" y="-16.792026" href="#tz_cabo_anatomia_g0-40"></use>
+<use x="6.260748" y="-16.792026" href="#tz_cabo_anatomia_g0-80"></use>
+<use x="12.019791" y="-16.792026" href="#tz_cabo_anatomia_g0-69"></use>
+<use x="17.778834" y="-16.792026" href="#tz_cabo_anatomia_g0-41"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#d7433b" stroke="#d7433b">
+<g fill="#f8dedc">
+<path d="M9.95863 0C9.95863 5.50006 5.50006 9.95863 0 9.95863S-9.95863 5.50006-9.95863 0S-5.50006-9.95863 0-9.95863S9.95863-5.50006 9.95863 0ZM0 0"></path>
+</g>
+</g>
+<g fill="#d7433b" stroke="#d7433b">
+<g fill="#d7433b" stroke="#d7433b">
+</g>
+<g transform="translate(60.43846,14.9746)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-16.792026,-16.792026)scale(-1,-1)">
+<g fill="#d7433b">
+<g stroke="none">
+<g fill="#d7433b">
+<use x="-16.792026" y="-16.792026" href="#tz_cabo_anatomia_g0-101"></use>
+<use x="-13.028308" y="-16.792026" href="#tz_cabo_anatomia_g0-108"></use>
+<use x="-10.675984" y="-16.792026" href="#tz_cabo_anatomia_g0-101"></use>
+<use x="-6.912266" y="-16.792026" href="#tz_cabo_anatomia_g0-109"></use>
+<use x=".144706" y="-16.792026" href="#tz_cabo_anatomia_g0-101"></use>
+<use x="3.908424" y="-16.792026" href="#tz_cabo_anatomia_g0-110"></use>
+<use x="8.377839" y="-16.792026" href="#tz_cabo_anatomia_g0-116"></use>
+<use x="11.671092" y="-16.792026" href="#tz_cabo_anatomia_g0-111"></use>
+<use x="18.728064" y="-16.792026" href="#tz_cabo_anatomia_g0-100"></use>
+<use x="23.432711" y="-16.792026" href="#tz_cabo_anatomia_g0-101"></use>
+<use x="30.019218" y="-16.792026" href="#tz_cabo_anatomia_g0-116"></use>
+<use x="33.312471" y="-16.792026" href="#tz_cabo_anatomia_g0-114"></use>
+<use x="36.612642" y="-16.792026" href="#tz_cabo_anatomia_g0-97"></use>
+<use x="40.846824" y="-16.792026" href="#tz_cabo_anatomia_g0-24"></use>
+<use x="40.846824" y="-16.792026" href="#tz_cabo_anatomia_g0-99"></use>
+<use x="44.610542" y="-16.792026" href="#tz_cabo_anatomia_g0-126"></use>
+<use x="44.610542" y="-16.792026" href="#tz_cabo_anatomia_g0-97"></use>
+<use x="48.844725" y="-16.792026" href="#tz_cabo_anatomia_g0-111"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#3fb618" stroke="#3fb618">
+<g fill="#e1f4da">
+<path d="M41.82555 0C41.82555 6.59993 36.47539 11.95009 29.87546 11.95009S17.92537 6.59993 17.92537 0S23.27553-11.95009 29.87546-11.95009S41.82555-6.59993 41.82555 0ZM29.87546 0"></path>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<path d="M31.58255 0C31.58255 .94281 30.81827 1.70709 29.87546 1.70709S28.16837 .94281 28.16837 0S28.93265-1.70709 29.87546-1.70709S31.58255-.94281 31.58255 0ZM29.87546 0" stroke="none"></path>
+</g>
+<g fill="#3fb618" stroke="#3fb618">
+<g fill="#e1f4da">
+<path d="M26.8876 25.87256C26.8876 32.47249 21.53745 37.82265 14.93752 37.82265S2.98743 32.47249 2.98743 25.87256S8.33759 13.92247 14.93752 13.92247S26.8876 19.27263 26.8876 25.87256ZM14.93752 25.87256"></path>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<path d="M16.6446 25.87256C16.6446 26.81537 15.88033 27.57965 14.93752 27.57965C13.9947 27.57965 13.23042 26.81537 13.23042 25.87256S13.9947 24.16547 14.93752 24.16547C15.88033 24.16547 16.6446 24.92975 16.6446 25.87256ZM14.93752 25.87256" stroke="none"></path>
+</g>
+<g fill="#3fb618" stroke="#3fb618">
+<g fill="#e1f4da">
+<path d="M-2.98743 25.87256C-2.98743 32.47249-8.33759 37.82265-14.93752 37.82265S-26.8876 32.47249-26.8876 25.87256S-21.53745 13.92247-14.93752 13.92247S-2.98743 19.27263-2.98743 25.87256ZM-14.93752 25.87256"></path>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<path d="M-13.23042 25.87256C-13.23042 26.81537-13.9947 27.57965-14.93752 27.57965C-15.88033 27.57965-16.6446 26.81537-16.6446 25.87256S-15.88033 24.16547-14.93752 24.16547C-13.9947 24.16547-13.23042 24.92975-13.23042 25.87256ZM-14.93752 25.87256" stroke="none"></path>
+</g>
+<g fill="#3fb618" stroke="#3fb618">
+<g fill="#e1f4da">
+<path d="M-17.92537 0C-17.92537 6.59993-23.27553 11.95009-29.87546 11.95009S-41.82555 6.59993-41.82555 0S-36.47539-11.95009-29.87546-11.95009S-17.92537-6.59993-17.92537 0ZM-29.87546 0"></path>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<path d="M-28.16837 0C-28.16837 .94281-28.93265 1.70709-29.87546 1.70709S-31.58255 .94281-31.58255 0S-30.81827-1.70709-29.87546-1.70709S-28.16837-.94281-28.16837 0ZM-29.87546 0" stroke="none"></path>
+</g>
+<g fill="#3fb618" stroke="#3fb618">
+<g fill="#e1f4da">
+<path d="M-2.98743-25.87256C-2.98743-19.27263-8.33759-13.92247-14.93752-13.92247S-26.8876-19.27263-26.8876-25.87256S-21.53745-37.82265-14.93752-37.82265S-2.98743-32.47249-2.98743-25.87256ZM-14.93752-25.87256"></path>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<path d="M-13.23042-25.87256C-13.23042-24.92975-13.9947-24.16547-14.93752-24.16547C-15.88033-24.16547-16.6446-24.92975-16.6446-25.87256S-15.88033-27.57965-14.93752-27.57965C-13.9947-27.57965-13.23042-26.81537-13.23042-25.87256ZM-14.93752-25.87256" stroke="none"></path>
+</g>
+<g fill="#3fb618" stroke="#3fb618">
+<g fill="#e1f4da">
+<path d="M26.8876-25.87256C26.8876-19.27263 21.53745-13.92247 14.93752-13.92247S2.98743-19.27263 2.98743-25.87256S8.33759-37.82265 14.93752-37.82265S26.8876-32.47249 26.8876-25.87256ZM14.93752-25.87256"></path>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<path d="M16.6446-25.87256C16.6446-24.92975 15.88033-24.16547 14.93752-24.16547C13.9947-24.16547 13.23042-24.92975 13.23042-25.87256S13.9947-27.57965 14.93752-27.57965C15.88033-27.57965 16.6446-26.81537 16.6446-25.87256ZM14.93752-25.87256" stroke="none"></path>
+</g>
+<g fill="#3fb618" stroke="#3fb618">
+<g fill="#3fb618" stroke="#3fb618">
+</g>
+<g transform="translate(60.43846,-8.46823)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-16.792026,-16.792026)scale(-1,-1)">
+<g fill="#3fb618">
+<g stroke="none">
+<g fill="#3fb618">
+<use x="-16.792026" y="-16.792026" href="#tz_cabo_anatomia_g0-116"></use>
+<use x="-13.498772" y="-16.792026" href="#tz_cabo_anatomia_g0-117"></use>
+<use x="-8.794125" y="-16.792026" href="#tz_cabo_anatomia_g0-98"></use>
+<use x="-3.854245" y="-16.792026" href="#tz_cabo_anatomia_g0-111"></use>
+<use x=".379938" y="-16.792026" href="#tz_cabo_anatomia_g0-115"></use>
+<use x="6.54303" y="-16.792026" href="#tz_cabo_anatomia_g0-108"></use>
+<use x="8.895353" y="-16.792026" href="#tz_cabo_anatomia_g0-111"></use>
+<use x="13.364769" y="-16.792026" href="#tz_cabo_anatomia_g0-111"></use>
+<use x="17.598951" y="-16.792026" href="#tz_cabo_anatomia_g0-115"></use>
+<use x="20.939254" y="-16.792026" href="#tz_cabo_anatomia_g0-101"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g fill="#2780e3" stroke="#2780e3">
+</g>
+<g transform="translate(60.43846,-30.45274)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-16.792026,-16.792026)scale(-1,-1)">
+<g fill="#2780e3">
+<g stroke="none">
+<g fill="#2780e3">
+<use x="-16.792026" y="-16.792026" href="#tz_cabo_anatomia_g0-12"></use>
+<use x="-12.087378" y="-16.792026" href="#tz_cabo_anatomia_g0-98"></use>
+<use x="-7.38273" y="-16.792026" href="#tz_cabo_anatomia_g0-114"></use>
+<use x="-4.08256" y="-16.792026" href="#tz_cabo_anatomia_g0-97"></use>
+<use x=".151623" y="-16.792026" href="#tz_cabo_anatomia_g0-115"></use>
+<use x="6.314714" y="-16.792026" href="#tz_cabo_anatomia_g0-40"></use>
+<use x="9.607967" y="-16.792026" href="#tz_cabo_anatomia_g0-112"></use>
+<use x="14.547847" y="-16.792026" href="#tz_cabo_anatomia_g0-111"></use>
+<use x="18.78203" y="-16.792026" href="#tz_cabo_anatomia_g0-114"></use>
+<use x="24.904989" y="-16.792026" href="#tz_cabo_anatomia_g0-99"></use>
+<use x="28.668707" y="-16.792026" href="#tz_cabo_anatomia_g0-111"></use>
+<use x="32.90289" y="-16.792026" href="#tz_cabo_anatomia_g0-114"></use>
+<use x="36.20306" y="-16.792026" href="#tz_cabo_anatomia_g0-41"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>
 </div>
-<div class="callout-title-container flex-fill">
-Nota
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cabo-anatomia-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;36.1: Corte típico: fibras (identificadas <strong>por cor</strong>) dentro de <strong>tubos loose</strong>, ao redor de um <strong>elemento de tração</strong> central, tudo sob uma <strong>capa</strong> de proteção.
+</figcaption>
+</figure>
 </div>
+<p>Elementos comuns:</p>
+<ul>
+<li><strong>Fibras</strong> — identificadas pelo <strong>padrão de cores</strong> (azul, laranja, verde, marrom…), essencial para emendar a fibra certa (capítulo <a href="10-emendas-fusao.html#sec-emendas" class="quarto-xref"><span>Seção 11.1</span></a>).</li>
+<li><strong>Tubos (loose tube)</strong> — alojam as fibras com folga, protegendo de tração/umidade; cabos <em>tight buffer</em> são mais para uso interno.</li>
+<li><strong>Elemento de tração</strong> — fio/fibra de aramida ou aço que aguenta o esforço mecânico (vão entre postes).</li>
+<li><strong>Capa</strong> — PE para externo (UV, água); LSZH para interno (baixa fumaça).</li>
+<li><strong>Geleia/elemento bloqueador de água</strong> em cabos externos.</li>
+</ul>
+</section>
+<section id="sec-cabos-tipos" class="level2" data-number="36.3">
+<h2 data-number="36.3" class="anchored" data-anchor-id="sec-cabos-tipos"><span class="header-section-number">36.3</span> Tipos por aplicação</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Cabo</th>
+<th>Onde</th>
+<th>Características</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Drop (flat)</strong></td>
+<td>CTO → casa</td>
+<td>1–2 fibras G.657, com fio de aço/aramida, fácil de manusear</td>
+</tr>
+<tr class="even">
+<td><strong>Autossustentável (AS/ASU)</strong></td>
+<td>rede aérea (postes)</td>
+<td>tem sustentação própria, dispensa cordoalha; <strong>espinha de peixe</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>Espinha / lançamento por cordoalha</strong></td>
+<td>rede aérea</td>
+<td>preso a uma cordoalha de aço separada</td>
+</tr>
+<tr class="even">
+<td><strong>Subterrâneo / dutado</strong></td>
+<td>dutos, túneis</td>
+<td>reforço contra esmagamento/roedores</td>
+</tr>
+<tr class="odd">
+<td><strong>CFOA / alta contagem</strong></td>
+<td>tronco/primária</td>
+<td>dezenas a centenas de fibras</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Drop:</strong> o trecho final (capítulo <a href="32-dio-cto-rede-primaria-secundaria.html#sec-cto" class="quarto-xref"><span>Seção 33.1</span></a>), <strong>G.657</strong> (insensível a curvatura); o elo mais frágil — instale sem dobra/tração.</li>
+<li><strong>AS (autossustentável):</strong> o cavalo de batalha da rede aérea do ISP — leva a primária/secundária entre postes <strong>sem cordoalha separada</strong>, identificado pelo formato em “8” (mensageiro integrado) ou redondo com aramida.</li>
+<li><strong>Alta contagem (espinha):</strong> o tronco que sai do POP, com muitas fibras para servir bairros inteiros (capítulo <a href="27-arquitetura-fttx.html#sec-fttx" class="quarto-xref"><span>Seção 28.1</span></a>).</li>
+</ul>
+</section>
+<section id="sec-cabos-contagem" class="level2" data-number="36.4">
+<h2 data-number="36.4" class="anchored" data-anchor-id="sec-cabos-contagem"><span class="header-section-number">36.4</span> Contagem de fibras e reserva</h2>
+<p>Dimensionar a <strong>contagem</strong> é planejamento de longo prazo: puxar cabo é caro, então <strong>sobre-dimensiona-se</strong>. Um tronco que hoje precisa de 12 fibras costuma ser lançado com 24/48 para crescimento e reserva. Regra prática: separe fibras para <strong>serviço atual + expansão + reserva técnica</strong> (reparo). Cabo sem fibra sobrando obriga a nova obra a cada crescimento.</p>
+</section>
+<section id="sec-cabos-cores" class="level2" data-number="36.5">
+<h2 data-number="36.5" class="anchored" data-anchor-id="sec-cabos-cores"><span class="header-section-number">36.5</span> Padrão de cores</h2>
+<p>O <strong>código de cores</strong> identifica fibras e tubos de forma padronizada (azul, laranja, verde, marrom, cinza, branco, vermelho, preto, amarelo, violeta, rosa, aqua). Saber a sequência é o que permite, anos depois, <strong>achar a fibra certa</strong> numa CEO com dezenas de fibras. Combine com a <strong>documentação</strong> (capítulo <a href="38-documentacao-georreferenciamento.html#sec-doc-georref" class="quarto-xref"><span>Seção 39.1</span></a>): cor + posição + registro = reparo rápido.</p>
+<div class="callout-provedor">
+<p><strong>Na prática do provedor</strong></p>
+<ul>
+<li><strong>Padronize por trecho:</strong> <strong>AS</strong> na rede aérea (primária/secundária), <strong>drop G.657</strong> no cliente, <strong>alta contagem</strong> no tronco. Menos SKUs, menos erro de campo.</li>
+<li><strong>Sobre-dimensione o tronco:</strong> lance 2–4× a fibra necessária hoje. O custo extra do cabo é pequeno perto do custo de <strong>relançar</strong> depois (mão de obra, autorização de poste, trânsito).</li>
+<li><strong>Respeite tração e raio de curvatura</strong> no lançamento — esticar demais o cabo aéreo ou dobrar no fechamento da CTO gera <strong>macrobending</strong> (capítulo
+<ol class="example" type="1">
+<li>e perda que só aparece semanas depois.</li>
+</ol></li>
+<li><strong>Aluguel de poste é gargalo:</strong> o cabo AS reduz ferragens, mas o <strong>ponto de fixação no poste</strong> depende de acordo com a concessionária de energia (capítulo <a href="36-infraestrutura-postes-ferragens.html#sec-infraestrutura" class="quarto-xref"><span>Seção 37.1</span></a>). Planeje a ocupação.</li>
+<li><strong>Cor + documentação sempre:</strong> sem o código de cores registrado, uma CEO de 48 fibras vira loteria no próximo reparo.</li>
+</ul>
 </div>
-<div class="callout-body-container callout-body">
-<p>Capítulo a ser desenvolvido pelo Claude Code (ver <code>PROMPT-CLAUDE-CODE.md</code> e <code>CLAUDE.md</code>).</p>
-</div>
-</div>
+</section>
+<section id="sec-resumo-35" class="level2" data-number="36.6">
+<h2 data-number="36.6" class="anchored" data-anchor-id="sec-resumo-35"><span class="header-section-number">36.6</span> Resumo e checklist</h2>
+<ul>
+<li>O cabo protege e transporta a fibra; escolha por <strong>trecho</strong>: <strong>drop</strong> (cliente), <strong>AS</strong> (aéreo), <strong>alta contagem</strong> (tronco), <strong>dutado</strong> (subterrâneo).</li>
+<li>Conheça a <strong>anatomia</strong> (fibras por cor, tubos loose, tração, capa) e o <strong>padrão de cores</strong>.</li>
+<li><strong>Sobre-dimensione</strong> a contagem do tronco (expansão + reserva).</li>
+<li>Respeite <strong>tração/curvatura</strong> no lançamento para não criar perda futura.</li>
+</ul>
+<p><strong>Checklist do capítulo</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox">Seleciono o tipo de cabo certo para cada trecho da planta.</label></li>
+<li><label><input type="checkbox">Identifico fibras/tubos pelo código de cores.</label></li>
+<li><label><input type="checkbox">Dimensiono a contagem do tronco com folga de expansão e reserva.</label></li>
+<li><label><input type="checkbox">Lanço o cabo respeitando tração e raio de curvatura.</label></li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1069,4 +1373,4 @@ Nota
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/35-cabos-opticos.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/35-cabos-opticos.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>
