@@ -1266,7 +1266,7 @@ Figura&nbsp;4.2: Cada camada embrulha a anterior: os dados HTTP viram <em>payloa
 </figcaption>
 </figure>
 </div>
-<p>Esse aninhamento também explica o <strong>MTU</strong> e a <strong>fragmentação</strong>: o quadro Ethernet tem um tamanho máximo (tipicamente 1500 bytes de <em>payload</em>). Como PPPoE rouba 8 bytes, a <strong>MSS</strong> do TCP precisa cair (ex.: para 1492) ou o cliente sofre com sites que “não abrem” — um problema clássico de provedor tratado no capítulo <span class="quarto-unresolved-ref">?sec-bng-pppoe</span>.</p>
+<p>Esse aninhamento também explica o <strong>MTU</strong> e a <strong>fragmentação</strong>: o quadro Ethernet tem um tamanho máximo (tipicamente 1500 bytes de <em>payload</em>). Como PPPoE rouba 8 bytes, a <strong>MSS</strong> do TCP precisa cair (ex.: para 1492) ou o cliente sofre com sites que “não abrem” — um problema clássico de provedor tratado no capítulo <a href="46-bng-bras-pppoe-ipoe.html#sec-bng-pppoe" class="quarto-xref"><span>Seção 47.1</span></a>.</p>
 <div class="callout-provedor">
 <p><strong>Na prática do provedor</strong></p>
 <p>O encapsulamento não é teoria — ele <strong>empilha custos de cabeçalho</strong> que o NOC precisa conhecer:</p>

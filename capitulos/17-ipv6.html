@@ -1056,7 +1056,7 @@ Figura&nbsp;18.1: Anatomia de um IPv6 unicast global: prefixo do ISP + ID de sub
 <li><strong>Plano de numeração:</strong> receba seu <strong>/32</strong> (NIC.br) e fatie em <strong>/48 por POP/região</strong> e <strong>/56 por assinante</strong> (via DHCPv6-PD no BNG). Mantenha hierarquia para <strong>sumarizar</strong> no BGP (capítulo <a href="16-subredes-cidr-vlsm.html#sec-subredes" class="quarto-xref"><span>Seção 17.1</span></a>).</li>
 <li><strong>Dual-stack</strong> é o caminho: rode IPv4+IPv6 juntos; o IPv6 alivia o CGNAT (menos sessões NAT, menos custo, menos chamado de jogo/console).</li>
 <li><strong>Não filtre ICMPv6!</strong> Diferente do IPv4, IPv6 <strong>depende</strong> de ICMPv6 (RS/RA, NDP, PMTUD). Bloquear ICMPv6 quebra a conectividade — libere os tipos essenciais.</li>
-<li><strong>PPPoE/IPoE com IPv6:</strong> entregue um /64 para o WAN/LAN via RA e delegue um /56 por PD; configure o RADIUS (capítulo <span class="quarto-unresolved-ref">?sec-radius</span>) para atribuir o prefixo por cliente.</li>
+<li><strong>PPPoE/IPoE com IPv6:</strong> entregue um /64 para o WAN/LAN via RA e delegue um /56 por PD; configure o RADIUS (capítulo <a href="47-radius-aaa.html#sec-radius" class="quarto-xref"><span>Seção 48.1</span></a>) para atribuir o prefixo por cliente.</li>
 <li><strong>CGNAT só no IPv4:</strong> com bom IPv6 dual-stack, grande parte do tráfego (vídeo, CDNs) já vai por IPv6 nativo, reduzindo a pressão no CGNAT.</li>
 </ul>
 </div>

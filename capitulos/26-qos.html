@@ -1010,7 +1010,7 @@ Figura&nbsp;27.1: Pipeline DiffServ: classifica-se por marca, distribui-se em <s
 <section id="sec-qos-isp" class="level2" data-number="27.5">
 <h2 data-number="27.5" class="anchored" data-anchor-id="sec-qos-isp"><span class="header-section-number">27.5</span> Onde aplicar no provedor</h2>
 <ul>
-<li><strong>Plano do assinante (rate-limit):</strong> o BNG (capítulo <span class="quarto-unresolved-ref">?sec-bng-pppoe</span>) faz <em>shaping/policing</em> para entregar exatamente os “300 Mega” contratados — normalmente via atributo do <strong>RADIUS</strong> (capítulo <span class="quarto-unresolved-ref">?sec-radius</span>).</li>
+<li><strong>Plano do assinante (rate-limit):</strong> o BNG (capítulo <a href="46-bng-bras-pppoe-ipoe.html#sec-bng-pppoe" class="quarto-xref"><span>Seção 47.1</span></a>) faz <em>shaping/policing</em> para entregar exatamente os “300 Mega” contratados — normalmente via atributo do <strong>RADIUS</strong> (capítulo <a href="47-radius-aaa.html#sec-radius" class="quarto-xref"><span>Seção 48.1</span></a>).</li>
 <li><strong>Voz/IPTV próprios:</strong> marque EF/AF na borda e <strong>honre</strong> a marca no core; reserve fila de prioridade para o tráfego de voz do serviço de telefonia do ISP.</li>
 <li><strong>Gerência:</strong> classe própria para SSH/SNMP/NTP nunca ficar sem banda durante um incidente.</li>
 <li><strong>Uplinks e PON:</strong> dimensione para <strong>≤ 70–80%</strong> no pico (capítulo <a href="06-grandezas-desempenho.html#sec-grandezas" class="quarto-xref"><span>Seção 7.1</span></a>); QoS <strong>prioriza</strong>, mas <strong>não cria</strong> banda — em saturação crônica, a solução é <strong>capacidade</strong>, não só QoS.</li>

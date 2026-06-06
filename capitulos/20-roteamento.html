@@ -649,7 +649,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="sec-roteamento" class="level2" data-number="21.1">
 <h2 data-number="21.1" class="anchored" data-anchor-id="sec-roteamento"><span class="header-section-number">21.1</span> Decidir o próximo salto</h2>
-<p>Endereçar (capítulos <a href="15-enderecamento-ipv4.html#sec-enderecamento" class="quarto-xref"><span>Seção 16.1</span></a> e <a href="16-subredes-cidr-vlsm.html#sec-subredes" class="quarto-xref"><span>Seção 17.1</span></a>) é só metade da camada 3; a outra é <strong>rotear</strong>: decidir, para cada pacote, <strong>por onde mandá-lo</strong> rumo ao destino. Cada roteador mantém uma <strong>tabela de rotas</strong> e, ao receber um pacote, procura o prefixo de destino mais específico e o encaminha ao <strong>próximo salto</strong>. No provedor, o roteamento interno (entre POPs, OLTs, agregadores) é o que faz a rede funcionar como um todo coeso; o roteamento <strong>externo</strong> (com outros ISPs) é o BGP (capítulo <span class="quarto-unresolved-ref">?sec-bgp</span>). Aqui tratamos o interno: estático, RIP e, sobretudo, <strong>OSPF</strong>.</p>
+<p>Endereçar (capítulos <a href="15-enderecamento-ipv4.html#sec-enderecamento" class="quarto-xref"><span>Seção 16.1</span></a> e <a href="16-subredes-cidr-vlsm.html#sec-subredes" class="quarto-xref"><span>Seção 17.1</span></a>) é só metade da camada 3; a outra é <strong>rotear</strong>: decidir, para cada pacote, <strong>por onde mandá-lo</strong> rumo ao destino. Cada roteador mantém uma <strong>tabela de rotas</strong> e, ao receber um pacote, procura o prefixo de destino mais específico e o encaminha ao <strong>próximo salto</strong>. No provedor, o roteamento interno (entre POPs, OLTs, agregadores) é o que faz a rede funcionar como um todo coeso; o roteamento <strong>externo</strong> (com outros ISPs) é o BGP (capítulo <a href="48-bgp-as-peering-ix.html#sec-bgp" class="quarto-xref"><span>Seção 49.1</span></a>). Aqui tratamos o interno: estático, RIP e, sobretudo, <strong>OSPF</strong>.</p>
 </section>
 <section id="sec-roteamento-tabela" class="level2" data-number="21.2">
 <h2 data-number="21.2" class="anchored" data-anchor-id="sec-roteamento-tabela"><span class="header-section-number">21.2</span> A tabela de rotas e o longest prefix match</h2>
@@ -1075,7 +1075,7 @@ Figura&nbsp;21.1: OSPF hierárquico: a <strong>Área 0</strong> é o <em>backbon
 <h2 data-number="21.6" class="anchored" data-anchor-id="sec-roteamento-isp"><span class="header-section-number">21.6</span> Onde cada um entra no ISP</h2>
 <ul>
 <li><strong>OSPF (ou IS-IS)</strong> como <strong>IGP</strong>: carrega as rotas <strong>internas</strong> (loopbacks, links, prefixos de infraestrutura) entre POPs e agregadores.</li>
-<li><strong>BGP</strong> como <strong>EGP</strong>: carrega as rotas <strong>da internet</strong> e dos clientes, e fala com trânsito/IX (capítulo <span class="quarto-unresolved-ref">?sec-bgp</span>). Tipicamente o BGP resolve o próximo salto <strong>via loopback aprendido pelo OSPF</strong> (iBGP).</li>
+<li><strong>BGP</strong> como <strong>EGP</strong>: carrega as rotas <strong>da internet</strong> e dos clientes, e fala com trânsito/IX (capítulo <a href="48-bgp-as-peering-ix.html#sec-bgp" class="quarto-xref"><span>Seção 49.1</span></a>). Tipicamente o BGP resolve o próximo salto <strong>via loopback aprendido pelo OSPF</strong> (iBGP).</li>
 <li><strong>Estático</strong>: default, links pontuais e clientes simples.</li>
 </ul>
 <div class="callout-provedor">

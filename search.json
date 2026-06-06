@@ -276,7 +276,7 @@
     "href": "capitulos/03-modelo-tcpip-pilha.html#sec-tcpip-encapsulamento",
     "title": "4  O Modelo TCP/IP, a Pilha de Protocolos e o Encapsulamento",
     "section": "4.4 Encapsulamento e desencapsulamento",
-    "text": "4.4 Encapsulamento e desencapsulamento\nEncapsular é embrulhar a PDU da camada de cima como payload da camada de baixo, prefixando um cabeçalho. A figura mostra os “embrulhos sucessivos”:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 4.2: Cada camada embrulha a anterior: os dados HTTP viram payload do TCP (segmento), que vira payload do IP (pacote), que vira payload do Ethernet (quadro).\n\n\n\nEsse aninhamento também explica o MTU e a fragmentação: o quadro Ethernet tem um tamanho máximo (tipicamente 1500 bytes de payload). Como PPPoE rouba 8 bytes, a MSS do TCP precisa cair (ex.: para 1492) ou o cliente sofre com sites que “não abrem” — um problema clássico de provedor tratado no capítulo ?sec-bng-pppoe.\n\nNa prática do provedor\nO encapsulamento não é teoria — ele empilha custos de cabeçalho que o NOC precisa conhecer:\n\nPPPoE adiciona 8 bytes; sobre Ethernet (1500), sobra 1492 de MTU. Se o MSS clamping não estiver configurado no BNG, clientes reclamam que “alguns sites travam” (pacotes grandes com Don’t Fragment são descartados).\nVLAN 802.1Q adiciona 4 bytes por tag; Q-in-Q (duas tags), 8. Em redes onde se dá uma VLAN por cliente até a OLT, é preciso garantir jumbo frames (MTU 1600+) nos uplinks para não fragmentar.\nUm ping -f -l &lt;tamanho&gt; (não fragmentar) é a ferramenta de campo para descobrir o MTU real de ponta a ponta quando um cliente reclama de lentidão seletiva.",
+    "text": "4.4 Encapsulamento e desencapsulamento\nEncapsular é embrulhar a PDU da camada de cima como payload da camada de baixo, prefixando um cabeçalho. A figura mostra os “embrulhos sucessivos”:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 4.2: Cada camada embrulha a anterior: os dados HTTP viram payload do TCP (segmento), que vira payload do IP (pacote), que vira payload do Ethernet (quadro).\n\n\n\nEsse aninhamento também explica o MTU e a fragmentação: o quadro Ethernet tem um tamanho máximo (tipicamente 1500 bytes de payload). Como PPPoE rouba 8 bytes, a MSS do TCP precisa cair (ex.: para 1492) ou o cliente sofre com sites que “não abrem” — um problema clássico de provedor tratado no capítulo Seção 47.1.\n\nNa prática do provedor\nO encapsulamento não é teoria — ele empilha custos de cabeçalho que o NOC precisa conhecer:\n\nPPPoE adiciona 8 bytes; sobre Ethernet (1500), sobra 1492 de MTU. Se o MSS clamping não estiver configurado no BNG, clientes reclamam que “alguns sites travam” (pacotes grandes com Don’t Fragment são descartados).\nVLAN 802.1Q adiciona 4 bytes por tag; Q-in-Q (duas tags), 8. Em redes onde se dá uma VLAN por cliente até a OLT, é preciso garantir jumbo frames (MTU 1600+) nos uplinks para não fragmentar.\nUm ping -f -l &lt;tamanho&gt; (não fragmentar) é a ferramenta de campo para descobrir o MTU real de ponta a ponta quando um cliente reclama de lentidão seletiva.",
     "crumbs": [
       "Parte I — Fundamentos e Modelos de Rede",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>O Modelo TCP/IP, a Pilha de Protocolos e o Encapsulamento</span>"
@@ -1200,7 +1200,7 @@
     "href": "capitulos/16-subredes-cidr-vlsm.html#sec-subredes-sumarizacao",
     "title": "17  Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)",
     "section": "17.5 Sumarização (agregação de rotas)",
-    "text": "17.5 Sumarização (agregação de rotas)\nSumarizar é o inverso: juntar vários prefixos contíguos em um só, menor, para reduzir a tabela de rotas (essencial no BGP — capítulo ?sec-bgp). Achar o resumo: alinhe os blocos em binário e ache o maior prefixo comum.\n\n17.5.1 Exercício resolvido 4 — sumarizar quatro /24\nResumir 192.168.0.0/24, 192.168.1.0/24, 192.168.2.0/24, 192.168.3.0/24:\n192.168.0.0 = ...0000 0000  (3º octeto)\n192.168.1.0 = ...0000 0001\n192.168.2.0 = ...0000 0010\n192.168.3.0 = ...0000 0011\n              └──comum──┘ ↑ variam os 2 últimos bits\nOs primeiros 22 bits são idênticos → resumo 192.168.0.0/22 (cobre .0 a .3 no 3º octeto, 1024 endereços, 4 redes /24). Anunciar uma rota /22 em vez de quatro /24 deixa a tabela BGP mais limpa e estável.\n\nNa prática do provedor\n\nPlaneje pools por OLT/PON com VLSM: estime assinantes + folga de crescimento, escolha o prefixo (não use /24 onde um /25 basta — guarde o resto). Em IPoE com CGNAT, recorte do 100.64.0.0/10.\n/30 ou /31 para transporte: cada link ponto a ponto entre roteadores/POPs é um /30 (ou /31, RFC 3021). Mantenha um bloco só para links, facilita sumarizar.\nLoopbacks em /32 num bloco contíguo → sumariza num único prefixo no IGP.\nSumarize antes de anunciar no BGP: receba seu bloco do registro (ex.: um /22 do NIC.br) e anuncie agregado, não os /24 soltos — tabela menor, menos flap, melhor reputação.\nDocumente cada recorte no IPAM. VLSM sem documentação vira sobreposição e blackhole meses depois.",
+    "text": "17.5 Sumarização (agregação de rotas)\nSumarizar é o inverso: juntar vários prefixos contíguos em um só, menor, para reduzir a tabela de rotas (essencial no BGP — capítulo Seção 49.1). Achar o resumo: alinhe os blocos em binário e ache o maior prefixo comum.\n\n17.5.1 Exercício resolvido 4 — sumarizar quatro /24\nResumir 192.168.0.0/24, 192.168.1.0/24, 192.168.2.0/24, 192.168.3.0/24:\n192.168.0.0 = ...0000 0000  (3º octeto)\n192.168.1.0 = ...0000 0001\n192.168.2.0 = ...0000 0010\n192.168.3.0 = ...0000 0011\n              └──comum──┘ ↑ variam os 2 últimos bits\nOs primeiros 22 bits são idênticos → resumo 192.168.0.0/22 (cobre .0 a .3 no 3º octeto, 1024 endereços, 4 redes /24). Anunciar uma rota /22 em vez de quatro /24 deixa a tabela BGP mais limpa e estável.\n\nNa prática do provedor\n\nPlaneje pools por OLT/PON com VLSM: estime assinantes + folga de crescimento, escolha o prefixo (não use /24 onde um /25 basta — guarde o resto). Em IPoE com CGNAT, recorte do 100.64.0.0/10.\n/30 ou /31 para transporte: cada link ponto a ponto entre roteadores/POPs é um /30 (ou /31, RFC 3021). Mantenha um bloco só para links, facilita sumarizar.\nLoopbacks em /32 num bloco contíguo → sumariza num único prefixo no IGP.\nSumarize antes de anunciar no BGP: receba seu bloco do registro (ex.: um /22 do NIC.br) e anuncie agregado, não os /24 soltos — tabela menor, menos flap, melhor reputação.\nDocumente cada recorte no IPAM. VLSM sem documentação vira sobreposição e blackhole meses depois.",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>17</span>  <span class='chapter-title'>Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)</span>"
@@ -1266,7 +1266,7 @@
     "href": "capitulos/17-ipv6.html#sec-ipv6-subredes",
     "title": "18  IPv6: Endereçamento, SLAAC e Sub-redes",
     "section": "18.5 Sub-redes em IPv6: pense diferente",
-    "text": "18.5 Sub-redes em IPv6: pense diferente\nEsqueça a economia de endereços do IPv4. Em IPv6 a conta é de prefixos, não de hosts:\n\n\n\nPrefixo\nQuantas /64 contém\nUso típico no ISP\n\n\n\n\n/32\n4 bilhões de /64\nalocação do registro ao ISP grande\n\n\n/48\n65.536 /64\nsite corporativo / POP\n\n\n/56\n256 /64\ndelegação típica ao assinante residencial\n\n\n/64\n1 (uma LAN)\ntoda rede de acesso/LAN\n\n\n\nA regra inviolável: a LAN é sempre /64 (SLAAC exige). Não se “economiza” fazendo /120 — quebra a autoconfiguração. Sobra espaço para todos: um único /32 do ISP comporta milhões de clientes com /56 cada.\n\nNa prática do provedor\n\nPlano de numeração: receba seu /32 (NIC.br) e fatie em /48 por POP/região e /56 por assinante (via DHCPv6-PD no BNG). Mantenha hierarquia para sumarizar no BGP (capítulo Seção 17.1).\nDual-stack é o caminho: rode IPv4+IPv6 juntos; o IPv6 alivia o CGNAT (menos sessões NAT, menos custo, menos chamado de jogo/console).\nNão filtre ICMPv6! Diferente do IPv4, IPv6 depende de ICMPv6 (RS/RA, NDP, PMTUD). Bloquear ICMPv6 quebra a conectividade — libere os tipos essenciais.\nPPPoE/IPoE com IPv6: entregue um /64 para o WAN/LAN via RA e delegue um /56 por PD; configure o RADIUS (capítulo ?sec-radius) para atribuir o prefixo por cliente.\nCGNAT só no IPv4: com bom IPv6 dual-stack, grande parte do tráfego (vídeo, CDNs) já vai por IPv6 nativo, reduzindo a pressão no CGNAT.",
+    "text": "18.5 Sub-redes em IPv6: pense diferente\nEsqueça a economia de endereços do IPv4. Em IPv6 a conta é de prefixos, não de hosts:\n\n\n\nPrefixo\nQuantas /64 contém\nUso típico no ISP\n\n\n\n\n/32\n4 bilhões de /64\nalocação do registro ao ISP grande\n\n\n/48\n65.536 /64\nsite corporativo / POP\n\n\n/56\n256 /64\ndelegação típica ao assinante residencial\n\n\n/64\n1 (uma LAN)\ntoda rede de acesso/LAN\n\n\n\nA regra inviolável: a LAN é sempre /64 (SLAAC exige). Não se “economiza” fazendo /120 — quebra a autoconfiguração. Sobra espaço para todos: um único /32 do ISP comporta milhões de clientes com /56 cada.\n\nNa prática do provedor\n\nPlano de numeração: receba seu /32 (NIC.br) e fatie em /48 por POP/região e /56 por assinante (via DHCPv6-PD no BNG). Mantenha hierarquia para sumarizar no BGP (capítulo Seção 17.1).\nDual-stack é o caminho: rode IPv4+IPv6 juntos; o IPv6 alivia o CGNAT (menos sessões NAT, menos custo, menos chamado de jogo/console).\nNão filtre ICMPv6! Diferente do IPv4, IPv6 depende de ICMPv6 (RS/RA, NDP, PMTUD). Bloquear ICMPv6 quebra a conectividade — libere os tipos essenciais.\nPPPoE/IPoE com IPv6: entregue um /64 para o WAN/LAN via RA e delegue um /56 por PD; configure o RADIUS (capítulo Seção 48.1) para atribuir o prefixo por cliente.\nCGNAT só no IPv4: com bom IPv6 dual-stack, grande parte do tráfego (vídeo, CDNs) já vai por IPv6 nativo, reduzindo a pressão no CGNAT.",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>18</span>  <span class='chapter-title'>IPv6: Endereçamento, SLAAC e Sub-redes</span>"
@@ -1343,7 +1343,7 @@
     "href": "capitulos/18-icmp-diagnostico.html#sec-icmp-icmpv6",
     "title": "19  ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)",
     "section": "19.6 ICMPv6: ainda mais essencial",
-    "text": "19.6 ICMPv6: ainda mais essencial\nEm IPv6 (capítulo Seção 18.1) o ICMPv6 é parte estrutural do protocolo: o NDP (descoberta de vizinho, RS/RA do SLAAC) roda sobre ICMPv6. Por isso a regra é categórica: nunca bloqueie ICMPv6 indiscriminadamente — você derrubaria a própria conectividade IPv6 (sem NDP não há resolução de vizinho; sem RA não há endereço).\n\nNa prática do provedor\n\nRoteiro de chamado “internet lenta/caindo”: ping no gateway (camada 1/2/3 local) → ping num IP do IX/CDN local (sua rede) → mtr até um destino conhecido. O salto onde a perda/RTT começa e persiste indica o responsável (você, o trânsito ou o destino).\nNão filtre ICMP no agregado/BNG: libere ao menos Echo, Time Exceeded e Frag Needed (e os tipos de NDP no IPv6). Filtrar tudo cega o suporte e quebra PMTUD/SLAAC.\nRate-limit de ICMP nos roteadores é normal e gera “perda” fantasma em saltos intermediários do mtr — não confunda com problema real.\nMonitore por ICMP com cautela: sondas de ping a OLTs/rádios são ótimas, mas combine com SNMP (capítulo ?sec-monitoramento) para não depender só de ICMP, que pode estar despriorizado.",
+    "text": "19.6 ICMPv6: ainda mais essencial\nEm IPv6 (capítulo Seção 18.1) o ICMPv6 é parte estrutural do protocolo: o NDP (descoberta de vizinho, RS/RA do SLAAC) roda sobre ICMPv6. Por isso a regra é categórica: nunca bloqueie ICMPv6 indiscriminadamente — você derrubaria a própria conectividade IPv6 (sem NDP não há resolução de vizinho; sem RA não há endereço).\n\nNa prática do provedor\n\nRoteiro de chamado “internet lenta/caindo”: ping no gateway (camada 1/2/3 local) → ping num IP do IX/CDN local (sua rede) → mtr até um destino conhecido. O salto onde a perda/RTT começa e persiste indica o responsável (você, o trânsito ou o destino).\nNão filtre ICMP no agregado/BNG: libere ao menos Echo, Time Exceeded e Frag Needed (e os tipos de NDP no IPv6). Filtrar tudo cega o suporte e quebra PMTUD/SLAAC.\nRate-limit de ICMP nos roteadores é normal e gera “perda” fantasma em saltos intermediários do mtr — não confunda com problema real.\nMonitore por ICMP com cautela: sondas de ping a OLTs/rádios são ótimas, mas combine com SNMP (capítulo Seção 50.1) para não depender só de ICMP, que pode estar despriorizado.",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>19</span>  <span class='chapter-title'>ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)</span>"
@@ -1431,7 +1431,7 @@
     "href": "capitulos/20-roteamento.html",
     "title": "21  Roteamento: Estático e Dinâmico (RIP, OSPF)",
     "section": "",
-    "text": "21.1 Decidir o próximo salto\nEndereçar (capítulos Seção 16.1 e Seção 17.1) é só metade da camada 3; a outra é rotear: decidir, para cada pacote, por onde mandá-lo rumo ao destino. Cada roteador mantém uma tabela de rotas e, ao receber um pacote, procura o prefixo de destino mais específico e o encaminha ao próximo salto. No provedor, o roteamento interno (entre POPs, OLTs, agregadores) é o que faz a rede funcionar como um todo coeso; o roteamento externo (com outros ISPs) é o BGP (capítulo ?sec-bgp). Aqui tratamos o interno: estático, RIP e, sobretudo, OSPF.",
+    "text": "21.1 Decidir o próximo salto\nEndereçar (capítulos Seção 16.1 e Seção 17.1) é só metade da camada 3; a outra é rotear: decidir, para cada pacote, por onde mandá-lo rumo ao destino. Cada roteador mantém uma tabela de rotas e, ao receber um pacote, procura o prefixo de destino mais específico e o encaminha ao próximo salto. No provedor, o roteamento interno (entre POPs, OLTs, agregadores) é o que faz a rede funcionar como um todo coeso; o roteamento externo (com outros ISPs) é o BGP (capítulo Seção 49.1). Aqui tratamos o interno: estático, RIP e, sobretudo, OSPF.",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>21</span>  <span class='chapter-title'>Roteamento: Estático e Dinâmico (RIP, OSPF)</span>"
@@ -1486,7 +1486,7 @@
     "href": "capitulos/20-roteamento.html#sec-roteamento-isp",
     "title": "21  Roteamento: Estático e Dinâmico (RIP, OSPF)",
     "section": "21.6 Onde cada um entra no ISP",
-    "text": "21.6 Onde cada um entra no ISP\n\nOSPF (ou IS-IS) como IGP: carrega as rotas internas (loopbacks, links, prefixos de infraestrutura) entre POPs e agregadores.\nBGP como EGP: carrega as rotas da internet e dos clientes, e fala com trânsito/IX (capítulo ?sec-bgp). Tipicamente o BGP resolve o próximo salto via loopback aprendido pelo OSPF (iBGP).\nEstático: default, links pontuais e clientes simples.\n\n\nNa prática do provedor\n\nNão roteie a internet inteira no OSPF. O IGP carrega só infraestrutura (loopbacks, links, prefixos internos); a tabela cheia da internet (~1M de rotas) é trabalho do BGP. Misturar os dois mata a convergência.\nLoopback é o coração: use /32 em loopback como router-id, destino de iBGP, SNMP e SSH de gerência — sobrevive à queda de qualquer interface física.\nBFD + OSPF/BGP dá failover sub-segundo no anel/núcleo; sem ele, a detecção depende de timers lentos e o cliente sente a queda.\nSumarize entre áreas e ao redistribuir, para conter flaps e enxugar tabelas.\nComece simples: muitos ISPs regionais rodam OSPF interno + BGP na borda; só migram para IS-IS/MPLS (capítulo ?sec-mpls) quando a escala exige.",
+    "text": "21.6 Onde cada um entra no ISP\n\nOSPF (ou IS-IS) como IGP: carrega as rotas internas (loopbacks, links, prefixos de infraestrutura) entre POPs e agregadores.\nBGP como EGP: carrega as rotas da internet e dos clientes, e fala com trânsito/IX (capítulo Seção 49.1). Tipicamente o BGP resolve o próximo salto via loopback aprendido pelo OSPF (iBGP).\nEstático: default, links pontuais e clientes simples.\n\n\nNa prática do provedor\n\nNão roteie a internet inteira no OSPF. O IGP carrega só infraestrutura (loopbacks, links, prefixos internos); a tabela cheia da internet (~1M de rotas) é trabalho do BGP. Misturar os dois mata a convergência.\nLoopback é o coração: use /32 em loopback como router-id, destino de iBGP, SNMP e SSH de gerência — sobrevive à queda de qualquer interface física.\nBFD + OSPF/BGP dá failover sub-segundo no anel/núcleo; sem ele, a detecção depende de timers lentos e o cliente sente a queda.\nSumarize entre áreas e ao redistribuir, para conter flaps e enxugar tabelas.\nComece simples: muitos ISPs regionais rodam OSPF interno + BGP na borda; só migram para IS-IS/MPLS (capítulo ?sec-mpls) quando a escala exige.",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>21</span>  <span class='chapter-title'>Roteamento: Estático e Dinâmico (RIP, OSPF)</span>"
@@ -1640,7 +1640,7 @@
     "href": "capitulos/23-dhcp.html",
     "title": "24  DHCP",
     "section": "",
-    "text": "24.1 Configuração automática de IP\nAtribuir IP, máscara, gateway e DNS à mão em cada dispositivo é inviável em escala. O DHCP (Dynamic Host Configuration Protocol) faz isso automaticamente: o cliente liga, pede, e recebe toda a configuração de rede por empréstimo (lease). Roda sobre UDP (portas 67 servidor / 68 cliente). No provedor, o DHCP aparece em dois mundos: na LAN do cliente (o roteador dele distribui 192.168.x) e no acesso IPoE, onde o BNG (capítulo ?sec-bng-pppoe) entrega o IP de serviço ao assinante — alternativa ao PPPoE.",
+    "text": "24.1 Configuração automática de IP\nAtribuir IP, máscara, gateway e DNS à mão em cada dispositivo é inviável em escala. O DHCP (Dynamic Host Configuration Protocol) faz isso automaticamente: o cliente liga, pede, e recebe toda a configuração de rede por empréstimo (lease). Roda sobre UDP (portas 67 servidor / 68 cliente). No provedor, o DHCP aparece em dois mundos: na LAN do cliente (o roteador dele distribui 192.168.x) e no acesso IPoE, onde o BNG (capítulo Seção 47.1) entrega o IP de serviço ao assinante — alternativa ao PPPoE.",
     "crumbs": [
       "Parte V — Transporte e Aplicação",
       "<span class='chapter-number'>24</span>  <span class='chapter-title'>DHCP</span>"
@@ -1684,7 +1684,7 @@
     "href": "capitulos/23-dhcp.html#sec-dhcp-dhcpv6",
     "title": "24  DHCP",
     "section": "24.5 DHCPv6",
-    "text": "24.5 DHCPv6\nEm IPv6 (capítulo Seção 18.1) há SLAAC (autoconfiguração sem servidor) e DHCPv6. No provedor, o mais importante é o DHCPv6-PD (Prefix Delegation): o BNG delega um prefixo (ex.: /56) ao roteador do cliente, que o reparte em /64s internos. É assim que o assinante recebe endereçamento IPv6 público para a casa toda.\n\nNa prática do provedor\n\nIPoE + DHCP é alternativa ao PPPoE no acesso: mais simples para o cliente (sem usuário/senha), com autenticação por Opção 82 + DHCP Snooping e integração ao RADIUS (capítulo ?sec-radius). Escolha PPPoE vs. IPoE conforme controle e billing desejados (capítulo ?sec-bng-pppoe).\nOpção 82 é anti-fraude: amarra o IP à porta/ONT/VLAN física; com DHCP Snooping + DAI nos switches, mata IP/ARP spoofing (capítulo Seção 13.1) e impede cliente de “se passar” por outro.\nServidor redundante + Relay: dois servidores DHCP centrais e relay na OLT/agregador; lease curto demais sobrecarrega, longo demais trava reuso de IP — ajuste ao churn.\nDHCPv6-PD no BNG entrega o /56 por cliente (via RADIUS) — peça-chave do dual-stack que alivia o CGNAT.\nEsgotou o pool? Clientes sem IP é DORA falhando: monitore utilização do scope e o reuso de lease.",
+    "text": "24.5 DHCPv6\nEm IPv6 (capítulo Seção 18.1) há SLAAC (autoconfiguração sem servidor) e DHCPv6. No provedor, o mais importante é o DHCPv6-PD (Prefix Delegation): o BNG delega um prefixo (ex.: /56) ao roteador do cliente, que o reparte em /64s internos. É assim que o assinante recebe endereçamento IPv6 público para a casa toda.\n\nNa prática do provedor\n\nIPoE + DHCP é alternativa ao PPPoE no acesso: mais simples para o cliente (sem usuário/senha), com autenticação por Opção 82 + DHCP Snooping e integração ao RADIUS (capítulo Seção 48.1). Escolha PPPoE vs. IPoE conforme controle e billing desejados (capítulo Seção 47.1).\nOpção 82 é anti-fraude: amarra o IP à porta/ONT/VLAN física; com DHCP Snooping + DAI nos switches, mata IP/ARP spoofing (capítulo Seção 13.1) e impede cliente de “se passar” por outro.\nServidor redundante + Relay: dois servidores DHCP centrais e relay na OLT/agregador; lease curto demais sobrecarrega, longo demais trava reuso de IP — ajuste ao churn.\nDHCPv6-PD no BNG entrega o /56 por cliente (via RADIUS) — peça-chave do dual-stack que alivia o CGNAT.\nEsgotou o pool? Clientes sem IP é DORA falhando: monitore utilização do scope e o reuso de lease.",
     "crumbs": [
       "Parte V — Transporte e Aplicação",
       "<span class='chapter-number'>24</span>  <span class='chapter-title'>DHCP</span>"
@@ -1816,7 +1816,7 @@
     "href": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-snmp",
     "title": "26  Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)",
     "section": "26.5 SNMP: os olhos do NOC",
-    "text": "26.5 SNMP: os olhos do NOC\nO SNMP (Simple Network Management Protocol) coleta métricas e estados dos equipamentos: tráfego por interface, CPU, temperatura, potência óptica das ONTs, uptime. O sistema de monitoramento (capítulo ?sec-monitoramento) faz polling (consulta periódica) e recebe traps (alarmes assíncronos).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 26.1: SNMP: o NMS faz polling (porta 161) nos equipamentos e recebe traps (porta 162) quando algo dispara um alarme.\n\n\n\nSegurança: use SNMPv3 (autenticação + cifra). O SNMPv1/v2c usa community strings em texto e, exposto à internet, vira vetor de DDoS por amplificação (capítulo ?sec-ddos) — restrinja por ACL à rede de gerência.",
+    "text": "26.5 SNMP: os olhos do NOC\nO SNMP (Simple Network Management Protocol) coleta métricas e estados dos equipamentos: tráfego por interface, CPU, temperatura, potência óptica das ONTs, uptime. O sistema de monitoramento (capítulo Seção 50.1) faz polling (consulta periódica) e recebe traps (alarmes assíncronos).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 26.1: SNMP: o NMS faz polling (porta 161) nos equipamentos e recebe traps (porta 162) quando algo dispara um alarme.\n\n\n\nSegurança: use SNMPv3 (autenticação + cifra). O SNMPv1/v2c usa community strings em texto e, exposto à internet, vira vetor de DDoS por amplificação (capítulo ?sec-ddos) — restrinja por ACL à rede de gerência.",
     "crumbs": [
       "Parte V — Transporte e Aplicação",
       "<span class='chapter-number'>26</span>  <span class='chapter-title'>Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)</span>"
@@ -1827,7 +1827,7 @@
     "href": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-ntp",
     "title": "26  Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)",
     "section": "26.6 NTP: o tempo certo",
-    "text": "26.6 NTP: o tempo certo\nO NTP sincroniza os relógios dos equipamentos. Parece detalhe, mas relógio errado quebra tudo o que importa em operação: logs com horário inconsistente inviabilizam correlação de incidentes e o cumprimento do Marco Civil (capítulo Seção 20.1), certificados TLS falham, e a autenticação (RADIUS, capítulo ?sec-radius) e o RADIUS accounting ficam sem sentido. Opere servidores NTP internos sincronizados a fontes confiáveis (e cuide para não virar open NTP — outro vetor de amplificação).\n\nNa prática do provedor\n\nMate o Telnet e o SNMPv2c expostos. SSH (com chaves) + SNMPv3, ambos restritos à rede/loopback de gerência por ACL. Telnet e community public na borda são convites a incidente.\nBloqueie a porta 25 de saída dos assinantes (deixe a 587 com auth): reduz spam da sua rede e protege a reputação dos seus IPs (capítulo Seção 20.1).\nNTP interno e correto é inegociável: sem ele, logs, certificados, RADIUS e obrigações legais desmoronam. Sincronize OLTs, BNG, switches e servidores.\nTFTP/firmware só na gerência: nunca exposto; use-o para provisionar ONTs e atualizar equipamentos em rede isolada.\nSNMP é o coração do monitoramento: padronize OIDs (tráfego, ótica, CPU, temp) e alarmes; sem SNMP você fica cego (capítulo ?sec-monitoramento).",
+    "text": "26.6 NTP: o tempo certo\nO NTP sincroniza os relógios dos equipamentos. Parece detalhe, mas relógio errado quebra tudo o que importa em operação: logs com horário inconsistente inviabilizam correlação de incidentes e o cumprimento do Marco Civil (capítulo Seção 20.1), certificados TLS falham, e a autenticação (RADIUS, capítulo Seção 48.1) e o RADIUS accounting ficam sem sentido. Opere servidores NTP internos sincronizados a fontes confiáveis (e cuide para não virar open NTP — outro vetor de amplificação).\n\nNa prática do provedor\n\nMate o Telnet e o SNMPv2c expostos. SSH (com chaves) + SNMPv3, ambos restritos à rede/loopback de gerência por ACL. Telnet e community public na borda são convites a incidente.\nBloqueie a porta 25 de saída dos assinantes (deixe a 587 com auth): reduz spam da sua rede e protege a reputação dos seus IPs (capítulo Seção 20.1).\nNTP interno e correto é inegociável: sem ele, logs, certificados, RADIUS e obrigações legais desmoronam. Sincronize OLTs, BNG, switches e servidores.\nTFTP/firmware só na gerência: nunca exposto; use-o para provisionar ONTs e atualizar equipamentos em rede isolada.\nSNMP é o coração do monitoramento: padronize OIDs (tráfego, ótica, CPU, temp) e alarmes; sem SNMP você fica cego (capítulo Seção 50.1).",
     "crumbs": [
       "Parte V — Transporte e Aplicação",
       "<span class='chapter-number'>26</span>  <span class='chapter-title'>Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)</span>"
@@ -1893,7 +1893,7 @@
     "href": "capitulos/26-qos.html#sec-qos-isp",
     "title": "27  Qualidade de Serviço (QoS)",
     "section": "27.5 Onde aplicar no provedor",
-    "text": "27.5 Onde aplicar no provedor\n\nPlano do assinante (rate-limit): o BNG (capítulo ?sec-bng-pppoe) faz shaping/policing para entregar exatamente os “300 Mega” contratados — normalmente via atributo do RADIUS (capítulo ?sec-radius).\nVoz/IPTV próprios: marque EF/AF na borda e honre a marca no core; reserve fila de prioridade para o tráfego de voz do serviço de telefonia do ISP.\nGerência: classe própria para SSH/SNMP/NTP nunca ficar sem banda durante um incidente.\nUplinks e PON: dimensione para ≤ 70–80% no pico (capítulo Seção 7.1); QoS prioriza, mas não cria banda — em saturação crônica, a solução é capacidade, não só QoS.\n\n\nNa prática do provedor\n\nConfie só na borda para marcar. Não confie no DSCP que chega do cliente (qualquer um marca tudo como EF); remarque na entrada conforme sua política e honre a marca internamente.\nRate-limit via RADIUS: mude o plano do cliente trocando o atributo no perfil — upgrade/downgrade sem tocar no equipamento.\nFQ-CoDel no acesso dá ganho enorme de latência sob carga (mata bufferbloat) — o cliente “sente a internet mais rápida” sem mais banda.\nQoS não conserta enlace cheio: se o uplink ou a PON vivem em 95%, o cliente sofre mesmo com QoS perfeito. QoS protege a voz no pico; capacidade resolve a lentidão geral.\nVLAN/PCP na planta: use a prioridade 802.1Q para a voz na rede metro/PON, alinhada ao DSCP IP.",
+    "text": "27.5 Onde aplicar no provedor\n\nPlano do assinante (rate-limit): o BNG (capítulo Seção 47.1) faz shaping/policing para entregar exatamente os “300 Mega” contratados — normalmente via atributo do RADIUS (capítulo Seção 48.1).\nVoz/IPTV próprios: marque EF/AF na borda e honre a marca no core; reserve fila de prioridade para o tráfego de voz do serviço de telefonia do ISP.\nGerência: classe própria para SSH/SNMP/NTP nunca ficar sem banda durante um incidente.\nUplinks e PON: dimensione para ≤ 70–80% no pico (capítulo Seção 7.1); QoS prioriza, mas não cria banda — em saturação crônica, a solução é capacidade, não só QoS.\n\n\nNa prática do provedor\n\nConfie só na borda para marcar. Não confie no DSCP que chega do cliente (qualquer um marca tudo como EF); remarque na entrada conforme sua política e honre a marca internamente.\nRate-limit via RADIUS: mude o plano do cliente trocando o atributo no perfil — upgrade/downgrade sem tocar no equipamento.\nFQ-CoDel no acesso dá ganho enorme de latência sob carga (mata bufferbloat) — o cliente “sente a internet mais rápida” sem mais banda.\nQoS não conserta enlace cheio: se o uplink ou a PON vivem em 95%, o cliente sofre mesmo com QoS perfeito. QoS protege a voz no pico; capacidade resolve a lentidão geral.\nVLAN/PCP na planta: use a prioridade 802.1Q para a voz na rede metro/PON, alinhada ao DSCP IP.",
     "crumbs": [
       "Parte V — Transporte e Aplicação",
       "<span class='chapter-number'>27</span>  <span class='chapter-title'>Qualidade de Serviço (QoS)</span>"
@@ -2058,7 +2058,7 @@
     "href": "capitulos/29-olt.html#sec-olt-funcoes",
     "title": "30  OLT — Optical Line Terminal",
     "section": "30.3 O que a OLT faz",
-    "text": "30.3 O que a OLT faz\n\nTermina a PON: transmite o downstream (broadcast+AES) e agenda o upstream (TDMA via DBA, capítulo Seção 29.3).\nAutentica/registra ONTs: descobre novas ONTs e as autoriza (por SN ou senha — capítulo 1).\nAplica perfis de serviço: velocidade (line profile), VLANs por cliente (capítulo Seção 14.1), QoS (capítulo Seção 27.1).\nMede a planta: reporta a potência óptica recebida de cada ONT (Rx/Tx), essencial para diagnóstico (capítulo Seção 34.1).\nFaz a ponte L2/L3: entrega o tráfego ao BNG (capítulo ?sec-bng-pppoe) — em modelo bridge (a OLT só comuta L2) ou, em alguns casos, roteando.",
+    "text": "30.3 O que a OLT faz\n\nTermina a PON: transmite o downstream (broadcast+AES) e agenda o upstream (TDMA via DBA, capítulo Seção 29.3).\nAutentica/registra ONTs: descobre novas ONTs e as autoriza (por SN ou senha — capítulo 1).\nAplica perfis de serviço: velocidade (line profile), VLANs por cliente (capítulo Seção 14.1), QoS (capítulo Seção 27.1).\nMede a planta: reporta a potência óptica recebida de cada ONT (Rx/Tx), essencial para diagnóstico (capítulo Seção 34.1).\nFaz a ponte L2/L3: entrega o tráfego ao BNG (capítulo Seção 47.1) — em modelo bridge (a OLT só comuta L2) ou, em alguns casos, roteando.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>30</span>  <span class='chapter-title'>OLT — Optical Line Terminal</span>"
@@ -2399,7 +2399,7 @@
     "href": "capitulos/34-provisionamento-pon.html#sec-provisionamento-fluxo",
     "title": "35  Provisionamento PON (VLANs por Cliente, Perfis, ONT)",
     "section": "35.2 O fluxo de provisionamento",
-    "text": "35.2 O fluxo de provisionamento\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 35.1: Fluxo típico: descoberta por SN → autorização → perfis de velocidade → VLAN (Q-in-Q até o BNG) → PPPoE/IPoE + RADIUS → IP e serviço.\n\n\n\n\nDescoberta — plugada a ONT, a OLT a detecta pelo número de série (SN) (e/ou senha) — capítulo Seção 31.1.\nAutorização — o provedor vincula aquele SN ao cliente/contrato e a uma porta PON.\nPerfis — aplica line profile (parâmetros PON/DBA) e service profile (velocidade, número de portas/SSID).\nVLAN — mapeia a C-VLAN do cliente; a OLT empilha a S-VLAN da PON (Q-in-Q, capítulo 1) e entrega ao BNG.\nAutenticação — o cliente sobe PPPoE (ou IPoE), autenticado pelo RADIUS (capítulo ?sec-radius).\nServiço — o BNG entrega IP (e prefixo IPv6) e aplica o rate-limit do plano (capítulo Seção 27.1).",
+    "text": "35.2 O fluxo de provisionamento\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 35.1: Fluxo típico: descoberta por SN → autorização → perfis de velocidade → VLAN (Q-in-Q até o BNG) → PPPoE/IPoE + RADIUS → IP e serviço.\n\n\n\n\nDescoberta — plugada a ONT, a OLT a detecta pelo número de série (SN) (e/ou senha) — capítulo Seção 31.1.\nAutorização — o provedor vincula aquele SN ao cliente/contrato e a uma porta PON.\nPerfis — aplica line profile (parâmetros PON/DBA) e service profile (velocidade, número de portas/SSID).\nVLAN — mapeia a C-VLAN do cliente; a OLT empilha a S-VLAN da PON (Q-in-Q, capítulo 1) e entrega ao BNG.\nAutenticação — o cliente sobe PPPoE (ou IPoE), autenticado pelo RADIUS (capítulo Seção 48.1).\nServiço — o BNG entrega IP (e prefixo IPv6) e aplica o rate-limit do plano (capítulo Seção 27.1).",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>35</span>  <span class='chapter-title'>Provisionamento PON (VLANs por Cliente, Perfis, ONT)</span>"
@@ -2432,7 +2432,7 @@
     "href": "capitulos/34-provisionamento-pon.html#sec-provisionamento-pppoe-ipoe",
     "title": "35  Provisionamento PON (VLANs por Cliente, Perfis, ONT)",
     "section": "35.5 PPPoE vs. IPoE no provisionamento",
-    "text": "35.5 PPPoE vs. IPoE no provisionamento\nDuas formas de autenticar/entregar IP (capítulo ?sec-bng-pppoe):\n\n\n\nAspecto\nPPPoE\nIPoE (DHCP)\n\n\n\n\nAutenticação\nusuário/senha\nOpção 82 + RADIUS\n\n\nControle/billing\nforte (sessão explícita)\nbom (via DHCP/RADIUS)\n\n\nExperiência\nexige configurar sessão\n“plug and play”\n\n\nMTU\n1492 (precisa MSS clamp)\n1500\n\n\n\nA escolha depende do controle desejado; muitos ISPs brasileiros usam PPPoE pela gestão de sessão e billing simples, com RADIUS atribuindo velocidade, IP e prefixo IPv6.\n\nNa prática do provedor\n\nAutomatize com perfis + sistema/OSS: ONT nova entra por SN com perfil do plano aplicado automaticamente; integre OLT ↔︎ sistema de gestão (provisionamento via API/NETCONF, capítulo ?sec-sdn). Provisionar a mão em escala é fonte de erro.\nVelocidade vem do RADIUS, não da ONT: o rate-limit do plano é atributo RADIUS no BNG (capítulo Seção 27.1) — upgrade sem tocar no equipamento do cliente.\nTR-069/ACS para a casa do cliente: Wi-Fi, firmware e diagnóstico remoto da ONT (capítulo Seção 31.1) — menos visitas técnicas.\nChecklist de ativação: SN autorizado? potência Rx na faixa (capítulo Seção 34.1)? C-VLAN correta? PPPoE autenticou (RADIUS)? IP/IPv6 entregues? Esse roteiro evita “instalei mas não navega”.\nErro nº 1: VLAN errada no perfil/uplink → ONT autentica na OLT (PON aceso) mas cliente não navega. Confira o caminho da VLAN ONT→OLT→BNG (capítulo\n\nantes de suspeitar de fibra.",
+    "text": "35.5 PPPoE vs. IPoE no provisionamento\nDuas formas de autenticar/entregar IP (capítulo Seção 47.1):\n\n\n\nAspecto\nPPPoE\nIPoE (DHCP)\n\n\n\n\nAutenticação\nusuário/senha\nOpção 82 + RADIUS\n\n\nControle/billing\nforte (sessão explícita)\nbom (via DHCP/RADIUS)\n\n\nExperiência\nexige configurar sessão\n“plug and play”\n\n\nMTU\n1492 (precisa MSS clamp)\n1500\n\n\n\nA escolha depende do controle desejado; muitos ISPs brasileiros usam PPPoE pela gestão de sessão e billing simples, com RADIUS atribuindo velocidade, IP e prefixo IPv6.\n\nNa prática do provedor\n\nAutomatize com perfis + sistema/OSS: ONT nova entra por SN com perfil do plano aplicado automaticamente; integre OLT ↔︎ sistema de gestão (provisionamento via API/NETCONF, capítulo ?sec-sdn). Provisionar a mão em escala é fonte de erro.\nVelocidade vem do RADIUS, não da ONT: o rate-limit do plano é atributo RADIUS no BNG (capítulo Seção 27.1) — upgrade sem tocar no equipamento do cliente.\nTR-069/ACS para a casa do cliente: Wi-Fi, firmware e diagnóstico remoto da ONT (capítulo Seção 31.1) — menos visitas técnicas.\nChecklist de ativação: SN autorizado? potência Rx na faixa (capítulo Seção 34.1)? C-VLAN correta? PPPoE autenticou (RADIUS)? IP/IPv6 entregues? Esse roteiro evita “instalei mas não navega”.\nErro nº 1: VLAN errada no perfil/uplink → ONT autentica na OLT (PON aceso) mas cliente não navega. Confira o caminho da VLAN ONT→OLT→BNG (capítulo\n\nantes de suspeitar de fibra.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>35</span>  <span class='chapter-title'>Provisionamento PON (VLANs por Cliente, Perfis, ONT)</span>"
@@ -3191,7 +3191,7 @@
     "href": "capitulos/45-tecnologias-radio-isp.html#sec-tec-integracao",
     "title": "46  Tecnologias de Rádio para ISP",
     "section": "46.5 Integração com a rede do provedor",
-    "text": "46.5 Integração com a rede do provedor\nO rádio não é uma “ilha”: ele entrega o cliente à mesma infraestrutura da fibra:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 46.1: O cliente de rádio entra na mesma cadeia: CPE → base → torre (alimentada por fibra) → BNG/RADIUS, com VLAN por cliente e PPPoE/IPoE, como na PON.\n\n\n\n\nVLAN por cliente (capítulo Seção 14.1) também no rádio, para isolar e rastrear.\nPPPoE/IPoE + RADIUS (capítulos ?sec-bng-pppoe, ?sec-radius) autenticam o cliente de rádio igual ao de fibra — mesmo billing, mesmo controle.\nQoS/rate-limit (capítulo Seção 27.1) via RADIUS — mas atenção: no rádio o gargalo pode ser o ar (SNR/overbooking da base), não só o plano.\nMonitoramento (capítulo ?sec-monitoramento) por SNMP: SNR, capacidade da base, clientes por setor, airtime.",
+    "text": "46.5 Integração com a rede do provedor\nO rádio não é uma “ilha”: ele entrega o cliente à mesma infraestrutura da fibra:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 46.1: O cliente de rádio entra na mesma cadeia: CPE → base → torre (alimentada por fibra) → BNG/RADIUS, com VLAN por cliente e PPPoE/IPoE, como na PON.\n\n\n\n\nVLAN por cliente (capítulo Seção 14.1) também no rádio, para isolar e rastrear.\nPPPoE/IPoE + RADIUS (capítulos Seção 47.1, Seção 48.1) autenticam o cliente de rádio igual ao de fibra — mesmo billing, mesmo controle.\nQoS/rate-limit (capítulo Seção 27.1) via RADIUS — mas atenção: no rádio o gargalo pode ser o ar (SNR/overbooking da base), não só o plano.\nMonitoramento (capítulo Seção 50.1) por SNMP: SNR, capacidade da base, clientes por setor, airtime.",
     "crumbs": [
       "Parte IX — Redes via Rádio (Áreas Rurais)",
       "<span class='chapter-number'>46</span>  <span class='chapter-title'>Tecnologias de Rádio para ISP</span>"
@@ -3224,7 +3224,62 @@
     "href": "capitulos/46-bng-bras-pppoe-ipoe.html",
     "title": "47  BNG/BRAS, PPPoE e IPoE",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "47.1 Onde o assinante “entra” na internet\nToda a planta (fibra na Parte VI, rádio na Parte IX) leva o tráfego do cliente até um ponto onde ele é autenticado, recebe IP, ganha velocidade e é roteado para a internet: o BNG (Broadband Network Gateway), também chamado BRAS (Broadband Remote Access Server). É o coração da operação de acesso — o equipamento que transforma “uma ONT/rádio conectado” em “um cliente pagante navegando”. Ele termina as sessões (PPPoE ou IPoE), conversa com o RADIUS (capítulo Seção 48.1) para autenticar/contabilizar, aplica o plano (rate-limit, QoS — capítulo Seção 27.1) e entrega ao roteamento (BGP, capítulo Seção 49.1).",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>47</span>  <span class='chapter-title'>BNG/BRAS, PPPoE e IPoE</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/46-bng-bras-pppoe-ipoe.html#sec-bng-papel",
+    "href": "capitulos/46-bng-bras-pppoe-ipoe.html#sec-bng-papel",
+    "title": "47  BNG/BRAS, PPPoE e IPoE",
+    "section": "47.2 O papel do BNG",
+    "text": "47.2 O papel do BNG\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 47.1: O BNG é o ponto de terminação do assinante: recebe a sessão (via OLT/agregador), autentica no RADIUS, atribui IP/velocidade e roteia à internet.\n\n\n\nFunções concentradas no BNG:\n\nTerminar a sessão do assinante (PPPoE ou IPoE).\nAutenticar/autorizar/contabilizar via RADIUS (AAA, capítulo Seção 48.1).\nAtribuir IP (IPv4, muitas vezes via CGNAT a jusante — capítulo\n\ne prefixo IPv6 (DHCPv6-PD, capítulo Seção 18.1).\n\nAplicar o plano: rate-limit/QoS por atributo RADIUS (capítulo Seção 27.1).\nMSS clamping (capítulo Seção 15.4) e políticas.\nRoteamento para a borda/BGP.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>47</span>  <span class='chapter-title'>BNG/BRAS, PPPoE e IPoE</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/46-bng-bras-pppoe-ipoe.html#sec-bng-pppoe-detalhe",
+    "href": "capitulos/46-bng-bras-pppoe-ipoe.html#sec-bng-pppoe-detalhe",
+    "title": "47  BNG/BRAS, PPPoE e IPoE",
+    "section": "47.3 PPPoE: sessão explícita",
+    "text": "47.3 PPPoE: sessão explícita\nO PPPoE (PPP over Ethernet) cria uma sessão lógica entre o roteador do cliente e o BNG, sobre a Ethernet/PON. Fases:\n\nDiscovery (PADI/PADO/PADR/PADS): cliente e BNG se acham e estabelecem a sessão.\nAutenticação (PAP/CHAP): usuário e senha validados no RADIUS.\nSessão: o BNG entrega IP, aplica plano e contabiliza; a sessão tem identificador e pode ser derrubada/auditada.\n\nVantagens: controle e billing fortes (sessão explícita, fácil de cortar inadimplente, contabilizar e auditar). Desvantagem: MTU 1492 (8 bytes de overhead) → exige MSS clamping, senão “sites grandes não abrem” (capítulo Seção 15.4).",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>47</span>  <span class='chapter-title'>BNG/BRAS, PPPoE e IPoE</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/46-bng-bras-pppoe-ipoe.html#sec-bng-ipoe",
+    "href": "capitulos/46-bng-bras-pppoe-ipoe.html#sec-bng-ipoe",
+    "title": "47  BNG/BRAS, PPPoE e IPoE",
+    "section": "47.4 IPoE: sem usuário/senha",
+    "text": "47.4 IPoE: sem usuário/senha\nO IPoE entrega IP via DHCP (capítulo Seção 24.1), sem sessão PPP. A identidade do cliente vem da Opção 82 (porta/VLAN/circuito) + DHCP Snooping, e a autorização ainda pode passar pelo RADIUS. Vantagens: MTU 1500 (sem overhead), experiência “plug and play”, bom para IPTV/multicast. Desvantagem: o controle de sessão é menos explícito que no PPPoE (mitigado por Opção 82 + RADIUS).\n\n\n\nAspecto\nPPPoE\nIPoE\n\n\n\n\nIdentidade\nusuário/senha\nOpção 82 + DHCP Snooping\n\n\nMTU\n1492 (MSS clamp)\n1500\n\n\nControle/billing\nforte (sessão)\nbom (DHCP/RADIUS)\n\n\nExperiência\nconfigura sessão\nautomático\n\n\nMulticast/IPTV\nmenos natural\nmelhor\n\n\n\nNo Brasil, PPPoE é muito comum pela gestão de sessão e billing; IPoE cresce em redes que querem simplicidade e IPTV.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>47</span>  <span class='chapter-title'>BNG/BRAS, PPPoE e IPoE</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/46-bng-bras-pppoe-ipoe.html#sec-bng-dimensionamento",
+    "href": "capitulos/46-bng-bras-pppoe-ipoe.html#sec-bng-dimensionamento",
+    "title": "47  BNG/BRAS, PPPoE e IPoE",
+    "section": "47.5 Dimensionamento e redundância",
+    "text": "47.5 Dimensionamento e redundância\nO BNG é ponto crítico: sua queda derruba todos os assinantes que termina. Cuidados:\n\nCapacidade: sessões simultâneas, throughput agregado, e headroom para o pico (capítulo Seção 7.1).\nRedundância: dois BNGs com failover (e RADIUS redundante); cliente reconecta no par se um cai.\nPosição: centralizado (simples) ou distribuído (menor raio de impacto). À medida que cresce, distribuir reduz o “blast radius”.\n\n\nNa prática do provedor\n\nMSS clamping é obrigatório em PPPoE. Configure (ex.: MSS 1452) e elimine a enxurrada de “Netflix abre, banco não” (capítulo Seção 15.4).\nVelocidade/IP/IPv6 vêm do RADIUS, não fixos no BNG: trocar plano = trocar atributo no perfil (capítulo Seção 48.1); entregue /56 por DHCPv6-PD para dual-stack (capítulo Seção 18.1) e alivie o CGNAT.\nRedundância de BNG + RADIUS: o BNG é o “pescoço” da operação; failover testado evita que uma manutenção vire apagão geral.\nIntegre com CGNAT e logs: o BNG + CGNAT precisam logar sessão/porta para o Marco Civil (capítulo 1); alinhe NTP (capítulo Seção 26.6) para horários corretos.\nPPPoE vs. IPoE é decisão de operação: escolha por controle de sessão (PPPoE) ou simplicidade/IPTV (IPoE); muitos rodam PPPoE no residencial e IPoE em nichos.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>47</span>  <span class='chapter-title'>BNG/BRAS, PPPoE e IPoE</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/46-bng-bras-pppoe-ipoe.html#sec-resumo-46",
+    "href": "capitulos/46-bng-bras-pppoe-ipoe.html#sec-resumo-46",
+    "title": "47  BNG/BRAS, PPPoE e IPoE",
+    "section": "47.6 Resumo e checklist",
+    "text": "47.6 Resumo e checklist\n\nO BNG/BRAS termina o assinante: autentica (RADIUS), dá IP/IPv6, aplica plano/QoS e roteia.\nPPPoE = sessão com usuário/senha (controle/billing forte, MTU 1492 + MSS clamp); IPoE = DHCP + Opção 82 (MTU 1500, plug and play).\nVelocidade e endereços vêm do RADIUS; entregue IPv6 por DHCPv6-PD.\nBNG é crítico: dimensione com folga e tenha redundância.\n\nChecklist do capítulo\n\nDescrevo as funções do BNG e o caminho do assinante até a internet.\nDiferencio PPPoE de IPoE e suas implicações de MTU/controle.\nConfiguro MSS clamping no PPPoE e atribuo plano via RADIUS.\nPlanejo redundância de BNG/RADIUS e logs para o Marco Civil.",
     "crumbs": [
       "Parte X — Operação de Provedor (ISP)",
       "<span class='chapter-number'>47</span>  <span class='chapter-title'>BNG/BRAS, PPPoE e IPoE</span>"
@@ -3235,7 +3290,62 @@
     "href": "capitulos/47-radius-aaa.html",
     "title": "48  RADIUS e AAA",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "48.1 Quem é o cliente, o que pode e quanto usou\nQuando o assinante sobe a sessão no BNG (capítulo Seção 47.1), três perguntas precisam de resposta: quem é? (autenticação), o que pode fazer? (autorização — velocidade, IP, prefixo) e quanto usou? (contabilização — tempo, bytes, logs). Esse tripé é o AAA, e o protocolo que o implementa no ISP é o RADIUS (Remote Authentication Dial-In User Service). É o RADIUS que liga o sistema de gestão/ billing (cadastro, plano, inadimplência) à rede (o BNG), tornando o provedor operável em escala.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>48</span>  <span class='chapter-title'>RADIUS e AAA</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/47-radius-aaa.html#sec-radius-aaa",
+    "href": "capitulos/47-radius-aaa.html#sec-radius-aaa",
+    "title": "48  RADIUS e AAA",
+    "section": "48.2 Os três As",
+    "text": "48.2 Os três As\n\n\n\n\n\n\n\n\nA\nO quê\nNo ISP\n\n\n\n\nAuthentication\nprovar identidade\nusuário/senha PPPoE, ou Opção 82 (IPoE)\n\n\nAuthorization\no que pode\nvelocidade (rate-limit), IP, pool, /56 IPv6, VLAN\n\n\nAccounting\no que usou\ninício/fim de sessão, bytes, tempo, IP/porta (Marco Civil)",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>48</span>  <span class='chapter-title'>RADIUS e AAA</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/47-radius-aaa.html#sec-radius-troca",
+    "href": "capitulos/47-radius-aaa.html#sec-radius-troca",
+    "title": "48  RADIUS e AAA",
+    "section": "48.3 Como funciona a troca RADIUS",
+    "text": "48.3 Como funciona a troca RADIUS\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 48.1: O BNG é cliente RADIUS: manda Access-Request com as credenciais; o servidor consulta a base e responde Access-Accept (com os atributos do plano) ou Access-Reject. Depois, o BNG envia Accounting (start/stop/interim).\n\n\n\n\nAccess-Request / Access-Accept(ou Reject): autenticação + autorização. O Accept carrega atributos (velocidade, IP, framed-route, etc.).\nAccounting (Start / Interim / Stop): o BNG reporta uso periódico e ao encerrar — base de billing e de logs legais.\nCoA / Disconnect (RFC 5176): Change of Authorization — o servidor pode mudar um cliente já conectado (trocar velocidade, derrubar a sessão) sem esperar reconexão. Essencial para upgrade/bloqueio em tempo real.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>48</span>  <span class='chapter-title'>RADIUS e AAA</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/47-radius-aaa.html#sec-radius-atributos",
+    "href": "capitulos/47-radius-aaa.html#sec-radius-atributos",
+    "title": "48  RADIUS e AAA",
+    "section": "48.4 Atributos: onde mora o plano",
+    "text": "48.4 Atributos: onde mora o plano\nA “mágica” do controle por RADIUS está nos atributos retornados:\n\nVelocidade (rate-limit up/down) — via Vendor-Specific Attributes (VSA) do fabricante do BNG (Mikrotik-Rate-Limit, Cisco, Huawei…).\nEndereçamento — Framed-IP-Address, pool, Framed-IPv6-Prefix / Delegated-IPv6-Prefix.\nSessão — Session-Timeout, Idle-Timeout, Filter-Id (ACL/política).\nVLAN/contexto — para IPoE e cenários avançados.\n\nTrocar o plano do cliente = mudar o atributo no perfil dele na base; com CoA, o efeito é imediato.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>48</span>  <span class='chapter-title'>RADIUS e AAA</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/47-radius-aaa.html#sec-radius-operacao",
+    "href": "capitulos/47-radius-aaa.html#sec-radius-operacao",
+    "title": "48  RADIUS e AAA",
+    "section": "48.5 RADIUS na operação do ISP",
+    "text": "48.5 RADIUS na operação do ISP\nO RADIUS é o elo entre billing e rede. Casos do dia a dia:\n\nAtivação: cadastro cria o usuário/plano; ao conectar, o RADIUS autoriza com a velocidade certa.\nUpgrade/downgrade: muda o atributo → CoA aplica na hora.\nBloqueio por inadimplência: o RADIUS direciona o cliente a um pool/ACL de bloqueio (página “fatura em aberto”) em vez de derrubar — walled garden.\nLogs (Marco Civil): o accounting registra quem teve qual IP/porta e quando (capítulo Seção 20.1), com NTP correto (capítulo Seção 26.6).\n\n\nNa prática do provedor\n\nRADIUS redundante é inegociável: se o RADIUS cai, ninguém autentica (e reconexões falham). Dois servidores + base replicada; o BNG aponta para ambos.\nCoA para tudo em tempo real: upgrade vendido às 22h deve valer às 22h01 — sem CoA o cliente teria que reconectar. Habilite e teste Disconnect/CoA.\nBloqueio por walled garden, não por reject: direcione o inadimplente a uma página de aviso/pagamento (pool + ACL) — melhor experiência e recuperação de receita do que simplesmente derrubar.\nAccounting + NTP = conformidade: guarde start/stop/interim com horário correto; é a prova legal de uso (Marco Civil) e a base de relatórios de tráfego.\nVSA do seu BNG: o atributo de velocidade depende do fabricante; padronize os perfis (300M/500M/1G) com o VSA certo para evitar “cliente contratou 500 e está com 100”.\nIntegração billing↔︎RADIUS↔︎BNG: automatize ativação/bloqueio/plano a partir do sistema de gestão; operação manual não escala.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>48</span>  <span class='chapter-title'>RADIUS e AAA</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/47-radius-aaa.html#sec-resumo-47",
+    "href": "capitulos/47-radius-aaa.html#sec-resumo-47",
+    "title": "48  RADIUS e AAA",
+    "section": "48.6 Resumo e checklist",
+    "text": "48.6 Resumo e checklist\n\nAAA = autenticar (quem), autorizar (o que pode) e contabilizar (o que usou); o RADIUS implementa no ISP.\nO BNG é cliente RADIUS: Access-Request/Accept (com atributos) e Accounting (start/stop/interim).\nCoA muda/derruba sessões em tempo real (upgrade, bloqueio).\nO RADIUS liga billing ↔︎ rede; redundância e accounting + NTP são críticos (Marco Civil).\n\nChecklist do capítulo\n\nExplico os três As e onde cada um aparece no acesso.\nDescrevo Access-Request/Accept e o papel dos atributos (velocidade, IP, /56).\nUso CoA para upgrade/bloqueio em tempo real.\nGaranto RADIUS redundante e accounting com NTP para conformidade.",
     "crumbs": [
       "Parte X — Operação de Provedor (ISP)",
       "<span class='chapter-number'>48</span>  <span class='chapter-title'>RADIUS e AAA</span>"
@@ -3246,7 +3356,73 @@
     "href": "capitulos/48-bgp-as-peering-ix.html",
     "title": "49  BGP, ASN, Peering e IX",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "49.1 Como o ISP conversa com o resto da internet\nAté aqui, o roteamento foi interno (OSPF, capítulo Seção 21.1). Mas o provedor não é uma ilha: ele precisa trocar rotas com o mundo — anunciar seus blocos IP e aprender como chegar a todos os outros. Isso é trabalho do BGP (Border Gateway Protocol), o protocolo que costura os ~75 mil sistemas autônomos (AS) da internet. Para se tornar um ISP “de verdade” (e não revendedor), você precisa de ASN próprio, bloco IP próprio e BGP com trânsito e no IX. Este capítulo é o portão de entrada para operar autonomamente.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>49</span>  <span class='chapter-title'>BGP, ASN, Peering e IX</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/48-bgp-as-peering-ix.html#sec-bgp-as",
+    "href": "capitulos/48-bgp-as-peering-ix.html#sec-bgp-as",
+    "title": "49  BGP, ASN, Peering e IX",
+    "section": "49.2 AS, ASN e a estrutura da internet",
+    "text": "49.2 AS, ASN e a estrutura da internet\nUm Sistema Autônomo (AS) é uma rede sob administração única com política de roteamento própria — o seu ISP é um AS. Cada AS tem um ASN (número, ex.: AS 264xxx no Brasil), atribuído pelo registro regional (no Brasil, NIC.br/Registro.br). O BGP troca rotas entre AS identificando o caminho pela sequência de ASNs (AS-Path). A internet é, então, uma malha de AS conectados por BGP.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 49.1: Seu AS conecta-se a trânsitos (que vendem “a internet inteira”) e ao IX, onde faz peering direto com muitos AS locais — mais barato e com menor latência.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>49</span>  <span class='chapter-title'>BGP, ASN, Peering e IX</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/48-bgp-as-peering-ix.html#sec-bgp-transito-peering",
+    "href": "capitulos/48-bgp-as-peering-ix.html#sec-bgp-transito-peering",
+    "title": "49  BGP, ASN, Peering e IX",
+    "section": "49.3 Trânsito vs. peering",
+    "text": "49.3 Trânsito vs. peering\nHá duas formas de obter/trocar rotas:\n\n\n\n\n\n\n\n\n\nTipo\nO que dá\nCusto\nRelação\n\n\n\n\nTrânsito (transit)\nacesso a toda a internet\npago por Mbps/Gbps\nvocê é cliente do upstream\n\n\nPeering (no IX)\nrotas dos peers presentes no IX\nbarato (porta no IX)\ntroca mútua e local\n\n\n\nO peering no IX (no Brasil, IX.br, o maior do mundo em alguns pontos) traz conteúdo local (CDNs, outros ISPs, bancos) com baixa latência e sem custo de trânsito — descarrega o trânsito pago. O trânsito garante alcance ao que não está no IX. A estratégia é: maximizar peering, comprar trânsito para o resto, com redundância (≥ 2 trânsitos).",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>49</span>  <span class='chapter-title'>BGP, ASN, Peering e IX</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/48-bgp-as-peering-ix.html#sec-bgp-atributos",
+    "href": "capitulos/48-bgp-as-peering-ix.html#sec-bgp-atributos",
+    "title": "49  BGP, ASN, Peering e IX",
+    "section": "49.4 Atributos e seleção de rota",
+    "text": "49.4 Atributos e seleção de rota\nO BGP escolhe o melhor caminho por uma sequência de critérios. Os que o ISP mais usa para engenharia de tráfego:\n\nLocal Preference — preferência de saída (qual upstream usar para sair); maior vence. É a principal alavanca para escolher por onde mandar o tráfego.\nAS-Path — caminho mais curto (menos ASNs) é preferido; AS-Path prepending (repetir seu ASN) “afasta” um caminho para balancear entrada.\nMED — sugere ao vizinho por onde entrar.\nCommunities — “etiquetas” que sinalizam políticas (ex.: pedir ao upstream para não anunciar uma rota em certa região).",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>49</span>  <span class='chapter-title'>BGP, ASN, Peering e IX</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/48-bgp-as-peering-ix.html#sec-bgp-seguranca",
+    "href": "capitulos/48-bgp-as-peering-ix.html#sec-bgp-seguranca",
+    "title": "49  BGP, ASN, Peering e IX",
+    "section": "49.5 Anunciar com responsabilidade",
+    "text": "49.5 Anunciar com responsabilidade\nAnunciar BGP errado afeta a internet inteira (sequestros de rota já tiraram serviços do ar). Higiene obrigatória:\n\nSumarize seu bloco (capítulo Seção 17.1): anuncie o agregado (ex.: um /22), não /24 soltos.\nAnuncie só o que é seu: filtros de saída para não vazar rotas de trânsito (virar trânsito acidental).\nRPKI / ROA: assine quais ASNs podem originar seus prefixos — defesa contra hijack; valide ROAs nas importações.\nIRR / filtros de prefixo acordados com upstreams e peers.\nMax-prefix: limite de prefixos por sessão para conter vazamentos.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>49</span>  <span class='chapter-title'>BGP, ASN, Peering e IX</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/48-bgp-as-peering-ix.html#sec-bgp-virar-as",
+    "href": "capitulos/48-bgp-as-peering-ix.html#sec-bgp-virar-as",
+    "title": "49  BGP, ASN, Peering e IX",
+    "section": "49.6 Tornando-se um AS",
+    "text": "49.6 Tornando-se um AS\nPassos práticos para o ISP brasileiro: obter ASN e bloco IP (IPv4 e IPv6) no Registro.br, configurar BGP no roteador de borda com ≥ 2 trânsitos e porta no IX.br, publicar ROA (RPKI), e organizar o roteamento interno (iBGP + OSPF, capítulo Seção 21.1) para distribuir as rotas aprendidas. A partir daí você controla sua conectividade — e sua resiliência.\n\nNa prática do provedor\n\nEntre no IX.br o quanto antes: o peering local corta custo de trânsito e baixa a latência ao conteúdo nacional (capítulo Seção 7.1) — o maior ganho de QoE depois da CDN de borda (capítulo Seção 25.1).\nDois trânsitos, sempre: redundância de upstream evita apagão quando um cai; use Local Preference para preferir o mais barato/rápido e o outro como backup.\nRPKI/ROA + filtros: publique ROA dos seus prefixos e valide os importados. Route hijack e route leak são incidentes reais e graves; filtros e RPKI são a defesa básica.\nSumarize e não vaze: anuncie o agregado e filtre a saída para nunca repassar rotas de trânsito (virar trânsito de graça para terceiros).\nIPv6 no BGP desde já: anuncie seu /32 IPv6 junto; dual-stack na borda é pré-requisito para o IPv6 do acesso (capítulo Seção 18.1) aliviar o CGNAT.\nHospede CDNs (cache): com ASN e presença no IX, negocie appliances de cache (capítulo Seção 25.1) — servem conteúdo localmente e descarregam trânsito.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>49</span>  <span class='chapter-title'>BGP, ASN, Peering e IX</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/48-bgp-as-peering-ix.html#sec-resumo-48",
+    "href": "capitulos/48-bgp-as-peering-ix.html#sec-resumo-48",
+    "title": "49  BGP, ASN, Peering e IX",
+    "section": "49.7 Resumo e checklist",
+    "text": "49.7 Resumo e checklist\n\nBGP troca rotas entre AS; cada ISP é um AS com ASN e blocos próprios.\nTrânsito (pago, toda a internet) + peering no IX (barato, local) — use os dois, com redundância.\nEngenharia de tráfego por Local Preference (saída), AS-Path prepend (entrada), MED e communities.\nHigiene: sumarizar, filtrar saída, RPKI/ROA, max-prefix — anúncio errado afeta o mundo.\n\nChecklist do capítulo\n\nExplico AS/ASN e o papel do AS-Path na escolha de rota.\nDiferencio trânsito de peering e a estratégia de usar ambos.\nUso Local Preference e AS-Path prepend para engenharia de tráfego.\nPublico ROA (RPKI), sumarizo e filtro para anunciar com segurança.",
     "crumbs": [
       "Parte X — Operação de Provedor (ISP)",
       "<span class='chapter-number'>49</span>  <span class='chapter-title'>BGP, ASN, Peering e IX</span>"
@@ -3257,7 +3433,62 @@
     "href": "capitulos/49-sistemas-gerencia-monitoramento.html",
     "title": "50  Gerência e Monitoramento (SNMP, Zabbix, NMS)",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "50.1 Ver a rede antes do cliente ligar\nUma rede de provedor tem milhares de elementos (OLTs, ONTs, switches, rádios, BNG, servidores) espalhados por uma cidade ou região. Sem monitoramento, você só sabe que algo caiu quando o telefone do suporte toca — tarde demais. O objetivo da gerência e do monitoramento é o oposto: detectar, diagnosticar e às vezes prever falhas antes do cliente, medir capacidade para planejar (capítulo Seção 7.1) e ter dados para SLA. Este capítulo junta as ferramentas (SNMP, capítulo Seção 26.5; logs; fluxos) em um sistema operacional de NOC.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>50</span>  <span class='chapter-title'>Gerência e Monitoramento (SNMP, Zabbix, NMS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/49-sistemas-gerencia-monitoramento.html#sec-mon-o-que",
+    "href": "capitulos/49-sistemas-gerencia-monitoramento.html#sec-mon-o-que",
+    "title": "50  Gerência e Monitoramento (SNMP, Zabbix, NMS)",
+    "section": "50.2 O que monitorar",
+    "text": "50.2 O que monitorar\n\n\n\n\n\n\n\nCamada\nMétricas\n\n\n\n\nÓptica (L1)\npotência Rx das ONTs, alarmes LOS, temperatura de SFP\n\n\nEnlace/rede (L2/L3)\ntráfego por interface, erros/descartes, status BGP/OSPF\n\n\nCapacidade\nocupação de uplinks, portas PON, airtime de rádio\n\n\nServiços\nDNS (latência/erro), RADIUS (auth/s), DHCP (pool), CGNAT (portas)\n\n\nInfra\nCPU/memória/temperatura de OLT/BNG, energia (nobreak/gerador)\n\n\nCliente\nsessões ativas, quedas, qualidade (SNR no rádio)",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>50</span>  <span class='chapter-title'>Gerência e Monitoramento (SNMP, Zabbix, NMS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/49-sistemas-gerencia-monitoramento.html#sec-mon-fontes",
+    "href": "capitulos/49-sistemas-gerencia-monitoramento.html#sec-mon-fontes",
+    "title": "50  Gerência e Monitoramento (SNMP, Zabbix, NMS)",
+    "section": "50.3 As fontes de dados",
+    "text": "50.3 As fontes de dados\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 50.1: O NMS central coleta SNMP (métricas), syslog (eventos), flow (tráfego) e telemetria dos equipamentos, gerando dashboards e disparando alarmes para o NOC.\n\n\n\n\nSNMP (capítulo Seção 26.5) — polling de métricas (tráfego, CPU, ótica) e traps (alarmes). A espinha dorsal do monitoramento.\nSyslog — eventos e logs dos equipamentos centralizados (correlação de incidentes; precisa de NTP correto, capítulo Seção 26.6).\nFlow (NetFlow/sFlow/IPFIX) — quem fala com quem e quanto: análise de tráfego, detecção de anomalias/DDoS (capítulo ?sec-ddos), planejamento de peering.\nTelemetria/streaming & APIs — coleta moderna em alta frequência (capítulo ?sec-sdn).\nICMP (capítulo Seção 19.1) — sondas de disponibilidade/latência.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>50</span>  <span class='chapter-title'>Gerência e Monitoramento (SNMP, Zabbix, NMS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/49-sistemas-gerencia-monitoramento.html#sec-mon-ferramentas",
+    "href": "capitulos/49-sistemas-gerencia-monitoramento.html#sec-mon-ferramentas",
+    "title": "50  Gerência e Monitoramento (SNMP, Zabbix, NMS)",
+    "section": "50.4 Ferramentas",
+    "text": "50.4 Ferramentas\n\nZabbix / LibreNMS / PRTG — NMS de coleta SNMP, alarmes e inventário (Zabbix e LibreNMS são populares e gratuitos no ISP regional).\nGrafana — dashboards bonitos sobre as bases de séries temporais.\nColetores de flow (ex.: ferramentas de NetFlow) — tráfego e segurança.\nSistemas específicos de PON — leem a potência das ONTs direto da OLT.\nIntegração com OSS/ticket — alarme vira chamado automaticamente.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>50</span>  <span class='chapter-title'>Gerência e Monitoramento (SNMP, Zabbix, NMS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/49-sistemas-gerencia-monitoramento.html#sec-mon-alarmes",
+    "href": "capitulos/49-sistemas-gerencia-monitoramento.html#sec-mon-alarmes",
+    "title": "50  Gerência e Monitoramento (SNMP, Zabbix, NMS)",
+    "section": "50.5 De métrica a ação: alarmes e SLA",
+    "text": "50.5 De métrica a ação: alarmes e SLA\nColetar dados é inútil sem agir sobre eles:\n\nLimiares (thresholds): ex.: ONT Rx &lt; −27 dBm (capítulo Seção 31.4), uplink &gt; 80% (capítulo Seção 7.1), perda de vizinho BGP — geram alarme.\nSeveridade e escalonamento: nem todo alarme acorda alguém às 3h; classifique (crítico/aviso) e roteie (NOC, plantão).\nCorrelação: “100 ONTs da mesma PON caíram” = um incidente (a PON), não 100 — evita inundar o NOC e aponta a causa (capítulo Seção 42.1).\nTendência/capacidade: gráficos históricos preveem saturação e guiam upgrades antes do gargalo.\nSLA: disponibilidade e latência medidas viram relatório para clientes corporativos.\n\n\nNa prática do provedor\n\nMonitore a potência das ONTs proativamente: alarme de Rx degradando (ex.: de −15 para −25 dBm) antecipa o chamado — você liga para o cliente antes de ele cair (capítulo Seção 34.1).\nCorrelacione por planta: ligue o monitoramento ao georreferenciamento (capítulo Seção 39.1): “caiu a PON da rua X” mostra quem foi afetado e o trecho comum, em vez de 80 alarmes soltos.\nCapacidade é planejamento: acompanhe ocupação de uplink/PON/airtime; divida a PON ou suba o uplink antes dos 80% no pico — QoS não cria banda (capítulo Seção 27.1).\nFlow para DDoS e peering: o NetFlow detecta ataques (capítulo ?sec-ddos) e mostra para onde vai seu tráfego (justifica novo peering no IX, capítulo Seção 49.1).\nNTP + syslog central: sem horário correto, correlação e logs legais (Marco Civil, capítulo Seção 20.1) não funcionam. Centralize e sincronize.\nAlarme → ticket automático: integre NMS e OSS para não depender de alguém “olhando a tela”.",
+    "crumbs": [
+      "Parte X — Operação de Provedor (ISP)",
+      "<span class='chapter-number'>50</span>  <span class='chapter-title'>Gerência e Monitoramento (SNMP, Zabbix, NMS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/49-sistemas-gerencia-monitoramento.html#sec-resumo-49",
+    "href": "capitulos/49-sistemas-gerencia-monitoramento.html#sec-resumo-49",
+    "title": "50  Gerência e Monitoramento (SNMP, Zabbix, NMS)",
+    "section": "50.6 Resumo e checklist",
+    "text": "50.6 Resumo e checklist\n\nMonitorar é ver antes do cliente: detectar, diagnosticar, prever e planejar.\nFontes: SNMP (métricas/traps), syslog (eventos), flow (tráfego), ICMP (disponibilidade), telemetria.\nFerramentas: Zabbix/LibreNMS + Grafana + flow, integradas ao OSS/ticket.\nTransforme métrica em ação: limiares, correlação por planta, tendência de capacidade e SLA.\n\nChecklist do capítulo\n\nDefino o que monitorar em cada camada (ótica, rede, capacidade, serviços).\nColeto via SNMP/syslog/flow com NTP correto e correlação por planta.\nConfiguro alarmes por limiar com severidade e escalonamento.\nUso tendência de capacidade para planejar upgrades antes da saturação.",
     "crumbs": [
       "Parte X — Operação de Provedor (ISP)",
       "<span class='chapter-number'>50</span>  <span class='chapter-title'>Gerência e Monitoramento (SNMP, Zabbix, NMS)</span>"

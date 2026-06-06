@@ -1004,7 +1004,7 @@ Figura&nbsp;19.1: Traceroute: TTL crescente faz cada roteador “se denunciar”
 <li><strong>Roteiro de chamado “internet lenta/caindo”:</strong> <code>ping</code> no gateway (camada 1/2/3 local) → <code>ping</code> num IP do <strong>IX/CDN local</strong> (sua rede) → <code>mtr</code> até um destino conhecido. O salto onde a perda/RTT <strong>começa e persiste</strong> indica o responsável (você, o trânsito ou o destino).</li>
 <li><strong>Não filtre ICMP no agregado/BNG:</strong> libere ao menos <em>Echo</em>, <em>Time Exceeded</em> e <em>Frag Needed</em> (e os tipos de NDP no IPv6). Filtrar tudo cega o suporte e quebra PMTUD/SLAAC.</li>
 <li><strong>Rate-limit de ICMP</strong> nos roteadores é normal e gera “perda” fantasma em saltos intermediários do <code>mtr</code> — não confunda com problema real.</li>
-<li><strong>Monitore por ICMP com cautela:</strong> sondas de <em>ping</em> a OLTs/rádios são ótimas, mas combine com SNMP (capítulo <span class="quarto-unresolved-ref">?sec-monitoramento</span>) para não depender só de ICMP, que pode estar despriorizado.</li>
+<li><strong>Monitore por ICMP com cautela:</strong> sondas de <em>ping</em> a OLTs/rádios são ótimas, mas combine com SNMP (capítulo <a href="49-sistemas-gerencia-monitoramento.html#sec-monitoramento" class="quarto-xref"><span>Seção 50.1</span></a>) para não depender só de ICMP, que pode estar despriorizado.</li>
 </ul>
 </div>
 </section>

@@ -731,7 +731,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="sec-outros-snmp" class="level2" data-number="26.5">
 <h2 data-number="26.5" class="anchored" data-anchor-id="sec-outros-snmp"><span class="header-section-number">26.5</span> SNMP: os olhos do NOC</h2>
-<p>O <strong>SNMP</strong> (<em>Simple Network Management Protocol</em>) coleta <strong>métricas e estados</strong> dos equipamentos: tráfego por interface, CPU, temperatura, potência óptica das ONTs, <em>uptime</em>. O sistema de monitoramento (capítulo <span class="quarto-unresolved-ref">?sec-monitoramento</span>) faz <strong>polling</strong> (consulta periódica) e recebe <strong>traps</strong> (alarmes assíncronos).</p>
+<p>O <strong>SNMP</strong> (<em>Simple Network Management Protocol</em>) coleta <strong>métricas e estados</strong> dos equipamentos: tráfego por interface, CPU, temperatura, potência óptica das ONTs, <em>uptime</em>. O sistema de monitoramento (capítulo <a href="49-sistemas-gerencia-monitoramento.html#sec-monitoramento" class="quarto-xref"><span>Seção 50.1</span></a>) faz <strong>polling</strong> (consulta periódica) e recebe <strong>traps</strong> (alarmes assíncronos).</p>
 <div id="fig-snmp" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-snmp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -952,7 +952,7 @@ Figura&nbsp;26.1: SNMP: o NMS faz <strong>polling</strong> (porta 161) nos equip
 </section>
 <section id="sec-outros-ntp" class="level2" data-number="26.6">
 <h2 data-number="26.6" class="anchored" data-anchor-id="sec-outros-ntp"><span class="header-section-number">26.6</span> NTP: o tempo certo</h2>
-<p>O <strong>NTP</strong> sincroniza os relógios dos equipamentos. Parece detalhe, mas <strong>relógio errado quebra tudo o que importa em operação</strong>: <em>logs</em> com horário inconsistente inviabilizam correlação de incidentes e o cumprimento do <strong>Marco Civil</strong> (capítulo <a href="19-nat-cgnat.html#sec-nat-cgnat" class="quarto-xref"><span>Seção 20.1</span></a>), certificados TLS falham, e a autenticação (RADIUS, capítulo <span class="quarto-unresolved-ref">?sec-radius</span>) e o RADIUS <em>accounting</em> ficam sem sentido. Opere <strong>servidores NTP internos</strong> sincronizados a fontes confiáveis (e cuide para não virar <em>open NTP</em> — outro vetor de amplificação).</p>
+<p>O <strong>NTP</strong> sincroniza os relógios dos equipamentos. Parece detalhe, mas <strong>relógio errado quebra tudo o que importa em operação</strong>: <em>logs</em> com horário inconsistente inviabilizam correlação de incidentes e o cumprimento do <strong>Marco Civil</strong> (capítulo <a href="19-nat-cgnat.html#sec-nat-cgnat" class="quarto-xref"><span>Seção 20.1</span></a>), certificados TLS falham, e a autenticação (RADIUS, capítulo <a href="47-radius-aaa.html#sec-radius" class="quarto-xref"><span>Seção 48.1</span></a>) e o RADIUS <em>accounting</em> ficam sem sentido. Opere <strong>servidores NTP internos</strong> sincronizados a fontes confiáveis (e cuide para não virar <em>open NTP</em> — outro vetor de amplificação).</p>
 <div class="callout-provedor">
 <p><strong>Na prática do provedor</strong></p>
 <ul>
@@ -960,7 +960,7 @@ Figura&nbsp;26.1: SNMP: o NMS faz <strong>polling</strong> (porta 161) nos equip
 <li><strong>Bloqueie a porta 25 de saída dos assinantes</strong> (deixe a 587 com auth): reduz spam da sua rede e protege a <strong>reputação dos seus IPs</strong> (capítulo <a href="19-nat-cgnat.html#sec-nat-cgnat" class="quarto-xref"><span>Seção 20.1</span></a>).</li>
 <li><strong>NTP interno e correto é inegociável:</strong> sem ele, <em>logs</em>, certificados, RADIUS e obrigações legais desmoronam. Sincronize OLTs, BNG, switches e servidores.</li>
 <li><strong>TFTP/firmware só na gerência:</strong> nunca exposto; use-o para provisionar ONTs e atualizar equipamentos em rede isolada.</li>
-<li><strong>SNMP é o coração do monitoramento:</strong> padronize OIDs (tráfego, ótica, CPU, temp) e alarmes; sem SNMP você fica cego (capítulo <span class="quarto-unresolved-ref">?sec-monitoramento</span>).</li>
+<li><strong>SNMP é o coração do monitoramento:</strong> padronize OIDs (tráfego, ótica, CPU, temp) e alarmes; sem SNMP você fica cego (capítulo <a href="49-sistemas-gerencia-monitoramento.html#sec-monitoramento" class="quarto-xref"><span>Seção 50.1</span></a>).</li>
 </ul>
 </div>
 </section>
