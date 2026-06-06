@@ -2,6 +2,125 @@
 title: "Switching, VLANs (802.1Q) e STP/RSTP"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Segmentar a camada 2 {#sec-switching}
+
+Um switch isola domínios de colisão, mas, por padrão, **todas as portas formam um
+único domínio de broadcast** — um broadcast em qualquer porta vai a todas. Em uma
+rede de provedor com milhares de assinantes, isso seria caótico (broadcast storms,
+ARP spoofing entre clientes, tráfego sem isolamento). A solução é a **VLAN**, que
+fatia logicamente o switch em vários domínios de broadcast independentes. Somado ao
+**STP**, que evita laços, a VLAN é a base do desenho de camada 2 do ISP — em
+especial a estratégia de **uma VLAN por cliente**.
+
+## VLAN e o padrão 802.1Q {#sec-switching-vlan}
+
+Uma **VLAN** (*Virtual LAN*, IEEE 802.1Q [@ieee8021q]) é um domínio de broadcast
+lógico identificado por um número de **12 bits** (**VID**, 1–4094). Quadros de VLANs
+diferentes não se enxergam na camada 2 — para conversar, precisam **subir à camada
+3** (roteamento). O 802.1Q insere uma **tag de 4 bytes** no quadro Ethernet:
+
+::: {#fig-vlan-tag}
+```{.tikz}
+%%| filename: vlan-tag
+%%| alt: Quadro Ethernet com a tag 802.1Q de 4 bytes inserida entre MAC origem e EtherType
+\begin{tikzpicture}[font=\footnotesize, node distance=0pt,
+    c/.style={draw=manualgray, minimum height=10mm, align=center}]
+  \node[c, fill=manualblue!12, minimum width=18mm] (dst) {MAC dest};
+  \node[c, fill=manualblue!10, minimum width=18mm, right=of dst] (src) {MAC orig};
+  \node[c, fill=manualred!16, minimum width=26mm, right=of src] (tag) {Tag 802.1Q\\(4 B)};
+  \node[c, fill=manualgreen!14, minimum width=16mm, right=of tag] (typ) {EtherType};
+  \node[c, fill=manualyellow!16, minimum width=22mm, right=of typ] (pay) {Payload};
+  \node[c, fill=manualgray!12, minimum width=12mm, right=of pay] (fcs) {FCS};
+  % detalhe da tag
+  \node[c, fill=manualred!10, minimum width=14mm, below=8mm of tag.south west, anchor=north west] (tpid) {TPID\\0x8100};
+  \node[c, fill=manualred!18, minimum width=8mm, right=0pt of tpid] (pcp) {PCP\\(3 b)};
+  \node[c, fill=manualred!22, minimum width=20mm, right=0pt of pcp] (vid) {VID (12 b)\\1–4094};
+  \draw[auxiliar] (tag.south west) -- (tpid.north west);
+  \draw[auxiliar] (tag.south east) -- (vid.north east);
+  \node[manualgray, right=2mm of vid] {PCP = prioridade (QoS)};
+\end{tikzpicture}
+```
+A tag 802.1Q (4 bytes) carrega o **VID** (qual VLAN) e o **PCP** (prioridade de
+classe de serviço, usada em QoS — capítulo @sec-qos).
 :::
+
+Tipos de porta:
+
+- **Access** — pertence a **uma** VLAN; o quadro entra/sai **sem tag** (o
+  dispositivo final não sabe de VLAN). É a porta do cliente/host.
+- **Trunk** — transporta **várias** VLANs **com tag**; liga switches entre si e ao
+  roteador/BNG. A *native VLAN* trafega sem tag no trunk (cuidado de segurança).
+
+## Q-in-Q (802.1ad): VLAN dentro de VLAN {#sec-switching-qinq}
+
+Com 4094 VLANs só, um provedor estoura o limite rápido. O **Q-in-Q** empilha **duas
+tags**: uma **externa (S-VLAN)** do provedor e uma **interna (C-VLAN)** do cliente.
+Assim o ISP transporta o tráfego do cliente preservando a VLAN dele, e escala muito
+além de 4094 combinações. Custo: **+4 bytes** por tag → atenção ao **MTU** dos
+*uplinks* (use jumbo, capítulo @sec-tcpip-encapsulamento).
+
+## Por que laços são fatais e o STP {#sec-switching-stp}
+
+Na camada 2 **não existe TTL** (diferente do IP). Um quadro broadcast em um **laço
+físico** de switches circula **para sempre**, multiplicando-se a cada volta — a
+**broadcast storm** que derruba a rede em segundos. O **STP** (*Spanning Tree
+Protocol*, 802.1D) previne isso construindo uma **árvore sem laços**: elege uma
+**root bridge** e **bloqueia** as portas redundantes, deixando um único caminho
+ativo. Se um link cai, o STP **reconverge** ativando a porta antes bloqueada.
+
+| Variante | Convergência | Observação |
+|---|---|---|
+| STP (802.1D) | ~30–50 s | lento; legado |
+| **RSTP** (802.1w) | ~1–6 s | padrão atual |
+| MSTP (802.1s) | rápida, por grupo de VLANs | escala em redes grandes |
+
+No *backbone* em **anel**, em vez de STP costuma-se usar **ERPS** (G.8032) ou
+proteção óptica, com reconvergência em **< 50 ms** (capítulo @sec-redundancia) — bem
+mais rápido que STP.
+
+## VLAN por cliente: o modelo do ISP {#sec-switching-isp}
+
+A prática dominante no acesso é dar a **cada cliente sua própria VLAN** (ou
+C-VLAN sob uma S-VLAN por OLT/região). Vantagens:
+
+- **Isolamento total** de camada 2 entre assinantes → mata ARP spoofing e
+  *broadcast* cruzado.
+- **Rastreabilidade**: a VLAN identifica o cliente até o BNG.
+- **QoS e políticas** por VLAN.
+
+Relação **VLAN × sub-rede**: cada VLAN é um domínio de broadcast e normalmente
+corresponde a **uma sub-rede IP** (capítulo @sec-subredes). "Uma VLAN = uma
+sub-rede" é a regra que mantém o roteamento limpo.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Desenho típico GPON:** porta *access* não existe na rua; a ONT entrega a
+  C-VLAN do cliente, a OLT empilha a S-VLAN da PON (**Q-in-Q**) e entrega num
+  **trunk** ao BNG, que termina o PPPoE/IPoE e roteia.
+- **Native VLAN hygiene:** nunca use a VLAN 1 (default) para serviço; remova a
+  *native* dos trunks que cruzam o cliente para evitar *VLAN hopping*.
+- **MTU é armadilha:** com Q-in-Q (+8 B) e PPPoE (+8 B), os *uplinks* precisam de
+  **MTU 1600+**; senão sites grandes "não abrem" (ajuste MSS no BNG).
+- **Anel ≠ STP no core:** prefira **ERPS** no anel metropolitano (< 50 ms);
+  reserve RSTP para topologias de POP. Loop sem proteção = *broadcast storm* =
+  cidade offline.
+- **DHCP Snooping + DAI por VLAN** blindam o acesso contra cliente malicioso.
+:::
+
+## Resumo e checklist {#sec-resumo-13}
+
+- **VLAN (802.1Q)** fatia o switch em domínios de broadcast; **VID** de 12 bits,
+  tag de 4 bytes com **PCP** para QoS.
+- Portas **access** (sem tag, cliente) e **trunk** (com tag, entre switches);
+  **Q-in-Q** escala além de 4094.
+- **STP/RSTP** evita laços (sem TTL na L2!); no anel use **ERPS** (< 50 ms).
+- O ISP usa **VLAN por cliente** para isolar, rastrear e aplicar política;
+  **uma VLAN ↔ uma sub-rede**.
+
+**Checklist do capítulo**
+
+- [ ] Diferencio porta access de trunk e sei onde cada uma fica.
+- [ ] Explico Q-in-Q e seu impacto no MTU.
+- [ ] Justifico STP/RSTP pela ausência de TTL na camada 2.
+- [ ] Desenho o caminho de VLAN da ONT ao BNG com Q-in-Q.

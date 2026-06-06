@@ -2,6 +2,109 @@
 title: "ARP e Resolução de Endereços"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## A ponte entre IP e MAC {#sec-arp}
+
+A camada 3 endereça por **IP**; a camada 2 entrega por **MAC** (capítulo
+@sec-ethernet). Quando um host quer mandar um pacote a um IP **da mesma rede local**,
+ele precisa descobrir **qual MAC** corresponde àquele IP — senão não consegue montar
+o quadro Ethernet. Quem faz essa tradução **IP → MAC** é o **ARP** (*Address
+Resolution Protocol*). É um protocolo simples, mas é a costura entre as duas camadas
+mais importantes do dia a dia, e fonte de vários problemas (e ataques) no provedor.
+
+## Como o ARP funciona {#sec-arp-funcionamento}
+
+ARP usa **broadcast de camada 2** para perguntar e **unicast** para responder:
+
+::: {#fig-arp}
+```{.tikz}
+%%| filename: arp-troca
+%%| alt: Host A pergunta em broadcast quem tem o IP do gateway e recebe resposta unicast com o MAC
+\begin{tikzpicture}[font=\footnotesize,
+    h/.style={draw=manualgray, rounded corners=2pt, fill=manualblue!8,
+              minimum width=22mm, minimum height=11mm, align=center}]
+  \node[h] (a) at (0,0) {Host A\\192.168.0.10};
+  \node[h, manualgreen] (gw) at (7,0) {Gateway\\192.168.0.1};
+  \node[h, fill=manualgray!10] (x) at (3.5,-2) {Outros hosts\\(ignoram)};
+
+  \draw[vetor, manualred] (a.north) to[bend left=20] node[above, align=center]
+     {\textbf{ARP Request} (broadcast)\\``quem tem .1? diga ao A''} (gw.north);
+  \draw[vetor, manualgreen] (gw.south) to[bend left=20] node[below, align=center]
+     {\textbf{ARP Reply} (unicast)\\``.1 está em AA:BB:CC:...''} (a.south);
+  \draw[auxiliar] (a) -- (x);
+\end{tikzpicture}
+```
+Troca ARP: A pergunta em **broadcast** quem tem o IP do gateway; o gateway responde
+em **unicast** com seu MAC. A guarda o par na **tabela ARP**.
 :::
+
+1. **ARP Request** — A envia um quadro **broadcast** (`FF:FF:...`) perguntando
+   "quem tem o IP `192.168.0.1`? responda para o MAC de A".
+2. Todos recebem; só o dono daquele IP (o gateway) **responde**.
+3. **ARP Reply** — o gateway manda **unicast** a A: "`192.168.0.1` está em
+   `AA:BB:CC:DD:EE:FF`".
+4. A guarda o par IP↔MAC na **cache ARP** (expira em minutos) e finalmente envia o
+   pacote.
+
+**Detalhe-chave:** se o destino está em **outra rede**, A não faz ARP pelo IP do
+destino — faz ARP pelo **MAC do gateway** e entrega a ele, que roteia. Por isso o
+*default gateway* correto é tão importante.
+
+## Tabela ARP e comandos {#sec-arp-tabela}
+
+A cache ARP é consultável:
+
+- `arp -a` (Windows) / `ip neigh` (Linux) — lista os pares IP↔MAC aprendidos.
+- Entradas podem ser **dinâmicas** (aprendidas, expiram) ou **estáticas** (fixadas
+  manualmente).
+
+No diagnóstico, uma entrada ARP **ausente** ou **incompleta** (`incomplete`) para o
+gateway indica problema de camada 2/1 — o vizinho não está respondendo.
+
+## ARP gratuito e Proxy ARP {#sec-arp-variantes}
+
+- **Gratuitous ARP (GARP)** — um host anuncia seu próprio par IP↔MAC sem ninguém
+  ter perguntado. Usos legítimos: detectar **IP duplicado** e atualizar tabelas
+  após **failover** (ex.: VRRP muda o MAC do gateway virtual). Usos maliciosos:
+  base do **ARP spoofing**.
+- **Proxy ARP** — um roteador responde ARP **em nome de** hosts de outra rede,
+  "fingindo" ser o destino local. Útil em alguns cenários de provedor (ex.:
+  entregar IPs públicos a clientes sem reconfigurar máscara), mas pode mascarar erros
+  de projeto — use com consciência.
+
+## ARP, IPv6 e o provedor {#sec-arp-ipv6}
+
+ARP é **exclusivo de IPv4**. No **IPv6** (capítulo @sec-ipv6) o papel é do **NDP**
+(*Neighbor Discovery Protocol*), que usa **ICMPv6** e *multicast* em vez de
+broadcast — mais eficiente e com recursos extras (autoconfiguração SLAAC). Conceito
+equivalente, mecanismo melhor.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **ARP spoofing** é um ataque clássico em rede de acesso compartilhada: um cliente
+  malicioso envia GARP dizendo "eu sou o gateway" e intercepta o tráfego dos
+  vizinhos (*man-in-the-middle*). Defesas: **VLAN por cliente** (isola o domínio de
+  broadcast — capítulo @sec-switching), **DHCP Snooping + Dynamic ARP Inspection
+  (DAI)** nos switches, e *port security*.
+- **IP duplicado** na rede de gerência derruba equipamentos de forma intermitente;
+  GARP de detecção e um bom IPAM evitam a dor de cabeça.
+- **Cache ARP grande no BNG/gateway**: em redes IPoE com muitos clientes por VLAN,
+  a tabela ARP/ND cresce; dimensione e monitore para não estourar.
+- **Tabela ARP incompleta para o cliente** após provisionar: confira VLAN, se a ONT
+  autenticou e se o IP/máscara batem — o ARP só fecha se camada 1/2 estiver de pé.
+:::
+
+## Resumo e checklist {#sec-resumo-12}
+
+- ARP traduz **IP → MAC** dentro da **mesma rede local**, via **broadcast**
+  (request) e **unicast** (reply).
+- Para destinos em outra rede, faz-se ARP do **gateway**, não do destino.
+- **GARP** e **Proxy ARP** têm usos legítimos e riscos; ARP spoofing é ameaça real.
+- Em **IPv6**, o equivalente é o **NDP** (ICMPv6, multicast).
+
+**Checklist do capítulo**
+
+- [ ] Explico a troca request/reply e por que uma é broadcast.
+- [ ] Sei por que se faz ARP do gateway para destinos remotos.
+- [ ] Reconheço ARP spoofing e as defesas (VLAN/cliente, DHCP Snooping, DAI).
+- [ ] Associo ARP (IPv4) ao NDP (IPv6).

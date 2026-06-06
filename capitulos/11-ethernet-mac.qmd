@@ -2,6 +2,120 @@
 title: "Ethernet e Endereçamento MAC"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## A camada 2 que move o mundo {#sec-ethernet}
+
+**Ethernet** (IEEE 802.3 [@ieee8023]) é, de longe, a tecnologia de **camada 2**
+mais usada do planeta — do *patch cord* do POP ao *uplink* de 100G do *backbone*.
+No provedor, Ethernet aparece em toda parte: na rede interna do POP, no transporte
+metropolitano, no encapsulamento PPPoE do assinante (que roda **sobre** Ethernet) e
+na própria GPON, que entrega quadros Ethernet à ONT. Entender o **quadro** e o
+**endereço MAC** é pré-requisito para VLANs, switching e diagnóstico de enlace.
+
+A camada 2 resolve um problema específico: **entregar quadros entre dispositivos no
+mesmo segmento de rede** (mesmo domínio de enlace). Ela não roteia entre redes —
+isso é camada 3 (Parte IV). Sua moeda é o **quadro**, endereçado por **MAC**.
+
+## O endereço MAC {#sec-ethernet-mac}
+
+O **MAC** (*Media Access Control*) é um identificador de **48 bits** (6 bytes),
+escrito em hexadecimal, ex.: `A4:BB:6D:1F:2C:09`. Estrutura:
+
+- **Primeiros 24 bits = OUI** (*Organizationally Unique Identifier*): identificam o
+  **fabricante** (útil no diagnóstico — dá para saber se um MAC é de uma ONT
+  Huawei, um roteador Mikrotik etc.).
+- **Últimos 24 bits**: número de série atribuído pelo fabricante.
+- **Bit I/G** (menos significativo do 1º byte): 0 = unicast, 1 = **multicast**.
+- **`FF:FF:FF:FF:FF:FF`** = **broadcast** (todos no segmento).
+
+O MAC é, em tese, **único e fixo** por interface — mas pode ser **clonado** por
+software, o que tem implicações de segurança e de autenticação no provedor.
+
+## O quadro Ethernet {#sec-ethernet-quadro}
+
+::: {#fig-quadro-ethernet}
+```{.tikz}
+%%| filename: quadro-ethernet
+%%| alt: Campos do quadro Ethernet: preâmbulo, MAC destino, MAC origem, EtherType, payload e FCS
+\begin{tikzpicture}[font=\footnotesize, node distance=0pt,
+    c/.style={draw=manualgray, minimum height=10mm, align=center}]
+  \node[c, fill=manualgray!12, minimum width=16mm] (pre) {Preâmbulo\\(7+1 B)};
+  \node[c, fill=manualblue!14, minimum width=18mm, right=of pre] (dst) {MAC\\destino (6)};
+  \node[c, fill=manualblue!10, minimum width=18mm, right=of dst] (src) {MAC\\origem (6)};
+  \node[c, fill=manualgreen!14, minimum width=16mm, right=of src] (typ) {EtherType\\(2)};
+  \node[c, fill=manualyellow!16, minimum width=26mm, right=of typ] (pay) {Payload\\(46–1500 B)};
+  \node[c, fill=manualred!12, minimum width=12mm, right=of pay] (fcs) {FCS\\(4)};
+  \node[manualgray, below=2mm of dst.south] {\itshape quem recebe};
+  \node[manualgray, below=2mm of src.south] {\itshape quem envia};
+  \node[manualgray, below=2mm of typ.south] {\itshape 0x0800=IPv4 / 0x8864=PPPoE};
+  \node[manualgray, below=2mm of fcs.south] {\itshape CRC de erro};
+\end{tikzpicture}
+```
+Campos do quadro Ethernet. O **EtherType** diz qual protocolo está no *payload*
+(IPv4, IPv6, ARP, PPPoE), e o **FCS** detecta corrupção.
 :::
+
+- **MTU** padrão: 1500 bytes de *payload*. **Jumbo frames** (até ~9000) são usados
+  em *uplinks* para evitar fragmentação com VLAN/Q-in-Q (capítulo @sec-tcpip-encapsulamento).
+- **EtherType** revela o conteúdo: `0x0800` IPv4, `0x86DD` IPv6, `0x0806` ARP,
+  `0x8100` VLAN 802.1Q, `0x8864` PPPoE sessão.
+- **FCS** é um **CRC**: detecta erro mas **não corrige** — quadro corrompido é
+  **descartado** (a recuperação fica para o TCP, camada 4).
+
+## Como o switch aprende: a tabela MAC {#sec-ethernet-switch}
+
+Um **switch** encaminha quadros olhando o **MAC destino**. Ele constrói uma
+**tabela MAC** (CAM) por **aprendizado**:
+
+1. Quadro chega na porta 3 com **MAC origem** `X` → o switch anota "`X` está na
+   porta 3".
+2. Para encaminhar ao **MAC destino** `Y`: se conhece `Y`, manda só na porta dele
+   (*unicast*); se **não** conhece, faz **flooding** (manda em todas, menos a de
+   entrada).
+3. **Broadcast** (`FF:FF:...`) e *multicast* desconhecido vão a todas as portas do
+   **domínio de broadcast** (a VLAN).
+
+Esse aprendizado é o que diferencia um switch (camada 2, inteligente) de um **hub**
+(camada 1, burro, que repete tudo em todas as portas). O **domínio de colisão** de
+cada porta de switch é isolado; o **domínio de broadcast** é a VLAN inteira
+(capítulo @sec-switching).
+
+## CSMA/CD: herança histórica {#sec-ethernet-csmacd}
+
+A Ethernet nasceu em meio **compartilhado** (cabo coaxial, hubs), onde dois nós
+podiam transmitir juntos e **colidir**. O protocolo **CSMA/CD** ("escute antes de
+falar; se colidir, recue e tente de novo") resolvia isso. Hoje, com switches e
+**full-duplex**, **não há colisão** — CSMA/CD é história. Mas o conceito de **meio
+compartilhado com arbitragem** ressurge na PON (*upstream* TDMA) e no rádio
+ponto-multiponto, então vale conhecer a ideia.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **OUI é diagnóstico grátis.** O MAC que aparece na OLT/switch revela o fabricante
+  do equipamento do cliente; útil para confirmar se é a ONT homologada ou um
+  roteador estranho na rede.
+- **MAC flapping** (o mesmo MAC "pulando" entre portas) quase sempre indica
+  **loop de camada 2** ou cabo/fibra cruzado — o STP (capítulo @sec-switching)
+  existe para evitar isso. No log do switch, *flapping* é alarme vermelho.
+- **Limite de MAC por porta** (*port security*) no acesso evita que um cliente
+  pendure um switch e injete MACs/loop na sua rede.
+- **PPPoE roda sobre Ethernet** (EtherType `0x8864`): por isso o MTU do cliente cai
+  para 1492 e o EtherType ajuda a equipe a reconhecer o tráfego de sessão no
+  *sniffer*.
+:::
+
+## Resumo e checklist {#sec-resumo-11}
+
+- Ethernet é a **camada 2** universal; sua PDU é o **quadro**, endereçado por
+  **MAC** (48 bits, OUI + série).
+- O **EtherType** identifica o conteúdo; o **FCS** detecta (não corrige) erro.
+- O switch **aprende MACs** e encaminha unicast; broadcast/desconhecido faz
+  **flooding** na VLAN.
+- **CSMA/CD** é herança de meio compartilhado; hoje é full-duplex sem colisão.
+
+**Checklist do capítulo**
+
+- [ ] Leio um MAC e identifico OUI, broadcast e multicast.
+- [ ] Sei os campos do quadro e o que o EtherType indica.
+- [ ] Explico como o switch monta a tabela MAC e quando faz flooding.
+- [ ] Reconheço *MAC flapping* como sintoma de loop de camada 2.
