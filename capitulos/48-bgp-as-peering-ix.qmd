@@ -2,6 +2,130 @@
 title: "BGP, ASN, Peering e IX"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Como o ISP conversa com o resto da internet {#sec-bgp}
+
+Até aqui, o roteamento foi **interno** (OSPF, capítulo @sec-roteamento). Mas o
+provedor não é uma ilha: ele precisa **trocar rotas com o mundo** — anunciar seus
+blocos IP e aprender como chegar a todos os outros. Isso é trabalho do **BGP** (*Border
+Gateway Protocol*), o protocolo que costura os ~75 mil **sistemas autônomos (AS)** da
+internet. Para se tornar um ISP "de verdade" (e não revendedor), você precisa de
+**ASN próprio**, **bloco IP próprio** e **BGP** com trânsito e no **IX**. Este capítulo
+é o portão de entrada para operar autonomamente.
+
+## AS, ASN e a estrutura da internet {#sec-bgp-as}
+
+Um **Sistema Autônomo (AS)** é uma rede sob administração única com política de
+roteamento própria — o seu ISP é um AS. Cada AS tem um **ASN** (número, ex.: AS
+264xxx no Brasil), atribuído pelo registro regional (no Brasil, **NIC.br/Registro.br**).
+O BGP troca rotas **entre AS** identificando o caminho pela **sequência de ASNs**
+(*AS-Path*). A internet é, então, uma malha de AS conectados por BGP.
+
+::: {#fig-bgp-as}
+```{.tikz}
+%%| filename: bgp-as
+%%| alt: Seu AS conectado a dois trânsitos e a um IX com vários peers, anunciando seu bloco
+\begin{tikzpicture}[font=\footnotesize,
+    as/.style={draw=manualgray, circle, fill=manualblue!12, minimum size=11mm, inner sep=0pt, align=center}]
+  \node[as, fill=manualgreen!16] (me) at (0,0) {Seu\\AS};
+  \node[as] (t1) at (-3,1.6) {Trânsito\\1};
+  \node[as] (t2) at (3,1.6) {Trânsito\\2};
+  \node[draw=manualred, fill=manualred!10, rounded corners=2pt, minimum width=16mm, minimum height=9mm, align=center] (ix) at (0,-2.2) {IX.br\\(peering)};
+  \node[as, minimum size=8mm] (p1) at (-2.6,-3.2) {AS x};
+  \node[as, minimum size=8mm] (p2) at (0,-3.6) {AS y};
+  \node[as, minimum size=8mm] (p3) at (2.6,-3.2) {AS z};
+  \draw[vetor, manualblue] (me)--(t1); \draw[vetor, manualblue] (me)--(t2);
+  \draw[curva, manualred] (me)--(ix);
+  \draw[curva, manualgray] (ix)--(p1) (ix)--(p2) (ix)--(p3);
+  \node[manualgray, font=\scriptsize, anchor=west] at (3.4,-2.2) {troca de tráfego local};
+\end{tikzpicture}
+```
+Seu AS conecta-se a **trânsitos** (que vendem "a internet inteira") e ao **IX**, onde
+faz **peering** direto com muitos AS locais — mais barato e com menor latência.
 :::
+
+## Trânsito vs. peering {#sec-bgp-transito-peering}
+
+Há duas formas de obter/trocar rotas:
+
+| Tipo | O que dá | Custo | Relação |
+|---|---|---|---|
+| **Trânsito (transit)** | acesso a **toda** a internet | **pago** por Mbps/Gbps | você é cliente do upstream |
+| **Peering (no IX)** | rotas **dos peers** presentes no IX | barato (porta no IX) | troca mútua e local |
+
+O **peering no IX** (no Brasil, **IX.br**, o maior do mundo em alguns pontos) traz
+**conteúdo local** (CDNs, outros ISPs, bancos) com **baixa latência** e **sem custo de
+trânsito** — descarrega o trânsito pago. O **trânsito** garante alcance ao que **não**
+está no IX. A estratégia é: **maximizar peering, comprar trânsito para o resto**, com
+**redundância** (≥ 2 trânsitos).
+
+## Atributos e seleção de rota {#sec-bgp-atributos}
+
+O BGP escolhe **o melhor caminho** por uma sequência de critérios. Os que o ISP mais
+usa para **engenharia de tráfego**:
+
+- **Local Preference** — preferência **de saída** (qual upstream usar para sair);
+  maior vence. É a principal alavanca para escolher por onde mandar o tráfego.
+- **AS-Path** — caminho mais curto (menos ASNs) é preferido; **AS-Path prepending**
+  (repetir seu ASN) "afasta" um caminho para **balancear entrada**.
+- **MED** — sugere ao vizinho por onde entrar.
+- **Communities** — "etiquetas" que sinalizam políticas (ex.: pedir ao upstream para
+  não anunciar uma rota em certa região).
+
+## Anunciar com responsabilidade {#sec-bgp-seguranca}
+
+Anunciar BGP errado afeta a internet inteira (sequestros de rota já tiraram serviços
+do ar). Higiene obrigatória:
+
+- **Sumarize** seu bloco (capítulo @sec-subredes): anuncie o **agregado** (ex.: um
+  /22), não /24 soltos.
+- **Anuncie só o que é seu:** filtros de saída para não vazar rotas de trânsito
+  (virar trânsito acidental).
+- **RPKI / ROA:** assine quais ASNs podem originar seus prefixos — defesa contra
+  *hijack*; valide ROAs nas importações.
+- **IRR / filtros de prefixo** acordados com upstreams e peers.
+- **Max-prefix:** limite de prefixos por sessão para conter vazamentos.
+
+## Tornando-se um AS {#sec-bgp-virar-as}
+
+Passos práticos para o ISP brasileiro: obter **ASN** e **bloco IP** (IPv4 e **IPv6**)
+no **Registro.br**, configurar **BGP** no roteador de borda com ≥ 2 **trânsitos** e
+porta no **IX.br**, publicar **ROA (RPKI)**, e organizar o roteamento interno (iBGP +
+OSPF, capítulo @sec-roteamento) para distribuir as rotas aprendidas. A partir daí você
+controla sua conectividade — e sua resiliência.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Entre no IX.br o quanto antes:** o peering local corta custo de trânsito e
+  **baixa a latência** ao conteúdo nacional (capítulo @sec-grandezas) — o maior ganho
+  de QoE depois da CDN de borda (capítulo @sec-https).
+- **Dois trânsitos, sempre:** redundância de upstream evita apagão quando um cai; use
+  **Local Preference** para preferir o mais barato/rápido e o outro como backup.
+- **RPKI/ROA + filtros:** publique ROA dos seus prefixos e valide os importados.
+  *Route hijack* e *route leak* são incidentes reais e graves; filtros e RPKI são a
+  defesa básica.
+- **Sumarize e não vaze:** anuncie o agregado e filtre a saída para nunca repassar
+  rotas de trânsito (virar trânsito de graça para terceiros).
+- **IPv6 no BGP desde já:** anuncie seu /32 IPv6 junto; dual-stack na borda é
+  pré-requisito para o IPv6 do acesso (capítulo @sec-ipv6) aliviar o CGNAT.
+- **Hospede CDNs (cache):** com ASN e presença no IX, negocie *appliances* de cache
+  (capítulo @sec-https) — servem conteúdo localmente e descarregam trânsito.
+:::
+
+## Resumo e checklist {#sec-resumo-48}
+
+- **BGP** troca rotas **entre AS**; cada ISP é um **AS** com **ASN** e blocos
+  próprios.
+- **Trânsito** (pago, toda a internet) + **peering** no **IX** (barato, local) — use
+  os dois, com redundância.
+- Engenharia de tráfego por **Local Preference** (saída), **AS-Path prepend**
+  (entrada), MED e **communities**.
+- **Higiene:** sumarizar, filtrar saída, **RPKI/ROA**, max-prefix — anúncio errado
+  afeta o mundo.
+
+**Checklist do capítulo**
+
+- [ ] Explico AS/ASN e o papel do AS-Path na escolha de rota.
+- [ ] Diferencio trânsito de peering e a estratégia de usar ambos.
+- [ ] Uso Local Preference e AS-Path prepend para engenharia de tráfego.
+- [ ] Publico ROA (RPKI), sumarizo e filtro para anunciar com segurança.

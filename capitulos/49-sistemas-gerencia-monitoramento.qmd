@@ -2,6 +2,120 @@
 title: "Gerência e Monitoramento (SNMP, Zabbix, NMS)"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Ver a rede antes do cliente ligar {#sec-monitoramento}
+
+Uma rede de provedor tem milhares de elementos (OLTs, ONTs, switches, rádios, BNG,
+servidores) espalhados por uma cidade ou região. **Sem monitoramento, você só sabe que
+algo caiu quando o telefone do suporte toca** — tarde demais. O objetivo da gerência e
+do monitoramento é o oposto: **detectar, diagnosticar e às vezes prever** falhas antes
+do cliente, medir capacidade para planejar (capítulo @sec-grandezas) e ter dados para
+SLA. Este capítulo junta as ferramentas (SNMP, capítulo @sec-outros-snmp; logs; fluxos)
+em um sistema operacional de NOC.
+
+## O que monitorar {#sec-mon-o-que}
+
+| Camada | Métricas |
+|---|---|
+| **Óptica (L1)** | potência Rx das ONTs, alarmes LOS, temperatura de SFP |
+| **Enlace/rede (L2/L3)** | tráfego por interface, erros/descartes, status BGP/OSPF |
+| **Capacidade** | ocupação de uplinks, portas PON, *airtime* de rádio |
+| **Serviços** | DNS (latência/erro), RADIUS (auth/s), DHCP (pool), CGNAT (portas) |
+| **Infra** | CPU/memória/temperatura de OLT/BNG, energia (nobreak/gerador) |
+| **Cliente** | sessões ativas, quedas, qualidade (SNR no rádio) |
+
+## As fontes de dados {#sec-mon-fontes}
+
+::: {#fig-monitoramento}
+```{.tikz}
+%%| filename: monitoramento-nms
+%%| alt: NMS central recebendo SNMP, syslog, flow e telemetria de OLT, BNG, switch e rádio, com dashboard e alarmes
+\begin{tikzpicture}[font=\footnotesize,
+    d/.style={draw=manualgray, rounded corners=2pt, fill=manualblue!10, minimum width=14mm, minimum height=7mm, align=center}]
+  \node[d, fill=manualgreen!16, minimum width=20mm, minimum height=12mm] (nms) at (0,0) {NMS\\(Zabbix/\\Grafana)};
+  \node[d] (olt) at (4,1.8) {OLT};
+  \node[d] (bng) at (4,0.6) {BNG};
+  \node[d] (sw) at (4,-0.6) {Switch};
+  \node[d] (radio) at (4,-1.8) {Rádio};
+  \draw[vetor, manualblue] (olt)-- node[above,font=\scriptsize]{SNMP} (nms);
+  \draw[vetor, manualblue] (bng)-- node[above,font=\scriptsize]{syslog/flow} (nms);
+  \draw[vetor, manualblue] (sw)-- (nms);
+  \draw[vetor, manualblue] (radio)-- (nms);
+  \node[d, fill=manualyellow!18] (dash) at (-3,0.8) {Dashboard};
+  \node[d, fill=manualred!14] (alarm) at (-3,-0.8) {Alarmes\\(alerta)};
+  \draw[vetor, manualgreen] (nms)--(dash); \draw[vetor, manualred] (nms)--(alarm);
+\end{tikzpicture}
+```
+O **NMS** central coleta **SNMP** (métricas), **syslog** (eventos), **flow**
+(tráfego) e telemetria dos equipamentos, gerando **dashboards** e disparando
+**alarmes** para o NOC.
 :::
+
+- **SNMP** (capítulo @sec-outros-snmp) — *polling* de métricas (tráfego, CPU, ótica) e
+  **traps** (alarmes). A espinha dorsal do monitoramento.
+- **Syslog** — eventos e logs dos equipamentos centralizados (correlação de
+  incidentes; precisa de **NTP** correto, capítulo @sec-outros-ntp).
+- **Flow (NetFlow/sFlow/IPFIX)** — **quem fala com quem** e quanto: análise de tráfego,
+  detecção de anomalias/DDoS (capítulo @sec-ddos), planejamento de peering.
+- **Telemetria/streaming & APIs** — coleta moderna em alta frequência (capítulo
+  @sec-sdn).
+- **ICMP** (capítulo @sec-icmp) — sondas de disponibilidade/latência.
+
+## Ferramentas {#sec-mon-ferramentas}
+
+- **Zabbix / LibreNMS / PRTG** — NMS de coleta SNMP, alarmes e inventário (Zabbix e
+  LibreNMS são populares e gratuitos no ISP regional).
+- **Grafana** — dashboards bonitos sobre as bases de séries temporais.
+- **Coletores de flow** (ex.: ferramentas de NetFlow) — tráfego e segurança.
+- **Sistemas específicos de PON** — leem a potência das ONTs direto da OLT.
+- **Integração com OSS/ticket** — alarme vira chamado automaticamente.
+
+## De métrica a ação: alarmes e SLA {#sec-mon-alarmes}
+
+Coletar dados é inútil sem **agir** sobre eles:
+
+- **Limiares (thresholds):** ex.: ONT Rx < −27 dBm (capítulo @sec-onu-potencia),
+  uplink > 80% (capítulo @sec-grandezas), perda de vizinho BGP — geram **alarme**.
+- **Severidade e escalonamento:** nem todo alarme acorda alguém às 3h; classifique
+  (crítico/aviso) e roteie (NOC, plantão).
+- **Correlação:** "100 ONTs da mesma PON caíram" = **um** incidente (a PON), não 100 —
+  evita inundar o NOC e aponta a causa (capítulo @sec-localizacao-falhas).
+- **Tendência/capacidade:** gráficos históricos preveem saturação e guiam upgrades
+  **antes** do gargalo.
+- **SLA:** disponibilidade e latência medidas viram relatório para clientes
+  corporativos.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Monitore a potência das ONTs proativamente:** alarme de Rx degradando (ex.: de
+  −15 para −25 dBm) antecipa o chamado — você liga para o cliente **antes** de ele
+  cair (capítulo @sec-orcamento).
+- **Correlacione por planta:** ligue o monitoramento ao georreferenciamento (capítulo
+  @sec-doc-georref): "caiu a PON da rua X" mostra quem foi afetado e o trecho comum,
+  em vez de 80 alarmes soltos.
+- **Capacidade é planejamento:** acompanhe ocupação de uplink/PON/airtime; **divida a
+  PON** ou suba o uplink **antes** dos 80% no pico — QoS não cria banda (capítulo
+  @sec-qos).
+- **Flow para DDoS e peering:** o NetFlow detecta ataques (capítulo @sec-ddos) e mostra
+  para onde vai seu tráfego (justifica novo peering no IX, capítulo @sec-bgp).
+- **NTP + syslog central:** sem horário correto, correlação e logs legais (Marco
+  Civil, capítulo @sec-nat-cgnat) não funcionam. Centralize e sincronize.
+- **Alarme → ticket automático:** integre NMS e OSS para não depender de alguém
+  "olhando a tela".
+:::
+
+## Resumo e checklist {#sec-resumo-49}
+
+- Monitorar é **ver antes do cliente**: detectar, diagnosticar, prever e planejar.
+- Fontes: **SNMP** (métricas/traps), **syslog** (eventos), **flow** (tráfego),
+  **ICMP** (disponibilidade), telemetria.
+- Ferramentas: **Zabbix/LibreNMS + Grafana + flow**, integradas ao OSS/ticket.
+- Transforme métrica em ação: **limiares, correlação por planta, tendência de
+  capacidade e SLA**.
+
+**Checklist do capítulo**
+
+- [ ] Defino o que monitorar em cada camada (ótica, rede, capacidade, serviços).
+- [ ] Coleto via SNMP/syslog/flow com NTP correto e correlação por planta.
+- [ ] Configuro alarmes por limiar com severidade e escalonamento.
+- [ ] Uso tendência de capacidade para planejar upgrades antes da saturação.

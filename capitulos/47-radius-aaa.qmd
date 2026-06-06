@@ -2,6 +2,112 @@
 title: "RADIUS e AAA"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Quem é o cliente, o que pode e quanto usou {#sec-radius}
+
+Quando o assinante sobe a sessão no BNG (capítulo @sec-bng-pppoe), três perguntas
+precisam de resposta: **quem é?** (autenticação), **o que pode fazer?** (autorização —
+velocidade, IP, prefixo) e **quanto usou?** (contabilização — tempo, bytes, logs).
+Esse tripé é o **AAA**, e o protocolo que o implementa no ISP é o **RADIUS** (*Remote
+Authentication Dial-In User Service*). É o RADIUS que liga o **sistema de gestão/
+billing** (cadastro, plano, inadimplência) à **rede** (o BNG), tornando o provedor
+operável em escala.
+
+## Os três As {#sec-radius-aaa}
+
+| A | O quê | No ISP |
+|---|---|---|
+| **Authentication** | provar identidade | usuário/senha PPPoE, ou Opção 82 (IPoE) |
+| **Authorization** | o que pode | velocidade (rate-limit), IP, pool, /56 IPv6, VLAN |
+| **Accounting** | o que usou | início/fim de sessão, bytes, tempo, IP/porta (Marco Civil) |
+
+## Como funciona a troca RADIUS {#sec-radius-troca}
+
+::: {#fig-radius}
+```{.tikz}
+%%| filename: radius-fluxo
+%%| alt: BNG como cliente RADIUS consultando o servidor RADIUS que consulta a base de assinantes
+\begin{tikzpicture}[font=\footnotesize,
+    b/.style={draw=manualgray, rounded corners=2pt, minimum height=8mm, align=center}]
+  \node[b, fill=manualred!10] (cli) at (0,0) {Assinante};
+  \node[b, fill=manualblue!12] (bng) at (3,0) {BNG\\(cliente RADIUS)};
+  \node[b, fill=manualgreen!14] (rad) at (6.4,0) {Servidor\\RADIUS};
+  \node[b, fill=manualyellow!16] (db) at (9.6,0) {Base/billing\\(SQL)};
+  \draw[curva] (cli)-- node[above,font=\scriptsize]{PPPoE} (bng);
+  \draw[vetor, manualblue] (bng)-- node[above,font=\scriptsize]{Access-Request} (rad);
+  \draw[vetor, manualgreen] (rad)-- node[below,font=\scriptsize]{Access-Accept (atributos)} (bng);
+  \draw[curva] (rad)-- (db);
+\end{tikzpicture}
+```
+O **BNG é cliente RADIUS**: manda *Access-Request* com as credenciais; o servidor
+consulta a base e responde *Access-Accept* (com os **atributos** do plano) ou
+*Access-Reject*. Depois, o BNG envia *Accounting* (start/stop/interim).
 :::
+
+- **Access-Request / Access-Accept(ou Reject):** autenticação + autorização. O
+  *Accept* carrega **atributos** (velocidade, IP, framed-route, etc.).
+- **Accounting (Start / Interim / Stop):** o BNG reporta uso periódico e ao
+  encerrar — base de **billing** e de **logs legais**.
+- **CoA / Disconnect (RFC 5176):** *Change of Authorization* — o servidor pode
+  **mudar** um cliente já conectado (trocar velocidade, derrubar a sessão) **sem
+  esperar reconexão**. Essencial para upgrade/bloqueio em tempo real.
+
+## Atributos: onde mora o plano {#sec-radius-atributos}
+
+A "mágica" do controle por RADIUS está nos **atributos** retornados:
+
+- **Velocidade** (rate-limit *up/down*) — via *Vendor-Specific Attributes* (VSA) do
+  fabricante do BNG (Mikrotik-Rate-Limit, Cisco, Huawei…).
+- **Endereçamento** — Framed-IP-Address, pool, Framed-IPv6-Prefix / Delegated-IPv6-Prefix.
+- **Sessão** — Session-Timeout, Idle-Timeout, Filter-Id (ACL/política).
+- **VLAN/contexto** — para IPoE e cenários avançados.
+
+Trocar o plano do cliente = **mudar o atributo** no perfil dele na base; com **CoA**,
+o efeito é **imediato**.
+
+## RADIUS na operação do ISP {#sec-radius-operacao}
+
+O RADIUS é o **elo entre billing e rede**. Casos do dia a dia:
+
+- **Ativação:** cadastro cria o usuário/plano; ao conectar, o RADIUS autoriza com a
+  velocidade certa.
+- **Upgrade/downgrade:** muda o atributo → **CoA** aplica na hora.
+- **Bloqueio por inadimplência:** o RADIUS direciona o cliente a um **pool/ACL de
+  bloqueio** (página "fatura em aberto") em vez de derrubar — *walled garden*.
+- **Logs (Marco Civil):** o *accounting* registra **quem teve qual IP/porta e
+  quando** (capítulo @sec-nat-cgnat), com **NTP correto** (capítulo @sec-outros-ntp).
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **RADIUS redundante é inegociável:** se o RADIUS cai, **ninguém autentica** (e
+  reconexões falham). Dois servidores + base replicada; o BNG aponta para ambos.
+- **CoA para tudo em tempo real:** upgrade vendido às 22h deve valer às 22h01 — sem
+  CoA o cliente teria que reconectar. Habilite e teste *Disconnect/CoA*.
+- **Bloqueio por walled garden**, não por *reject*: direcione o inadimplente a uma
+  página de aviso/pagamento (pool + ACL) — melhor experiência e recuperação de
+  receita do que simplesmente derrubar.
+- **Accounting + NTP = conformidade:** guarde *start/stop/interim* com horário
+  correto; é a prova legal de uso (Marco Civil) e a base de relatórios de tráfego.
+- **VSA do seu BNG:** o atributo de velocidade depende do fabricante; padronize os
+  perfis (300M/500M/1G) com o VSA certo para evitar "cliente contratou 500 e está com
+  100".
+- **Integração billing↔RADIUS↔BNG:** automatize ativação/bloqueio/plano a partir do
+  sistema de gestão; operação manual não escala.
+:::
+
+## Resumo e checklist {#sec-resumo-47}
+
+- **AAA** = autenticar (quem), autorizar (o que pode) e contabilizar (o que usou); o
+  **RADIUS** implementa no ISP.
+- O **BNG é cliente RADIUS**: *Access-Request/Accept* (com **atributos**) e
+  *Accounting* (start/stop/interim).
+- **CoA** muda/derruba sessões em tempo real (upgrade, bloqueio).
+- O RADIUS liga **billing ↔ rede**; redundância e **accounting + NTP** são críticos
+  (Marco Civil).
+
+**Checklist do capítulo**
+
+- [ ] Explico os três As e onde cada um aparece no acesso.
+- [ ] Descrevo Access-Request/Accept e o papel dos atributos (velocidade, IP, /56).
+- [ ] Uso CoA para upgrade/bloqueio em tempo real.
+- [ ] Garanto RADIUS redundante e accounting com NTP para conformidade.

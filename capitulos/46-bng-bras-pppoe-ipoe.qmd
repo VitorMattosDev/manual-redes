@@ -2,6 +2,125 @@
 title: "BNG/BRAS, PPPoE e IPoE"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Onde o assinante "entra" na internet {#sec-bng-pppoe}
+
+Toda a planta (fibra na Parte VI, rádio na Parte IX) leva o tráfego do cliente até um
+ponto onde ele é **autenticado, recebe IP, ganha velocidade e é roteado para a
+internet**: o **BNG** (*Broadband Network Gateway*), também chamado **BRAS**
+(*Broadband Remote Access Server*). É o coração da operação de acesso — o equipamento
+que transforma "uma ONT/rádio conectado" em "um cliente pagante navegando". Ele
+termina as sessões (PPPoE ou IPoE), conversa com o **RADIUS** (capítulo @sec-radius)
+para autenticar/contabilizar, aplica o **plano** (rate-limit, QoS — capítulo
+@sec-qos) e entrega ao roteamento (**BGP**, capítulo @sec-bgp).
+
+## O papel do BNG {#sec-bng-papel}
+
+::: {#fig-bng}
+```{.tikz}
+%%| filename: bng-papel
+%%| alt: Caminho do assinante pela OLT até o BNG, que autentica via RADIUS e roteia para a internet
+\begin{tikzpicture}[font=\footnotesize,
+    b/.style={draw=manualgray, rounded corners=2pt, minimum height=8mm, align=center}]
+  \node[b, fill=manualred!10] (cli) at (0,0) {Cliente\\(ONT/rádio)};
+  \node[b, fill=manualyellow!16] (olt) at (2.6,0) {OLT/\\agregador};
+  \node[b, fill=manualblue!12] (bng) at (5.4,0) {\textbf{BNG}};
+  \node[b, fill=manualgreen!14] (net) at (8.4,0) {Internet\\(BGP)};
+  \node[b, fill=manualgray!12] (rad) at (5.4,-2) {RADIUS};
+  \draw[curva] (cli)--(olt); \draw[curva] (olt)-- node[above,font=\scriptsize]{Q-in-Q} (bng);
+  \draw[vetor, manualblue] (bng)--(net);
+  \draw[vetor, manualred] (bng)-- node[right,font=\scriptsize]{auth/acct} (rad);
+  \node[manualgray, font=\scriptsize, below=0.5mm of bng] {termina sessão, IP, rate-limit};
+\end{tikzpicture}
+```
+O **BNG** é o ponto de terminação do assinante: recebe a sessão (via OLT/agregador),
+autentica no **RADIUS**, atribui IP/velocidade e roteia à internet.
 :::
+
+Funções concentradas no BNG:
+
+- **Terminar a sessão** do assinante (PPPoE ou IPoE).
+- **Autenticar/autorizar/contabilizar** via **RADIUS** (AAA, capítulo @sec-radius).
+- **Atribuir IP** (IPv4, muitas vezes via **CGNAT** a jusante — capítulo
+  @sec-nat-cgnat) e **prefixo IPv6** (DHCPv6-PD, capítulo @sec-ipv6).
+- **Aplicar o plano:** rate-limit/QoS por atributo RADIUS (capítulo @sec-qos).
+- **MSS clamping** (capítulo @sec-ip-fragmentacao) e políticas.
+- **Roteamento** para a borda/BGP.
+
+## PPPoE: sessão explícita {#sec-bng-pppoe-detalhe}
+
+O **PPPoE** (*PPP over Ethernet*) cria uma **sessão lógica** entre o roteador do
+cliente e o BNG, sobre a Ethernet/PON. Fases:
+
+1. **Discovery (PADI/PADO/PADR/PADS):** cliente e BNG se acham e estabelecem a sessão.
+2. **Autenticação (PAP/CHAP):** **usuário e senha** validados no RADIUS.
+3. **Sessão:** o BNG entrega IP, aplica plano e contabiliza; a sessão tem
+   identificador e pode ser derrubada/auditada.
+
+Vantagens: **controle e billing fortes** (sessão explícita, fácil de cortar
+inadimplente, contabilizar e auditar). Desvantagem: **MTU 1492** (8 bytes de
+overhead) → exige **MSS clamping**, senão "sites grandes não abrem" (capítulo
+@sec-ip-fragmentacao).
+
+## IPoE: sem usuário/senha {#sec-bng-ipoe}
+
+O **IPoE** entrega IP **via DHCP** (capítulo @sec-dhcp), sem sessão PPP. A identidade
+do cliente vem da **Opção 82** (porta/VLAN/circuito) + **DHCP Snooping**, e a
+autorização ainda pode passar pelo **RADIUS**. Vantagens: **MTU 1500** (sem
+overhead), experiência "plug and play", bom para IPTV/multicast. Desvantagem: o
+controle de sessão é menos explícito que no PPPoE (mitigado por Opção 82 + RADIUS).
+
+| Aspecto | PPPoE | IPoE |
+|---|---|---|
+| Identidade | usuário/senha | Opção 82 + DHCP Snooping |
+| MTU | 1492 (MSS clamp) | 1500 |
+| Controle/billing | forte (sessão) | bom (DHCP/RADIUS) |
+| Experiência | configura sessão | automático |
+| Multicast/IPTV | menos natural | melhor |
+
+No Brasil, **PPPoE** é muito comum pela gestão de sessão e *billing*; **IPoE** cresce
+em redes que querem simplicidade e IPTV.
+
+## Dimensionamento e redundância {#sec-bng-dimensionamento}
+
+O BNG é **ponto crítico**: sua queda derruba **todos** os assinantes que termina.
+Cuidados:
+
+- **Capacidade:** sessões simultâneas, *throughput* agregado, e *headroom* para o
+  pico (capítulo @sec-grandezas).
+- **Redundância:** dois BNGs com *failover* (e RADIUS redundante); cliente reconecta no
+  par se um cai.
+- **Posição:** centralizado (simples) ou distribuído (menor raio de impacto). À medida
+  que cresce, distribuir reduz o "blast radius".
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **MSS clamping é obrigatório em PPPoE.** Configure (ex.: MSS 1452) e elimine a
+  enxurrada de "Netflix abre, banco não" (capítulo @sec-ip-fragmentacao).
+- **Velocidade/IP/IPv6 vêm do RADIUS**, não fixos no BNG: trocar plano = trocar
+  atributo no perfil (capítulo @sec-radius); entregue **/56 por DHCPv6-PD** para
+  dual-stack (capítulo @sec-ipv6) e alivie o CGNAT.
+- **Redundância de BNG + RADIUS:** o BNG é o "pescoço" da operação; *failover*
+  testado evita que uma manutenção vire apagão geral.
+- **Integre com CGNAT e logs:** o BNG + CGNAT precisam **logar** sessão/porta para o
+  Marco Civil (capítulo @sec-nat-cgnat); alinhe NTP (capítulo @sec-outros-ntp) para
+  horários corretos.
+- **PPPoE vs. IPoE é decisão de operação:** escolha por controle de sessão (PPPoE) ou
+  simplicidade/IPTV (IPoE); muitos rodam PPPoE no residencial e IPoE em nichos.
+:::
+
+## Resumo e checklist {#sec-resumo-46}
+
+- O **BNG/BRAS** termina o assinante: **autentica (RADIUS)**, dá **IP/IPv6**, aplica
+  **plano/QoS** e roteia.
+- **PPPoE** = sessão com usuário/senha (controle/billing forte, MTU 1492 + MSS clamp);
+  **IPoE** = DHCP + Opção 82 (MTU 1500, plug and play).
+- Velocidade e endereços vêm do **RADIUS**; entregue IPv6 por **DHCPv6-PD**.
+- BNG é **crítico**: dimensione com folga e tenha **redundância**.
+
+**Checklist do capítulo**
+
+- [ ] Descrevo as funções do BNG e o caminho do assinante até a internet.
+- [ ] Diferencio PPPoE de IPoE e suas implicações de MTU/controle.
+- [ ] Configuro MSS clamping no PPPoE e atribuo plano via RADIUS.
+- [ ] Planejo redundância de BNG/RADIUS e logs para o Marco Civil.
