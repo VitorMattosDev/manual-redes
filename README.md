@@ -55,7 +55,7 @@ _quarto.yml            # config do book + filtros TikZ + formatos
 index.qmd              # apresentação + mapa de pré-requisitos (mermaid)
 styles.css             # tema (1ª linha = marcador SCSS obrigatório)
 CLAUDE.md              # instruções para o Claude Code
-capitulos/             # 55 capítulos + glossário + referências
+capitulos/             # 59 capítulos + apêndices (config, regulatório) + glossário + referências
 _extensions/danmackinlay/tikz/   # extensão TikZ COM patches locais
 .github/workflows/publish.yml
 ```

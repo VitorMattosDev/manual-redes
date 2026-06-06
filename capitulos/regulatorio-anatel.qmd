@@ -1,0 +1,95 @@
+---
+title: "Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)"
+---
+
+## Operar ISP no Brasil é uma atividade regulada {#sec-regulatorio}
+
+Os 55 capítulos tratam da **engenharia** da rede; este apêndice trata do que torna o
+provedor **legal**. Montar a planta é metade — a outra é estar **regular** perante a
+**Anatel** (capítulo @sec-organizacao) e cumprir as leis de **guarda de dados** e
+**privacidade**. Esta visão é **introdutória e não substitui assessoria
+jurídica/regulatória**: as regras mudam (resoluções da Anatel, atos normativos) e os
+valores/prazos exatos devem ser conferidos na **regulamentação vigente**. O objetivo
+aqui é o **mapa**: o que existe e por que importa para a operação.
+
+## SCM: a outorga que autoriza o provedor {#sec-reg-scm}
+
+O serviço que um ISP presta (acesso à internet) enquadra-se, na regulação brasileira,
+como **SCM — Serviço de Comunicação Multimídia**. Pontos práticos:
+
+- **Outorga/autorização de SCM** junto à Anatel é o que **autoriza legalmente** a
+  prestação. Provedores pequenos têm um rito **simplificado** (dispensas conforme
+  porte), mas a autorização é o ponto de partida.
+- Com a outorga vêm **obrigações**: cadastro e atualização de dados, **declarações de
+  tráfego/receita**, e atendimento a normas de **direitos do consumidor** de telecom.
+- A figura do **provedor de pequeno porte (PPP)** tem **tratamento regulatório
+  assimétrico** (obrigações reduzidas), reconhecendo o peso dos ISPs regionais.
+
+## Espectro e homologação de equipamentos {#sec-reg-espectro}
+
+A Parte IX já insiste nisso: **rádio é espectro regulado** (capítulos
+@sec-radio-fund, @sec-ptp-ptmp).
+
+- **Faixas não licenciadas** (ex.: 5 GHz para WISP) têm **limite de EIRP** e condições
+  de uso; respeitá-las é obrigação, não recomendação. Ultrapassar a EIRP é infração
+  **e** atrapalha vizinhos.
+- **Todo equipamento de telecom** que se conecta à rede ou irradia precisa ser
+  **homologado pela Anatel** (rádios, ONTs, roteadores). Equipamento **não homologado**
+  é irregular e fonte de incompatibilidade e multa.
+- **Faixas licenciadas** (uso exclusivo) exigem **autorização de uso de
+  radiofrequência** específica — outro rito, para quem opera enlaces licenciados.
+
+## Marco Civil: guarda de registros {#sec-reg-marco-civil}
+
+O **Marco Civil da Internet** (Lei 12.965/2014) impõe ao provedor de **conexão** o
+dever de **guardar os registros de conexão** — quem usou qual IP, quando — pelo prazo
+legal (**1 ano**), sob sigilo, fornecidos à autoridade **mediante ordem judicial**.
+Consequências de engenharia diretas:
+
+- Em **CGNAT** (capítulo @sec-nat-cgnat), o IP público é compartilhado: para
+  identificar um assinante é **obrigatório registrar também a porta de origem e o
+  horário** (*logs* de tradução). **Sem isso, o log não identifica ninguém** — e o
+  provedor fica exposto.
+- Os *logs* de **PPPoE/RADIUS** (capítulo @sec-radius) — início/fim de sessão, IP
+  atribuído, usuário — são a base dessa rastreabilidade. Dimensione armazenamento e
+  **sincronize o relógio (NTP)** de tudo: horário errado invalida o registro.
+
+## LGPD: dados do assinante {#sec-reg-lgpd}
+
+A **LGPD** (Lei 13.709/2018) rege o tratamento de **dados pessoais** dos assinantes
+(cadastro, CPF, endereço, e os próprios registros de conexão). Para o provedor:
+
+- Trate dados com **finalidade, necessidade e segurança**; registros de conexão são
+  guardados por **obrigação legal**, mas o acesso a eles deve ser **controlado e
+  auditado** (capítulo @sec-seguranca).
+- **Minimize e proteja**: criptografia/segregação de bases, controle de acesso da
+  equipe, e plano de resposta a incidente/vazamento.
+
+## Telefonia, se você oferecer voz {#sec-reg-voz}
+
+Ofertar **VoIP/telefonia** (capítulo @sec-voip) pode acrescentar enquadramento e
+obrigações próprias — **numeração**, **portabilidade**, **interconexão** e regras de
+serviço de voz. Avalie o enquadramento **antes** de vender o produto.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Regularize a SCM antes de crescer.** Operar sem outorga é risco jurídico e
+  financeiro; o rito simplificado para pequeno porte existe justamente para isso.
+- **Só instale equipamento homologado** e **dentro da EIRP** da faixa (capítulo
+  @sec-ptp-ptmp). Barato não homologado sai caro em multa e suporte.
+- **Logs de CGNAT com porta + NTP confiável** são inegociáveis: sem porta de origem e
+  horário correto, você **não consegue** atender uma ordem judicial — e a culpa é sua.
+- **Retenha registros pelo prazo legal**, com acesso **auditado** e em conformidade
+  com a **LGPD**. Guardar de menos é ilegal; expor de mais também.
+- **Documente um responsável** por regulatório/jurídico. Engenharia boa não compensa
+  estar irregular.
+:::
+
+## Para fechar
+
+A rede que este manual ensinou a construir — da fibra ao BGP — só vira **negócio
+sustentável** quando está **regular**: outorga de SCM, espectro e equipamentos dentro
+das regras da Anatel, registros guardados conforme o Marco Civil e dados tratados sob
+a LGPD. **Engenharia e conformidade andam juntas.** (Verifique sempre a
+regulamentação vigente; este apêndice é um mapa, não aconselhamento jurídico.)

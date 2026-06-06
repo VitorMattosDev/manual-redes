@@ -1,0 +1,148 @@
+---
+title: "Wi-Fi Doméstico: Bandas, Canais e Cobertura"
+---
+
+## A última dezena de metros {#sec-wifi}
+
+A fibra entrega 300, 500, 700 Mbps **na ONT** — e depois o sinal atravessa paredes,
+móveis e o micro-ondas até o celular no quarto dos fundos. Esse último trecho é
+**Wi-Fi**, e é onde mora **metade dos chamados de "internet lenta"** (capítulo
+@sec-onu-ont). O assinante não distingue "fibra" de "Wi-Fi": para ele é tudo
+"internet". Por isso o provedor que entende Wi-Fi resolve chamado por telefone,
+evita visita técnica e não troca ONT boa achando que o problema é a rede. Este
+capítulo trata o Wi-Fi como ele é — um **meio compartilhado de rádio** (capítulos
+@sec-meios-introducao e @sec-radio-fund), com as mesmas leis de propagação e disputa de
+acesso da Parte IX, só que dentro de casa.
+
+## Bandas: 2,4 GHz, 5 GHz e 6 GHz {#sec-wifi-bandas}
+
+O Wi-Fi opera em faixas não licenciadas (capítulo @sec-radio-fund). Cada uma
+troca **alcance** por **capacidade**:
+
+| Banda | Alcance/penetração | Capacidade | Congestionamento |
+|---|---|---|---|
+| **2,4 GHz** | maior alcance, atravessa paredes | baixa (poucos canais) | **alto** (vizinhos, BT, micro-ondas) |
+| **5 GHz** | menor alcance, mais sensível a parede | alta (muitos canais) | médio |
+| **6 GHz** (Wi-Fi 6E/7) | parecido com 5 GHz | altíssima (espectro novo e limpo) | baixo (ainda pouco usado) |
+
+A regra física é a do capítulo @sec-radio-fund: **quanto maior a frequência,
+maior a atenuação** por distância e por obstáculo. Daí 2,4 GHz "ir mais longe" e
+5/6 GHz "ser mais rápido perto do roteador". Um bom roteador moderno é
+**dual/tri-band** e publica o **mesmo SSID** nas bandas (*band steering*), empurrando
+cada cliente para a melhor.
+
+## Canais e o problema da sobreposição {#sec-wifi-canais}
+
+Cada banda se divide em **canais**. O detalhe crítico — origem de metade dos
+problemas de 2,4 GHz — é que os canais de 2,4 GHz **se sobrepõem**: só **1, 6 e 11**
+não interferem entre si.
+
+::: {#fig-wifi-canais}
+```{.tikz}
+%%| filename: wifi-canais-24
+%%| alt: Espectro de 2,4 GHz mostrando que apenas os canais 1, 6 e 11 nao se sobrepoem
+\begin{tikzpicture}[font=\footnotesize]
+  \draw[eixo,->] (-1.4,0) -- (13.6,0) node[right]{2,4 GHz};
+  \foreach \c/\x in {1/1,6/6,11/11} \node[manualgray,font=\scriptsize] at (\x,-0.35) {\c};
+  % canais 1, 6, 11 (nao sobrepostos)
+  \fill[manualblue!35,draw=manualblue] (-1.2,0)--(0,1.5)--(2.2,1.5)--(3.4,0)--cycle;
+  \fill[manualgreen!35,draw=manualgreen] (3.8,0)--(5,1.5)--(7,1.5)--(8.2,0)--cycle;
+  \fill[manualred!35,draw=manualred] (8.8,0)--(10,1.5)--(12,1.5)--(13.2,0)--cycle;
+  \node[manualblue] at (1,1.85) {Ch 1};
+  \node[manualgreen] at (6,1.85) {Ch 6};
+  \node[manualred] at (11,1.85) {Ch 11};
+  % canal intermediario (interfere com 1 e 6)
+  \draw[manualgray,dashed] (0.8,0)--(2,1.0)--(4,1.0)--(5.2,0);
+  \node[manualgray,font=\scriptsize] at (3,1.25) {Ch 3 (interfere)};
+\end{tikzpicture}
+```
+Em 2,4 GHz cada canal tem ~22 MHz e o espaçamento é de 5 MHz, então só **1, 6 e 11**
+ficam realmente separados. Usar canal 3 ou 9 "soma" interferência de dois vizinhos.
+:::
+
+Em **5 GHz** há muitos canais não sobrepostos, mas alguns são **DFS** (precisam ceder
+a radares meteorológicos/militares) e podem sofrer interrupções. **Largura de canal**
+também conta: 20 MHz é mais robusto e menos suscetível; 40/80/160 MHz dá mais pico de
+banda, mas "ocupa" mais espectro e piora a convivência num prédio cheio de redes.
+
+## CSMA/CA: o ar é um meio compartilhado {#sec-wifi-csma}
+
+Wi-Fi usa **CSMA/CA** — escuta antes de transmitir, exatamente o problema do capítulo
+@sec-tec-tdma. Só **um** transmite por vez no canal; todos os clientes e redes vizinhas
+no mesmo canal **dividem o tempo**. Consequências práticas:
+
+- Um cliente **distante e lento** (negocia 6 Mbps) **prende o canal** mais tempo por
+  pacote, derrubando a vazão dos demais (*airtime* desigual).
+- Redes vizinhas no **mesmo canal** competem pelo mesmo ar — daí a importância do
+  plano 1/6/11.
+- "Velocidade negociada" (PHY rate) **não é** vazão: descontados *overhead*, disputa e
+  retransmissões, a vazão real fica bem abaixo (o mesmo *goodput* do capítulo
+  @sec-grandezas).
+
+Wi-Fi 6 (802.11ax) ataca isso com **OFDMA** (vários clientes em subportadoras no mesmo
+tempo) e **MU-MIMO**, melhorando o uso do *airtime* em ambientes cheios de dispositivos.
+
+## Padrões: do 802.11n ao Wi-Fi 7 {#sec-wifi-padroes}
+
+| Geração | Padrão | Banda | Destaque |
+|---|---|---|---|
+| Wi-Fi 4 | 802.11n | 2,4/5 GHz | MIMO, base instalada antiga |
+| Wi-Fi 5 | 802.11ac | 5 GHz | 80/160 MHz, MU-MIMO down |
+| **Wi-Fi 6/6E** | 802.11ax | 2,4/5/**6** GHz | **OFDMA**, eficiência em ambiente cheio |
+| Wi-Fi 7 | 802.11be | 2,4/5/6 GHz | 320 MHz, MLO (multi-link) |
+
+Para o provedor, o salto que mais importa não é o pico de banda anunciado na caixa, e
+sim a **eficiência em casa cheia de aparelhos** (Wi-Fi 6 OFDMA) — é o que reduz
+chamado, não o "número grande" do *marketing*.
+
+## Cobertura: posicionamento, repetidor e mesh {#sec-wifi-cobertura}
+
+A maior causa de "lentidão" é **cobertura ruim**, não falta de banda. Atenuação por
+obstáculo (capítulo @sec-radio-fund) derruba o sinal rápido: laje, parede de
+concreto, espelho e geladeira são barreiras severas, principalmente em 5/6 GHz.
+
+- **Posição do roteador:** central, alto e **longe** de metal, micro-ondas e do chão.
+  Roteador atrás da TV, no rack, dentro do armário = chamado garantido.
+- **Repetidor** (*range extender*): barato, mas costuma **repetir pela metade** da
+  banda e cria SSID duplicado — solução de tapar buraco, não de projeto.
+- **Mesh:** vários pontos com o **mesmo SSID** e *roaming* transparente; idealmente
+  com **backhaul cabeado** (ou banda dedicada). É a solução correta para casa grande
+  ou de dois andares.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Teste cabeado vs. Wi-Fi antes de culpar a rede.** Cabo entrega 300M e Wi-Fi 40M
+  no quarto dos fundos? O problema é **Wi-Fi/cobertura**, não a fibra. Esse teste
+  isolado economiza a maioria das visitas (capítulo @sec-troubleshooting).
+- **Force 2,4 GHz para canais 1, 6 ou 11.** "Automático" muitas vezes escolhe canal
+  sobreposto. Em prédio, escaneie o ambiente e fixe o canal mais limpo.
+- **Não venda 5 GHz como bala de prata.** Mais rápido perto, mas morre na parede.
+  Cliente em casa grande precisa de **mesh**, não de SSID 5 GHz mais potente.
+- **Gerencie a ONT/roteador por TR-069/ACS** (capítulo @sec-onu-ont): leia canal,
+  potência, clientes conectados e a taxa negociada **sem ir à casa**; troque canal e
+  atualize firmware remotamente.
+- **Padronize firmware e desligue "turbos" instáveis** (160 MHz em ambiente cheio
+  costuma piorar). 20/40 MHz estável > 160 MHz com retransmissão.
+- **ONT bridge + roteador homologado** dá mais controle de Wi-Fi do que ONT *router*
+  de baixo custo; decida conforme seu modelo de suporte (capítulo @sec-onu-ont).
+:::
+
+## Resumo e checklist {#sec-resumo-56}
+
+- Wi-Fi é **rádio compartilhado** (CSMA/CA): mesma física de propagação e disputa da
+  Parte IX, dentro de casa.
+- **2,4 GHz** vai longe e congestiona; **5/6 GHz** é rápido e morre na parede. Em
+  2,4 GHz, só **1, 6 e 11** não se sobrepõem.
+- **PHY rate não é vazão**; cobertura ruim, não falta de banda, é a causa nº 1 de
+  "lentidão".
+- **Mesh com backhaul** resolve casa grande; **repetidor** é paliativo.
+- Gerencie remotamente por **TR-069**; sempre **isole cabeado vs. Wi-Fi**.
+
+**Checklist do capítulo**
+
+- [ ] Escolho a banda certa (alcance vs. capacidade) para cada situação.
+- [ ] Fixo 2,4 GHz em canal 1, 6 ou 11 e evito sobreposição.
+- [ ] Explico por que PHY rate não é a vazão entregue.
+- [ ] Isolo Wi-Fi de fibra com teste cabeado antes de despachar técnico.
+- [ ] Indico mesh (backhaul) em vez de repetidor quando o caso pede.

@@ -1,0 +1,127 @@
+---
+title: "Troubleshooting: Metodologia por Camadas"
+---
+
+## Diagnosticar é eliminar, não adivinhar {#sec-troubleshooting}
+
+Todo capítulo deste manual terminou com pistas de diagnóstico: LEDs da ONT (capítulo
+@sec-onu-ont), potência Rx, OTDR (capítulo @sec-interpretacao-otdr), `ping` e
+`traceroute` (capítulo @sec-icmp). Falta amarrá-las num **método**. A diferença entre
+um suporte que resolve por telefone e um que despacha técnico a esmo é ter um
+**roteiro** que **isola a falha por camada** (capítulo @sec-osi-encapsulamento) em vez
+de trocar peças no escuro. A regra de ouro: **uma camada só funciona se a de baixo
+funciona**. Por isso, na dúvida, comece embaixo (camada 1) e suba — você elimina
+metade das causas a cada degrau.
+
+## Três estratégias {#sec-tshoot-estrategias}
+
+- **Bottom-up (de baixo para cima):** começa na **camada física** e sobe. Ideal para
+  o acesso óptico/rádio do provedor, onde a maioria dos problemas é **camada 1**
+  (fibra, conector, potência, visada).
+- **Top-down (de cima para baixo):** começa na **aplicação**. Bom quando "a internet
+  funciona, mas **só um site/serviço** falha".
+- **Dividir para conquistar:** ataca direto a camada mais **provável** pelo sintoma e
+  caminha para os lados. Veterano usa essa — mas ela depende de experiência.
+
+No provedor, o *default* é **bottom-up**: barato, mecânico e à prova de palpite.
+
+## A escada de diagnóstico {#sec-tshoot-escada}
+
+::: {#fig-tshoot-escada}
+```{.tikz}
+%%| filename: troubleshooting-escada
+%%| alt: Escada de diagnostico das camadas 1 a 7 com o que checar e a ferramenta em cada nivel
+\begin{tikzpicture}[font=\footnotesize,
+    cam/.style={draw=manualgray, rounded corners=2pt, minimum width=3.4cm, minimum height=7mm, fill=manualblue!10, anchor=west}]
+  \node[cam,fill=manualred!16] (l1) at (0,0) {L1 Fisica};
+  \node[cam,fill=manualyellow!20] (l2) at (0,0.95) {L2 Enlace};
+  \node[cam,fill=manualgreen!16] (l3) at (0,1.9) {L3 Rede};
+  \node[cam,fill=manualblue!14] (l4) at (0,2.85) {L4 Transporte};
+  \node[cam,fill=manualblue!10] (l7) at (0,3.8) {L5-7 Aplicacao};
+  % anotacoes
+  \node[anchor=west,font=\scriptsize,manualgray] at (3.7,0) {LOS/Rx, OTDR, VFL, visada};
+  \node[anchor=west,font=\scriptsize,manualgray] at (3.7,0.95) {PPPoE, MAC, VLAN, autenticou?};
+  \node[anchor=west,font=\scriptsize,manualgray] at (3.7,1.9) {IP, gateway, rota, ping/traceroute};
+  \node[anchor=west,font=\scriptsize,manualgray] at (3.7,2.85) {porta/firewall, MTU/MSS};
+  \node[anchor=west,font=\scriptsize,manualgray] at (3.7,3.8) {DNS, TLS, o servico em si};
+  \draw[vetor,manualred] (-0.5,-0.1) -- (-0.5,4.0) node[midway,left,rotate=90,anchor=south,font=\scriptsize]{bottom-up};
+\end{tikzpicture}
+```
+Bottom-up: confirme cada degrau antes de subir. **LOS aceso?** nada acima importa.
+**Não autenticou PPPoE?** não adianta testar DNS.
+:::
+
+| Camada | Pergunta-chave | Ferramenta |
+|---|---|---|
+| **1 Física** | Tem luz/sinal? Rx na faixa? Visada ok? | LEDs, power meter, **OTDR**, VFL (cap. @sec-otdr) |
+| **2 Enlace** | Autenticou? MAC/VLAN certos? | OLT, logs de **PPPoE/RADIUS** (cap. @sec-radius) |
+| **3 Rede** | Tem IP e gateway? Rota existe? | `ping`, `traceroute` (cap. @sec-icmp) |
+| **4 Transporte** | Porta aberta? MTU/MSS ok? | teste de porta, **MSS clamp** (cap. @sec-tcp-udp) |
+| **5–7 Aplicação** | DNS resolve? TLS ok? Serviço no ar? | `nslookup`/`dig`, navegador, *looking glass* |
+
+## Roteiro do chamado de acesso {#sec-tshoot-roteiro}
+
+O caminho bottom-up para "minha internet caiu", reaproveitando o capítulo
+@sec-onu-ont:
+
+1. **Energia e LEDs.** Power apagado? É tomada/fonte. **LOS vermelho?** Camada 1 —
+   fibra/conector/drop; leia a **potência Rx** remotamente **antes** de despachar
+   (interpretação do laudo em @sec-interpretacao-otdr).
+2. **Autenticação (camada 2).** PON fixo mas **sem Internet**? Veja PPPoE/RADIUS
+   (capítulo @sec-radius): credencial, sessão presa, perfil.
+3. **Camada 3.** Pegou IP? `ping` no gateway e num IP público (ex.: `8.8.8.8`).
+   Responde por IP mas **não por nome** → é **DNS** (camada 7), não a rede.
+4. **Isole cliente vs. rede.** Teste **cabeado vs. Wi-Fi** (capítulo @sec-wifi):
+   problema só no Wi-Fi = cobertura, não fibra. `traceroute` mostra **onde** o caminho
+   morre (no cliente, no seu core ou no trânsito).
+5. **Aplicação.** Só um serviço falha? Verifique DNS, **MTU/MSS** (PPPoE reduz a MTU,
+   capítulo @sec-tcp-udp) e o *looking glass* do IX (capítulo @sec-bgp).
+
+## Falha de um x falha de muitos {#sec-tshoot-escopo}
+
+Antes de mergulhar num assinante, **pergunte o escopo** — isso muda tudo:
+
+- **Um cliente:** drop, ONT, Wi-Fi, conta PPPoE. Diagnóstico individual.
+- **Uma CTO/um PON inteiro caiu:** suspeite de **rede primária/secundária**, cabo
+  rompido, OLT/placa, ou **splitter** (capítulos @sec-cto-primaria-secundaria,
+  @sec-splitters).
+- **Tudo lento/instável ao mesmo tempo:** **uplink saturado**, *peering*/trânsito
+  (capítulo @sec-bgp), **DDoS** (capítulo @sec-ddos), ou falha de núcleo (capítulo
+  @sec-redundancia). O **monitoramento** (capítulo @sec-monitoramento) é quem responde
+  isso em segundos.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Comece pela camada 1 e pelo escopo.** "Um ou muitos?" e "tem luz?" eliminam a
+  maioria das hipóteses antes de qualquer comando.
+- **Leia potência e estado da sessão remotamente** (OLT, TR-069, RADIUS) **antes** de
+  despachar técnico — visita é o recurso mais caro do provedor.
+- **`ping` por IP vs. por nome** separa **rede** de **DNS** em dez segundos. Decore
+  esse teste e ensine ao atendimento de primeiro nível.
+- **MTU/MSS é a falha "fantasma":** navega em quase tudo, mas alguns sites/HTTPS
+  travam. Em PPPoE, configure **MSS clamping** (capítulo @sec-tcp-udp).
+- **Documente o roteiro e padronize-o no atendimento.** Roteiro escrito transforma
+  diagnóstico em processo — e reduz visita, tempo de chamado e troca de peça boa.
+- **Deixe o monitoramento ser o primeiro a saber** (capítulo @sec-monitoramento): se
+  muitos caíram juntos, o NOC age na causa raiz, não em mil chamados individuais.
+:::
+
+## Resumo e checklist {#sec-resumo-59}
+
+- Diagnosticar é **eliminar por camada**: uma camada só funciona se a de baixo
+  funciona. No provedor, o padrão é **bottom-up**.
+- A **escada**: L1 (luz/Rx/visada) → L2 (PPPoE/MAC) → L3 (IP/rota) → L4 (porta/MTU) →
+  L5–7 (DNS/TLS/serviço).
+- **Pergunte o escopo** (um x muitos) **antes** de mergulhar — muda completamente a
+  hipótese.
+- Ferramentas-chave: LEDs/power meter/**OTDR**, logs PPPoE/RADIUS, `ping`/`traceroute`,
+  teste **cabeado vs. Wi-Fi**, *looking glass* e **monitoramento**.
+
+**Checklist do capítulo**
+
+- [ ] Escolho a estratégia (bottom-up no acesso) e sigo a escada de camadas.
+- [ ] Determino o **escopo** (um cliente x CTO x rede toda) antes de agir.
+- [ ] Separo rede de DNS com `ping` por IP vs. por nome.
+- [ ] Leio potência/sessão remotamente antes de despachar técnico.
+- [ ] Reconheço a falha de **MTU/MSS** em PPPoE.

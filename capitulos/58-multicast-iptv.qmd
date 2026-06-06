@@ -1,0 +1,124 @@
+---
+title: "Multicast e IPTV"
+---
+
+## Um para muitos, sem clonar a rede {#sec-multicast}
+
+Quando o provedor entrega **TV ao vivo (IPTV)**, milhares de assinantes assistem ao
+**mesmo** canal ao mesmo tempo. Mandar uma cópia do fluxo para cada um (**unicast**)
+multiplicaria o tráfego pelo número de espectadores e derreteria o *uplink*. A
+solução é **multicast**: a fonte envia **uma única cópia** e a **rede replica** o
+fluxo só onde há quem peça. É o oposto do **broadcast** (que vai a todos) — multicast
+vai **apenas a quem assinou o grupo**. Este capítulo encadeia coisas já vistas: o
+endereçamento `224.0.0.0/4` (capítulo @sec-enderecamento), o IPoE que "casa" melhor
+com IPTV (capítulo @sec-bng-pppoe) e o QoS para vídeo (capítulo @sec-qos).
+
+## Endereçamento de grupo {#sec-multicast-grupo}
+
+Multicast não tem "destinatário" único: tem **grupo**. Um endereço **classe D**
+(`224.0.0.0` a `239.255.255.255`, ou seja `224.0.0.0/4`) **identifica o grupo**, não
+uma máquina. Quem quer receber um canal **entra** no grupo daquele canal; quem troca
+de canal **sai** de um grupo e **entra** em outro. A faixa `239.0.0.0/8` é de uso
+**administrativo/privado** (típica para IPTV interna do provedor). No nível do quadro
+Ethernet, o IP de grupo mapeia para um **MAC multicast** (capítulo @sec-ethernet).
+
+::: {#fig-multicast-tree}
+```{.tikz}
+%%| filename: multicast-tree
+%%| alt: Fonte IPTV enviando um fluxo que a rede replica somente no ultimo no ate tres STBs
+\begin{tikzpicture}[font=\footnotesize,>=stealth,
+    eq/.style={draw=manualgray, rounded corners=2pt, minimum size=7mm, fill=manualblue!10},
+    stb/.style={draw=manualgreen, rounded corners=2pt, minimum size=6mm, fill=manualgreen!14}]
+  \node[eq,fill=manualyellow!22] (src) at (0,0) {Headend};
+  \node[eq] (r1) at (3.2,0) {Core};
+  \node[eq] (r2) at (6.4,0) {Acesso};
+  \node[stb] (s1) at (9.2,1.3) {STB};
+  \node[stb] (s2) at (9.2,0) {STB};
+  \node[stb] (s3) at (9.2,-1.3) {STB};
+  % tronco: 1 copia
+  \draw[vetor,manualred,line width=1.4pt] (src)--(r1) node[midway,above,font=\scriptsize]{1 fluxo};
+  \draw[vetor,manualred,line width=1.4pt] (r1)--(r2) node[midway,above,font=\scriptsize]{1 fluxo};
+  % replicacao no ultimo no
+  \draw[vetor,manualgreen] (r2)--(s1);
+  \draw[vetor,manualgreen] (r2)--(s2);
+  \draw[vetor,manualgreen] (r2)--(s3);
+  \node[manualgreen,font=\scriptsize] at (7.9,-1.9) {replica so aqui};
+\end{tikzpicture}
+```
+A fonte manda **uma** cópia; o fluxo só se **replica no nó mais próximo** dos
+assinantes que pediram o canal. Trocar 3 por 3000 STBs **não** muda o tráfego no
+tronco.
+:::
+
+## IGMP no acesso, PIM no core {#sec-multicast-igmp-pim}
+
+Dois protocolos fazem a árvore acontecer:
+
+- **IGMP** (*Internet Group Management Protocol*) é o **assinante falando com o
+  roteador**: "quero entrar no grupo do canal X" (*join*) ou "saí" (*leave*). É o que
+  o **set-top box** dispara ao trocar de canal.
+- **PIM** (*Protocol Independent Multicast*, geralmente **PIM-SM**) é o que os
+  **roteadores do core** usam **entre si** para construir a árvore de distribuição da
+  fonte até onde há *joins*, apoiando-se no roteamento unicast já existente (capítulo
+  @sec-roteamento).
+
+No meio, o switch de acesso precisa de **IGMP snooping**: sem ele, o switch trata
+multicast como **broadcast** e **inunda** todas as portas com todos os canais —
+matando a rede de acesso. Com snooping, ele "escuta" os *joins* e envia cada canal
+**só nas portas que pediram**.
+
+| Função | Protocolo | Onde |
+|---|---|---|
+| Assinante entra/sai do grupo | **IGMP** | STB ↔ roteador de borda |
+| Switch entrega só a quem pediu | **IGMP snooping** | switch de acesso |
+| Roteadores montam a árvore | **PIM-SM** | core/distribuição |
+
+## Por que IPTV combina com IPoE {#sec-multicast-ipoe}
+
+No **PPPoE** (capítulo @sec-bng-pppoe), cada assinante tem um **túnel ponto a ponto**
+até o BNG — o que é, por natureza, **unicast** e atrapalha a replicação eficiente. No
+**IPoE**, o tráfego é IP nativo no acesso, e o **IGMP snooping** e a replicação
+funcionam de forma direta. Por isso operadoras com forte oferta de **IPTV tendem a
+IPoE** (ou usam recursos específicos para multicast sobre PPPoE). É a justificativa
+prática da tabela "PPPoE vs. IPoE" do capítulo @sec-bng-pppoe.
+
+## QoS e a saúde do vídeo {#sec-multicast-qos}
+
+Vídeo ao vivo é **constante e sensível**: tolera pouco **perda** (causa *macroblock*,
+imagem "quadriculada") e pouco **jitter**. Trate-o no QoS (capítulo @sec-qos) com
+classe própria (tipicamente **AF**), separado do *bulk* e abaixo da voz. O *zapping*
+(tempo para trocar de canal) depende do **IGMP leave/join** rápido e do **I-frame** do
+vídeo — *leave* lento deixa o canal antigo "vazando" e atrasa a troca.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Sem IGMP snooping, multicast vira broadcast.** O sintoma é a rede de acesso
+  inundada e lenta ao ligar IPTV. Habilite snooping em **todos** os switches do
+  caminho e configure o **querier**.
+- **Prefira IPoE para IPTV** (capítulo @sec-bng-pppoe) — a replicação é natural; em
+  PPPoE, multicast é dor de cabeça.
+- **Use `239.0.0.0/8`** para os grupos internos de IPTV e documente o mapa
+  canal→grupo.
+- **Monitore perda no fluxo multicast** (capítulo @sec-monitoramento): 0,1% de perda
+  que passa despercebido no *speedtest* já "quadricula" a TV.
+- **Reserve uma classe de QoS para vídeo** (AF), separada da voz (EF) e do tráfego
+  comum; *leave* rápido melhora o *zapping*.
+:::
+
+## Resumo e checklist {#sec-resumo-58}
+
+- **Multicast** manda **uma cópia** e deixa a **rede replicar** — viabiliza IPTV sem
+  multiplicar o tráfego por espectador.
+- Grupos usam **classe D** (`224.0.0.0/4`); IPTV interna costuma usar `239.0.0.0/8`.
+- **IGMP** (assinante↔roteador) + **IGMP snooping** (switch) + **PIM-SM** (core)
+  constroem a entrega.
+- **IPoE** combina melhor com IPTV que **PPPoE**; vídeo quer **QoS** (classe AF) e
+  baixa perda.
+
+**Checklist do capítulo**
+
+- [ ] Explico a diferença entre unicast, broadcast e multicast.
+- [ ] Sei o papel de IGMP, IGMP snooping e PIM-SM e onde cada um atua.
+- [ ] Habilito snooping para não inundar o acesso com os canais.
+- [ ] Justifico IPoE para IPTV e dou ao vídeo uma classe de QoS própria.

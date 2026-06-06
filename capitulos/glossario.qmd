@@ -40,6 +40,9 @@ público entre muitos assinantes.
 **CIDR** — *Classless Inter-Domain Routing*; endereçamento por prefixo (ex.: /24)
 sem classes.
 
+**Codec** — algoritmo que digitaliza/comprime a voz (ex.: G.711, G.729, Opus) no
+VoIP, equilibrando qualidade e banda.
+
 **CTO / CEO** — Caixa de Terminação/Emenda Óptica; ponto da rede secundária onde os
 *drops* dos clientes se conectam, normalmente após um *splitter*.
 
@@ -54,6 +57,9 @@ no POP/OLT.
 **DNS** — *Domain Name System*; traduz nomes (exemplo.com.br) em endereços IP.
 
 **Drop** — cabo de fibra que liga a CTO à ONT do assinante.
+
+**DSCP** — *Differentiated Services Code Point*; marca de QoS no cabeçalho IP (ex.:
+EF/46 para voz, AF para vídeo).
 
 **Duplex** — sentido do fluxo: simplex (um), half (alternado), full (simultâneo).
 
@@ -88,8 +94,19 @@ compartilhados.
 **ICMP** — protocolo de controle/diagnóstico da camada 3 (base de `ping` e
 `traceroute`).
 
+**IGMP** — *Internet Group Management Protocol*; o assinante entra/sai de um grupo
+multicast (base do *zapping* de IPTV). Ver *IGMP snooping*.
+
+**IGMP snooping** — recurso do switch que envia cada fluxo multicast só às portas que
+pediram, evitando inundar o acesso.
+
 **IP** — *Internet Protocol*; endereçamento lógico e roteamento (camada 3), em
 versões IPv4 e IPv6.
+
+**IPoE** — *IP over Ethernet*; alternativa ao PPPoE para o acesso, sem túnel — casa
+melhor com IPTV/multicast.
+
+**IPTV** — TV ao vivo sobre IP, entregue por multicast a partir do *headend*.
 
 **ISP** — *Internet Service Provider*; provedor de acesso à internet.
 
@@ -106,20 +123,35 @@ onde provedores fazem *peering*.
 
 **Latência** — tempo de propagação fim a fim; **RTT** é a ida e volta.
 
+**LGPD** — Lei Geral de Proteção de Dados (Lei 13.709/2018); rege o tratamento de
+dados pessoais dos assinantes.
+
 ## M
 
 **MAC** — *Media Access Control*; endereço físico de camada 2 (48 bits).
+
+**Marco Civil** — Lei 12.965/2014; entre outras coisas, obriga o provedor de conexão
+a guardar os **registros de conexão** por 1 ano.
 
 **MSS** — *Maximum Segment Size*; maior bloco de dados em um segmento TCP.
 
 **MTU** — *Maximum Transmission Unit*; maior *payload* de um quadro (ex.: 1500 B
 em Ethernet, 1492 com PPPoE).
 
+**Multicast** — envio "um para muitos": uma cópia da fonte que a rede replica só a
+quem assinou o grupo (classe D, `224.0.0.0/4`).
+
+**MU-MIMO** — *Multi-User MIMO*; o ponto de acesso fala com vários clientes Wi-Fi em
+paralelo via múltiplas antenas.
+
 ## N
 
 **NAT** — *Network Address Translation*; tradução de endereços IP (ver CGNAT).
 
 ## O
+
+**OFDMA** — *Orthogonal Frequency-Division Multiple Access*; no Wi-Fi 6, divide o
+canal entre vários clientes ao mesmo tempo, melhorando o uso do *airtime*.
 
 **OLT** — *Optical Line Terminal*; equipamento no POP que origina a rede PON.
 
@@ -137,6 +169,9 @@ eventos ao longo da fibra.
 
 **PDU** — *Protocol Data Unit*; unidade de dados de uma camada (segmento, pacote,
 quadro, bits).
+
+**PIM** — *Protocol Independent Multicast* (em geral PIM-SM); os roteadores do core
+montam a árvore de distribuição multicast.
 
 **POP** — *Point of Presence*; site do provedor que abriga OLTs, roteadores e
 *uplinks*.
@@ -158,14 +193,29 @@ assinantes.
 **Rede primária / secundária** — trecho da planta da OLT/DIO até o primeiro
 *splitter* (primária) e deste até as CTOs/clientes (secundária).
 
+**RTP** — *Real-time Transport Protocol*; carrega a mídia (voz/vídeo) do VoIP em UDP;
+é o fluxo que precisa de QoS.
+
 **RTT** — *Round-Trip Time*; latência de ida e volta (o que o `ping` mede).
 
 ## S
+
+**SBC** — *Session Border Controller*; intermedia SIP/RTP do provedor, resolve NAT e
+ancora a mídia do VoIP.
+
+**SCM** — Serviço de Comunicação Multimídia; enquadramento/outorga da Anatel sob o
+qual o ISP presta o acesso à internet.
+
+**SIP** — *Session Initiation Protocol*; sinalização do VoIP (abre/fecha a chamada),
+separada da mídia (RTP).
 
 **Splitter** — divisor óptico passivo (1:8, 1:16, 1:64…), balanceado ou
 desbalanceado.
 
 **STP** — *Spanning Tree Protocol*; evita laços em redes Ethernet comutadas.
+
+**STUN** — protocolo que ajuda o cliente VoIP a descobrir seu IP público e atravessar
+o NAT (junto de ICE/TURN).
 
 ## T
 
@@ -191,6 +241,9 @@ com eficiência.
 
 **WDM** — *Wavelength Division Multiplexing*; múltiplos comprimentos de onda na
 mesma fibra (ex.: down/up em GPON).
+
+**Wi-Fi** — rede local sem fio (IEEE 802.11) em 2,4/5/6 GHz; meio compartilhado por
+CSMA/CA, no trecho final até o dispositivo do cliente.
 
 ## X
 

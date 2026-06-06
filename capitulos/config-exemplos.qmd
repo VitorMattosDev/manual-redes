@@ -1,0 +1,124 @@
+---
+title: "Apêndice: Exemplos de Configuração"
+---
+
+## Como ler este apêndice {#sec-config-exemplos}
+
+O corpo do manual é **conceitual e independente de fabricante** — de propósito: o
+conceito sobrevive à troca de marca, a sintaxe não. Este apêndice aterra alguns
+conceitos em **comandos reais**, para servir de ponto de partida ao montar o
+laboratório. Os trechos são **ilustrativos**: a sintaxe exata muda por **versão e
+fabricante** (RouterOS, Huawei, Cisco, Nokia…). **Sempre valide em laboratório antes
+da produção** e troque IPs/ASNs/senhas pelos seus. Os exemplos usam **Mikrotik
+(RouterOS)** por ser o mais comum em provedores regionais, com notas para OLT Huawei.
+
+> **Aviso:** prefixos, ASNs e credenciais abaixo são **fictícios** (documentação,
+> ASN privado `64512`). Não copie para produção sem revisar.
+
+## OSPF como IGP interno {#sec-config-ospf}
+
+IGP carregando **só infraestrutura** (loopbacks e links), como no capítulo
+@sec-roteamento. Loopback `/32` é o *router-id* e destino estável de gerência/iBGP.
+
+```
+# Mikrotik RouterOS - OSPF basico (loopback + links de core)
+/interface bridge add name=loopback
+/ip address add address=10.255.0.1/32 interface=loopback
+/routing ospf instance add name=core router-id=10.255.0.1
+/routing ospf area add name=backbone area-id=0.0.0.0 instance=core
+/routing ospf interface-template add area=backbone networks=10.255.0.1/32
+/routing ospf interface-template add area=backbone interfaces=ether1 \
+    cost=10 type=ptp
+```
+
+## BGP com o trânsito/IX {#sec-config-bgp}
+
+EGP carregando a **internet e os clientes** (capítulo @sec-bgp). Filtre **sempre** o
+que anuncia (só seus prefixos) e considere filtrar o que aceita. iBGP resolve o
+próximo salto via loopback aprendido no OSPF.
+
+```
+# Mikrotik RouterOS v7 - eBGP com upstream
+/routing bgp connection add name=upstream remote.address=203.0.113.1 \
+    remote.as=64500 local.role=ebgp \
+    address-families=ip output.filter-chain=bgp-out \
+    input.filter-chain=bgp-in
+
+# anuncie SOMENTE o seu bloco
+/routing filter rule add chain=bgp-out rule="if (dst==198.51.100.0/22) {accept}"
+/routing filter rule add chain=bgp-out rule="reject"
+# proteja-se contra rota default/lixo entrante (exemplo minimo)
+/routing filter rule add chain=bgp-in rule="if (dst-len>24) {reject}"
+```
+
+## PPPoE + RADIUS no BNG {#sec-config-pppoe}
+
+Concentração de assinantes autenticados por **RADIUS** (capítulos @sec-bng-pppoe,
+@sec-radius). O *profile* já trata a **MTU/MSS** do PPPoE (capítulo @sec-tcp-udp).
+
+```
+# Mikrotik RouterOS - servidor PPPoE com RADIUS e MSS clamp
+/ppp profile add name=assinantes use-mpls=no \
+    change-tcp-mss=yes only-one=yes dns-server=10.255.0.53
+/interface pppoe-server server add service-name=provedor interface=vlan-acesso \
+    default-profile=assinantes one-session-per-host=yes
+/radius add service=ppp address=10.255.0.20 secret=segredo-aqui
+/ppp aaa set use-radius=yes
+```
+
+## QoS e controle de banda {#sec-config-qos}
+
+Honrar a marcação e proteger filas sensíveis (capítulo @sec-qos). Voz (EF) acima de
+vídeo (AF) acima do *bulk*; o plano do cliente sai do RADIUS (*Rate-Limit*).
+
+```
+# Mikrotik RouterOS - plano de 300M (o RADIUS pode injetar via Rate-Limit)
+/queue simple add name=cli-300M target=10.20.0.0/24 \
+    max-limit=300M/300M burst-limit=330M/330M
+# priorizar voz marcada EF (DSCP 46) numa queue tree e proteger bufferbloat
+/queue type add name=voz-pfifo kind=pfifo pfifo-limit=20
+```
+
+## Provisionar ONT na OLT (Huawei) {#sec-config-olt}
+
+Fluxo de **descoberta → autorização → perfil** do capítulo @sec-provisionamento. A
+ONT é identificada pelo **SN** (capítulo @sec-onu-ont). Comandos Huawei (MA5800)
+**resumidos** — a ordem e os nomes variam por versão:
+
+```
+# Huawei OLT (resumo ilustrativo)
+display ont autofind all                 # ve ONTs descobertas (SN)
+config
+interface gpon 0/1
+  ont add 0 sn-auth "48575443XXXXXXXX" omci ont-lineprofile-id 10 \
+      ont-srvprofile-id 10                # autoriza com perfis
+  ont port native-vlan 0 1 vlan 100      # VLAN de servico na ONT
+quit
+# leia a potencia para diagnostico (capitulo @sec-onu-ont)
+display ont optical-info 0 1
+```
+
+## Diagnóstico rápido (cliente/POP) {#sec-config-diag}
+
+Os testes do capítulo @sec-troubleshooting na linha de comando:
+
+```
+ping 10.255.0.1            # gateway/loopback - camada 3 interna
+ping 8.8.8.8               # internet por IP - rede ok?
+nslookup site.com.br       # resolve por nome? senao, e DNS (camada 7)
+traceroute 8.8.8.8         # ONDE o caminho morre (cliente, core, transito)
+iperf3 -c host -u          # jitter/perda (UDP) p/ VoIP e video
+```
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Versione suas configs** (Git/RANCID/Oxidized) e padronize *templates* por papel
+  (borda, agregador, OLT). Config "na unha" sem versão é dívida técnica.
+- **Filtro de saída BGP é inegociável:** anuncie **só** o seu bloco. Um filtro errado
+  vira *route leak* e tira você do ar (ou tira o vizinho).
+- **MSS clamp no profile PPPoE** elimina a falha "fantasma" de MTU (capítulo
+  @sec-troubleshooting).
+- **Teste em laboratório** (até um CHR/GNS3 ajuda) antes de tocar produção; estes
+  trechos são ponto de partida, não receita pronta.
+:::

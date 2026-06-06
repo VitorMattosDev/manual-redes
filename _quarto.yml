@@ -110,7 +110,19 @@ book:
         - capitulos/54-sdn-automacao.qmd
         - capitulos/55-ipv6-deployment-isp.qmd
 
+    - part: "Parte XIII — Serviços ao Assinante e Rede do Cliente"
+      chapters:
+        - capitulos/56-wifi-domestico.qmd
+        - capitulos/57-voip-sip-telefonia.qmd
+        - capitulos/58-multicast-iptv.qmd
+
+    - part: "Parte XIV — Diagnóstico e Operação"
+      chapters:
+        - capitulos/59-troubleshooting-metodologia.qmd
+
   appendices:
+    - capitulos/config-exemplos.qmd
+    - capitulos/regulatorio-anatel.qmd
     - capitulos/glossario.qmd
     - capitulos/referencias.qmd
 

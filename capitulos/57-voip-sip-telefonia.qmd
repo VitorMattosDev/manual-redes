@@ -1,0 +1,124 @@
+---
+title: "VoIP e SIP: Telefonia sobre IP"
+---
+
+## Voz como mais um serviço sobre a rede {#sec-voip}
+
+Muito provedor de fibra também vende **telefone**. A porta **TEL** da ONT (capítulo
+@sec-onu-ont) não liga em central telefônica nenhuma: a voz vira **pacotes IP** e
+viaja pela mesma rede dos dados — é **VoIP** (*Voice over IP*). Tecnicamente é um
+serviço de tempo real rodando sobre **UDP** (capítulo @sec-tcp-udp), extremamente
+sensível a **jitter e perda** (capítulo @sec-grandezas), e por isso o primeiro
+candidato a **QoS** (capítulo @sec-qos). Entender VoIP é separar duas coisas que as
+pessoas confundem: a **sinalização** (quem liga para quem, toca, atende, desliga) e a
+**mídia** (a voz em si).
+
+## SIP e RTP: sinalização separada da mídia {#sec-voip-sip-rtp}
+
+- **SIP** (*Session Initiation Protocol*) é a **sinalização**: estabelece, modifica e
+  encerra a chamada (INVITE, ACK, BYE). É texto, parecido com HTTP (capítulo
+  @sec-http), normalmente em **UDP/5060** (ou TLS para SIP seguro).
+- **RTP** (*Real-time Transport Protocol*) carrega a **voz digitalizada**, em **UDP**,
+  numa faixa de portas alta negociada na hora. É o RTP que precisa de QoS — não o SIP.
+- **SDP**, dentro do INVITE, **negocia** codecs, IPs e portas que o RTP vai usar.
+
+::: {#fig-sip-flow}
+```{.tikz}
+%%| filename: sip-call-flow
+%%| alt: Fluxo de chamada SIP entre dois telefones com INVITE, 200 OK, ACK, RTP e BYE
+\begin{tikzpicture}[font=\footnotesize,>=stealth]
+  % linhas de vida
+  \node[manualblue] (a) at (0,0.4) {Telefone A};
+  \node[manualred] (b) at (8,0.4) {Telefone B};
+  \draw[auxiliar,dashed] (0,0.1) -- (0,-6.6);
+  \draw[auxiliar,dashed] (8,0.1) -- (8,-6.6);
+  % sinalizacao SIP
+  \draw[vetor,manualgray] (0,-0.4) -- (8,-0.4) node[midway,above,font=\scriptsize]{INVITE (SDP)};
+  \draw[vetor,manualgray] (8,-1.0) -- (0,-1.0) node[midway,above,font=\scriptsize]{180 Ringing};
+  \draw[vetor,manualgray] (8,-1.6) -- (0,-1.6) node[midway,above,font=\scriptsize]{200 OK (SDP)};
+  \draw[vetor,manualgray] (0,-2.2) -- (8,-2.2) node[midway,above,font=\scriptsize]{ACK};
+  % midia RTP
+  \draw[vetor,manualgreen,line width=1pt] (0,-3.0) -- (8,-3.0);
+  \draw[vetor,manualgreen,line width=1pt] (8,-3.5) -- (0,-3.5);
+  \node[manualgreen] at (4,-2.75) {RTP: voz (UDP), bidirecional};
+  \draw[destaque,manualgreen] (1.2,-3.85) rectangle (6.8,-2.55);
+  % encerramento
+  \draw[vetor,manualgray] (0,-4.6) -- (8,-4.6) node[midway,above,font=\scriptsize]{BYE};
+  \draw[vetor,manualgray] (8,-5.2) -- (0,-5.2) node[midway,above,font=\scriptsize]{200 OK};
+  \node[manualblue,font=\scriptsize] at (0,-6.0) {sinalizacao = SIP};
+  \node[manualgreen,font=\scriptsize] at (8,-6.0) {midia = RTP};
+\end{tikzpicture}
+```
+A sinalização **SIP** abre e fecha a chamada; entre o ACK e o BYE, a voz flui em
+**RTP** direto entre as pontas. O QoS protege o **RTP**, não o SIP.
+:::
+
+## Codecs: qualidade contra banda {#sec-voip-codecs}
+
+O **codec** digitaliza e comprime a voz. A escolha equilibra qualidade, banda e
+robustez:
+
+| Codec | Banda aprox. (com overhead) | Qualidade | Nota |
+|---|---|---|---|
+| **G.711** (PCM) | ~80–90 kbps | excelente | sem compressão; padrão "limpo" |
+| **G.729** | ~30 kbps | boa | comprime; útil em enlace estreito |
+| **Opus** | 10–40 kbps (variável) | excelente | moderno, resiliente a perda |
+
+Uma chamada G.711 consome menos de 0,1 Mbps — **banda nunca é o problema**; jitter e
+perda são. Cada conversa usa **dois fluxos RTP** (um por sentido), e o que estraga a
+ligação é **jitter** (voz "robótica"), **perda** (cortes) e **latência** alta (eco,
+"atravessar a fala").
+
+## O calcanhar de aquiles: NAT {#sec-voip-nat}
+
+SIP/RTP carregam **endereços IP dentro do próprio conteúdo** (no SDP). Quando o
+assinante está atrás de **NAT/CGNAT** (capítulo @sec-nat-cgnat), o IP anunciado é o
+**privado** — e a outra ponta tenta mandar a voz para um endereço inalcançável.
+Sintoma clássico: **chamada conecta mas não há áudio** (ou áudio só num sentido). As
+soluções:
+
+- **STUN/ICE/TURN:** o cliente descobre seu IP público e a melhor rota de mídia.
+- **SBC** (*Session Border Controller*): um intermediário do provedor que **reescreve**
+  SIP/SDP e **ancora a mídia**, resolvendo NAT de forma centralizada.
+- **ALG SIP no roteador:** muitas vezes **piora** — em geral é melhor **desligar** o
+  SIP ALG do CPE e tratar NAT no SBC.
+
+## QoS para voz {#sec-voip-qos}
+
+Voz é o caso de uso que **justifica** o QoS (capítulo @sec-qos). A prática:
+
+- Marque o RTP de voz como **EF (DSCP 46)** e **honre** a marca em todo o core.
+- Em links de acesso/rádio, **priorize** a fila de voz e proteja contra **bufferbloat**
+  (capítulo @sec-grandezas): voz não tolera fila inchada.
+- Dimensione o **jitter buffer** no equipamento; ele troca um pouco de latência por
+  estabilidade contra jitter.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **"Liga mas não tem voz" = NAT/RTP, não SIP.** Se a chamada completa mas falta
+  áudio (ou só um lado ouve), suspeite de **CGNAT/SBC/ALG**, não da conta SIP.
+- **Trate NAT no SBC, desligue o SIP ALG do CPE.** O ALG do roteador doméstico é fonte
+  recorrente de áudio unidirecional.
+- **Marque EF (DSCP 46) e priorize a fila de voz** na borda e no rádio; sem isso, um
+  *download* satura o enlace e pica a ligação.
+- **G.711 onde há banda, Opus onde há perda.** Não economize codec onde sobra fibra —
+  qualidade limpa gera menos reclamação.
+- **Telefonia tem regras próprias** (numeração, portabilidade, interconexão): a oferta
+  de voz pode exigir enquadramento regulatório específico (apêndice @sec-regulatorio).
+:::
+
+## Resumo e checklist {#sec-resumo-57}
+
+- VoIP separa **SIP** (sinalização: INVITE/200 OK/ACK/BYE) de **RTP** (a voz em UDP).
+- **Banda não é o gargalo** (uma chamada < 0,1 Mbps); **jitter, perda e latência** são.
+- **NAT/CGNAT** quebra a mídia (áudio mudo/unidirecional); resolva com **SBC/STUN**, e
+  desconfie do **SIP ALG**.
+- Voz é o caso clássico de **QoS**: marque **EF/DSCP 46** e priorize a fila.
+
+**Checklist do capítulo**
+
+- [ ] Distingo sinalização (SIP) de mídia (RTP) e sei qual precisa de QoS.
+- [ ] Escolho codec (G.711/G.729/Opus) por banda e robustez.
+- [ ] Diagnostico áudio mudo/unidirecional como problema de NAT/RTP.
+- [ ] Marco EF (DSCP 46) e priorizo a voz na borda e no rádio.

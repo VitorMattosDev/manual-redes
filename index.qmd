@@ -33,6 +33,10 @@ flowchart TD
   VI --> X
   X --> XI["XI · Segurança e Confiabilidade"]
   X --> XII["XII · Avançado"]
+  V --> XIII["XIII · Serviços ao Assinante"]
+  VI --> XIII
+  VIII --> XIV["XIV · Diagnóstico"]
+  X --> XIV
 ```
 
 ## Convenções
