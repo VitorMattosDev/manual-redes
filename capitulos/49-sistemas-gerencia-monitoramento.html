@@ -1036,7 +1036,7 @@ Figura&nbsp;50.1: O <strong>NMS</strong> central coleta <strong>SNMP</strong> (m
 <ul>
 <li><strong>SNMP</strong> (capítulo <a href="25-outros-protocolos-aplicacao.html#sec-outros-snmp" class="quarto-xref"><span>Seção 26.5</span></a>) — <em>polling</em> de métricas (tráfego, CPU, ótica) e <strong>traps</strong> (alarmes). A espinha dorsal do monitoramento.</li>
 <li><strong>Syslog</strong> — eventos e logs dos equipamentos centralizados (correlação de incidentes; precisa de <strong>NTP</strong> correto, capítulo <a href="25-outros-protocolos-aplicacao.html#sec-outros-ntp" class="quarto-xref"><span>Seção 26.6</span></a>).</li>
-<li><strong>Flow (NetFlow/sFlow/IPFIX)</strong> — <strong>quem fala com quem</strong> e quanto: análise de tráfego, detecção de anomalias/DDoS (capítulo <span class="quarto-unresolved-ref">?sec-ddos</span>), planejamento de peering.</li>
+<li><strong>Flow (NetFlow/sFlow/IPFIX)</strong> — <strong>quem fala com quem</strong> e quanto: análise de tráfego, detecção de anomalias/DDoS (capítulo <a href="52-ddos-mitigacao.html#sec-ddos" class="quarto-xref"><span>Seção 53.1</span></a>), planejamento de peering.</li>
 <li><strong>Telemetria/streaming &amp; APIs</strong> — coleta moderna em alta frequência (capítulo <span class="quarto-unresolved-ref">?sec-sdn</span>).</li>
 <li><strong>ICMP</strong> (capítulo <a href="18-icmp-diagnostico.html#sec-icmp" class="quarto-xref"><span>Seção 19.1</span></a>) — sondas de disponibilidade/latência.</li>
 </ul>
@@ -1067,7 +1067,7 @@ Figura&nbsp;50.1: O <strong>NMS</strong> central coleta <strong>SNMP</strong> (m
 <li><strong>Monitore a potência das ONTs proativamente:</strong> alarme de Rx degradando (ex.: de −15 para −25 dBm) antecipa o chamado — você liga para o cliente <strong>antes</strong> de ele cair (capítulo <a href="33-orcamento-potencia.html#sec-orcamento" class="quarto-xref"><span>Seção 34.1</span></a>).</li>
 <li><strong>Correlacione por planta:</strong> ligue o monitoramento ao georreferenciamento (capítulo <a href="38-documentacao-georreferenciamento.html#sec-doc-georref" class="quarto-xref"><span>Seção 39.1</span></a>): “caiu a PON da rua X” mostra quem foi afetado e o trecho comum, em vez de 80 alarmes soltos.</li>
 <li><strong>Capacidade é planejamento:</strong> acompanhe ocupação de uplink/PON/airtime; <strong>divida a PON</strong> ou suba o uplink <strong>antes</strong> dos 80% no pico — QoS não cria banda (capítulo <a href="26-qos.html#sec-qos" class="quarto-xref"><span>Seção 27.1</span></a>).</li>
-<li><strong>Flow para DDoS e peering:</strong> o NetFlow detecta ataques (capítulo <span class="quarto-unresolved-ref">?sec-ddos</span>) e mostra para onde vai seu tráfego (justifica novo peering no IX, capítulo <a href="48-bgp-as-peering-ix.html#sec-bgp" class="quarto-xref"><span>Seção 49.1</span></a>).</li>
+<li><strong>Flow para DDoS e peering:</strong> o NetFlow detecta ataques (capítulo <a href="52-ddos-mitigacao.html#sec-ddos" class="quarto-xref"><span>Seção 53.1</span></a>) e mostra para onde vai seu tráfego (justifica novo peering no IX, capítulo <a href="48-bgp-as-peering-ix.html#sec-bgp" class="quarto-xref"><span>Seção 49.1</span></a>).</li>
 <li><strong>NTP + syslog central:</strong> sem horário correto, correlação e logs legais (Marco Civil, capítulo <a href="19-nat-cgnat.html#sec-nat-cgnat" class="quarto-xref"><span>Seção 20.1</span></a>) não funcionam. Centralize e sincronize.</li>
 <li><strong>Alarme → ticket automático:</strong> integre NMS e OSS para não depender de alguém “olhando a tela”.</li>
 </ul>

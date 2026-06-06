@@ -331,7 +331,7 @@
     "href": "capitulos/04-tipos-topologias.html#sec-topologias-classicas",
     "title": "5  Tipos de Rede e Topologias",
     "section": "5.3 As topologias clássicas",
-    "text": "5.3 As topologias clássicas\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 5.1: As quatro topologias clássicas. No provedor convivem todas: estrela no acesso, anel no backbone metropolitano e malha (parcial) no núcleo para redundância.\n\n\n\n\nBarramento — um meio compartilhado por todos. Simples e barato, mas uma falha no cabo derruba tudo e as colisões limitam a escala. Praticamente extinto em LAN cabeada moderna, mas o conceito sobrevive no meio compartilhado do rádio ponto-multiponto e do downstream PON.\nEstrela — todos ligam a um nó central (switch/OLT). Domina a LAN e o acesso: falha de um braço não afeta os demais, e o ponto central facilita gerência. O risco é o ponto único de falha no centro.\nAnel — cada nó liga a dois vizinhos, formando um laço. Permite dois caminhos (horário/anti-horário); se um trecho rompe, o tráfego inverte o sentido. É a topologia preferida do backbone de ISP (capítulo ?sec-redundancia), normalmente com proteção tipo ERPS ou anel óptico.\nMalha — nós interligados por vários caminhos. Máxima resiliência e custo; usada parcialmente no núcleo e entre POPs principais.",
+    "text": "5.3 As topologias clássicas\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 5.1: As quatro topologias clássicas. No provedor convivem todas: estrela no acesso, anel no backbone metropolitano e malha (parcial) no núcleo para redundância.\n\n\n\n\nBarramento — um meio compartilhado por todos. Simples e barato, mas uma falha no cabo derruba tudo e as colisões limitam a escala. Praticamente extinto em LAN cabeada moderna, mas o conceito sobrevive no meio compartilhado do rádio ponto-multiponto e do downstream PON.\nEstrela — todos ligam a um nó central (switch/OLT). Domina a LAN e o acesso: falha de um braço não afeta os demais, e o ponto central facilita gerência. O risco é o ponto único de falha no centro.\nAnel — cada nó liga a dois vizinhos, formando um laço. Permite dois caminhos (horário/anti-horário); se um trecho rompe, o tráfego inverte o sentido. É a topologia preferida do backbone de ISP (capítulo Seção 52.1), normalmente com proteção tipo ERPS ou anel óptico.\nMalha — nós interligados por vários caminhos. Máxima resiliência e custo; usada parcialmente no núcleo e entre POPs principais.",
     "crumbs": [
       "Parte I — Fundamentos e Modelos de Rede",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Tipos de Rede e Topologias</span>"
@@ -991,7 +991,7 @@
     "href": "capitulos/13-switching-vlan-stp.html#sec-switching-stp",
     "title": "14  Switching, VLANs (802.1Q) e STP/RSTP",
     "section": "14.4 Por que laços são fatais e o STP",
-    "text": "14.4 Por que laços são fatais e o STP\nNa camada 2 não existe TTL (diferente do IP). Um quadro broadcast em um laço físico de switches circula para sempre, multiplicando-se a cada volta — a broadcast storm que derruba a rede em segundos. O STP (Spanning Tree Protocol, 802.1D) previne isso construindo uma árvore sem laços: elege uma root bridge e bloqueia as portas redundantes, deixando um único caminho ativo. Se um link cai, o STP reconverge ativando a porta antes bloqueada.\n\n\n\nVariante\nConvergência\nObservação\n\n\n\n\nSTP (802.1D)\n~30–50 s\nlento; legado\n\n\nRSTP (802.1w)\n~1–6 s\npadrão atual\n\n\nMSTP (802.1s)\nrápida, por grupo de VLANs\nescala em redes grandes\n\n\n\nNo backbone em anel, em vez de STP costuma-se usar ERPS (G.8032) ou proteção óptica, com reconvergência em &lt; 50 ms (capítulo ?sec-redundancia) — bem mais rápido que STP.",
+    "text": "14.4 Por que laços são fatais e o STP\nNa camada 2 não existe TTL (diferente do IP). Um quadro broadcast em um laço físico de switches circula para sempre, multiplicando-se a cada volta — a broadcast storm que derruba a rede em segundos. O STP (Spanning Tree Protocol, 802.1D) previne isso construindo uma árvore sem laços: elege uma root bridge e bloqueia as portas redundantes, deixando um único caminho ativo. Se um link cai, o STP reconverge ativando a porta antes bloqueada.\n\n\n\nVariante\nConvergência\nObservação\n\n\n\n\nSTP (802.1D)\n~30–50 s\nlento; legado\n\n\nRSTP (802.1w)\n~1–6 s\npadrão atual\n\n\nMSTP (802.1s)\nrápida, por grupo de VLANs\nescala em redes grandes\n\n\n\nNo backbone em anel, em vez de STP costuma-se usar ERPS (G.8032) ou proteção óptica, com reconvergência em &lt; 50 ms (capítulo Seção 52.1) — bem mais rápido que STP.",
     "crumbs": [
       "Parte III — Camada de Enlace",
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>Switching, VLANs (802.1Q) e STP/RSTP</span>"
@@ -1618,7 +1618,7 @@
     "href": "capitulos/22-dns.html#sec-dns-seguranca",
     "title": "23  DNS",
     "section": "23.5 DNS seguro e moderno",
-    "text": "23.5 DNS seguro e moderno\n\nDNSSEC assina as respostas, evitando cache poisoning (respostas forjadas). Recomendado no recursivo (validação) e nos domínios autoritativos.\nDoH/DoT (DNS over HTTPS/TLS) cifram a consulta. Bom para privacidade, mas o cliente que usa um DoH externo (Google/Cloudflare) deixa de usar o cache do ISP — impacto a considerar.\n\n\nNa prática do provedor\n\nOpere seu recursivo (BIND/Unbound/Knot) redundante (dois ou mais), próximo do cliente (no POP/borda) e com peering no IX para alcançar autoritativos com baixa latência. DNS lento = “internet lenta” percebida.\nCache + TTL: respeite TTLs, dimensione cache; um recursivo bem aquecido responde a maioria das consultas em &lt; 1 ms.\nPTR/reverso: configure o reverso dos seus blocos (e delegue aos clientes corporativos) — sem ele, e-mail dos clientes cai em spam.\nAnti-abuso: proteja o recursivo contra uso externo (open resolver vira arma de DDoS por amplificação — capítulo ?sec-ddos); responda só à sua base, aplique rate-limit (RRL).\nMonitore o DNS como serviço crítico (latência, taxa de erro, cache hit); é uma das primeiras coisas a falhar de forma “invisível”.",
+    "text": "23.5 DNS seguro e moderno\n\nDNSSEC assina as respostas, evitando cache poisoning (respostas forjadas). Recomendado no recursivo (validação) e nos domínios autoritativos.\nDoH/DoT (DNS over HTTPS/TLS) cifram a consulta. Bom para privacidade, mas o cliente que usa um DoH externo (Google/Cloudflare) deixa de usar o cache do ISP — impacto a considerar.\n\n\nNa prática do provedor\n\nOpere seu recursivo (BIND/Unbound/Knot) redundante (dois ou mais), próximo do cliente (no POP/borda) e com peering no IX para alcançar autoritativos com baixa latência. DNS lento = “internet lenta” percebida.\nCache + TTL: respeite TTLs, dimensione cache; um recursivo bem aquecido responde a maioria das consultas em &lt; 1 ms.\nPTR/reverso: configure o reverso dos seus blocos (e delegue aos clientes corporativos) — sem ele, e-mail dos clientes cai em spam.\nAnti-abuso: proteja o recursivo contra uso externo (open resolver vira arma de DDoS por amplificação — capítulo Seção 53.1); responda só à sua base, aplique rate-limit (RRL).\nMonitore o DNS como serviço crítico (latência, taxa de erro, cache hit); é uma das primeiras coisas a falhar de forma “invisível”.",
     "crumbs": [
       "Parte V — Transporte e Aplicação",
       "<span class='chapter-number'>23</span>  <span class='chapter-title'>DNS</span>"
@@ -1816,7 +1816,7 @@
     "href": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-snmp",
     "title": "26  Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)",
     "section": "26.5 SNMP: os olhos do NOC",
-    "text": "26.5 SNMP: os olhos do NOC\nO SNMP (Simple Network Management Protocol) coleta métricas e estados dos equipamentos: tráfego por interface, CPU, temperatura, potência óptica das ONTs, uptime. O sistema de monitoramento (capítulo Seção 50.1) faz polling (consulta periódica) e recebe traps (alarmes assíncronos).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 26.1: SNMP: o NMS faz polling (porta 161) nos equipamentos e recebe traps (porta 162) quando algo dispara um alarme.\n\n\n\nSegurança: use SNMPv3 (autenticação + cifra). O SNMPv1/v2c usa community strings em texto e, exposto à internet, vira vetor de DDoS por amplificação (capítulo ?sec-ddos) — restrinja por ACL à rede de gerência.",
+    "text": "26.5 SNMP: os olhos do NOC\nO SNMP (Simple Network Management Protocol) coleta métricas e estados dos equipamentos: tráfego por interface, CPU, temperatura, potência óptica das ONTs, uptime. O sistema de monitoramento (capítulo Seção 50.1) faz polling (consulta periódica) e recebe traps (alarmes assíncronos).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 26.1: SNMP: o NMS faz polling (porta 161) nos equipamentos e recebe traps (porta 162) quando algo dispara um alarme.\n\n\n\nSegurança: use SNMPv3 (autenticação + cifra). O SNMPv1/v2c usa community strings em texto e, exposto à internet, vira vetor de DDoS por amplificação (capítulo Seção 53.1) — restrinja por ACL à rede de gerência.",
     "crumbs": [
       "Parte V — Transporte e Aplicação",
       "<span class='chapter-number'>26</span>  <span class='chapter-title'>Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)</span>"
@@ -2047,7 +2047,7 @@
     "href": "capitulos/29-olt.html#sec-olt-anatomia",
     "title": "30  OLT — Optical Line Terminal",
     "section": "30.2 Anatomia: chassi, placas e portas",
-    "text": "30.2 Anatomia: chassi, placas e portas\nOLTs vêm em dois formatos: chassi (modular, grande, para POP central) e pizza box (compacta, 1U, para POPs menores/distribuídos). No modelo chassi:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 30.1: Chassi de OLT: fontes e controladora redundantes, placas de uplink (ao backbone) e placas PON (cada porta origina uma árvore de splitters/ONTs).\n\n\n\n\nPlacas PON — cada porta é uma árvore independente (uma PON), com seu transceiver óptico (SFP PON da classe B+/C+, capítulo Seção 29.1).\nPlacas de uplink — agregam o tráfego de todas as PONs para o backbone (10/40/100G).\nControladora + fontes redundantes — switching interno, gerência e alimentação; redundância é essencial (capítulo ?sec-redundancia).",
+    "text": "30.2 Anatomia: chassi, placas e portas\nOLTs vêm em dois formatos: chassi (modular, grande, para POP central) e pizza box (compacta, 1U, para POPs menores/distribuídos). No modelo chassi:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 30.1: Chassi de OLT: fontes e controladora redundantes, placas de uplink (ao backbone) e placas PON (cada porta origina uma árvore de splitters/ONTs).\n\n\n\n\nPlacas PON — cada porta é uma árvore independente (uma PON), com seu transceiver óptico (SFP PON da classe B+/C+, capítulo Seção 29.1).\nPlacas de uplink — agregam o tráfego de todas as PONs para o backbone (10/40/100G).\nControladora + fontes redundantes — switching interno, gerência e alimentação; redundância é essencial (capítulo Seção 52.1).",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>30</span>  <span class='chapter-title'>OLT — Optical Line Terminal</span>"
@@ -3455,7 +3455,7 @@
     "href": "capitulos/49-sistemas-gerencia-monitoramento.html#sec-mon-fontes",
     "title": "50  Gerência e Monitoramento (SNMP, Zabbix, NMS)",
     "section": "50.3 As fontes de dados",
-    "text": "50.3 As fontes de dados\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 50.1: O NMS central coleta SNMP (métricas), syslog (eventos), flow (tráfego) e telemetria dos equipamentos, gerando dashboards e disparando alarmes para o NOC.\n\n\n\n\nSNMP (capítulo Seção 26.5) — polling de métricas (tráfego, CPU, ótica) e traps (alarmes). A espinha dorsal do monitoramento.\nSyslog — eventos e logs dos equipamentos centralizados (correlação de incidentes; precisa de NTP correto, capítulo Seção 26.6).\nFlow (NetFlow/sFlow/IPFIX) — quem fala com quem e quanto: análise de tráfego, detecção de anomalias/DDoS (capítulo ?sec-ddos), planejamento de peering.\nTelemetria/streaming & APIs — coleta moderna em alta frequência (capítulo ?sec-sdn).\nICMP (capítulo Seção 19.1) — sondas de disponibilidade/latência.",
+    "text": "50.3 As fontes de dados\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 50.1: O NMS central coleta SNMP (métricas), syslog (eventos), flow (tráfego) e telemetria dos equipamentos, gerando dashboards e disparando alarmes para o NOC.\n\n\n\n\nSNMP (capítulo Seção 26.5) — polling de métricas (tráfego, CPU, ótica) e traps (alarmes). A espinha dorsal do monitoramento.\nSyslog — eventos e logs dos equipamentos centralizados (correlação de incidentes; precisa de NTP correto, capítulo Seção 26.6).\nFlow (NetFlow/sFlow/IPFIX) — quem fala com quem e quanto: análise de tráfego, detecção de anomalias/DDoS (capítulo Seção 53.1), planejamento de peering.\nTelemetria/streaming & APIs — coleta moderna em alta frequência (capítulo ?sec-sdn).\nICMP (capítulo Seção 19.1) — sondas de disponibilidade/latência.",
     "crumbs": [
       "Parte X — Operação de Provedor (ISP)",
       "<span class='chapter-number'>50</span>  <span class='chapter-title'>Gerência e Monitoramento (SNMP, Zabbix, NMS)</span>"
@@ -3477,7 +3477,7 @@
     "href": "capitulos/49-sistemas-gerencia-monitoramento.html#sec-mon-alarmes",
     "title": "50  Gerência e Monitoramento (SNMP, Zabbix, NMS)",
     "section": "50.5 De métrica a ação: alarmes e SLA",
-    "text": "50.5 De métrica a ação: alarmes e SLA\nColetar dados é inútil sem agir sobre eles:\n\nLimiares (thresholds): ex.: ONT Rx &lt; −27 dBm (capítulo Seção 31.4), uplink &gt; 80% (capítulo Seção 7.1), perda de vizinho BGP — geram alarme.\nSeveridade e escalonamento: nem todo alarme acorda alguém às 3h; classifique (crítico/aviso) e roteie (NOC, plantão).\nCorrelação: “100 ONTs da mesma PON caíram” = um incidente (a PON), não 100 — evita inundar o NOC e aponta a causa (capítulo Seção 42.1).\nTendência/capacidade: gráficos históricos preveem saturação e guiam upgrades antes do gargalo.\nSLA: disponibilidade e latência medidas viram relatório para clientes corporativos.\n\n\nNa prática do provedor\n\nMonitore a potência das ONTs proativamente: alarme de Rx degradando (ex.: de −15 para −25 dBm) antecipa o chamado — você liga para o cliente antes de ele cair (capítulo Seção 34.1).\nCorrelacione por planta: ligue o monitoramento ao georreferenciamento (capítulo Seção 39.1): “caiu a PON da rua X” mostra quem foi afetado e o trecho comum, em vez de 80 alarmes soltos.\nCapacidade é planejamento: acompanhe ocupação de uplink/PON/airtime; divida a PON ou suba o uplink antes dos 80% no pico — QoS não cria banda (capítulo Seção 27.1).\nFlow para DDoS e peering: o NetFlow detecta ataques (capítulo ?sec-ddos) e mostra para onde vai seu tráfego (justifica novo peering no IX, capítulo Seção 49.1).\nNTP + syslog central: sem horário correto, correlação e logs legais (Marco Civil, capítulo Seção 20.1) não funcionam. Centralize e sincronize.\nAlarme → ticket automático: integre NMS e OSS para não depender de alguém “olhando a tela”.",
+    "text": "50.5 De métrica a ação: alarmes e SLA\nColetar dados é inútil sem agir sobre eles:\n\nLimiares (thresholds): ex.: ONT Rx &lt; −27 dBm (capítulo Seção 31.4), uplink &gt; 80% (capítulo Seção 7.1), perda de vizinho BGP — geram alarme.\nSeveridade e escalonamento: nem todo alarme acorda alguém às 3h; classifique (crítico/aviso) e roteie (NOC, plantão).\nCorrelação: “100 ONTs da mesma PON caíram” = um incidente (a PON), não 100 — evita inundar o NOC e aponta a causa (capítulo Seção 42.1).\nTendência/capacidade: gráficos históricos preveem saturação e guiam upgrades antes do gargalo.\nSLA: disponibilidade e latência medidas viram relatório para clientes corporativos.\n\n\nNa prática do provedor\n\nMonitore a potência das ONTs proativamente: alarme de Rx degradando (ex.: de −15 para −25 dBm) antecipa o chamado — você liga para o cliente antes de ele cair (capítulo Seção 34.1).\nCorrelacione por planta: ligue o monitoramento ao georreferenciamento (capítulo Seção 39.1): “caiu a PON da rua X” mostra quem foi afetado e o trecho comum, em vez de 80 alarmes soltos.\nCapacidade é planejamento: acompanhe ocupação de uplink/PON/airtime; divida a PON ou suba o uplink antes dos 80% no pico — QoS não cria banda (capítulo Seção 27.1).\nFlow para DDoS e peering: o NetFlow detecta ataques (capítulo Seção 53.1) e mostra para onde vai seu tráfego (justifica novo peering no IX, capítulo Seção 49.1).\nNTP + syslog central: sem horário correto, correlação e logs legais (Marco Civil, capítulo Seção 20.1) não funcionam. Centralize e sincronize.\nAlarme → ticket automático: integre NMS e OSS para não depender de alguém “olhando a tela”.",
     "crumbs": [
       "Parte X — Operação de Provedor (ISP)",
       "<span class='chapter-number'>50</span>  <span class='chapter-title'>Gerência e Monitoramento (SNMP, Zabbix, NMS)</span>"
@@ -3499,7 +3499,73 @@
     "href": "capitulos/50-seguranca-redes.html",
     "title": "51  Segurança de Redes",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "51.1 Proteger a rede, o cliente e a si mesmo\nUm provedor é, ao mesmo tempo, alvo (de ataques externos) e arma potencial (se sua rede for usada para atacar outros) e guardião (dos dados e da conectividade dos assinantes). Segurança no ISP não é um produto, é uma postura em camadas: proteger a infraestrutura (OLT, BNG, roteadores), o acesso (cliente não atacar cliente), a borda (anti-spoofing, anti-DDoS — capítulo Seção 53.1) e cumprir obrigações legais (Marco Civil, LGPD). Este capítulo organiza as defesas por onde elas atuam, amarrando o que vimos nas partes anteriores.",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>51</span>  <span class='chapter-title'>Segurança de Redes</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/50-seguranca-redes.html#sec-seg-camadas",
+    "href": "capitulos/50-seguranca-redes.html#sec-seg-camadas",
+    "title": "51  Segurança de Redes",
+    "section": "51.2 Defesa em camadas",
+    "text": "51.2 Defesa em camadas\nA segurança espelha as camadas OSI (capítulo Seção 3.1) — cada uma com suas ameaças e defesas:\n\n\n\n\n\n\n\n\nCamada\nAmeaça típica\nDefesa\n\n\n\n\nFísica (1)\nacesso ao DIO/CTO, corte de fibra\ntrancas, vedação, vigilância\n\n\nEnlace (2)\nARP/MAC spoofing, rogue DHCP, loop\nVLAN/cliente, DHCP Snooping, DAI, STP\n\n\nRede (3)\nIP spoofing, hijack BGP\nuRPF, filtros, RPKI/ROA\n\n\nTransporte (4)\nSYN flood, varredura\nrate-limit, firewall stateful\n\n\nAplicação (7)\nDNS amplificação, brute-force\nSNMPv3/SSH, hardening, anti-amplificação",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>51</span>  <span class='chapter-title'>Segurança de Redes</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/50-seguranca-redes.html#sec-seg-infra",
+    "href": "capitulos/50-seguranca-redes.html#sec-seg-infra",
+    "title": "51  Segurança de Redes",
+    "section": "51.3 Protegendo a infraestrutura",
+    "text": "51.3 Protegendo a infraestrutura\nOs equipamentos de rede são o alvo de maior valor — comprometer uma OLT/BNG/roteador é comprometer milhares de clientes:\n\nGerência fora de banda e restrita: SSH (não Telnet), SNMPv3 (não v2c), tudo por ACL na rede/loopback de gerência (capítulos Seção 26.2, Seção 21.1).\nSenhas fortes/chaves, MFA no que suportar; sem credenciais padrão.\nHardening: desabilitar serviços inúteis, atualizar firmware, logar acessos.\nControl-plane policing: proteger a CPU dos roteadores contra flood.\nBackup de configuração versionado (e da base de planta/GIS, capítulo Seção 39.1).",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>51</span>  <span class='chapter-title'>Segurança de Redes</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/50-seguranca-redes.html#sec-seg-acesso",
+    "href": "capitulos/50-seguranca-redes.html#sec-seg-acesso",
+    "title": "51  Segurança de Redes",
+    "section": "51.4 Protegendo o acesso (cliente ↔︎ cliente)",
+    "text": "51.4 Protegendo o acesso (cliente ↔︎ cliente)\nNa rede de acesso, o risco é um assinante atacar outro ou se passar por outro:\n\nVLAN por cliente (capítulo Seção 14.1) isola o domínio de broadcast — mata ARP spoofing entre vizinhos.\nDHCP Snooping + Dynamic ARP Inspection (DAI) — bloqueiam rogue DHCP e ARP forjado (capítulos Seção 13.1, Seção 24.1).\nuRPF / anti-spoofing — descarta pacotes com IP de origem que não pertence ao cliente (impede spoofing e participação em DDoS refletido).\nPort security / limite de MAC — evita que o cliente pendure switch e injete loop/MACs.\nAES na PON (capítulo Seção 29.1) — protege o downstream broadcast do vizinho.",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>51</span>  <span class='chapter-title'>Segurança de Redes</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/50-seguranca-redes.html#sec-seg-amplificacao",
+    "href": "capitulos/50-seguranca-redes.html#sec-seg-amplificacao",
+    "title": "51  Segurança de Redes",
+    "section": "51.5 Não ser a arma do ataque",
+    "text": "51.5 Não ser a arma do ataque\nServiços mal configurados na sua rede viram munição para DDoS por amplificação contra terceiros (capítulo Seção 53.1):\n\nOpen resolver DNS (capítulo Seção 23.1) — responda recursivo só à sua base, com rate-limit (RRL).\nNTP/SNMP/SSDP abertos — restrinja por ACL; desabilite monlist no NTP.\nBCP38 (anti-spoofing): filtre na borda pacotes com origem falsa — é o que impede sua rede de originar ataques refletidos.",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>51</span>  <span class='chapter-title'>Segurança de Redes</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/50-seguranca-redes.html#sec-seg-legal",
+    "href": "capitulos/50-seguranca-redes.html#sec-seg-legal",
+    "title": "51  Segurança de Redes",
+    "section": "51.6 Conformidade legal",
+    "text": "51.6 Conformidade legal\nNo Brasil o ISP tem deveres legais que são parte da segurança:\n\nMarco Civil: guarda de logs de conexão (quem teve qual IP/porta e quando) — via RADIUS accounting + CGNAT com NTP correto (capítulos Seção 48.1, Seção 20.1).\nLGPD: proteção dos dados pessoais dos assinantes (cadastro, tráfego); acesso controlado, retenção mínima, segurança da base.\nPorta 25 Management (capítulo Seção 26.4): bloqueio de saída para conter spam.\n\n\nNa prática do provedor\n\nO básico pega 90%: sem Telnet, sem SNMPv2c público, sem senha padrão, gerência por ACL, firmware atualizado. A maioria dos comprometimentos explora o trivial.\nAnti-spoofing (BCP38/uRPF) na borda e no acesso: protege a internet de você e você de ser refletido — e é frequentemente exigido por upstreams/IX.\nFeche os amplificadores: open resolver, NTP/SNMP abertos. Um único resolver aberto seu pode ser usado num ataque de centenas de Gbps a um terceiro — e te tira do ar junto.\nVLAN/cliente + DHCP Snooping + DAI são o pacote padrão de isolamento do acesso — configure por padrão, não caso a caso.\nLogs + NTP + backup: conformidade (Marco Civil/LGPD) e recuperação dependem de horário correto, retenção adequada e backup de config/planta.\nPlano de resposta a incidente: saiba o que fazer quando (não se) acontecer — contatos de upstream/IX, blackhole, comunicação (capítulo Seção 53.1).",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>51</span>  <span class='chapter-title'>Segurança de Redes</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/50-seguranca-redes.html#sec-resumo-50",
+    "href": "capitulos/50-seguranca-redes.html#sec-resumo-50",
+    "title": "51  Segurança de Redes",
+    "section": "51.7 Resumo e checklist",
+    "text": "51.7 Resumo e checklist\n\nSegurança é em camadas: física, enlace (VLAN/DHCP Snooping/DAI), rede (uRPF/RPKI), transporte/aplicação (firewall, hardening).\nProteja a infraestrutura (SSH/SNMPv3/ACL/backup) e o acesso (isolar e anti-spoofing cliente↔︎cliente).\nNão seja a arma: feche open resolver/NTP/SNMP e aplique BCP38.\nConformidade (Marco Civil/LGPD) com logs, NTP e proteção de dados é parte da segurança.\n\nChecklist do capítulo\n\nMapeio ameaças e defesas por camada.\nFaço hardening da gerência (SSH/SNMPv3/ACL/backup).\nIsolo o acesso (VLAN/cliente, DHCP Snooping, DAI, uRPF).\nFecho amplificadores (BCP38) e cumpro Marco Civil/LGPD.",
     "crumbs": [
       "Parte XI — Segurança e Confiabilidade",
       "<span class='chapter-number'>51</span>  <span class='chapter-title'>Segurança de Redes</span>"
@@ -3510,7 +3576,73 @@
     "href": "capitulos/51-redundancia-protecao-anel.html",
     "title": "52  Redundância, Proteção e Anel Óptico",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "52.1 Projetar para a falha\nFalhas vão acontecer: cabo rompido por retroescavadeira, fonte queimada, energia em falta, equipamento travado. A diferença entre um provedor amador e um profissional não é não ter falhas — é a falha não derrubar o cliente. Redundância é projetar a rede com caminhos e componentes alternativos que assumem automaticamente quando algo cai. Este capítulo cobre como medir disponibilidade e onde investir em redundância — do anel óptico no backbone (capítulo Seção 5.3) à energia no POP.",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>52</span>  <span class='chapter-title'>Redundância, Proteção e Anel Óptico</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/51-redundancia-protecao-anel.html#sec-red-disponibilidade",
+    "href": "capitulos/51-redundancia-protecao-anel.html#sec-red-disponibilidade",
+    "title": "52  Redundância, Proteção e Anel Óptico",
+    "section": "52.2 Disponibilidade: os “noves”",
+    "text": "52.2 Disponibilidade: os “noves”\nDisponibilidade mede a fração do tempo em que o serviço está no ar:\n\n\n\nDisponibilidade\nIndisponibilidade/ano\n\n\n\n\n99% (“dois noves”)\n~3,65 dias\n\n\n99,9% (“três noves”)\n~8,8 horas\n\n\n99,99% (“quatro noves”)\n~52 minutos\n\n\n99,999% (“cinco noves”)\n~5 minutos\n\n\n\nCada “nove” extra custa caro (mais redundância), então invista onde o impacto é maior: o núcleo/backbone e os pontos de concentração (OLT, BNG) afetam milhares; o drop de um cliente afeta um. Priorize redundância pelo número de afetados.",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>52</span>  <span class='chapter-title'>Redundância, Proteção e Anel Óptico</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/51-redundancia-protecao-anel.html#sec-red-spof",
+    "href": "capitulos/51-redundancia-protecao-anel.html#sec-red-spof",
+    "title": "52  Redundância, Proteção e Anel Óptico",
+    "section": "52.3 Os pontos únicos de falha (SPOF)",
+    "text": "52.3 Os pontos únicos de falha (SPOF)\nUm SPOF (Single Point of Failure) é um elemento cuja falha sozinha derruba o serviço. O exercício central é caçar SPOFs e eliminá-los onde o impacto justifica:\n\n\n\n\n\n\n\n\nElemento\nRisco\nRedundância\n\n\n\n\nCabo de backbone\nrompimento\nanel (dois caminhos)\n\n\nOLT/BNG\nhardware/energia\nfontes/uplinks redundantes, par de equipamentos\n\n\nTrânsito IP\nupstream cai\n≥ 2 trânsitos + IX (capítulo Seção 49.1)\n\n\nEnergia do POP\nfalta de luz\nnobreak + gerador\n\n\nServidor (DNS/RADIUS)\ntravamento\n2+ instâncias redundantes",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>52</span>  <span class='chapter-title'>Redundância, Proteção e Anel Óptico</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/51-redundancia-protecao-anel.html#sec-red-anel",
+    "href": "capitulos/51-redundancia-protecao-anel.html#sec-red-anel",
+    "title": "52  Redundância, Proteção e Anel Óptico",
+    "section": "52.4 O anel óptico",
+    "text": "52.4 O anel óptico\nA topologia em anel (capítulo Seção 5.3) é a defesa clássica do backbone contra rompimento de cabo — a causa nº 1 de queda em massa:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 52.1: Anel óptico entre POPs: se um trecho rompe, o tráfego reconverge pelo outro lado do anel — a cidade continua online.\n\n\n\nA reconvergência rápida vem de mecanismos próprios:\n\nERPS (G.8032) — proteção de anel Ethernet, reconverge em &lt; 50 ms.\nProteção óptica (OLP) — comuta para fibra reserva automaticamente.\nNo nível 3: OSPF/IS-IS + BFD (capítulo Seção 21.1) detectam e reroteiam rápido.\n\nBem mais veloz que o STP clássico (segundos, capítulo Seção 14.1) — por isso o anel de backbone usa ERPS/óptico, não STP.",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>52</span>  <span class='chapter-title'>Redundância, Proteção e Anel Óptico</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/51-redundancia-protecao-anel.html#sec-red-pon",
+    "href": "capitulos/51-redundancia-protecao-anel.html#sec-red-pon",
+    "title": "52  Redundância, Proteção e Anel Óptico",
+    "section": "52.5 Redundância na PON e no acesso",
+    "text": "52.5 Redundância na PON e no acesso\nNa árvore PON (capítulo Seção 28.1) a redundância total é cara (a fibra é compartilhada), mas há opções por nível de criticidade:\n\nType B protection: porta PON/fibra-tronco redundante até o splitter — protege o trecho que afeta toda a PON.\nType C: redundância até a ONT (caro; só cliente crítico/corporativo).\nDupla abordagem: para cliente SLA, duas fibras por caminhos físicos distintos.\nRádio como backup: um enlace de rádio (Parte IX) pode ser backup de um cliente corporativo de fibra.",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>52</span>  <span class='chapter-title'>Redundância, Proteção e Anel Óptico</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/51-redundancia-protecao-anel.html#sec-red-energia",
+    "href": "capitulos/51-redundancia-protecao-anel.html#sec-red-energia",
+    "title": "52  Redundância, Proteção e Anel Óptico",
+    "section": "52.6 Energia: a redundância esquecida",
+    "text": "52.6 Energia: a redundância esquecida\nBoa parte das “quedas de rede” é, na verdade, falta de energia no POP/torre. A infraestrutura elétrica é redundância de primeira ordem:\n\nNobreak/UPS para a transição e picos curtos.\nBanco de baterias dimensionado para a autonomia desejada.\nGerador para faltas longas (com combustível e manutenção!).\nMonitoramento de energia (capítulo Seção 50.1) — alarme de falta de rede elétrica antes de a bateria acabar.\n\n\nNa prática do provedor\n\nAnel no backbone, sempre. Rompimento de cabo é questão de quando, não se (retroescavadeira, poda, acidente). ERPS/óptico reconverge em ms e ninguém percebe.\nEnergia é a falha nº 1 disfarçada: nobreak + gerador no POP central e baterias nas torres; monitore a rede elétrica. Bateria que acaba às 2h da manhã é apagão evitável.\nDistribua o risco (blast radius): POPs menores e OLTs distribuídas em vez de uma OLT gigante — uma falha afeta menos gente (capítulo Seção 30.1).\nRedundância proporcional ao impacto: invista pesado no núcleo/BNG/OLT e em 2 trânsitos + IX (capítulo Seção 49.1); no drop de residencial, o custo de redundar não compensa. Ofereça dupla abordagem como produto a corporativo.\nTeste o failover. Redundância nunca testada costuma falhar na hora H — simule queda de trânsito, de BNG e de trecho de anel.",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>52</span>  <span class='chapter-title'>Redundância, Proteção e Anel Óptico</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/51-redundancia-protecao-anel.html#sec-resumo-51",
+    "href": "capitulos/51-redundancia-protecao-anel.html#sec-resumo-51",
+    "title": "52  Redundância, Proteção e Anel Óptico",
+    "section": "52.7 Resumo e checklist",
+    "text": "52.7 Resumo e checklist\n\nDisponibilidade mede-se em “noves”; invista onde o impacto (nº de afetados) é maior.\nCace SPOFs e elimine-os: cabo (anel), equipamento (par/fontes), trânsito (2+ IX), energia (nobreak+gerador).\nAnel óptico + ERPS/óptico/BFD reconverge em &lt; 50 ms — muito além do STP.\nPON redunda por níveis (Type B/C, dupla abordagem); rádio pode ser backup.\n\nChecklist do capítulo\n\nTraduzo metas de SLA em “noves” e priorizo por impacto.\nIdentifico e elimino SPOFs no núcleo, acesso e energia.\nProjeto anel de backbone com ERPS/proteção óptica + BFD.\nGaranto energia redundante (nobreak/gerador) e testo o failover.",
     "crumbs": [
       "Parte XI — Segurança e Confiabilidade",
       "<span class='chapter-number'>52</span>  <span class='chapter-title'>Redundância, Proteção e Anel Óptico</span>"
@@ -3521,7 +3653,62 @@
     "href": "capitulos/52-ddos-mitigacao.html",
     "title": "53  DDoS e Mitigação",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "53.1 O ataque que enche o cano\nUm DDoS (Distributed Denial of Service) tenta esgotar um recurso — banda do link, capacidade do BNG, CPU de um servidor — com tráfego em volume vindo de muitas fontes, tornando o serviço indisponível. Para o ISP, DDoS é dor dupla: o cliente é alvo (um cliente atacado pode saturar o uplink e derrubar todos os vizinhos) e a rede pode ser abusada como refletor (capítulo Seção 51.1). Saber detectar e mitigar rápido é parte da operação — um ataque de dezenas de Gbps a um cliente pode tirar a cidade do ar se não for contido.",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>53</span>  <span class='chapter-title'>DDoS e Mitigação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/52-ddos-mitigacao.html#sec-ddos-tipos",
+    "href": "capitulos/52-ddos-mitigacao.html#sec-ddos-tipos",
+    "title": "53  DDoS e Mitigação",
+    "section": "53.2 Tipos de ataque",
+    "text": "53.2 Tipos de ataque\n\n\n\n\n\n\n\n\nTipo\nComo funciona\nAlvo\n\n\n\n\nVolumétrico\ninunda a banda (Gbps)\nuplink/trânsito\n\n\nAmplificação/reflexão\nabusa DNS/NTP/SSDP abertos para multiplicar\nbanda\n\n\nProtocolo\nesgota estado (SYN flood)\nBNG, firewall, servidor\n\n\nAplicação (L7)\nrequisições “válidas” caras (HTTP flood)\nservidor/serviço\n\n\n\nO volumétrico por amplificação é o mais comum e perigoso para ISP: o atacante envia uma pequena consulta com IP de origem forjado (o da vítima) a milhares de servidores abertos (DNS/NTP), que respondem muito maiores para a vítima — multiplicando o tráfego dezenas a centenas de vezes.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 53.1: Amplificação: o atacante forja o IP da vítima e dispara consultas pequenas a muitos refletores abertos, que despejam respostas grandes sobre a vítima.",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>53</span>  <span class='chapter-title'>DDoS e Mitigação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/52-ddos-mitigacao.html#sec-ddos-deteccao",
+    "href": "capitulos/52-ddos-mitigacao.html#sec-ddos-deteccao",
+    "title": "53  DDoS e Mitigação",
+    "section": "53.3 Detecção",
+    "text": "53.3 Detecção\nVocê não mitiga o que não vê. A detecção vem do monitoramento (capítulo Seção 50.1):\n\nFlow (NetFlow/sFlow) — identifica anomalia de tráfego (pico súbito para um IP, muitos pacotes pequenos, portas de amplificação) e o alvo.\nLimiares e baseline — tráfego muito acima do normal de um cliente/prefixo dispara alarme.\nAlarmes de saturação de uplink/BNG.\n\nA chave é detectar rápido e identificar o IP-alvo para agir antes de o ataque saturar o trânsito.",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>53</span>  <span class='chapter-title'>DDoS e Mitigação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/52-ddos-mitigacao.html#sec-ddos-mitigacao-met",
+    "href": "capitulos/52-ddos-mitigacao.html#sec-ddos-mitigacao-met",
+    "title": "53  DDoS e Mitigação",
+    "section": "53.4 Mitigação",
+    "text": "53.4 Mitigação\nDa mais simples (e brutal) à mais sofisticada:\n\nRTBH (Remote Triggered Black Hole): anuncia o IP-alvo para descarte (na sua rede e, via community BGP, no upstream/IX — capítulo Seção 49.1). Salva a rede derrubando só a vítima (o cliente atacado fica offline, mas os outros são preservados). Defesa de emergência mais usada por ISP.\nFlowspec (BGP): propaga filtros granulares (por porta/protocolo) — descarta só o tráfego de ataque, preservando o cliente. Melhor que RTBH quando disponível.\nScrubbing (depuração): desvia o tráfego para um serviço que limpa (remove o ataque, devolve o legítimo) — próprio ou contratado (upstream/CDN). Para alvos críticos.\nAnti-spoofing (BCP38/uRPF) e fechar amplificadores (capítulo Seção 51.1): prevenção — impede sua rede de originar/refletir ataques.\n\n\n\n\nTécnica\nGranularidade\nCliente-alvo\n\n\n\n\nRTBH\ndescarta tudo do IP\nfica offline (mas salva os outros)\n\n\nFlowspec\npor porta/protocolo\npreservado\n\n\nScrubbing\nlimpa, devolve legítimo\npreservado (melhor)",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>53</span>  <span class='chapter-title'>DDoS e Mitigação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/52-ddos-mitigacao.html#sec-ddos-capacidade",
+    "href": "capitulos/52-ddos-mitigacao.html#sec-ddos-capacidade",
+    "title": "53  DDoS e Mitigação",
+    "section": "53.5 Capacidade e parceiros",
+    "text": "53.5 Capacidade e parceiros\nNenhum ISP regional tem banda para “absorver” um ataque de centenas de Gbps sozinho — a mitigação eficaz depende de mover a defesa para perto da fonte: do seu upstream (RTBH/Flowspec via community), do IX.br (que oferece recursos anti-DDoS) ou de um serviço de scrubbing. Por isso, acordar communities de blackhole com os trânsitos e participar do IX são preparações essenciais (capítulo Seção 49.1).\n\nNa prática do provedor\n\nTenha RTBH pronto e acordado com o upstream ANTES do ataque. No meio de um DDoS de 50 Gbps não dá tempo de configurar; deixe a community de blackhole do trânsito documentada e testada. RTBH é o “freio de emergência”.\nFlowspec quando possível: descarta só o ataque e mantém o cliente online — bem melhor que blackhole, que sacrifica a vítima.\nPrevina sendo bom vizinho: BCP38/uRPF e feche open resolver/NTP/SNMP (capítulo Seção 51.1). Não ser refletor evita que sua rede vire arma (e caia junto) e melhora sua reputação.\nFlow é os olhos: sem NetFlow/sFlow você descobre o DDoS pelo telefone tocando. Configure detecção por baseline e alarme do IP-alvo (capítulo Seção 50.1).\nOfereça proteção como produto ao corporativo (scrubbing/Flowspec): cliente que já foi atacado paga por estar protegido.\nPlano de resposta: quem aciona o quê (RTBH, upstream, IX), como comunica o cliente, e como reverte quando o ataque cessa.",
+    "crumbs": [
+      "Parte XI — Segurança e Confiabilidade",
+      "<span class='chapter-number'>53</span>  <span class='chapter-title'>DDoS e Mitigação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/52-ddos-mitigacao.html#sec-resumo-52",
+    "href": "capitulos/52-ddos-mitigacao.html#sec-resumo-52",
+    "title": "53  DDoS e Mitigação",
+    "section": "53.6 Resumo e checklist",
+    "text": "53.6 Resumo e checklist\n\nDDoS esgota recursos (banda, estado, CPU); o volumétrico por amplificação é o mais comum e pode saturar seu trânsito.\nDetecte com flow (anomalia + IP-alvo) e baseline; rapidez é tudo.\nMitigue com RTBH (emergência, sacrifica a vítima), Flowspec (filtra, preserva) e scrubbing (limpa) — movendo a defesa para o upstream/IX.\nPrevina com BCP38/uRPF e fechando amplificadores: não ser arma nem refletor.\n\nChecklist do capítulo\n\nReconheço os tipos de DDoS e como funciona a amplificação.\nDetecto ataque por flow/baseline e identifico o IP-alvo.\nTenho RTBH (community) acordado com upstream e uso Flowspec/scrubbing quando dá.\nPrevino com BCP38/uRPF e fecho open resolver/NTP/SNMP.",
     "crumbs": [
       "Parte XI — Segurança e Confiabilidade",
       "<span class='chapter-number'>53</span>  <span class='chapter-title'>DDoS e Mitigação</span>"

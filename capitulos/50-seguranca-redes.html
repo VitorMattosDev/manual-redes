@@ -610,8 +610,20 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#sec-seguranca" id="toc-sec-seguranca" class="nav-link active" data-scroll-target="#sec-seguranca"><span class="header-section-number">51.1</span> Proteger a rede, o cliente e a si mesmo</a></li>
+  <li><a href="#sec-seg-camadas" id="toc-sec-seg-camadas" class="nav-link" data-scroll-target="#sec-seg-camadas"><span class="header-section-number">51.2</span> Defesa em camadas</a></li>
+  <li><a href="#sec-seg-infra" id="toc-sec-seg-infra" class="nav-link" data-scroll-target="#sec-seg-infra"><span class="header-section-number">51.3</span> Protegendo a infraestrutura</a></li>
+  <li><a href="#sec-seg-acesso" id="toc-sec-seg-acesso" class="nav-link" data-scroll-target="#sec-seg-acesso"><span class="header-section-number">51.4</span> Protegendo o acesso (cliente ↔︎ cliente)</a></li>
+  <li><a href="#sec-seg-amplificacao" id="toc-sec-seg-amplificacao" class="nav-link" data-scroll-target="#sec-seg-amplificacao"><span class="header-section-number">51.5</span> Não ser a arma do ataque</a></li>
+  <li><a href="#sec-seg-legal" id="toc-sec-seg-legal" class="nav-link" data-scroll-target="#sec-seg-legal"><span class="header-section-number">51.6</span> Conformidade legal</a></li>
+  <li><a href="#sec-resumo-50" id="toc-sec-resumo-50" class="nav-link" data-scroll-target="#sec-resumo-50"><span class="header-section-number">51.7</span> Resumo e checklist</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/50-seguranca-redes.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -635,21 +647,124 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="sec-seguranca" class="level2" data-number="51.1">
+<h2 data-number="51.1" class="anchored" data-anchor-id="sec-seguranca"><span class="header-section-number">51.1</span> Proteger a rede, o cliente e a si mesmo</h2>
+<p>Um provedor é, ao mesmo tempo, <strong>alvo</strong> (de ataques externos) e <strong>arma potencial</strong> (se sua rede for usada para atacar outros) e <strong>guardião</strong> (dos dados e da conectividade dos assinantes). Segurança no ISP não é um produto, é uma <strong>postura em camadas</strong>: proteger a <strong>infraestrutura</strong> (OLT, BNG, roteadores), o <strong>acesso</strong> (cliente não atacar cliente), a <strong>borda</strong> (anti-spoofing, anti-DDoS — capítulo <a href="52-ddos-mitigacao.html#sec-ddos" class="quarto-xref"><span>Seção 53.1</span></a>) e cumprir <strong>obrigações legais</strong> (Marco Civil, LGPD). Este capítulo organiza as defesas por onde elas atuam, amarrando o que vimos nas partes anteriores.</p>
+</section>
+<section id="sec-seg-camadas" class="level2" data-number="51.2">
+<h2 data-number="51.2" class="anchored" data-anchor-id="sec-seg-camadas"><span class="header-section-number">51.2</span> Defesa em camadas</h2>
+<p>A segurança espelha as camadas OSI (capítulo <a href="02-modelo-osi.html#sec-osi-introducao" class="quarto-xref"><span>Seção 3.1</span></a>) — cada uma com suas ameaças e defesas:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Camada</th>
+<th>Ameaça típica</th>
+<th>Defesa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Física (1)</strong></td>
+<td>acesso ao DIO/CTO, corte de fibra</td>
+<td>trancas, vedação, vigilância</td>
+</tr>
+<tr class="even">
+<td><strong>Enlace (2)</strong></td>
+<td>ARP/MAC spoofing, rogue DHCP, loop</td>
+<td>VLAN/cliente, DHCP Snooping, DAI, STP</td>
+</tr>
+<tr class="odd">
+<td><strong>Rede (3)</strong></td>
+<td>IP spoofing, hijack BGP</td>
+<td>uRPF, filtros, RPKI/ROA</td>
+</tr>
+<tr class="even">
+<td><strong>Transporte (4)</strong></td>
+<td>SYN flood, varredura</td>
+<td>rate-limit, firewall stateful</td>
+</tr>
+<tr class="odd">
+<td><strong>Aplicação (7)</strong></td>
+<td>DNS amplificação, brute-force</td>
+<td>SNMPv3/SSH, hardening, anti-amplificação</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sec-seg-infra" class="level2" data-number="51.3">
+<h2 data-number="51.3" class="anchored" data-anchor-id="sec-seg-infra"><span class="header-section-number">51.3</span> Protegendo a infraestrutura</h2>
+<p>Os equipamentos de rede são o alvo de maior valor — comprometer uma OLT/BNG/roteador é comprometer milhares de clientes:</p>
+<ul>
+<li><strong>Gerência fora de banda e restrita:</strong> SSH (não Telnet), <strong>SNMPv3</strong> (não v2c), tudo por <strong>ACL</strong> na rede/loopback de gerência (capítulos <a href="25-outros-protocolos-aplicacao.html#sec-outros-ssh" class="quarto-xref"><span>Seção 26.2</span></a>, <a href="20-roteamento.html#sec-roteamento" class="quarto-xref"><span>Seção 21.1</span></a>).</li>
+<li><strong>Senhas fortes/chaves, MFA</strong> no que suportar; <strong>sem credenciais padrão</strong>.</li>
+<li><strong>Hardening:</strong> desabilitar serviços inúteis, atualizar firmware, <strong>logar acessos</strong>.</li>
+<li><strong>Control-plane policing:</strong> proteger a CPU dos roteadores contra flood.</li>
+<li><strong>Backup de configuração</strong> versionado (e da base de planta/GIS, capítulo <a href="38-documentacao-georreferenciamento.html#sec-doc-georref" class="quarto-xref"><span>Seção 39.1</span></a>).</li>
+</ul>
+</section>
+<section id="sec-seg-acesso" class="level2" data-number="51.4">
+<h2 data-number="51.4" class="anchored" data-anchor-id="sec-seg-acesso"><span class="header-section-number">51.4</span> Protegendo o acesso (cliente ↔︎ cliente)</h2>
+<p>Na rede de acesso, o risco é um assinante <strong>atacar outro</strong> ou <strong>se passar por</strong> outro:</p>
+<ul>
+<li><strong>VLAN por cliente</strong> (capítulo <a href="13-switching-vlan-stp.html#sec-switching" class="quarto-xref"><span>Seção 14.1</span></a>) isola o domínio de broadcast — mata ARP spoofing entre vizinhos.</li>
+<li><strong>DHCP Snooping + Dynamic ARP Inspection (DAI)</strong> — bloqueiam <em>rogue DHCP</em> e ARP forjado (capítulos <a href="12-arp.html#sec-arp" class="quarto-xref"><span>Seção 13.1</span></a>, <a href="23-dhcp.html#sec-dhcp" class="quarto-xref"><span>Seção 24.1</span></a>).</li>
+<li><strong>uRPF / anti-spoofing</strong> — descarta pacotes com IP de origem que não pertence ao cliente (impede spoofing e participação em DDoS refletido).</li>
+<li><strong>Port security / limite de MAC</strong> — evita que o cliente pendure switch e injete loop/MACs.</li>
+<li><strong>AES na PON</strong> (capítulo <a href="28-gpon-epon-xgspon.html#sec-gpon" class="quarto-xref"><span>Seção 29.1</span></a>) — protege o <em>downstream</em> broadcast do vizinho.</li>
+</ul>
+</section>
+<section id="sec-seg-amplificacao" class="level2" data-number="51.5">
+<h2 data-number="51.5" class="anchored" data-anchor-id="sec-seg-amplificacao"><span class="header-section-number">51.5</span> Não ser a arma do ataque</h2>
+<p>Serviços mal configurados na sua rede viram <strong>munição</strong> para DDoS por amplificação contra terceiros (capítulo <a href="52-ddos-mitigacao.html#sec-ddos" class="quarto-xref"><span>Seção 53.1</span></a>):</p>
+<ul>
+<li><strong>Open resolver DNS</strong> (capítulo <a href="22-dns.html#sec-dns" class="quarto-xref"><span>Seção 23.1</span></a>) — responda recursivo só à sua base, com <em>rate-limit</em> (RRL).</li>
+<li><strong>NTP/SNMP/SSDP abertos</strong> — restrinja por ACL; desabilite <em>monlist</em> no NTP.</li>
+<li><strong>BCP38 (anti-spoofing):</strong> filtre na borda pacotes com origem falsa — é o que impede sua rede de <strong>originar</strong> ataques refletidos.</li>
+</ul>
+</section>
+<section id="sec-seg-legal" class="level2" data-number="51.6">
+<h2 data-number="51.6" class="anchored" data-anchor-id="sec-seg-legal"><span class="header-section-number">51.6</span> Conformidade legal</h2>
+<p>No Brasil o ISP tem deveres legais que são <strong>parte da segurança</strong>:</p>
+<ul>
+<li><strong>Marco Civil:</strong> guarda de <strong>logs de conexão</strong> (quem teve qual IP/porta e quando) — via RADIUS <em>accounting</em> + CGNAT com <strong>NTP correto</strong> (capítulos <a href="47-radius-aaa.html#sec-radius" class="quarto-xref"><span>Seção 48.1</span></a>, <a href="19-nat-cgnat.html#sec-nat-cgnat" class="quarto-xref"><span>Seção 20.1</span></a>).</li>
+<li><strong>LGPD:</strong> proteção dos <strong>dados pessoais</strong> dos assinantes (cadastro, tráfego); acesso controlado, retenção mínima, segurança da base.</li>
+<li><strong>Porta 25 Management</strong> (capítulo <a href="25-outros-protocolos-aplicacao.html#sec-outros-email" class="quarto-xref"><span>Seção 26.4</span></a>): bloqueio de saída para conter spam.</li>
+</ul>
+<div class="callout-provedor">
+<p><strong>Na prática do provedor</strong></p>
+<ul>
+<li><strong>O básico pega 90%:</strong> sem Telnet, sem SNMPv2c público, sem senha padrão, gerência por ACL, firmware atualizado. A maioria dos comprometimentos explora o trivial.</li>
+<li><strong>Anti-spoofing (BCP38/uRPF) na borda e no acesso:</strong> protege a internet <strong>de você</strong> e você <strong>de ser refletido</strong> — e é frequentemente exigido por upstreams/IX.</li>
+<li><strong>Feche os amplificadores:</strong> open resolver, NTP/SNMP abertos. Um único resolver aberto seu pode ser usado num ataque de centenas de Gbps a um terceiro — e te tira do ar junto.</li>
+<li><strong>VLAN/cliente + DHCP Snooping + DAI</strong> são o pacote padrão de isolamento do acesso — configure por padrão, não caso a caso.</li>
+<li><strong>Logs + NTP + backup:</strong> conformidade (Marco Civil/LGPD) e recuperação dependem de horário correto, retenção adequada e backup de config/planta.</li>
+<li><strong>Plano de resposta a incidente:</strong> saiba o que fazer quando (não se) acontecer — contatos de upstream/IX, <em>blackhole</em>, comunicação (capítulo <a href="52-ddos-mitigacao.html#sec-ddos" class="quarto-xref"><span>Seção 53.1</span></a>).</li>
+</ul>
 </div>
-<div class="callout-title-container flex-fill">
-Nota
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Capítulo a ser desenvolvido pelo Claude Code (ver <code>PROMPT-CLAUDE-CODE.md</code> e <code>CLAUDE.md</code>).</p>
-</div>
-</div>
+</section>
+<section id="sec-resumo-50" class="level2" data-number="51.7">
+<h2 data-number="51.7" class="anchored" data-anchor-id="sec-resumo-50"><span class="header-section-number">51.7</span> Resumo e checklist</h2>
+<ul>
+<li>Segurança é <strong>em camadas</strong>: física, enlace (VLAN/DHCP Snooping/DAI), rede (uRPF/RPKI), transporte/aplicação (firewall, hardening).</li>
+<li><strong>Proteja a infraestrutura</strong> (SSH/SNMPv3/ACL/backup) e o <strong>acesso</strong> (isolar e anti-spoofing cliente↔︎cliente).</li>
+<li><strong>Não seja a arma:</strong> feche open resolver/NTP/SNMP e aplique <strong>BCP38</strong>.</li>
+<li><strong>Conformidade</strong> (Marco Civil/LGPD) com logs, NTP e proteção de dados é parte da segurança.</li>
+</ul>
+<p><strong>Checklist do capítulo</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox">Mapeio ameaças e defesas por camada.</label></li>
+<li><label><input type="checkbox">Faço hardening da gerência (SSH/SNMPv3/ACL/backup).</label></li>
+<li><label><input type="checkbox">Isolo o acesso (VLAN/cliente, DHCP Snooping, DAI, uRPF).</label></li>
+<li><label><input type="checkbox">Fecho amplificadores (BCP38) e cumpro Marco Civil/LGPD.</label></li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1069,4 +1184,4 @@ Nota
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/50-seguranca-redes.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/50-seguranca-redes.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>

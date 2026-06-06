@@ -1048,7 +1048,7 @@ Figura&nbsp;23.1: Hierarquia DNS: <strong>raiz → TLD (.br, .com) → domínio 
 <li><strong>Opere seu recursivo</strong> (BIND/Unbound/Knot) <strong>redundante</strong> (dois ou mais), próximo do cliente (no POP/borda) e com peering no <strong>IX</strong> para alcançar autoritativos com baixa latência. DNS lento = “internet lenta” percebida.</li>
 <li><strong>Cache + TTL:</strong> respeite TTLs, dimensione cache; um recursivo bem aquecido responde a maioria das consultas em &lt; 1 ms.</li>
 <li><strong>PTR/reverso:</strong> configure o reverso dos seus blocos (e delegue aos clientes corporativos) — sem ele, e-mail dos clientes cai em <em>spam</em>.</li>
-<li><strong>Anti-abuso:</strong> proteja o recursivo contra uso externo (open resolver vira arma de <strong>DDoS por amplificação</strong> — capítulo <span class="quarto-unresolved-ref">?sec-ddos</span>); responda só à sua base, aplique <em>rate-limit</em> (RRL).</li>
+<li><strong>Anti-abuso:</strong> proteja o recursivo contra uso externo (open resolver vira arma de <strong>DDoS por amplificação</strong> — capítulo <a href="52-ddos-mitigacao.html#sec-ddos" class="quarto-xref"><span>Seção 53.1</span></a>); responda só à sua base, aplique <em>rate-limit</em> (RRL).</li>
 <li><strong>Monitore o DNS</strong> como serviço crítico (latência, taxa de erro, <em>cache hit</em>); é uma das primeiras coisas a falhar de forma “invisível”.</li>
 </ul>
 </div>
