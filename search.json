@@ -650,7 +650,7 @@
     "href": "capitulos/08-fibra-tipos-caracteristicas.html#sec-fibra-dispersao-limite",
     "title": "9  Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)",
     "section": "9.5 Dispersão e o limite de banda × distância",
-    "text": "9.5 Dispersão e o limite de banda × distância\nEm monomodo, a dispersão cromática (em ps/(nm·km)) define até onde se pode ir a uma dada taxa. Para GPON (2,5/1,25 Gbps) e os ~20 km típicos, a dispersão não é o gargalo — a atenuação é. Mas ao subir para XGS-PON (10G) ou DWDM de backbone, a dispersão volta a importar e exige lasers de espectro estreito (DFB) e, às vezes, fibras G.655 ou compensação. Mensagem: no acesso, dimensione por potência; no transporte de alta taxa, vigie também a dispersão.\n\nNa prática do provedor\n\nPadronize o estoque: G.652.D em bobinas de tronco e cabos auto-sustentados (AS) da rede aérea; G.657.A1/A2 em drop e cordões internos. Menos SKUs, menos erro de campo.\nCapa amarela = monomodo. Treine a equipe: viu fibra colorida (aqua/violeta) na rua, alguém comprou multimodo errado.\nConector é onde mais se perde. Prefira fusão a conectores em emendas permanentes; reserve conectores (SC/APC) para pontos de manobra (DIO, CTO, ONT).\nDocumente a atenuação esperada de cada PON no projeto. Quando o OTDR (capítulo ?sec-otdr) acusar um valor acima do previsto, você já sabe que há evento novo (curvatura, fusão ruim, conector sujo).",
+    "text": "9.5 Dispersão e o limite de banda × distância\nEm monomodo, a dispersão cromática (em ps/(nm·km)) define até onde se pode ir a uma dada taxa. Para GPON (2,5/1,25 Gbps) e os ~20 km típicos, a dispersão não é o gargalo — a atenuação é. Mas ao subir para XGS-PON (10G) ou DWDM de backbone, a dispersão volta a importar e exige lasers de espectro estreito (DFB) e, às vezes, fibras G.655 ou compensação. Mensagem: no acesso, dimensione por potência; no transporte de alta taxa, vigie também a dispersão.\n\nNa prática do provedor\n\nPadronize o estoque: G.652.D em bobinas de tronco e cabos auto-sustentados (AS) da rede aérea; G.657.A1/A2 em drop e cordões internos. Menos SKUs, menos erro de campo.\nCapa amarela = monomodo. Treine a equipe: viu fibra colorida (aqua/violeta) na rua, alguém comprou multimodo errado.\nConector é onde mais se perde. Prefira fusão a conectores em emendas permanentes; reserve conectores (SC/APC) para pontos de manobra (DIO, CTO, ONT).\nDocumente a atenuação esperada de cada PON no projeto. Quando o OTDR (capítulo Seção 40.1) acusar um valor acima do previsto, você já sabe que há evento novo (curvatura, fusão ruim, conector sujo).",
     "crumbs": [
       "Parte II — Camada Física e Fibra Óptica",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)</span>"
@@ -782,7 +782,7 @@
     "href": "capitulos/10-emendas-fusao.html#sec-emendas-perda",
     "title": "11  Emendas: Fusão e Mecânica",
     "section": "11.4 O que o número da máquina significa",
-    "text": "11.4 O que o número da máquina significa\nA fusora exibe uma perda estimada (ex.: 0,02 dB). É uma estimativa óptica do alinhamento — não substitui a medição real com OTDR (capítulo ?sec-otdr), mas é um bom filtro de qualidade no ato. Valores de referência:\n\n\n\nEstimativa\nInterpretação\n\n\n\n\n≤ 0,05 dB\nexcelente\n\n\n0,05–0,10 dB\naceitável (planta de campo)\n\n\n0,10–0,30 dB\nrefazer se for tronco/PON crítica\n\n\n&gt; 0,30 dB ou “bolha”/“linha”\nrefazer sempre\n\n\n\nRefazer uma fusão custa 2 minutos; um chamado por PON degradada custa uma visita. Em rede primária, onde a emenda afeta dezenas de clientes, seja rigoroso.",
+    "text": "11.4 O que o número da máquina significa\nA fusora exibe uma perda estimada (ex.: 0,02 dB). É uma estimativa óptica do alinhamento — não substitui a medição real com OTDR (capítulo Seção 40.1), mas é um bom filtro de qualidade no ato. Valores de referência:\n\n\n\nEstimativa\nInterpretação\n\n\n\n\n≤ 0,05 dB\nexcelente\n\n\n0,05–0,10 dB\naceitável (planta de campo)\n\n\n0,10–0,30 dB\nrefazer se for tronco/PON crítica\n\n\n&gt; 0,30 dB ou “bolha”/“linha”\nrefazer sempre\n\n\n\nRefazer uma fusão custa 2 minutos; um chamado por PON degradada custa uma visita. Em rede primária, onde a emenda afeta dezenas de clientes, seja rigoroso.",
     "crumbs": [
       "Parte II — Camada Física e Fibra Óptica",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Emendas: Fusão e Mecânica</span>"
@@ -2366,7 +2366,7 @@
     "href": "capitulos/33-orcamento-potencia.html#sec-orcamento-reverso",
     "title": "34  Orçamento de Potência Óptica (Power Budget)",
     "section": "34.6 Sentido reverso e simetria",
-    "text": "34.6 Sentido reverso e simetria\nO orçamento vale nos dois sentidos: o downstream (OLT→ONT) e o upstream (ONT→OLT) usam λ diferentes (capítulo Seção 29.1) com atenuações ligeiramente distintas e potências de TX diferentes. Em GPON a ONT costuma ter TX menor; verifique os dois sentidos, mas na prática o downstream e a leitura de Rx na ONT e de Rx na OLT (a OLT informa quanto recebe de cada ONT) são as métricas operacionais do dia a dia.\n\nNa prática do provedor\n\nCalcule por padrão de árvore, não por cliente: defina 2–3 padrões (ex.: 1:2+1:8 urbano; 1:2+1:16 denso; tap em via longa) e tenha o orçamento de cada um pronto. Instalação vira “cabe neste padrão?”.\nSempre 3 dB de margem. Projeto no limite (sobra &lt; 3 dB) volta como chamado: sujeira, sol no drop (macrobending), uma fusão refeita pior — tudo come a folga.\nA OLT já te dá o Rx de cada ONT. Compare o medido com o previsto: se a ONT deveria estar em −13 e está em −22, há evento novo (conector sujo, dobra, fusão ruim) — vá direto ao OTDR (capítulo ?sec-otdr) em vez de trocar a ONT.\nCliente “cai à tarde”: clássico de drop no limite que piora com o calor — o orçamento estava apertado. Refaça a conta e o drop.\nPlaneje XGS-PON no orçamento: λ e sensibilidades diferentes mudam levemente a conta; ao coexistir, valide a margem dos dois.",
+    "text": "34.6 Sentido reverso e simetria\nO orçamento vale nos dois sentidos: o downstream (OLT→ONT) e o upstream (ONT→OLT) usam λ diferentes (capítulo Seção 29.1) com atenuações ligeiramente distintas e potências de TX diferentes. Em GPON a ONT costuma ter TX menor; verifique os dois sentidos, mas na prática o downstream e a leitura de Rx na ONT e de Rx na OLT (a OLT informa quanto recebe de cada ONT) são as métricas operacionais do dia a dia.\n\nNa prática do provedor\n\nCalcule por padrão de árvore, não por cliente: defina 2–3 padrões (ex.: 1:2+1:8 urbano; 1:2+1:16 denso; tap em via longa) e tenha o orçamento de cada um pronto. Instalação vira “cabe neste padrão?”.\nSempre 3 dB de margem. Projeto no limite (sobra &lt; 3 dB) volta como chamado: sujeira, sol no drop (macrobending), uma fusão refeita pior — tudo come a folga.\nA OLT já te dá o Rx de cada ONT. Compare o medido com o previsto: se a ONT deveria estar em −13 e está em −22, há evento novo (conector sujo, dobra, fusão ruim) — vá direto ao OTDR (capítulo Seção 40.1) em vez de trocar a ONT.\nCliente “cai à tarde”: clássico de drop no limite que piora com o calor — o orçamento estava apertado. Refaça a conta e o drop.\nPlaneje XGS-PON no orçamento: λ e sensibilidades diferentes mudam levemente a conta; ao coexistir, valide a margem dos dois.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>34</span>  <span class='chapter-title'>Orçamento de Potência Óptica (Power Budget)</span>"
@@ -2619,7 +2619,7 @@
     "href": "capitulos/37-fusao-campo-certificacao.html#sec-fusao-testes",
     "title": "38  Fusão em Campo e Certificação",
     "section": "38.4 Os dois testes de certificação",
-    "text": "38.4 Os dois testes de certificação\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 38.1: Dois testes complementares: a perda de inserção (fonte + power-meter) dá a perda total fim a fim; o OTDR mapeia e mede cada evento ao longo da fibra.\n\n\n\n\nPerda de inserção (fonte de luz + power-meter): mede a atenuação total do enlace em dB, no comprimento de onda de operação. É o teste que diz “o enlace fecha o orçamento?”. Simples e definitivo para o número global.\nOTDR (Optical Time-Domain Reflectometer): envia pulsos e analisa o retroespalhamento, localizando e medindo cada evento (fusão, conector, splitter, curvatura, ruptura) e a distância de cada um (capítulos ?sec-otdr e 2). É o teste que diz “onde está e quanto perde cada ponto?”.\n\nOs dois são complementares: o power-meter dá a verdade do total; o OTDR mostra a anatomia do trecho. Para certificar PON, mede-se nos λ relevantes (1310/1490/1550).",
+    "text": "38.4 Os dois testes de certificação\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 38.1: Dois testes complementares: a perda de inserção (fonte + power-meter) dá a perda total fim a fim; o OTDR mapeia e mede cada evento ao longo da fibra.\n\n\n\n\nPerda de inserção (fonte de luz + power-meter): mede a atenuação total do enlace em dB, no comprimento de onda de operação. É o teste que diz “o enlace fecha o orçamento?”. Simples e definitivo para o número global.\nOTDR (Optical Time-Domain Reflectometer): envia pulsos e analisa o retroespalhamento, localizando e medindo cada evento (fusão, conector, splitter, curvatura, ruptura) e a distância de cada um (capítulos Seção 40.1 e 2). É o teste que diz “onde está e quanto perde cada ponto?”.\n\nOs dois são complementares: o power-meter dá a verdade do total; o OTDR mostra a anatomia do trecho. Para certificar PON, mede-se nos λ relevantes (1310/1490/1550).",
     "crumbs": [
       "Parte VII — Planta Externa (OSP)",
       "<span class='chapter-number'>38</span>  <span class='chapter-title'>Fusão em Campo e Certificação</span>"
@@ -2718,7 +2718,62 @@
     "href": "capitulos/39-instrumentos-power-meter-otdr-vfl.html",
     "title": "40  Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "40.1 O kit que mede a camada 1\nTudo na fibra é camada 1 (capítulo Seção 3.3) — e camada 1 se mede, não se adivinha. O conjunto de instrumentos ópticos é o que transforma “o cliente caiu” em “há um evento de 2,3 dB a 480 m do POP”. Cada instrumento responde a uma pergunta diferente: quanta potência chega (power-meter), qual é o mapa de eventos do trecho (OTDR), onde exatamente está a fibra/quebra (VFL), e serve de referência de transmissão (fonte de luz). Saber qual usar quando é metade do diagnóstico óptico.",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>40</span>  <span class='chapter-title'>Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/39-instrumentos-power-meter-otdr-vfl.html#sec-otdr-powermeter",
+    "href": "capitulos/39-instrumentos-power-meter-otdr-vfl.html#sec-otdr-powermeter",
+    "title": "40  Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz",
+    "section": "40.2 Power-meter e fonte de luz",
+    "text": "40.2 Power-meter e fonte de luz\n\nPower-meter (medidor de potência): lê a potência óptica que chega, em dBm, no λ selecionado. É o instrumento do dia a dia: medir o Rx num ponto e comparar com o orçamento (capítulo Seção 34.1). Barato, simples, definitivo para “quanto chega aqui”.\nFonte de luz (light source): emite potência conhecida e estável num λ. Sozinha não mede; combinada com o power-meter na outra ponta, dá a perda de inserção (atenuação total) do enlace:\n\n\\[\\text{Perda (dB)} = P_{\\text{fonte}} - P_{\\text{medido}}.\\]\nEsse par fonte + power-meter é o teste de certificação fim a fim (capítulo Seção 38.1): mede a perda total real, no λ de operação.",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>40</span>  <span class='chapter-title'>Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/39-instrumentos-power-meter-otdr-vfl.html#sec-otdr-otdr",
+    "href": "capitulos/39-instrumentos-power-meter-otdr-vfl.html#sec-otdr-otdr",
+    "title": "40  Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz",
+    "section": "40.3 OTDR: o “ultrassom” da fibra",
+    "text": "40.3 OTDR: o “ultrassom” da fibra\nO OTDR (Optical Time-Domain Reflectometer) injeta pulsos de luz e mede o retroespalhamento (Rayleigh) e as reflexões que voltam. Pelo tempo de retorno, calcula a distância de cada evento; pela queda do sinal, mede a perda de cada um. O resultado é um traço (curva potência × distância) que é a radiografia do enlace:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 40.1: Traço OTDR: o declive contínuo é a atenuação da fibra; picos reflexivos são conectores/fim; degraus sem pico são fusões/curvaturas; o fim reflete e cai ao ruído. (Interpretação detalhada no capítulo Seção 41.1.)\n\n\n\nParâmetros que o operador escolhe no OTDR (capítulo Seção 41.1 explica o impacto): comprimento de onda, largura de pulso (resolução × alcance), tempo de média e faixa (range).",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>40</span>  <span class='chapter-title'>Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/39-instrumentos-power-meter-otdr-vfl.html#sec-otdr-vfl",
+    "href": "capitulos/39-instrumentos-power-meter-otdr-vfl.html#sec-otdr-vfl",
+    "title": "40  Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz",
+    "section": "40.4 VFL: o localizador visual",
+    "text": "40.4 VFL: o localizador visual\nO VFL (Visual Fault Locator) é uma caneta laser vermelha (650 nm visível) que se injeta na fibra: onde houver quebra, dobra forte ou conector ruim, a luz vaza e acende em vermelho, visível a olho nu. Usos:\n\nAchar a quebra num patch/drop curto (onde o OTDR tem zona morta).\nIdentificar a fibra correta num feixe (acende a ponta certa).\nChecar continuidade e conectores em bancada.\n\nLimitação: alcance curto (centenas de metros a ~poucos km) e não mede perda — é localização visual, complementar ao OTDR.",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>40</span>  <span class='chapter-title'>Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/39-instrumentos-power-meter-otdr-vfl.html#sec-otdr-qual",
+    "href": "capitulos/39-instrumentos-power-meter-otdr-vfl.html#sec-otdr-qual",
+    "title": "40  Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz",
+    "section": "40.5 Qual instrumento para qual pergunta",
+    "text": "40.5 Qual instrumento para qual pergunta\n\n\n\n\n\n\n\nPergunta\nInstrumento\n\n\n\n\nQuanta potência chega aqui? (Rx)\npower-meter\n\n\nQual a perda total do enlace?\nfonte + power-meter\n\n\nOnde estão os eventos e quanto cada um perde?\nOTDR\n\n\nOnde exatamente está a quebra/dobra (curto)?\nVFL\n\n\nA fibra está identificada corretamente?\nVFL (ou identificador de fibra)\n\n\n\n\nNa prática do provedor\n\nPower-meter no kit de todo técnico: medir o Rx na ONT/CTO e comparar com o orçamento (capítulo Seção 34.1) resolve a maioria dos chamados sem OTDR.\nOTDR para a primária e para achar evento novo: quando o Rx caiu vs. o baseline (capítulo Seção 38.1), o OTDR diz onde e quanto — vá ao ponto, não saia trocando peças.\nVFL para o último trecho: quebra no drop ou identificar a fibra certa na CTO — rápido e barato. Cuidado: não olhe direto para o laser.\nMeça sempre no λ certo: PON usa 1310/1490/1550; medir no λ errado dá número errado. Para diagnosticar sem afetar o serviço, há OTDR/medições em 1625/1650 nm (fora da banda de dados) com filtro.\nCalibre e cuide dos conectores dos instrumentos: um conector sujo no próprio OTDR/power-meter (capítulo Seção 10.1) contamina toda medição.",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>40</span>  <span class='chapter-title'>Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/39-instrumentos-power-meter-otdr-vfl.html#sec-resumo-39",
+    "href": "capitulos/39-instrumentos-power-meter-otdr-vfl.html#sec-resumo-39",
+    "title": "40  Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz",
+    "section": "40.6 Resumo e checklist",
+    "text": "40.6 Resumo e checklist\n\nPower-meter mede Rx (dBm); fonte + power-meter dá a perda total.\nOTDR mapeia eventos (distância + perda) — a radiografia do enlace.\nVFL localiza visualmente quebras/dobras em trechos curtos e identifica fibra.\nEscolha o instrumento pela pergunta; meça sempre no λ correto.\n\nChecklist do capítulo\n\nUso power-meter para ler Rx e comparar com o orçamento.\nMeço perda de inserção com fonte + power-meter.\nSei quando o OTDR é necessário (evento novo, primária).\nUso VFL no último trecho e meço no comprimento de onda certo.",
     "crumbs": [
       "Parte VIII — Medição e Diagnóstico Óptico",
       "<span class='chapter-number'>40</span>  <span class='chapter-title'>Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz</span>"
@@ -2729,7 +2784,73 @@
     "href": "capitulos/40-interpretacao-otdr.html",
     "title": "41  Interpretação de Traços OTDR",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "41.1 Ler a radiografia da fibra\nTer um OTDR (capítulo Seção 40.1) é metade do trabalho; a outra metade é interpretar o traço corretamente. Um OTDR mal configurado ou mal lido leva a conclusões erradas — “tem uma fusão ruim” onde há só uma curvatura, ou “a fibra acaba aqui” quando é só zona morta. Este capítulo ensina a reconhecer cada evento, escolher os parâmetros e evitar as armadilhas clássicas de leitura.",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>41</span>  <span class='chapter-title'>Interpretação de Traços OTDR</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/40-interpretacao-otdr.html#sec-otdr-eventos",
+    "href": "capitulos/40-interpretacao-otdr.html#sec-otdr-eventos",
+    "title": "41  Interpretação de Traços OTDR",
+    "section": "41.2 Os eventos e suas assinaturas",
+    "text": "41.2 Os eventos e suas assinaturas\nCada elemento da fibra deixa uma marca característica no traço:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 41.1: Assinaturas típicas no traço OTDR: cada tipo de evento tem uma forma própria — saber distingui-las é o cerne da interpretação.\n\n\n\n\n\n\n\n\n\n\n\nEvento\nAssinatura no traço\nReflexivo?\n\n\n\n\nFibra\ndeclive reto e constante (dB/km)\n—\n\n\nFusão\ndegrau para baixo, sem pico\nnão\n\n\nConector/mecânica\npico para cima + degrau\nsim\n\n\nCurvatura (macrobend)\ndegrau, maior em 1550 que em 1310\nnão\n\n\nSplitter\ndegrau grande (ex.: 10,5 dB num 1:8)\nleve\n\n\nFim da fibra\npico + queda ao ruído\nsim\n\n\n“Gainer” (falso ganho)\ndegrau para cima (artefato)\nnão",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>41</span>  <span class='chapter-title'>Interpretação de Traços OTDR</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/40-interpretacao-otdr.html#sec-otdr-gainer",
+    "href": "capitulos/40-interpretacao-otdr.html#sec-otdr-gainer",
+    "title": "41  Interpretação de Traços OTDR",
+    "section": "41.3 O “gainer”: a pegadinha clássica",
+    "text": "41.3 O “gainer”: a pegadinha clássica\nUm evento que parece um ganho (o traço sobe!) é fisicamente impossível — a fibra só atenua. O “gainer” é um artefato que ocorre quando se emendam fibras com coeficientes de retroespalhamento diferentes (ex.: fibras de fabricantes/lotes distintos): de um lado o OTDR superestima, do outro subestima. A perda real da fusão é a média das medições nos dois sentidos (A→B e B→A). Por isso fusões críticas se medem bidirecionalmente — confiar num sentido só engana.",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>41</span>  <span class='chapter-title'>Interpretação de Traços OTDR</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/40-interpretacao-otdr.html#sec-otdr-curvatura",
+    "href": "capitulos/40-interpretacao-otdr.html#sec-otdr-curvatura",
+    "title": "41  Interpretação de Traços OTDR",
+    "section": "41.4 Curvatura vs. fusão: use dois λ",
+    "text": "41.4 Curvatura vs. fusão: use dois λ\nUma curvatura (macrobending, capítulo Seção 8.1) e uma fusão ruim podem parecer degraus iguais em 1310 nm. O truque: a curvatura perde muito mais em 1550 nm que em 1310 (a perda por curvatura cresce com o λ), enquanto a fusão perde parecido nos dois. Medindo nos dois comprimentos de onda, um degrau que “dispara” em 1550 é curvatura; um degrau parecido nos dois é fusão/conector. Isso direciona o reparo certo (endireitar o cabo vs. refazer a emenda).",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>41</span>  <span class='chapter-title'>Interpretação de Traços OTDR</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/40-interpretacao-otdr.html#sec-otdr-parametros",
+    "href": "capitulos/40-interpretacao-otdr.html#sec-otdr-parametros",
+    "title": "41  Interpretação de Traços OTDR",
+    "section": "41.5 Parâmetros: largura de pulso e zona morta",
+    "text": "41.5 Parâmetros: largura de pulso e zona morta\nA configuração define o que você consegue ver:\n\nLargura de pulso: pulso curto → melhor resolução (eventos próximos separados) e menor zona morta, mas menos alcance. Pulso longo → mais alcance, mas eventos próximos “se fundem”. Escolha conforme o trecho.\nZona morta: trecho logo após um evento reflexivo forte onde o OTDR fica “cego” (saturado). Por isso o OTDR não enxerga bem os primeiros metros — use um fiber ring / launch cable (rolo de lançamento) para “jogar” a zona morta para fora do trecho de interesse.\nTempo de média: mais média → traço mais limpo (menos ruído), mais lento.\nRange: ajuste à distância real; range curto demais “esconde” o fim.",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>41</span>  <span class='chapter-title'>Interpretação de Traços OTDR</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/40-interpretacao-otdr.html#sec-otdr-metodo",
+    "href": "capitulos/40-interpretacao-otdr.html#sec-otdr-metodo",
+    "title": "41  Interpretação de Traços OTDR",
+    "section": "41.6 Método de leitura",
+    "text": "41.6 Método de leitura\n\nConfigure λ, pulso, range, média ao trecho; use launch cable.\nIdentifique o fim da fibra (último pico+queda) — confirme a distância esperada.\nPercorra os eventos da origem ao fim: classifique cada um (fusão/conector/ curvatura/splitter) pela assinatura.\nPara eventos suspeitos, meça nos dois λ (curvatura?) e bidirecional (gainer?).\nCompare com o baseline (capítulo Seção 38.1): o que mudou é o culpado.\n\n\nNa prática do provedor\n\nBaseline é rei. Guarde o traço de aceitação de cada trecho (capítulo Seção 38.1). No incidente, sobreponha o traço atual ao baseline: o evento novo salta aos olhos e você vai direto ao ponto (capítulo Seção 42.1).\nUse launch cable sempre: sem ele, a zona morta esconde o primeiro conector/CTO e você “perde” os metros mais próximos do POP.\nMediu degrau alto em 1550 e baixo em 1310? É curvatura — procure cabo dobrado/prensado, não refaça a fusão.\nViu “ganho”? Não comemore: é gainer; meça bidirecional para a perda real da fusão.\nEm PON com splitter, o OTDR depois do splitter vê várias fibras somadas — meça antes do splitter ou use OTDR PON-aware que entende a árvore; senão a leitura confunde.",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>41</span>  <span class='chapter-title'>Interpretação de Traços OTDR</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/40-interpretacao-otdr.html#sec-resumo-40",
+    "href": "capitulos/40-interpretacao-otdr.html#sec-resumo-40",
+    "title": "41  Interpretação de Traços OTDR",
+    "section": "41.7 Resumo e checklist",
+    "text": "41.7 Resumo e checklist\n\nCada evento tem assinatura: fusão = degrau; conector/fim = pico; curvatura = degrau pior em 1550; splitter = degrau grande.\nO “gainer” é artefato — perda real = média bidirecional.\nDois λ distinguem curvatura de fusão; launch cable elimina a zona morta.\nCompare com o baseline para achar o evento novo.\n\nChecklist do capítulo\n\nClassifico cada evento do traço pela assinatura.\nReconheço e trato o “gainer” com medição bidirecional.\nDistingo curvatura de fusão medindo em 1310 e 1550 nm.\nConfiguro pulso/range/launch cable e comparo com o baseline.",
     "crumbs": [
       "Parte VIII — Medição e Diagnóstico Óptico",
       "<span class='chapter-number'>41</span>  <span class='chapter-title'>Interpretação de Traços OTDR</span>"
@@ -2740,7 +2861,62 @@
     "href": "capitulos/41-localizacao-falhas.html",
     "title": "42  Localização de Falhas na Planta Óptica",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "42.1 Do alarme ao ponto exato\nCliente ligou, ou o monitoramento alarmou: agora é preciso localizar e consertar a falha rápido — o tempo de reparo é SLA e reputação. Este capítulo junta tudo da Parte VIII (instrumentos, OTDR) com o orçamento (capítulo Seção 34.1) e a documentação (capítulo Seção 39.1) em um método de localização: do sintoma à coordenada no mapa, sem trocar peças no escuro. A regra-mestra continua a do capítulo Seção 3.8: diagnostique de baixo para cima, e a camada 1 (óptica) é a suspeita nº 1.",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>42</span>  <span class='chapter-title'>Localização de Falhas na Planta Óptica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/41-localizacao-falhas.html#sec-loc-triagem",
+    "href": "capitulos/41-localizacao-falhas.html#sec-loc-triagem",
+    "title": "42  Localização de Falhas na Planta Óptica",
+    "section": "42.2 Triagem: um cliente ou muitos?",
+    "text": "42.2 Triagem: um cliente ou muitos?\nA primeira pergunta define tudo:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 42.1: Na árvore PON, onde está a falha define o impacto: tronco/primária afeta muitos clientes; drop afeta um. O padrão de quem caiu já localiza o problema.\n\n\n\n\nUm cliente só → provável drop/ONT (rede secundária). Comece pela ONT (potência Rx, LEDs — capítulo Seção 31.1) e pelo drop.\nTodos de uma CTO → problema na CTO ou no trecho até ela (splitter, secundária).\nToda uma PON / vários bairros → rede primária ou OLT (capítulo Seção 30.1) — incidente grave. Use o georreferenciamento para ver quem caiu e inferir o trecho comum.\n\nO georreferenciamento (capítulo Seção 39.1) responde isso em segundos: “todos os afetados compartilham a CEO da rua X” → a falha está no trecho até ela.",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>42</span>  <span class='chapter-title'>Localização de Falhas na Planta Óptica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/41-localizacao-falhas.html#sec-loc-sintomas",
+    "href": "capitulos/41-localizacao-falhas.html#sec-loc-sintomas",
+    "title": "42  Localização de Falhas na Planta Óptica",
+    "section": "42.3 Sintomas ópticos e o que indicam",
+    "text": "42.3 Sintomas ópticos e o que indicam\n\n\n\n\n\n\n\nSintoma\nProvável causa\n\n\n\n\nLOS na ONT, sem luz\nfibra rompida, conector solto, drop quebrado\n\n\nRx muito baixo (ex.: −28 dBm)\ncurvatura, conector sujo, splitter/fusão ruim, fibra envelhecida\n\n\nRx piora ao longo do dia\nmacrobending no drop (calor/sol — capítulo Seção 8.1)\n\n\nCai e volta intermitente\nconector mal encaixado, infiltração na caixa, drop tensionado\n\n\nToda a PON com Rx baixo\nproblema na primária/porta da OLT",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>42</span>  <span class='chapter-title'>Localização de Falhas na Planta Óptica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/41-localizacao-falhas.html#sec-loc-metodo",
+    "href": "capitulos/41-localizacao-falhas.html#sec-loc-metodo",
+    "title": "42  Localização de Falhas na Planta Óptica",
+    "section": "42.4 O método de localização",
+    "text": "42.4 O método de localização\n\nConfirme a camada 1 primeiro: leia a potência (na ONT/OLT e/ou com power-meter, capítulo Seção 40.1). Rx fora da faixa = óptico.\nCompare com o orçamento/baseline (capítulos Seção 34.1, Seção 38.1): quanto deveria chegar? a diferença mede a gravidade.\nDispare o OTDR do POP/ponto de acesso: localize o evento novo (distância + perda) sobrepondo ao baseline (capítulo Seção 41.1).\nConverta distância → local pelo georreferenciamento (a rota do cabo, não a linha reta): “evento a 480 m = a CEO da esquina Y”.\nVFL no último trecho (drop/patch) para achar a quebra exata onde o OTDR tem zona morta.\nRepare (refazer fusão, trocar conector/drop, endireitar curvatura), meça de novo e confirme o Rx na faixa.\nAtualize a documentação (o que mudou) e o baseline.",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>42</span>  <span class='chapter-title'>Localização de Falhas na Planta Óptica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/41-localizacao-falhas.html#sec-loc-casos",
+    "href": "capitulos/41-localizacao-falhas.html#sec-loc-casos",
+    "title": "42  Localização de Falhas na Planta Óptica",
+    "section": "42.5 Casos típicos e a correção",
+    "text": "42.5 Casos típicos e a correção\n\n“Cliente cai à tarde, volta à noite”: drop dobrado/prensado (macrobending) que piora com o calor. OTDR mostra degrau pior em 1550; endireite/refaça o drop.\n“PON inteira degradou”: conector sujo no DIO/porta da OLT ou fusão ruim na primária. Inspecione/limpe conectores (capítulo Seção 10.1) antes de abrir caixa; OTDR localiza se for fusão.\n“Cliente novo não fecha”: Rx no limite — orçamento apertado (capítulo Seção 34.1). Reduza divisão/encurte, ou cheque conector/drop.\n“Rompimento de cabo” (retroescavadeira/poda): OTDR dá a distância exata; o georreferenciamento dá o endereço; leve reserva técnica (capítulo\n\npara emendar.\n\n\n\nNa prática do provedor\n\nLeia a potência ANTES de despachar. A OLT já reporta o Rx de cada ONT (capítulo Seção 30.1): Rx em −10 dBm e cliente reclamando → não é óptico, é configuração/Wi-Fi; Rx em −27 e piorando → é fibra, leve fibra/conector. Isso economiza visitas.\nBaseline + georreferenciamento = reparo rápido. Sobreponha o OTDR ao baseline para achar o evento, e o mapa para achar o endereço. Sem eles, você mede do zero e anda às cegas.\nInspecione/limpe conector primeiro (capítulo Seção 10.1): a “falha óptica” mais comum e mais barata de resolver é sujeira.\nComunique o impacto (georreferenciamento mostra quantos caíram): priorize reparos por número de afetados e avise proativamente os clientes do trecho.\nPadronize o kit e o método: power-meter + OTDR + VFL + reserva no carro, e o roteiro de 7 passos. Diagnóstico vira processo, não improviso.",
+    "crumbs": [
+      "Parte VIII — Medição e Diagnóstico Óptico",
+      "<span class='chapter-number'>42</span>  <span class='chapter-title'>Localização de Falhas na Planta Óptica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/41-localizacao-falhas.html#sec-resumo-41",
+    "href": "capitulos/41-localizacao-falhas.html#sec-resumo-41",
+    "title": "42  Localização de Falhas na Planta Óptica",
+    "section": "42.6 Resumo e checklist",
+    "text": "42.6 Resumo e checklist\n\nTriagem por impacto: um cliente (drop/ONT), uma CTO (secundária), uma PON (primária/OLT).\nCamada 1 primeiro: leia o Rx, compare com orçamento/baseline, então OTDR + georreferenciamento para localizar.\nVFL acha a quebra no último trecho; dois λ distinguem curvatura de fusão.\nRepare, remeça e documente — atualize o baseline.\n\nChecklist do capítulo\n\nFaço triagem por número/padrão de clientes afetados.\nLeio a potência e comparo com orçamento/baseline antes de despachar.\nLocalizo o evento com OTDR e converto distância em endereço pelo GIS.\nReparo, confirmo o Rx na faixa e atualizo a documentação.",
     "crumbs": [
       "Parte VIII — Medição e Diagnóstico Óptico",
       "<span class='chapter-number'>42</span>  <span class='chapter-title'>Localização de Falhas na Planta Óptica</span>"
