@@ -14,7 +14,7 @@
     "href": "index.html#como-ler",
     "title": "Manual de Redes de Computadores",
     "section": "0.1 Como ler",
-    "text": "0.1 Como ler\nAs partes têm dependências leves entre si. O mapa abaixo mostra uma ordem sugerida — você pode ir direto às partes de fibra (VI–VIII) se já domina os fundamentos, mas elas fazem mais sentido depois das Partes I e II.\n\n\n\n\n\nflowchart TD\n  I[\"I · Fundamentos\"] --&gt; II[\"II · Física e Fibra\"]\n  I --&gt; III[\"III · Enlace\"]\n  III --&gt; IV[\"IV · Rede\"]\n  IV --&gt; V[\"V · Transporte e Aplicação\"]\n  II --&gt; VI[\"VI · PON / FTTx\"]\n  VI --&gt; VII[\"VII · Planta Externa (OSP)\"]\n  VII --&gt; VIII[\"VIII · Medição Óptica\"]\n  II --&gt; IX[\"IX · Rádio Rural\"]\n  V --&gt; X[\"X · Operação de ISP\"]\n  VI --&gt; X\n  X --&gt; XI[\"XI · Segurança e Confiabilidade\"]\n  X --&gt; XII[\"XII · Avançado\"]",
+    "text": "0.1 Como ler\nAs partes têm dependências leves entre si. O mapa abaixo mostra uma ordem sugerida — você pode ir direto às partes de fibra (VI–VIII) se já domina os fundamentos, mas elas fazem mais sentido depois das Partes I e II.\n\n\n\n\n\nflowchart TD\n  I[\"I · Fundamentos\"] --&gt; II[\"II · Física e Fibra\"]\n  I --&gt; III[\"III · Enlace\"]\n  III --&gt; IV[\"IV · Rede\"]\n  IV --&gt; V[\"V · Transporte e Aplicação\"]\n  II --&gt; VI[\"VI · PON / FTTx\"]\n  VI --&gt; VII[\"VII · Planta Externa (OSP)\"]\n  VII --&gt; VIII[\"VIII · Medição Óptica\"]\n  II --&gt; IX[\"IX · Rádio Rural\"]\n  V --&gt; X[\"X · Operação de ISP\"]\n  VI --&gt; X\n  X --&gt; XI[\"XI · Segurança e Confiabilidade\"]\n  X --&gt; XII[\"XII · Avançado\"]\n  V --&gt; XIII[\"XIII · Serviços ao Assinante\"]\n  VI --&gt; XIII\n  VIII --&gt; XIV[\"XIV · Diagnóstico\"]\n  X --&gt; XIV",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Apresentação</span>"
     ]
@@ -3924,245 +3924,685 @@
     ]
   },
   {
-    "objectID": "capitulos/glossario.html",
-    "href": "capitulos/glossario.html",
-    "title": "Apêndice A — Glossário",
+    "objectID": "capitulos/56-wifi-domestico.html",
+    "href": "capitulos/56-wifi-domestico.html",
+    "title": "57  Wi-Fi Doméstico: Bandas, Canais e Cobertura",
     "section": "",
-    "text": "A.1 A\nSiglas e termos usados ao longo do manual. O glossário cresce a cada parte; os termos abaixo cobrem os fundamentos (Partes I–III) e os principais conceitos de provedor que já aparecem nas pontes conceituais.\nAnatel — Agência Nacional de Telecomunicações; regula espectro de rádio e o serviço de telecom no Brasil.\nARP — Address Resolution Protocol; descobre o MAC associado a um IP na mesma rede local (camada 2/3).\nASN — Autonomous System Number; identificador único de um sistema autônomo no roteamento BGP.",
+    "text": "57.1 A última dezena de metros\nA fibra entrega 300, 500, 700 Mbps na ONT — e depois o sinal atravessa paredes, móveis e o micro-ondas até o celular no quarto dos fundos. Esse último trecho é Wi-Fi, e é onde mora metade dos chamados de “internet lenta” (capítulo Seção 31.1). O assinante não distingue “fibra” de “Wi-Fi”: para ele é tudo “internet”. Por isso o provedor que entende Wi-Fi resolve chamado por telefone, evita visita técnica e não troca ONT boa achando que o problema é a rede. Este capítulo trata o Wi-Fi como ele é — um meio compartilhado de rádio (capítulos Seção 6.1 e Seção 43.1), com as mesmas leis de propagação e disputa de acesso da Parte IX, só que dentro de casa.",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>57</span>  <span class='chapter-title'>Wi-Fi Doméstico: Bandas, Canais e Cobertura</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/56-wifi-domestico.html#sec-wifi-bandas",
+    "href": "capitulos/56-wifi-domestico.html#sec-wifi-bandas",
+    "title": "57  Wi-Fi Doméstico: Bandas, Canais e Cobertura",
+    "section": "57.2 Bandas: 2,4 GHz, 5 GHz e 6 GHz",
+    "text": "57.2 Bandas: 2,4 GHz, 5 GHz e 6 GHz\nO Wi-Fi opera em faixas não licenciadas (capítulo Seção 43.1). Cada uma troca alcance por capacidade:\n\n\n\n\n\n\n\n\n\nBanda\nAlcance/penetração\nCapacidade\nCongestionamento\n\n\n\n\n2,4 GHz\nmaior alcance, atravessa paredes\nbaixa (poucos canais)\nalto (vizinhos, BT, micro-ondas)\n\n\n5 GHz\nmenor alcance, mais sensível a parede\nalta (muitos canais)\nmédio\n\n\n6 GHz (Wi-Fi 6E/7)\nparecido com 5 GHz\naltíssima (espectro novo e limpo)\nbaixo (ainda pouco usado)\n\n\n\nA regra física é a do capítulo Seção 43.1: quanto maior a frequência, maior a atenuação por distância e por obstáculo. Daí 2,4 GHz “ir mais longe” e 5/6 GHz “ser mais rápido perto do roteador”. Um bom roteador moderno é dual/tri-band e publica o mesmo SSID nas bandas (band steering), empurrando cada cliente para a melhor.",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>57</span>  <span class='chapter-title'>Wi-Fi Doméstico: Bandas, Canais e Cobertura</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/56-wifi-domestico.html#sec-wifi-canais",
+    "href": "capitulos/56-wifi-domestico.html#sec-wifi-canais",
+    "title": "57  Wi-Fi Doméstico: Bandas, Canais e Cobertura",
+    "section": "57.3 Canais e o problema da sobreposição",
+    "text": "57.3 Canais e o problema da sobreposição\nCada banda se divide em canais. O detalhe crítico — origem de metade dos problemas de 2,4 GHz — é que os canais de 2,4 GHz se sobrepõem: só 1, 6 e 11 não interferem entre si.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 57.1: Em 2,4 GHz cada canal tem ~22 MHz e o espaçamento é de 5 MHz, então só 1, 6 e 11 ficam realmente separados. Usar canal 3 ou 9 “soma” interferência de dois vizinhos.\n\n\n\nEm 5 GHz há muitos canais não sobrepostos, mas alguns são DFS (precisam ceder a radares meteorológicos/militares) e podem sofrer interrupções. Largura de canal também conta: 20 MHz é mais robusto e menos suscetível; 40/80/160 MHz dá mais pico de banda, mas “ocupa” mais espectro e piora a convivência num prédio cheio de redes.",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>57</span>  <span class='chapter-title'>Wi-Fi Doméstico: Bandas, Canais e Cobertura</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/56-wifi-domestico.html#sec-wifi-csma",
+    "href": "capitulos/56-wifi-domestico.html#sec-wifi-csma",
+    "title": "57  Wi-Fi Doméstico: Bandas, Canais e Cobertura",
+    "section": "57.4 CSMA/CA: o ar é um meio compartilhado",
+    "text": "57.4 CSMA/CA: o ar é um meio compartilhado\nWi-Fi usa CSMA/CA — escuta antes de transmitir, exatamente o problema do capítulo Seção 46.3. Só um transmite por vez no canal; todos os clientes e redes vizinhas no mesmo canal dividem o tempo. Consequências práticas:\n\nUm cliente distante e lento (negocia 6 Mbps) prende o canal mais tempo por pacote, derrubando a vazão dos demais (airtime desigual).\nRedes vizinhas no mesmo canal competem pelo mesmo ar — daí a importância do plano 1/6/11.\n“Velocidade negociada” (PHY rate) não é vazão: descontados overhead, disputa e retransmissões, a vazão real fica bem abaixo (o mesmo goodput do capítulo Seção 7.1).\n\nWi-Fi 6 (802.11ax) ataca isso com OFDMA (vários clientes em subportadoras no mesmo tempo) e MU-MIMO, melhorando o uso do airtime em ambientes cheios de dispositivos.",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>57</span>  <span class='chapter-title'>Wi-Fi Doméstico: Bandas, Canais e Cobertura</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/56-wifi-domestico.html#sec-wifi-padroes",
+    "href": "capitulos/56-wifi-domestico.html#sec-wifi-padroes",
+    "title": "57  Wi-Fi Doméstico: Bandas, Canais e Cobertura",
+    "section": "57.5 Padrões: do 802.11n ao Wi-Fi 7",
+    "text": "57.5 Padrões: do 802.11n ao Wi-Fi 7\n\n\n\n\n\n\n\n\n\nGeração\nPadrão\nBanda\nDestaque\n\n\n\n\nWi-Fi 4\n802.11n\n2,4/5 GHz\nMIMO, base instalada antiga\n\n\nWi-Fi 5\n802.11ac\n5 GHz\n80/160 MHz, MU-MIMO down\n\n\nWi-Fi 6/6E\n802.11ax\n2,4/5/6 GHz\nOFDMA, eficiência em ambiente cheio\n\n\nWi-Fi 7\n802.11be\n2,4/5/6 GHz\n320 MHz, MLO (multi-link)\n\n\n\nPara o provedor, o salto que mais importa não é o pico de banda anunciado na caixa, e sim a eficiência em casa cheia de aparelhos (Wi-Fi 6 OFDMA) — é o que reduz chamado, não o “número grande” do marketing.",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>57</span>  <span class='chapter-title'>Wi-Fi Doméstico: Bandas, Canais e Cobertura</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/56-wifi-domestico.html#sec-wifi-cobertura",
+    "href": "capitulos/56-wifi-domestico.html#sec-wifi-cobertura",
+    "title": "57  Wi-Fi Doméstico: Bandas, Canais e Cobertura",
+    "section": "57.6 Cobertura: posicionamento, repetidor e mesh",
+    "text": "57.6 Cobertura: posicionamento, repetidor e mesh\nA maior causa de “lentidão” é cobertura ruim, não falta de banda. Atenuação por obstáculo (capítulo Seção 43.1) derruba o sinal rápido: laje, parede de concreto, espelho e geladeira são barreiras severas, principalmente em 5/6 GHz.\n\nPosição do roteador: central, alto e longe de metal, micro-ondas e do chão. Roteador atrás da TV, no rack, dentro do armário = chamado garantido.\nRepetidor (range extender): barato, mas costuma repetir pela metade da banda e cria SSID duplicado — solução de tapar buraco, não de projeto.\nMesh: vários pontos com o mesmo SSID e roaming transparente; idealmente com backhaul cabeado (ou banda dedicada). É a solução correta para casa grande ou de dois andares.\n\n\nNa prática do provedor\n\nTeste cabeado vs. Wi-Fi antes de culpar a rede. Cabo entrega 300M e Wi-Fi 40M no quarto dos fundos? O problema é Wi-Fi/cobertura, não a fibra. Esse teste isolado economiza a maioria das visitas (capítulo Seção 60.1).\nForce 2,4 GHz para canais 1, 6 ou 11. “Automático” muitas vezes escolhe canal sobreposto. Em prédio, escaneie o ambiente e fixe o canal mais limpo.\nNão venda 5 GHz como bala de prata. Mais rápido perto, mas morre na parede. Cliente em casa grande precisa de mesh, não de SSID 5 GHz mais potente.\nGerencie a ONT/roteador por TR-069/ACS (capítulo Seção 31.1): leia canal, potência, clientes conectados e a taxa negociada sem ir à casa; troque canal e atualize firmware remotamente.\nPadronize firmware e desligue “turbos” instáveis (160 MHz em ambiente cheio costuma piorar). 20/40 MHz estável &gt; 160 MHz com retransmissão.\nONT bridge + roteador homologado dá mais controle de Wi-Fi do que ONT router de baixo custo; decida conforme seu modelo de suporte (capítulo Seção 31.1).",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>57</span>  <span class='chapter-title'>Wi-Fi Doméstico: Bandas, Canais e Cobertura</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/56-wifi-domestico.html#sec-resumo-56",
+    "href": "capitulos/56-wifi-domestico.html#sec-resumo-56",
+    "title": "57  Wi-Fi Doméstico: Bandas, Canais e Cobertura",
+    "section": "57.7 Resumo e checklist",
+    "text": "57.7 Resumo e checklist\n\nWi-Fi é rádio compartilhado (CSMA/CA): mesma física de propagação e disputa da Parte IX, dentro de casa.\n2,4 GHz vai longe e congestiona; 5/6 GHz é rápido e morre na parede. Em 2,4 GHz, só 1, 6 e 11 não se sobrepõem.\nPHY rate não é vazão; cobertura ruim, não falta de banda, é a causa nº 1 de “lentidão”.\nMesh com backhaul resolve casa grande; repetidor é paliativo.\nGerencie remotamente por TR-069; sempre isole cabeado vs. Wi-Fi.\n\nChecklist do capítulo\n\nEscolho a banda certa (alcance vs. capacidade) para cada situação.\nFixo 2,4 GHz em canal 1, 6 ou 11 e evito sobreposição.\nExplico por que PHY rate não é a vazão entregue.\nIsolo Wi-Fi de fibra com teste cabeado antes de despachar técnico.\nIndico mesh (backhaul) em vez de repetidor quando o caso pede.",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>57</span>  <span class='chapter-title'>Wi-Fi Doméstico: Bandas, Canais e Cobertura</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/57-voip-sip-telefonia.html",
+    "href": "capitulos/57-voip-sip-telefonia.html",
+    "title": "58  VoIP e SIP: Telefonia sobre IP",
+    "section": "",
+    "text": "58.1 Voz como mais um serviço sobre a rede\nMuito provedor de fibra também vende telefone. A porta TEL da ONT (capítulo Seção 31.1) não liga em central telefônica nenhuma: a voz vira pacotes IP e viaja pela mesma rede dos dados — é VoIP (Voice over IP). Tecnicamente é um serviço de tempo real rodando sobre UDP (capítulo Seção 22.1), extremamente sensível a jitter e perda (capítulo Seção 7.1), e por isso o primeiro candidato a QoS (capítulo Seção 27.1). Entender VoIP é separar duas coisas que as pessoas confundem: a sinalização (quem liga para quem, toca, atende, desliga) e a mídia (a voz em si).",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>58</span>  <span class='chapter-title'>VoIP e SIP: Telefonia sobre IP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/57-voip-sip-telefonia.html#sec-voip-sip-rtp",
+    "href": "capitulos/57-voip-sip-telefonia.html#sec-voip-sip-rtp",
+    "title": "58  VoIP e SIP: Telefonia sobre IP",
+    "section": "58.2 SIP e RTP: sinalização separada da mídia",
+    "text": "58.2 SIP e RTP: sinalização separada da mídia\n\nSIP (Session Initiation Protocol) é a sinalização: estabelece, modifica e encerra a chamada (INVITE, ACK, BYE). É texto, parecido com HTTP (capítulo Seção 25.2), normalmente em UDP/5060 (ou TLS para SIP seguro).\nRTP (Real-time Transport Protocol) carrega a voz digitalizada, em UDP, numa faixa de portas alta negociada na hora. É o RTP que precisa de QoS — não o SIP.\nSDP, dentro do INVITE, negocia codecs, IPs e portas que o RTP vai usar.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 58.1: A sinalização SIP abre e fecha a chamada; entre o ACK e o BYE, a voz flui em RTP direto entre as pontas. O QoS protege o RTP, não o SIP.",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>58</span>  <span class='chapter-title'>VoIP e SIP: Telefonia sobre IP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/57-voip-sip-telefonia.html#sec-voip-codecs",
+    "href": "capitulos/57-voip-sip-telefonia.html#sec-voip-codecs",
+    "title": "58  VoIP e SIP: Telefonia sobre IP",
+    "section": "58.3 Codecs: qualidade contra banda",
+    "text": "58.3 Codecs: qualidade contra banda\nO codec digitaliza e comprime a voz. A escolha equilibra qualidade, banda e robustez:\n\n\n\n\n\n\n\n\n\nCodec\nBanda aprox. (com overhead)\nQualidade\nNota\n\n\n\n\nG.711 (PCM)\n~80–90 kbps\nexcelente\nsem compressão; padrão “limpo”\n\n\nG.729\n~30 kbps\nboa\ncomprime; útil em enlace estreito\n\n\nOpus\n10–40 kbps (variável)\nexcelente\nmoderno, resiliente a perda\n\n\n\nUma chamada G.711 consome menos de 0,1 Mbps — banda nunca é o problema; jitter e perda são. Cada conversa usa dois fluxos RTP (um por sentido), e o que estraga a ligação é jitter (voz “robótica”), perda (cortes) e latência alta (eco, “atravessar a fala”).",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>58</span>  <span class='chapter-title'>VoIP e SIP: Telefonia sobre IP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/57-voip-sip-telefonia.html#sec-voip-nat",
+    "href": "capitulos/57-voip-sip-telefonia.html#sec-voip-nat",
+    "title": "58  VoIP e SIP: Telefonia sobre IP",
+    "section": "58.4 O calcanhar de aquiles: NAT",
+    "text": "58.4 O calcanhar de aquiles: NAT\nSIP/RTP carregam endereços IP dentro do próprio conteúdo (no SDP). Quando o assinante está atrás de NAT/CGNAT (capítulo Seção 20.1), o IP anunciado é o privado — e a outra ponta tenta mandar a voz para um endereço inalcançável. Sintoma clássico: chamada conecta mas não há áudio (ou áudio só num sentido). As soluções:\n\nSTUN/ICE/TURN: o cliente descobre seu IP público e a melhor rota de mídia.\nSBC (Session Border Controller): um intermediário do provedor que reescreve SIP/SDP e ancora a mídia, resolvendo NAT de forma centralizada.\nALG SIP no roteador: muitas vezes piora — em geral é melhor desligar o SIP ALG do CPE e tratar NAT no SBC.",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>58</span>  <span class='chapter-title'>VoIP e SIP: Telefonia sobre IP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/57-voip-sip-telefonia.html#sec-voip-qos",
+    "href": "capitulos/57-voip-sip-telefonia.html#sec-voip-qos",
+    "title": "58  VoIP e SIP: Telefonia sobre IP",
+    "section": "58.5 QoS para voz",
+    "text": "58.5 QoS para voz\nVoz é o caso de uso que justifica o QoS (capítulo Seção 27.1). A prática:\n\nMarque o RTP de voz como EF (DSCP 46) e honre a marca em todo o core.\nEm links de acesso/rádio, priorize a fila de voz e proteja contra bufferbloat (capítulo Seção 7.1): voz não tolera fila inchada.\nDimensione o jitter buffer no equipamento; ele troca um pouco de latência por estabilidade contra jitter.\n\n\nNa prática do provedor\n\n“Liga mas não tem voz” = NAT/RTP, não SIP. Se a chamada completa mas falta áudio (ou só um lado ouve), suspeite de CGNAT/SBC/ALG, não da conta SIP.\nTrate NAT no SBC, desligue o SIP ALG do CPE. O ALG do roteador doméstico é fonte recorrente de áudio unidirecional.\nMarque EF (DSCP 46) e priorize a fila de voz na borda e no rádio; sem isso, um download satura o enlace e pica a ligação.\nG.711 onde há banda, Opus onde há perda. Não economize codec onde sobra fibra — qualidade limpa gera menos reclamação.\nTelefonia tem regras próprias (numeração, portabilidade, interconexão): a oferta de voz pode exigir enquadramento regulatório específico (apêndice Seção B.1).",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>58</span>  <span class='chapter-title'>VoIP e SIP: Telefonia sobre IP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/57-voip-sip-telefonia.html#sec-resumo-57",
+    "href": "capitulos/57-voip-sip-telefonia.html#sec-resumo-57",
+    "title": "58  VoIP e SIP: Telefonia sobre IP",
+    "section": "58.6 Resumo e checklist",
+    "text": "58.6 Resumo e checklist\n\nVoIP separa SIP (sinalização: INVITE/200 OK/ACK/BYE) de RTP (a voz em UDP).\nBanda não é o gargalo (uma chamada &lt; 0,1 Mbps); jitter, perda e latência são.\nNAT/CGNAT quebra a mídia (áudio mudo/unidirecional); resolva com SBC/STUN, e desconfie do SIP ALG.\nVoz é o caso clássico de QoS: marque EF/DSCP 46 e priorize a fila.\n\nChecklist do capítulo\n\nDistingo sinalização (SIP) de mídia (RTP) e sei qual precisa de QoS.\nEscolho codec (G.711/G.729/Opus) por banda e robustez.\nDiagnostico áudio mudo/unidirecional como problema de NAT/RTP.\nMarco EF (DSCP 46) e priorizo a voz na borda e no rádio.",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>58</span>  <span class='chapter-title'>VoIP e SIP: Telefonia sobre IP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/58-multicast-iptv.html",
+    "href": "capitulos/58-multicast-iptv.html",
+    "title": "59  Multicast e IPTV",
+    "section": "",
+    "text": "59.1 Um para muitos, sem clonar a rede\nQuando o provedor entrega TV ao vivo (IPTV), milhares de assinantes assistem ao mesmo canal ao mesmo tempo. Mandar uma cópia do fluxo para cada um (unicast) multiplicaria o tráfego pelo número de espectadores e derreteria o uplink. A solução é multicast: a fonte envia uma única cópia e a rede replica o fluxo só onde há quem peça. É o oposto do broadcast (que vai a todos) — multicast vai apenas a quem assinou o grupo. Este capítulo encadeia coisas já vistas: o endereçamento 224.0.0.0/4 (capítulo Seção 16.1), o IPoE que “casa” melhor com IPTV (capítulo Seção 47.1) e o QoS para vídeo (capítulo Seção 27.1).",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>59</span>  <span class='chapter-title'>Multicast e IPTV</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/58-multicast-iptv.html#sec-multicast-grupo",
+    "href": "capitulos/58-multicast-iptv.html#sec-multicast-grupo",
+    "title": "59  Multicast e IPTV",
+    "section": "59.2 Endereçamento de grupo",
+    "text": "59.2 Endereçamento de grupo\nMulticast não tem “destinatário” único: tem grupo. Um endereço classe D (224.0.0.0 a 239.255.255.255, ou seja 224.0.0.0/4) identifica o grupo, não uma máquina. Quem quer receber um canal entra no grupo daquele canal; quem troca de canal sai de um grupo e entra em outro. A faixa 239.0.0.0/8 é de uso administrativo/privado (típica para IPTV interna do provedor). No nível do quadro Ethernet, o IP de grupo mapeia para um MAC multicast (capítulo Seção 12.1).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 59.1: A fonte manda uma cópia; o fluxo só se replica no nó mais próximo dos assinantes que pediram o canal. Trocar 3 por 3000 STBs não muda o tráfego no tronco.",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>59</span>  <span class='chapter-title'>Multicast e IPTV</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/58-multicast-iptv.html#sec-multicast-igmp-pim",
+    "href": "capitulos/58-multicast-iptv.html#sec-multicast-igmp-pim",
+    "title": "59  Multicast e IPTV",
+    "section": "59.3 IGMP no acesso, PIM no core",
+    "text": "59.3 IGMP no acesso, PIM no core\nDois protocolos fazem a árvore acontecer:\n\nIGMP (Internet Group Management Protocol) é o assinante falando com o roteador: “quero entrar no grupo do canal X” (join) ou “saí” (leave). É o que o set-top box dispara ao trocar de canal.\nPIM (Protocol Independent Multicast, geralmente PIM-SM) é o que os roteadores do core usam entre si para construir a árvore de distribuição da fonte até onde há joins, apoiando-se no roteamento unicast já existente (capítulo Seção 21.1).\n\nNo meio, o switch de acesso precisa de IGMP snooping: sem ele, o switch trata multicast como broadcast e inunda todas as portas com todos os canais — matando a rede de acesso. Com snooping, ele “escuta” os joins e envia cada canal só nas portas que pediram.\n\n\n\n\n\n\n\n\nFunção\nProtocolo\nOnde\n\n\n\n\nAssinante entra/sai do grupo\nIGMP\nSTB ↔︎ roteador de borda\n\n\nSwitch entrega só a quem pediu\nIGMP snooping\nswitch de acesso\n\n\nRoteadores montam a árvore\nPIM-SM\ncore/distribuição",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>59</span>  <span class='chapter-title'>Multicast e IPTV</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/58-multicast-iptv.html#sec-multicast-ipoe",
+    "href": "capitulos/58-multicast-iptv.html#sec-multicast-ipoe",
+    "title": "59  Multicast e IPTV",
+    "section": "59.4 Por que IPTV combina com IPoE",
+    "text": "59.4 Por que IPTV combina com IPoE\nNo PPPoE (capítulo Seção 47.1), cada assinante tem um túnel ponto a ponto até o BNG — o que é, por natureza, unicast e atrapalha a replicação eficiente. No IPoE, o tráfego é IP nativo no acesso, e o IGMP snooping e a replicação funcionam de forma direta. Por isso operadoras com forte oferta de IPTV tendem a IPoE (ou usam recursos específicos para multicast sobre PPPoE). É a justificativa prática da tabela “PPPoE vs. IPoE” do capítulo Seção 47.1.",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>59</span>  <span class='chapter-title'>Multicast e IPTV</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/58-multicast-iptv.html#sec-multicast-qos",
+    "href": "capitulos/58-multicast-iptv.html#sec-multicast-qos",
+    "title": "59  Multicast e IPTV",
+    "section": "59.5 QoS e a saúde do vídeo",
+    "text": "59.5 QoS e a saúde do vídeo\nVídeo ao vivo é constante e sensível: tolera pouco perda (causa macroblock, imagem “quadriculada”) e pouco jitter. Trate-o no QoS (capítulo Seção 27.1) com classe própria (tipicamente AF), separado do bulk e abaixo da voz. O zapping (tempo para trocar de canal) depende do IGMP leave/join rápido e do I-frame do vídeo — leave lento deixa o canal antigo “vazando” e atrasa a troca.\n\nNa prática do provedor\n\nSem IGMP snooping, multicast vira broadcast. O sintoma é a rede de acesso inundada e lenta ao ligar IPTV. Habilite snooping em todos os switches do caminho e configure o querier.\nPrefira IPoE para IPTV (capítulo Seção 47.1) — a replicação é natural; em PPPoE, multicast é dor de cabeça.\nUse 239.0.0.0/8 para os grupos internos de IPTV e documente o mapa canal→grupo.\nMonitore perda no fluxo multicast (capítulo Seção 50.1): 0,1% de perda que passa despercebido no speedtest já “quadricula” a TV.\nReserve uma classe de QoS para vídeo (AF), separada da voz (EF) e do tráfego comum; leave rápido melhora o zapping.",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>59</span>  <span class='chapter-title'>Multicast e IPTV</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/58-multicast-iptv.html#sec-resumo-58",
+    "href": "capitulos/58-multicast-iptv.html#sec-resumo-58",
+    "title": "59  Multicast e IPTV",
+    "section": "59.6 Resumo e checklist",
+    "text": "59.6 Resumo e checklist\n\nMulticast manda uma cópia e deixa a rede replicar — viabiliza IPTV sem multiplicar o tráfego por espectador.\nGrupos usam classe D (224.0.0.0/4); IPTV interna costuma usar 239.0.0.0/8.\nIGMP (assinante↔︎roteador) + IGMP snooping (switch) + PIM-SM (core) constroem a entrega.\nIPoE combina melhor com IPTV que PPPoE; vídeo quer QoS (classe AF) e baixa perda.\n\nChecklist do capítulo\n\nExplico a diferença entre unicast, broadcast e multicast.\nSei o papel de IGMP, IGMP snooping e PIM-SM e onde cada um atua.\nHabilito snooping para não inundar o acesso com os canais.\nJustifico IPoE para IPTV e dou ao vídeo uma classe de QoS própria.",
+    "crumbs": [
+      "Parte XIII — Serviços ao Assinante e Rede do Cliente",
+      "<span class='chapter-number'>59</span>  <span class='chapter-title'>Multicast e IPTV</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/59-troubleshooting-metodologia.html",
+    "href": "capitulos/59-troubleshooting-metodologia.html",
+    "title": "60  Troubleshooting: Metodologia por Camadas",
+    "section": "",
+    "text": "60.1 Diagnosticar é eliminar, não adivinhar\nTodo capítulo deste manual terminou com pistas de diagnóstico: LEDs da ONT (capítulo Seção 31.1), potência Rx, OTDR (capítulo Seção 41.1), ping e traceroute (capítulo Seção 19.1). Falta amarrá-las num método. A diferença entre um suporte que resolve por telefone e um que despacha técnico a esmo é ter um roteiro que isola a falha por camada (capítulo Seção 3.8) em vez de trocar peças no escuro. A regra de ouro: uma camada só funciona se a de baixo funciona. Por isso, na dúvida, comece embaixo (camada 1) e suba — você elimina metade das causas a cada degrau.",
+    "crumbs": [
+      "Parte XIV — Diagnóstico e Operação",
+      "<span class='chapter-number'>60</span>  <span class='chapter-title'>Troubleshooting: Metodologia por Camadas</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/59-troubleshooting-metodologia.html#sec-tshoot-estrategias",
+    "href": "capitulos/59-troubleshooting-metodologia.html#sec-tshoot-estrategias",
+    "title": "60  Troubleshooting: Metodologia por Camadas",
+    "section": "60.2 Três estratégias",
+    "text": "60.2 Três estratégias\n\nBottom-up (de baixo para cima): começa na camada física e sobe. Ideal para o acesso óptico/rádio do provedor, onde a maioria dos problemas é camada 1 (fibra, conector, potência, visada).\nTop-down (de cima para baixo): começa na aplicação. Bom quando “a internet funciona, mas só um site/serviço falha”.\nDividir para conquistar: ataca direto a camada mais provável pelo sintoma e caminha para os lados. Veterano usa essa — mas ela depende de experiência.\n\nNo provedor, o default é bottom-up: barato, mecânico e à prova de palpite.",
+    "crumbs": [
+      "Parte XIV — Diagnóstico e Operação",
+      "<span class='chapter-number'>60</span>  <span class='chapter-title'>Troubleshooting: Metodologia por Camadas</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/59-troubleshooting-metodologia.html#sec-tshoot-escada",
+    "href": "capitulos/59-troubleshooting-metodologia.html#sec-tshoot-escada",
+    "title": "60  Troubleshooting: Metodologia por Camadas",
+    "section": "60.3 A escada de diagnóstico",
+    "text": "60.3 A escada de diagnóstico\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 60.1: Bottom-up: confirme cada degrau antes de subir. LOS aceso? nada acima importa. Não autenticou PPPoE? não adianta testar DNS.\n\n\n\n\n\n\n\n\n\n\n\nCamada\nPergunta-chave\nFerramenta\n\n\n\n\n1 Física\nTem luz/sinal? Rx na faixa? Visada ok?\nLEDs, power meter, OTDR, VFL (cap. Seção 40.1)\n\n\n2 Enlace\nAutenticou? MAC/VLAN certos?\nOLT, logs de PPPoE/RADIUS (cap. Seção 48.1)\n\n\n3 Rede\nTem IP e gateway? Rota existe?\nping, traceroute (cap. Seção 19.1)\n\n\n4 Transporte\nPorta aberta? MTU/MSS ok?\nteste de porta, MSS clamp (cap. Seção 22.1)\n\n\n5–7 Aplicação\nDNS resolve? TLS ok? Serviço no ar?\nnslookup/dig, navegador, looking glass",
+    "crumbs": [
+      "Parte XIV — Diagnóstico e Operação",
+      "<span class='chapter-number'>60</span>  <span class='chapter-title'>Troubleshooting: Metodologia por Camadas</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/59-troubleshooting-metodologia.html#sec-tshoot-roteiro",
+    "href": "capitulos/59-troubleshooting-metodologia.html#sec-tshoot-roteiro",
+    "title": "60  Troubleshooting: Metodologia por Camadas",
+    "section": "60.4 Roteiro do chamado de acesso",
+    "text": "60.4 Roteiro do chamado de acesso\nO caminho bottom-up para “minha internet caiu”, reaproveitando o capítulo Seção 31.1:\n\nEnergia e LEDs. Power apagado? É tomada/fonte. LOS vermelho? Camada 1 — fibra/conector/drop; leia a potência Rx remotamente antes de despachar (interpretação do laudo em Seção 41.1).\nAutenticação (camada 2). PON fixo mas sem Internet? Veja PPPoE/RADIUS (capítulo Seção 48.1): credencial, sessão presa, perfil.\nCamada 3. Pegou IP? ping no gateway e num IP público (ex.: 8.8.8.8). Responde por IP mas não por nome → é DNS (camada 7), não a rede.\nIsole cliente vs. rede. Teste cabeado vs. Wi-Fi (capítulo Seção 57.1): problema só no Wi-Fi = cobertura, não fibra. traceroute mostra onde o caminho morre (no cliente, no seu core ou no trânsito).\nAplicação. Só um serviço falha? Verifique DNS, MTU/MSS (PPPoE reduz a MTU, capítulo Seção 22.1) e o looking glass do IX (capítulo Seção 49.1).",
+    "crumbs": [
+      "Parte XIV — Diagnóstico e Operação",
+      "<span class='chapter-number'>60</span>  <span class='chapter-title'>Troubleshooting: Metodologia por Camadas</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/59-troubleshooting-metodologia.html#sec-tshoot-escopo",
+    "href": "capitulos/59-troubleshooting-metodologia.html#sec-tshoot-escopo",
+    "title": "60  Troubleshooting: Metodologia por Camadas",
+    "section": "60.5 Falha de um x falha de muitos",
+    "text": "60.5 Falha de um x falha de muitos\nAntes de mergulhar num assinante, pergunte o escopo — isso muda tudo:\n\nUm cliente: drop, ONT, Wi-Fi, conta PPPoE. Diagnóstico individual.\nUma CTO/um PON inteiro caiu: suspeite de rede primária/secundária, cabo rompido, OLT/placa, ou splitter (capítulos Seção 33.4, Seção 32.1).\nTudo lento/instável ao mesmo tempo: uplink saturado, peering/trânsito (capítulo Seção 49.1), DDoS (capítulo Seção 53.1), ou falha de núcleo (capítulo Seção 52.1). O monitoramento (capítulo Seção 50.1) é quem responde isso em segundos.\n\n\nNa prática do provedor\n\nComece pela camada 1 e pelo escopo. “Um ou muitos?” e “tem luz?” eliminam a maioria das hipóteses antes de qualquer comando.\nLeia potência e estado da sessão remotamente (OLT, TR-069, RADIUS) antes de despachar técnico — visita é o recurso mais caro do provedor.\nping por IP vs. por nome separa rede de DNS em dez segundos. Decore esse teste e ensine ao atendimento de primeiro nível.\nMTU/MSS é a falha “fantasma”: navega em quase tudo, mas alguns sites/HTTPS travam. Em PPPoE, configure MSS clamping (capítulo Seção 22.1).\nDocumente o roteiro e padronize-o no atendimento. Roteiro escrito transforma diagnóstico em processo — e reduz visita, tempo de chamado e troca de peça boa.\nDeixe o monitoramento ser o primeiro a saber (capítulo Seção 50.1): se muitos caíram juntos, o NOC age na causa raiz, não em mil chamados individuais.",
+    "crumbs": [
+      "Parte XIV — Diagnóstico e Operação",
+      "<span class='chapter-number'>60</span>  <span class='chapter-title'>Troubleshooting: Metodologia por Camadas</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/59-troubleshooting-metodologia.html#sec-resumo-59",
+    "href": "capitulos/59-troubleshooting-metodologia.html#sec-resumo-59",
+    "title": "60  Troubleshooting: Metodologia por Camadas",
+    "section": "60.6 Resumo e checklist",
+    "text": "60.6 Resumo e checklist\n\nDiagnosticar é eliminar por camada: uma camada só funciona se a de baixo funciona. No provedor, o padrão é bottom-up.\nA escada: L1 (luz/Rx/visada) → L2 (PPPoE/MAC) → L3 (IP/rota) → L4 (porta/MTU) → L5–7 (DNS/TLS/serviço).\nPergunte o escopo (um x muitos) antes de mergulhar — muda completamente a hipótese.\nFerramentas-chave: LEDs/power meter/OTDR, logs PPPoE/RADIUS, ping/traceroute, teste cabeado vs. Wi-Fi, looking glass e monitoramento.\n\nChecklist do capítulo\n\nEscolho a estratégia (bottom-up no acesso) e sigo a escada de camadas.\nDetermino o escopo (um cliente x CTO x rede toda) antes de agir.\nSeparo rede de DNS com ping por IP vs. por nome.\nLeio potência/sessão remotamente antes de despachar técnico.\nReconheço a falha de MTU/MSS em PPPoE.",
+    "crumbs": [
+      "Parte XIV — Diagnóstico e Operação",
+      "<span class='chapter-number'>60</span>  <span class='chapter-title'>Troubleshooting: Metodologia por Camadas</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/config-exemplos.html",
+    "href": "capitulos/config-exemplos.html",
+    "title": "Apêndice A — Apêndice: Exemplos de Configuração",
+    "section": "",
+    "text": "A.1 Como ler este apêndice\nO corpo do manual é conceitual e independente de fabricante — de propósito: o conceito sobrevive à troca de marca, a sintaxe não. Este apêndice aterra alguns conceitos em comandos reais, para servir de ponto de partida ao montar o laboratório. Os trechos são ilustrativos: a sintaxe exata muda por versão e fabricante (RouterOS, Huawei, Cisco, Nokia…). Sempre valide em laboratório antes da produção e troque IPs/ASNs/senhas pelos seus. Os exemplos usam Mikrotik (RouterOS) por ser o mais comum em provedores regionais, com notas para OLT Huawei.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Apêndice: Exemplos de Configuração</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/config-exemplos.html#sec-config-exemplos",
+    "href": "capitulos/config-exemplos.html#sec-config-exemplos",
+    "title": "Apêndice A — Apêndice: Exemplos de Configuração",
+    "section": "",
+    "text": "Aviso: prefixos, ASNs e credenciais abaixo são fictícios (documentação, ASN privado 64512). Não copie para produção sem revisar.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Apêndice: Exemplos de Configuração</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/config-exemplos.html#sec-config-ospf",
+    "href": "capitulos/config-exemplos.html#sec-config-ospf",
+    "title": "Apêndice A — Apêndice: Exemplos de Configuração",
+    "section": "A.2 OSPF como IGP interno",
+    "text": "A.2 OSPF como IGP interno\nIGP carregando só infraestrutura (loopbacks e links), como no capítulo Seção 21.1. Loopback /32 é o router-id e destino estável de gerência/iBGP.\n# Mikrotik RouterOS - OSPF basico (loopback + links de core)\n/interface bridge add name=loopback\n/ip address add address=10.255.0.1/32 interface=loopback\n/routing ospf instance add name=core router-id=10.255.0.1\n/routing ospf area add name=backbone area-id=0.0.0.0 instance=core\n/routing ospf interface-template add area=backbone networks=10.255.0.1/32\n/routing ospf interface-template add area=backbone interfaces=ether1 \\\n    cost=10 type=ptp",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Apêndice: Exemplos de Configuração</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/config-exemplos.html#sec-config-bgp",
+    "href": "capitulos/config-exemplos.html#sec-config-bgp",
+    "title": "Apêndice A — Apêndice: Exemplos de Configuração",
+    "section": "A.3 BGP com o trânsito/IX",
+    "text": "A.3 BGP com o trânsito/IX\nEGP carregando a internet e os clientes (capítulo Seção 49.1). Filtre sempre o que anuncia (só seus prefixos) e considere filtrar o que aceita. iBGP resolve o próximo salto via loopback aprendido no OSPF.\n# Mikrotik RouterOS v7 - eBGP com upstream\n/routing bgp connection add name=upstream remote.address=203.0.113.1 \\\n    remote.as=64500 local.role=ebgp \\\n    address-families=ip output.filter-chain=bgp-out \\\n    input.filter-chain=bgp-in\n\n# anuncie SOMENTE o seu bloco\n/routing filter rule add chain=bgp-out rule=\"if (dst==198.51.100.0/22) {accept}\"\n/routing filter rule add chain=bgp-out rule=\"reject\"\n# proteja-se contra rota default/lixo entrante (exemplo minimo)\n/routing filter rule add chain=bgp-in rule=\"if (dst-len&gt;24) {reject}\"",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Apêndice: Exemplos de Configuração</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/config-exemplos.html#sec-config-pppoe",
+    "href": "capitulos/config-exemplos.html#sec-config-pppoe",
+    "title": "Apêndice A — Apêndice: Exemplos de Configuração",
+    "section": "A.4 PPPoE + RADIUS no BNG",
+    "text": "A.4 PPPoE + RADIUS no BNG\nConcentração de assinantes autenticados por RADIUS (capítulos Seção 47.1, Seção 48.1). O profile já trata a MTU/MSS do PPPoE (capítulo Seção 22.1).\n# Mikrotik RouterOS - servidor PPPoE com RADIUS e MSS clamp\n/ppp profile add name=assinantes use-mpls=no \\\n    change-tcp-mss=yes only-one=yes dns-server=10.255.0.53\n/interface pppoe-server server add service-name=provedor interface=vlan-acesso \\\n    default-profile=assinantes one-session-per-host=yes\n/radius add service=ppp address=10.255.0.20 secret=segredo-aqui\n/ppp aaa set use-radius=yes",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Apêndice: Exemplos de Configuração</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/config-exemplos.html#sec-config-qos",
+    "href": "capitulos/config-exemplos.html#sec-config-qos",
+    "title": "Apêndice A — Apêndice: Exemplos de Configuração",
+    "section": "A.5 QoS e controle de banda",
+    "text": "A.5 QoS e controle de banda\nHonrar a marcação e proteger filas sensíveis (capítulo Seção 27.1). Voz (EF) acima de vídeo (AF) acima do bulk; o plano do cliente sai do RADIUS (Rate-Limit).\n# Mikrotik RouterOS - plano de 300M (o RADIUS pode injetar via Rate-Limit)\n/queue simple add name=cli-300M target=10.20.0.0/24 \\\n    max-limit=300M/300M burst-limit=330M/330M\n# priorizar voz marcada EF (DSCP 46) numa queue tree e proteger bufferbloat\n/queue type add name=voz-pfifo kind=pfifo pfifo-limit=20",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Apêndice: Exemplos de Configuração</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/config-exemplos.html#sec-config-olt",
+    "href": "capitulos/config-exemplos.html#sec-config-olt",
+    "title": "Apêndice A — Apêndice: Exemplos de Configuração",
+    "section": "A.6 Provisionar ONT na OLT (Huawei)",
+    "text": "A.6 Provisionar ONT na OLT (Huawei)\nFluxo de descoberta → autorização → perfil do capítulo Seção 35.1. A ONT é identificada pelo SN (capítulo Seção 31.1). Comandos Huawei (MA5800) resumidos — a ordem e os nomes variam por versão:\n# Huawei OLT (resumo ilustrativo)\ndisplay ont autofind all                 # ve ONTs descobertas (SN)\nconfig\ninterface gpon 0/1\n  ont add 0 sn-auth \"48575443XXXXXXXX\" omci ont-lineprofile-id 10 \\\n      ont-srvprofile-id 10                # autoriza com perfis\n  ont port native-vlan 0 1 vlan 100      # VLAN de servico na ONT\nquit\n# leia a potencia para diagnostico (capitulo @sec-onu-ont)\ndisplay ont optical-info 0 1",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Apêndice: Exemplos de Configuração</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/config-exemplos.html#sec-config-diag",
+    "href": "capitulos/config-exemplos.html#sec-config-diag",
+    "title": "Apêndice A — Apêndice: Exemplos de Configuração",
+    "section": "A.7 Diagnóstico rápido (cliente/POP)",
+    "text": "A.7 Diagnóstico rápido (cliente/POP)\nOs testes do capítulo Seção 60.1 na linha de comando:\nping 10.255.0.1            # gateway/loopback - camada 3 interna\nping 8.8.8.8               # internet por IP - rede ok?\nnslookup site.com.br       # resolve por nome? senao, e DNS (camada 7)\ntraceroute 8.8.8.8         # ONDE o caminho morre (cliente, core, transito)\niperf3 -c host -u          # jitter/perda (UDP) p/ VoIP e video\n\nNa prática do provedor\n\nVersione suas configs (Git/RANCID/Oxidized) e padronize templates por papel (borda, agregador, OLT). Config “na unha” sem versão é dívida técnica.\nFiltro de saída BGP é inegociável: anuncie só o seu bloco. Um filtro errado vira route leak e tira você do ar (ou tira o vizinho).\nMSS clamp no profile PPPoE elimina a falha “fantasma” de MTU (capítulo Seção 60.1).\nTeste em laboratório (até um CHR/GNS3 ajuda) antes de tocar produção; estes trechos são ponto de partida, não receita pronta.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Apêndice: Exemplos de Configuração</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/regulatorio-anatel.html",
+    "href": "capitulos/regulatorio-anatel.html",
+    "title": "Apêndice B — Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)",
+    "section": "",
+    "text": "B.1 Operar ISP no Brasil é uma atividade regulada\nOs 55 capítulos tratam da engenharia da rede; este apêndice trata do que torna o provedor legal. Montar a planta é metade — a outra é estar regular perante a Anatel (capítulo Seção 2.7) e cumprir as leis de guarda de dados e privacidade. Esta visão é introdutória e não substitui assessoria jurídica/regulatória: as regras mudam (resoluções da Anatel, atos normativos) e os valores/prazos exatos devem ser conferidos na regulamentação vigente. O objetivo aqui é o mapa: o que existe e por que importa para a operação.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/regulatorio-anatel.html#sec-reg-scm",
+    "href": "capitulos/regulatorio-anatel.html#sec-reg-scm",
+    "title": "Apêndice B — Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)",
+    "section": "B.2 SCM: a outorga que autoriza o provedor",
+    "text": "B.2 SCM: a outorga que autoriza o provedor\nO serviço que um ISP presta (acesso à internet) enquadra-se, na regulação brasileira, como SCM — Serviço de Comunicação Multimídia. Pontos práticos:\n\nOutorga/autorização de SCM junto à Anatel é o que autoriza legalmente a prestação. Provedores pequenos têm um rito simplificado (dispensas conforme porte), mas a autorização é o ponto de partida.\nCom a outorga vêm obrigações: cadastro e atualização de dados, declarações de tráfego/receita, e atendimento a normas de direitos do consumidor de telecom.\nA figura do provedor de pequeno porte (PPP) tem tratamento regulatório assimétrico (obrigações reduzidas), reconhecendo o peso dos ISPs regionais.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/regulatorio-anatel.html#sec-reg-espectro",
+    "href": "capitulos/regulatorio-anatel.html#sec-reg-espectro",
+    "title": "Apêndice B — Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)",
+    "section": "B.3 Espectro e homologação de equipamentos",
+    "text": "B.3 Espectro e homologação de equipamentos\nA Parte IX já insiste nisso: rádio é espectro regulado (capítulos Seção 43.1, Seção 44.1).\n\nFaixas não licenciadas (ex.: 5 GHz para WISP) têm limite de EIRP e condições de uso; respeitá-las é obrigação, não recomendação. Ultrapassar a EIRP é infração e atrapalha vizinhos.\nTodo equipamento de telecom que se conecta à rede ou irradia precisa ser homologado pela Anatel (rádios, ONTs, roteadores). Equipamento não homologado é irregular e fonte de incompatibilidade e multa.\nFaixas licenciadas (uso exclusivo) exigem autorização de uso de radiofrequência específica — outro rito, para quem opera enlaces licenciados.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/regulatorio-anatel.html#sec-reg-marco-civil",
+    "href": "capitulos/regulatorio-anatel.html#sec-reg-marco-civil",
+    "title": "Apêndice B — Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)",
+    "section": "B.4 Marco Civil: guarda de registros",
+    "text": "B.4 Marco Civil: guarda de registros\nO Marco Civil da Internet (Lei 12.965/2014) impõe ao provedor de conexão o dever de guardar os registros de conexão — quem usou qual IP, quando — pelo prazo legal (1 ano), sob sigilo, fornecidos à autoridade mediante ordem judicial. Consequências de engenharia diretas:\n\nEm CGNAT (capítulo Seção 20.1), o IP público é compartilhado: para identificar um assinante é obrigatório registrar também a porta de origem e o horário (logs de tradução). Sem isso, o log não identifica ninguém — e o provedor fica exposto.\nOs logs de PPPoE/RADIUS (capítulo Seção 48.1) — início/fim de sessão, IP atribuído, usuário — são a base dessa rastreabilidade. Dimensione armazenamento e sincronize o relógio (NTP) de tudo: horário errado invalida o registro.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/regulatorio-anatel.html#sec-reg-lgpd",
+    "href": "capitulos/regulatorio-anatel.html#sec-reg-lgpd",
+    "title": "Apêndice B — Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)",
+    "section": "B.5 LGPD: dados do assinante",
+    "text": "B.5 LGPD: dados do assinante\nA LGPD (Lei 13.709/2018) rege o tratamento de dados pessoais dos assinantes (cadastro, CPF, endereço, e os próprios registros de conexão). Para o provedor:\n\nTrate dados com finalidade, necessidade e segurança; registros de conexão são guardados por obrigação legal, mas o acesso a eles deve ser controlado e auditado (capítulo Seção 51.1).\nMinimize e proteja: criptografia/segregação de bases, controle de acesso da equipe, e plano de resposta a incidente/vazamento.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/regulatorio-anatel.html#sec-reg-voz",
+    "href": "capitulos/regulatorio-anatel.html#sec-reg-voz",
+    "title": "Apêndice B — Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)",
+    "section": "B.6 Telefonia, se você oferecer voz",
+    "text": "B.6 Telefonia, se você oferecer voz\nOfertar VoIP/telefonia (capítulo Seção 58.1) pode acrescentar enquadramento e obrigações próprias — numeração, portabilidade, interconexão e regras de serviço de voz. Avalie o enquadramento antes de vender o produto.\n\nNa prática do provedor\n\nRegularize a SCM antes de crescer. Operar sem outorga é risco jurídico e financeiro; o rito simplificado para pequeno porte existe justamente para isso.\nSó instale equipamento homologado e dentro da EIRP da faixa (capítulo Seção 44.1). Barato não homologado sai caro em multa e suporte.\nLogs de CGNAT com porta + NTP confiável são inegociáveis: sem porta de origem e horário correto, você não consegue atender uma ordem judicial — e a culpa é sua.\nRetenha registros pelo prazo legal, com acesso auditado e em conformidade com a LGPD. Guardar de menos é ilegal; expor de mais também.\nDocumente um responsável por regulatório/jurídico. Engenharia boa não compensa estar irregular.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/regulatorio-anatel.html#para-fechar",
+    "href": "capitulos/regulatorio-anatel.html#para-fechar",
+    "title": "Apêndice B — Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)",
+    "section": "B.7 Para fechar",
+    "text": "B.7 Para fechar\nA rede que este manual ensinou a construir — da fibra ao BGP — só vira negócio sustentável quando está regular: outorga de SCM, espectro e equipamentos dentro das regras da Anatel, registros guardados conforme o Marco Civil e dados tratados sob a LGPD. Engenharia e conformidade andam juntas. (Verifique sempre a regulamentação vigente; este apêndice é um mapa, não aconselhamento jurídico.)",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Apêndice: Regulatório (Anatel, SCM, Marco Civil e LGPD)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/glossario.html",
+    "href": "capitulos/glossario.html",
+    "title": "Apêndice C — Glossário",
+    "section": "",
+    "text": "C.1 A\nSiglas e termos usados ao longo do manual. O glossário cresce a cada parte; os termos abaixo cobrem os fundamentos (Partes I–III) e os principais conceitos de provedor que já aparecem nas pontes conceituais.\nAnatel — Agência Nacional de Telecomunicações; regula espectro de rádio e o serviço de telecom no Brasil.\nARP — Address Resolution Protocol; descobre o MAC associado a um IP na mesma rede local (camada 2/3).\nASN — Autonomous System Number; identificador único de um sistema autônomo no roteamento BGP.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#b",
     "href": "capitulos/glossario.html#b",
-    "title": "Apêndice A — Glossário",
-    "section": "A.2 B",
-    "text": "A.2 B\nBackbone — rede de núcleo/transporte que interliga POPs e a internet.\nBDP — Bandwidth-Delay Product (produto banda-atraso); banda × RTT, limita a vazão de uma única conexão TCP.\nBGP — Border Gateway Protocol; protocolo de roteamento entre sistemas autônomos (provedores).\nBNG / BRAS — Broadband Network Gateway; concentra e autentica os assinantes (PPPoE/IPoE), aplica políticas e velocidade.\nBufferbloat — inchaço de filas que dispara a latência quando o enlace satura.",
+    "title": "Apêndice C — Glossário",
+    "section": "C.2 B",
+    "text": "C.2 B\nBackbone — rede de núcleo/transporte que interliga POPs e a internet.\nBDP — Bandwidth-Delay Product (produto banda-atraso); banda × RTT, limita a vazão de uma única conexão TCP.\nBGP — Border Gateway Protocol; protocolo de roteamento entre sistemas autônomos (provedores).\nBNG / BRAS — Broadband Network Gateway; concentra e autentica os assinantes (PPPoE/IPoE), aplica políticas e velocidade.\nBufferbloat — inchaço de filas que dispara a latência quando o enlace satura.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#c",
     "href": "capitulos/glossario.html#c",
-    "title": "Apêndice A — Glossário",
-    "section": "A.3 C",
-    "text": "A.3 C\nCGNAT — Carrier-Grade NAT; NAT em larga escala que compartilha um IPv4 público entre muitos assinantes.\nCIDR — Classless Inter-Domain Routing; endereçamento por prefixo (ex.: /24) sem classes.\nCTO / CEO — Caixa de Terminação/Emenda Óptica; ponto da rede secundária onde os drops dos clientes se conectam, normalmente após um splitter.",
+    "title": "Apêndice C — Glossário",
+    "section": "C.3 C",
+    "text": "C.3 C\nCGNAT — Carrier-Grade NAT; NAT em larga escala que compartilha um IPv4 público entre muitos assinantes.\nCIDR — Classless Inter-Domain Routing; endereçamento por prefixo (ex.: /24) sem classes.\nCodec — algoritmo que digitaliza/comprime a voz (ex.: G.711, G.729, Opus) no VoIP, equilibrando qualidade e banda.\nCTO / CEO — Caixa de Terminação/Emenda Óptica; ponto da rede secundária onde os drops dos clientes se conectam, normalmente após um splitter.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#d",
     "href": "capitulos/glossario.html#d",
-    "title": "Apêndice A — Glossário",
-    "section": "A.4 D",
-    "text": "A.4 D\ndBm — potência em decibéis referida a 1 mW; unidade de medida óptica (ex.: ONT com −20 dBm de recepção).\nDIO — Distribuidor Interno Óptico; bastidor de organização/conexão das fibras no POP/OLT.\nDNS — Domain Name System; traduz nomes (exemplo.com.br) em endereços IP.\nDrop — cabo de fibra que liga a CTO à ONT do assinante.\nDuplex — sentido do fluxo: simplex (um), half (alternado), full (simultâneo).",
+    "title": "Apêndice C — Glossário",
+    "section": "C.4 D",
+    "text": "C.4 D\ndBm — potência em decibéis referida a 1 mW; unidade de medida óptica (ex.: ONT com −20 dBm de recepção).\nDIO — Distribuidor Interno Óptico; bastidor de organização/conexão das fibras no POP/OLT.\nDNS — Domain Name System; traduz nomes (exemplo.com.br) em endereços IP.\nDrop — cabo de fibra que liga a CTO à ONT do assinante.\nDSCP — Differentiated Services Code Point; marca de QoS no cabeçalho IP (ex.: EF/46 para voz, AF para vídeo).\nDuplex — sentido do fluxo: simplex (um), half (alternado), full (simultâneo).",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#e",
     "href": "capitulos/glossario.html#e",
-    "title": "Apêndice A — Glossário",
-    "section": "A.5 E",
-    "text": "A.5 E\nEIRP — Effective Isotropic Radiated Power; potência efetiva irradiada por uma antena (potência + ganho − perdas).\nEncapsulamento — embrulhar a PDU de uma camada como payload da camada inferior, prefixando cabeçalho.\nEthernet — padrão IEEE 802.3 de camada 2 (quadros, MAC) dominante em LAN.",
+    "title": "Apêndice C — Glossário",
+    "section": "C.5 E",
+    "text": "C.5 E\nEIRP — Effective Isotropic Radiated Power; potência efetiva irradiada por uma antena (potência + ganho − perdas).\nEncapsulamento — embrulhar a PDU de uma camada como payload da camada inferior, prefixando cabeçalho.\nEthernet — padrão IEEE 802.3 de camada 2 (quadros, MAC) dominante em LAN.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#f",
     "href": "capitulos/glossario.html#f",
-    "title": "Apêndice A — Glossário",
-    "section": "A.6 F",
-    "text": "A.6 F\nFCS — Frame Check Sequence; CRC de detecção de erro no fim do quadro Ethernet.\nFresnel (zona de) — elipsoide ao redor da linha de visada de rádio que deve ficar livre de obstáculos.\nFTTx — Fiber To The x (Home, Building…); arquiteturas de fibra até o cliente.",
+    "title": "Apêndice C — Glossário",
+    "section": "C.6 F",
+    "text": "C.6 F\nFCS — Frame Check Sequence; CRC de detecção de erro no fim do quadro Ethernet.\nFresnel (zona de) — elipsoide ao redor da linha de visada de rádio que deve ficar livre de obstáculos.\nFTTx — Fiber To The x (Home, Building…); arquiteturas de fibra até o cliente.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#g",
     "href": "capitulos/glossario.html#g",
-    "title": "Apêndice A — Glossário",
-    "section": "A.7 G",
-    "text": "A.7 G\nGoodput — vazão de dados úteis da aplicação, descontados todos os cabeçalhos.\nGPON — Gigabit PON (ITU-T G.984); ~2,5 Gbps down / 1,25 Gbps up compartilhados.",
+    "title": "Apêndice C — Glossário",
+    "section": "C.7 G",
+    "text": "C.7 G\nGoodput — vazão de dados úteis da aplicação, descontados todos os cabeçalhos.\nGPON — Gigabit PON (ITU-T G.984); ~2,5 Gbps down / 1,25 Gbps up compartilhados.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#i",
     "href": "capitulos/glossario.html#i",
-    "title": "Apêndice A — Glossário",
-    "section": "A.8 I",
-    "text": "A.8 I\nICMP — protocolo de controle/diagnóstico da camada 3 (base de ping e traceroute).\nIP — Internet Protocol; endereçamento lógico e roteamento (camada 3), em versões IPv4 e IPv6.\nISP — Internet Service Provider; provedor de acesso à internet.\nIX / IXP — Internet Exchange; ponto de troca de tráfego (no Brasil, IX.br) onde provedores fazem peering.",
+    "title": "Apêndice C — Glossário",
+    "section": "C.8 I",
+    "text": "C.8 I\nICMP — protocolo de controle/diagnóstico da camada 3 (base de ping e traceroute).\nIGMP — Internet Group Management Protocol; o assinante entra/sai de um grupo multicast (base do zapping de IPTV). Ver IGMP snooping.\nIGMP snooping — recurso do switch que envia cada fluxo multicast só às portas que pediram, evitando inundar o acesso.\nIP — Internet Protocol; endereçamento lógico e roteamento (camada 3), em versões IPv4 e IPv6.\nIPoE — IP over Ethernet; alternativa ao PPPoE para o acesso, sem túnel — casa melhor com IPTV/multicast.\nIPTV — TV ao vivo sobre IP, entregue por multicast a partir do headend.\nISP — Internet Service Provider; provedor de acesso à internet.\nIX / IXP — Internet Exchange; ponto de troca de tráfego (no Brasil, IX.br) onde provedores fazem peering.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#j",
     "href": "capitulos/glossario.html#j",
-    "title": "Apêndice A — Glossário",
-    "section": "A.9 J",
-    "text": "A.9 J\nJitter — variação da latência entre pacotes; crítico para voz/vídeo.",
+    "title": "Apêndice C — Glossário",
+    "section": "C.9 J",
+    "text": "C.9 J\nJitter — variação da latência entre pacotes; crítico para voz/vídeo.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#l",
     "href": "capitulos/glossario.html#l",
-    "title": "Apêndice A — Glossário",
-    "section": "A.10 L",
-    "text": "A.10 L\nLAN / MAN / WAN — redes local / metropolitana / de longa distância.\nLatência — tempo de propagação fim a fim; RTT é a ida e volta.",
+    "title": "Apêndice C — Glossário",
+    "section": "C.10 L",
+    "text": "C.10 L\nLAN / MAN / WAN — redes local / metropolitana / de longa distância.\nLatência — tempo de propagação fim a fim; RTT é a ida e volta.\nLGPD — Lei Geral de Proteção de Dados (Lei 13.709/2018); rege o tratamento de dados pessoais dos assinantes.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#m",
     "href": "capitulos/glossario.html#m",
-    "title": "Apêndice A — Glossário",
-    "section": "A.11 M",
-    "text": "A.11 M\nMAC — Media Access Control; endereço físico de camada 2 (48 bits).\nMSS — Maximum Segment Size; maior bloco de dados em um segmento TCP.\nMTU — Maximum Transmission Unit; maior payload de um quadro (ex.: 1500 B em Ethernet, 1492 com PPPoE).",
+    "title": "Apêndice C — Glossário",
+    "section": "C.11 M",
+    "text": "C.11 M\nMAC — Media Access Control; endereço físico de camada 2 (48 bits).\nMarco Civil — Lei 12.965/2014; entre outras coisas, obriga o provedor de conexão a guardar os registros de conexão por 1 ano.\nMSS — Maximum Segment Size; maior bloco de dados em um segmento TCP.\nMTU — Maximum Transmission Unit; maior payload de um quadro (ex.: 1500 B em Ethernet, 1492 com PPPoE).\nMulticast — envio “um para muitos”: uma cópia da fonte que a rede replica só a quem assinou o grupo (classe D, 224.0.0.0/4).\nMU-MIMO — Multi-User MIMO; o ponto de acesso fala com vários clientes Wi-Fi em paralelo via múltiplas antenas.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#n",
     "href": "capitulos/glossario.html#n",
-    "title": "Apêndice A — Glossário",
-    "section": "A.12 N",
-    "text": "A.12 N\nNAT — Network Address Translation; tradução de endereços IP (ver CGNAT).",
+    "title": "Apêndice C — Glossário",
+    "section": "C.12 N",
+    "text": "C.12 N\nNAT — Network Address Translation; tradução de endereços IP (ver CGNAT).",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#o",
     "href": "capitulos/glossario.html#o",
-    "title": "Apêndice A — Glossário",
-    "section": "A.13 O",
-    "text": "A.13 O\nOLT — Optical Line Terminal; equipamento no POP que origina a rede PON.\nONT / ONU — Optical Network Terminal/Unit; equipamento na ponta do assinante.\nOSI — modelo de referência de 7 camadas (ISO/ITU-T).\nOTDR — Optical Time-Domain Reflectometer; instrumento que mapeia perdas e eventos ao longo da fibra.\nOverbooking — razão entre banda contratada somada e banda real disponível (compartilhamento estatístico).",
+    "title": "Apêndice C — Glossário",
+    "section": "C.13 O",
+    "text": "C.13 O\nOFDMA — Orthogonal Frequency-Division Multiple Access; no Wi-Fi 6, divide o canal entre vários clientes ao mesmo tempo, melhorando o uso do airtime.\nOLT — Optical Line Terminal; equipamento no POP que origina a rede PON.\nONT / ONU — Optical Network Terminal/Unit; equipamento na ponta do assinante.\nOSI — modelo de referência de 7 camadas (ISO/ITU-T).\nOTDR — Optical Time-Domain Reflectometer; instrumento que mapeia perdas e eventos ao longo da fibra.\nOverbooking — razão entre banda contratada somada e banda real disponível (compartilhamento estatístico).",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#p",
     "href": "capitulos/glossario.html#p",
-    "title": "Apêndice A — Glossário",
-    "section": "A.14 P",
-    "text": "A.14 P\nPDU — Protocol Data Unit; unidade de dados de uma camada (segmento, pacote, quadro, bits).\nPOP — Point of Presence; site do provedor que abriga OLTs, roteadores e uplinks.\nPON — Passive Optical Network; rede óptica passiva (sem energia entre OLT e ONT), em árvore via splitters.\nPower budget — orçamento de potência óptica: potência de TX menos todas as perdas, comparada à sensibilidade do RX.\nPPPoE — PPP over Ethernet; encapsula sessões de assinante autenticadas pelo BNG/RADIUS.",
+    "title": "Apêndice C — Glossário",
+    "section": "C.14 P",
+    "text": "C.14 P\nPDU — Protocol Data Unit; unidade de dados de uma camada (segmento, pacote, quadro, bits).\nPIM — Protocol Independent Multicast (em geral PIM-SM); os roteadores do core montam a árvore de distribuição multicast.\nPOP — Point of Presence; site do provedor que abriga OLTs, roteadores e uplinks.\nPON — Passive Optical Network; rede óptica passiva (sem energia entre OLT e ONT), em árvore via splitters.\nPower budget — orçamento de potência óptica: potência de TX menos todas as perdas, comparada à sensibilidade do RX.\nPPPoE — PPP over Ethernet; encapsula sessões de assinante autenticadas pelo BNG/RADIUS.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#r",
     "href": "capitulos/glossario.html#r",
-    "title": "Apêndice A — Glossário",
-    "section": "A.15 R",
-    "text": "A.15 R\nRADIUS — protocolo de AAA (autenticação, autorização, contabilização) dos assinantes.\nRede primária / secundária — trecho da planta da OLT/DIO até o primeiro splitter (primária) e deste até as CTOs/clientes (secundária).\nRTT — Round-Trip Time; latência de ida e volta (o que o ping mede).",
+    "title": "Apêndice C — Glossário",
+    "section": "C.15 R",
+    "text": "C.15 R\nRADIUS — protocolo de AAA (autenticação, autorização, contabilização) dos assinantes.\nRede primária / secundária — trecho da planta da OLT/DIO até o primeiro splitter (primária) e deste até as CTOs/clientes (secundária).\nRTP — Real-time Transport Protocol; carrega a mídia (voz/vídeo) do VoIP em UDP; é o fluxo que precisa de QoS.\nRTT — Round-Trip Time; latência de ida e volta (o que o ping mede).",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#s",
     "href": "capitulos/glossario.html#s",
-    "title": "Apêndice A — Glossário",
-    "section": "A.16 S",
-    "text": "A.16 S\nSplitter — divisor óptico passivo (1:8, 1:16, 1:64…), balanceado ou desbalanceado.\nSTP — Spanning Tree Protocol; evita laços em redes Ethernet comutadas.",
+    "title": "Apêndice C — Glossário",
+    "section": "C.16 S",
+    "text": "C.16 S\nSBC — Session Border Controller; intermedia SIP/RTP do provedor, resolve NAT e ancora a mídia do VoIP.\nSCM — Serviço de Comunicação Multimídia; enquadramento/outorga da Anatel sob o qual o ISP presta o acesso à internet.\nSIP — Session Initiation Protocol; sinalização do VoIP (abre/fecha a chamada), separada da mídia (RTP).\nSplitter — divisor óptico passivo (1:8, 1:16, 1:64…), balanceado ou desbalanceado.\nSTP — Spanning Tree Protocol; evita laços em redes Ethernet comutadas.\nSTUN — protocolo que ajuda o cliente VoIP a descobrir seu IP público e atravessar o NAT (junto de ICE/TURN).",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#t",
     "href": "capitulos/glossario.html#t",
-    "title": "Apêndice A — Glossário",
-    "section": "A.17 T",
-    "text": "A.17 T\nTCP — transporte confiável, orientado a conexão (3-way handshake).\nTDMA — Time Division Multiple Access; arbitragem do upstream PON por tempo.\nTLS — Transport Layer Security; criptografia que protege o HTTPS.",
+    "title": "Apêndice C — Glossário",
+    "section": "C.17 T",
+    "text": "C.17 T\nTCP — transporte confiável, orientado a conexão (3-way handshake).\nTDMA — Time Division Multiple Access; arbitragem do upstream PON por tempo.\nTLS — Transport Layer Security; criptografia que protege o HTTPS.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#u",
     "href": "capitulos/glossario.html#u",
-    "title": "Apêndice A — Glossário",
-    "section": "A.18 U",
-    "text": "A.18 U\nUDP — transporte leve, sem conexão nem garantias (DNS, voz, vídeo ao vivo).",
+    "title": "Apêndice C — Glossário",
+    "section": "C.18 U",
+    "text": "C.18 U\nUDP — transporte leve, sem conexão nem garantias (DNS, voz, vídeo ao vivo).",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#v",
     "href": "capitulos/glossario.html#v",
-    "title": "Apêndice A — Glossário",
-    "section": "A.19 V",
-    "text": "A.19 V\nVLAN — rede local virtual (IEEE 802.1Q); segmenta a camada 2, ex.: uma VLAN por cliente.\nVLSM — Variable Length Subnet Mask; máscaras de tamanho variável para usar IPs com eficiência.",
+    "title": "Apêndice C — Glossário",
+    "section": "C.19 V",
+    "text": "C.19 V\nVLAN — rede local virtual (IEEE 802.1Q); segmenta a camada 2, ex.: uma VLAN por cliente.\nVLSM — Variable Length Subnet Mask; máscaras de tamanho variável para usar IPs com eficiência.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#w",
     "href": "capitulos/glossario.html#w",
-    "title": "Apêndice A — Glossário",
-    "section": "A.20 W",
-    "text": "A.20 W\nWDM — Wavelength Division Multiplexing; múltiplos comprimentos de onda na mesma fibra (ex.: down/up em GPON).",
+    "title": "Apêndice C — Glossário",
+    "section": "C.20 W",
+    "text": "C.20 W\nWDM — Wavelength Division Multiplexing; múltiplos comprimentos de onda na mesma fibra (ex.: down/up em GPON).\nWi-Fi — rede local sem fio (IEEE 802.11) em 2,4/5/6 GHz; meio compartilhado por CSMA/CA, no trecho final até o dispositivo do cliente.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/glossario.html#x",
     "href": "capitulos/glossario.html#x",
-    "title": "Apêndice A — Glossário",
-    "section": "A.21 X",
-    "text": "A.21 X\nXGS-PON — PON simétrica de 10 Gbps (ITU-T G.9807.1), sucessora da GPON.",
+    "title": "Apêndice C — Glossário",
+    "section": "C.21 X",
+    "text": "C.21 X\nXGS-PON — PON simétrica de 10 Gbps (ITU-T G.9807.1), sucessora da GPON.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Glossário</span>"
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Glossário</span>"
     ]
   },
   {
     "objectID": "capitulos/referencias.html",
     "href": "capitulos/referencias.html",
-    "title": "Apêndice B — Referências",
+    "title": "Apêndice D — Referências",
     "section": "",
     "text": "Borman, D., B. Braden, V. Jacobson, and R. Scheffenegger. 2014. TCP\nExtensions for High Performance. RFC 7323. IETF. https://www.rfc-editor.org/info/rfc7323.\n\n\nG.9807.1: 10-Gigabit-Capable Symmetric Passive Optical Network\n(XGS-PON). 2016. ITU-T. https://www.itu.int/rec/T-REC-G.9807.1.\n\n\nG.984.1: Gigabit-Capable Passive Optical Networks (GPON): General\nCharacteristics. 2008. ITU-T. https://www.itu.int/rec/T-REC-G.984.1.\n\n\nIEEE Standard for Ethernet, Pub. L. Nos. IEEE 802.3 (2022).\n\n\nIEEE Standard for Local and Metropolitan Area Networks–Bridges and\nBridged Networks, Pub. L. Nos. IEEE 802.1Q (2022).\n\n\nKurose, James F., and Keith W. Ross. 2021. Redes de Computadores e a\nInternet: Uma Abordagem Top-down. 8th ed. Pearson.\n\n\nPostel, J. 1981a. Internet Protocol. RFC 791. IETF. https://www.rfc-editor.org/info/rfc791.\n\n\nPostel, J. 1981b. Transmission Control Protocol. RFC 793. IETF.\nhttps://www.rfc-editor.org/info/rfc793.\n\n\nTanenbaum, Andrew S., David J. Wetherall, and Nick Feamster. 2021.\nRedes de Computadores. 6th ed. Pearson.",
     "crumbs": [
       "Apêndices",
-      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Referências</span>"
+      "<span class='chapter-number'>D</span>  <span class='chapter-title'>Referências</span>"
     ]
   }
 ]
