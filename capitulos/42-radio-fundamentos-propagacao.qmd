@@ -2,6 +2,131 @@
 title: "Rádio: Fundamentos e Propagação"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Quando a fibra não chega {#sec-radio-fund}
+
+Há lugares onde puxar fibra é inviável: sítios isolados, fazendas, comunidades
+rurais distantes do último poste (capítulo @sec-meios-radio). Ali o provedor leva
+internet por **rádio** — ondas eletromagnéticas pelo ar — tipicamente a partir de uma
+**torre alimentada por fibra** (FTTA, capítulo @sec-fttx). O rádio é mais barato e
+rápido de implantar que fibra em área dispersa, mas é um **meio aberto, compartilhado
+e sujeito ao ambiente**: clima, obstáculos, interferência. Entender a **propagação** é
+o que separa um enlace de rádio estável de um que cai toda chuva.
+
+## Frequência, comprimento de onda e banda {#sec-radio-frequencia}
+
+O sinal de rádio é uma onda com **frequência** (Hz) e **comprimento de onda**
+($\lambda = c/f$). Duas tendências físicas governam tudo:
+
+- **Frequências mais altas** (5 GHz, 11 GHz+) → mais **banda** disponível, antenas
+  menores e mais diretivas, mas **menor alcance** e **mais sensíveis a obstáculos e
+  chuva**.
+- **Frequências mais baixas** (2,4 GHz) → mais **penetração** e alcance, mas **pouca
+  banda** e mais **congestionamento**.
+
+As faixas usadas por WISPs no Brasil (reguladas pela **Anatel**, capítulo
+@sec-protocolos-padroes):
+
+| Faixa | Banda | Característica | Uso |
+|---|---|---|---|
+| 2,4 GHz | estreita, congestionada | penetra mais | PtMP de longo alcance |
+| 5 GHz | larga | equilíbrio | **padrão WISP** (PtP e PtMP) |
+| 11–24 GHz (licenciado) | muito larga | exige visada limpa | *backhaul* PtP de alta capacidade |
+| 60 GHz | enorme | alcance curto, chuva forte atenua | enlaces curtos urbanos |
+
+## A equação do enlace (link budget) {#sec-radio-linkbudget}
+
+Assim como a fibra tem orçamento de potência (capítulo @sec-orcamento), o rádio tem o
+**orçamento de enlace**. A potência que chega ao receptor é:
+
+$$P_{Rx} = P_{Tx} + G_{Tx} + G_{Rx} - \text{perdas} - \text{FSPL}$$
+
+onde $G$ são os **ganhos das antenas** (dBi) e **FSPL** é a perda no espaço livre. O
+$P_{Rx}$ tem de ficar **acima da sensibilidade** do rádio, com **margem de
+desvanecimento** (*fade margin*) — a folga para chuva, variação e desalinhamento.
+
+::: {#fig-link-budget}
+```{.tikz}
+%%| filename: radio-link-budget
+%%| alt: Orçamento de enlace de rádio com potência TX, ganhos de antena, FSPL e sensibilidade RX
+\begin{tikzpicture}[font=\footnotesize,
+    a/.style={draw=manualgray, fill=manualblue!10, minimum width=14mm, minimum height=8mm, align=center}]
+  \node[a, fill=manualgreen!14] (tx) at (0,0) {Rádio TX\\$P_{Tx}$};
+  \node[a] (atx) at (2.2,0) {Antena\\$G_{Tx}$};
+  \node[a] (arx) at (7,0) {Antena\\$G_{Rx}$};
+  \node[a, fill=manualred!12] (rx) at (9.2,0) {Rádio RX\\$P_{Rx}$};
+  \draw[vetor, manualblue] (atx) -- node[above,font=\scriptsize]{FSPL (perda no espaço livre)} (arx);
+  \draw[curva] (tx)--(atx); \draw[curva] (arx)--(rx);
+  \node[manualred, font=\scriptsize, align=center] at (4.6,-1.0) {$P_{Rx}$ deve ficar acima da sensibilidade\\+ margem de desvanecimento};
+\end{tikzpicture}
+```
+Orçamento de enlace: a potência transmitida, somada aos ganhos das antenas e
+descontada a perda no caminho (FSPL), tem de chegar acima da **sensibilidade** com
+**margem**.
 :::
+
+## FSPL: a perda no espaço livre {#sec-radio-fspl}
+
+A **FSPL** (*Free Space Path Loss*) é a atenuação que o sinal sofre só por se espalhar
+no ar — cresce com a **distância** e com a **frequência**:
+
+$$\text{FSPL (dB)} = 32{,}45 + 20\log_{10}(d_{km}) + 20\log_{10}(f_{MHz}).$$
+
+**Exemplo:** enlace de **10 km** em **5.500 MHz**:
+`FSPL = 32,45 + 20·log(10) + 20·log(5500) = 32,45 + 20 + 74,8 ≈ 127,3 dB`. Essa perda
+enorme é compensada pelos **ganhos de antena** (uma parabólica de 5 GHz dá 25–30 dBi
+de cada lado) — por isso enlaces PtP usam antenas direcionais de alto ganho.
+
+## O que degrada o sinal {#sec-radio-degradacao}
+
+- **Obstáculos** (relevo, árvores, prédios) — bloqueiam ou difratam; exigem **visada**
+  e **zona de Fresnel** livre (capítulo @sec-fresnel).
+- **Chuva** — atenua mais em frequências altas (crítico ≥ 11 GHz); dimensione margem
+  para o pior caso climático regional.
+- **Vegetação** — folhagem (sobretudo molhada) absorve muito em 5 GHz; uma árvore que
+  cresce derruba o enlace meses depois.
+- **Interferência** — outros emissores na mesma faixa (meio compartilhado); 2,4/5 GHz
+  não licenciados são disputados. Reduz a **SNR** e a vazão.
+- **Multipercurso** — reflexões (água, telhados) chegam defasadas e se cancelam; MIMO
+  e diversidade ajudam (capítulo @sec-tecnologias-radio).
+
+## SNR e a relação com a vazão {#sec-radio-snr}
+
+A **SNR** (relação sinal/ruído) determina qual **modulação** o rádio consegue usar
+(QPSK, 16-QAM, 64-QAM, 256-QAM…) e, portanto, a **vazão**. SNR alta → modulação densa
+→ mais Mbps; SNR baixa → o rádio "cai" para modulação robusta e lenta (ou perde o
+link). Por isso **margem e baixa interferência** valem mais que potência bruta: um
+enlace com SNR folgada entrega banda alta e estável.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Margem de desvanecimento ≥ 10–20 dB.** Nunca projete o rádio no limite: chuva,
+  vegetação que cresce e interferência nova comem a folga. Enlace "no talo" cai no
+  primeiro temporal.
+- **Backhaul de fibra na torre (FTTA):** leve fibra até a torre e distribua por rádio
+  só o último salto — assim o cliente rural tem a capacidade da fibra atrás do rádio.
+- **Respeite a Anatel:** potência/EIRP máximos e faixas homologadas (capítulo
+  @sec-tecnologias-radio). Estourar EIRP é ilegal e gera interferência (e multa).
+- **Faça levantamento de espectro** antes de instalar: em 5 GHz congestionado,
+  escolha canal limpo (analisador) — interferência derruba SNR e vazão mesmo com
+  sinal forte.
+- **Documente o link budget** de cada enlace (distância, frequência, antenas, FSPL,
+  margem) como você documenta o orçamento óptico — é a base do diagnóstico.
+:::
+
+## Resumo e checklist {#sec-resumo-42}
+
+- Rádio é meio **aberto/compartilhado**; frequência alta = mais banda/menos alcance,
+  baixa = mais alcance/menos banda.
+- O **orçamento de enlace** ($P_{Rx} = P_{Tx}+G-\text{perdas}-$FSPL) tem de ficar
+  acima da sensibilidade **com margem**.
+- **FSPL** cresce com distância e frequência; antenas de alto ganho compensam.
+- **SNR** define a modulação e a vazão; chuva, vegetação e **interferência** são os
+  vilões.
+
+**Checklist do capítulo**
+
+- [ ] Escolho a faixa (2,4/5/11+ GHz) pelo alcance, banda e visada.
+- [ ] Calculo a FSPL e monto o orçamento de enlace com margem.
+- [ ] Relaciono SNR com modulação e vazão.
+- [ ] Projeto com margem ≥ 10–20 dB e respeito a Anatel.

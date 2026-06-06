@@ -2,6 +2,124 @@
 title: "Visada (LOS), Zona de Fresnel e Cálculo de Enlace"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Ver não é o bastante {#sec-fresnel}
+
+Para um enlace de rádio funcionar bem (capítulo @sec-radio-fund), não basta as duas
+antenas se **enxergarem** (linha de visada, LOS). A onda de rádio viaja por um
+**volume** ao redor da linha reta — a **zona de Fresnel** — e esse volume precisa
+estar **desobstruído**. Um morro, uma árvore ou um telhado que "só encosta" na linha
+de visada já invade a zona de Fresnel e **degrada o sinal** por difração. Calcular e
+liberar a zona de Fresnel é **o** cuidado que mais decide a estabilidade de um enlace
+PtP/PtMP — e a fonte nº 1 de enlaces que "funcionam mas caem".
+
+## Linha de visada: óptica vs. de rádio {#sec-fresnel-los}
+
+- **LOS óptica** — você vê o outro ponto a olho/binóculo.
+- **LOS de rádio** — além de ver, a **zona de Fresnel está livre**. É mais exigente:
+  pode haver visada óptica perfeita e, ainda assim, a vegetação na base da linha
+  invadir a Fresnel e arruinar o enlace.
+
+Há também enlaces **NLOS/nLOS** (sem visada total), que algumas tecnologias toleram em
+frequências baixas via difração/reflexão — mas com perda e instabilidade. **A regra
+de ouro é projetar para LOS de rádio plena.**
+
+## A zona de Fresnel {#sec-fresnel-zona}
+
+A primeira zona de Fresnel é um **elipsoide** entre as antenas. Seu **raio máximo**
+(no meio do enlace) é:
+
+$$r = 17{,}32 \sqrt{\frac{d}{4f}} \quad [\text{m}]$$
+
+com **d** em km (distância total) e **f** em GHz. A recomendação prática: manter
+**≥ 60%** da primeira zona livre de obstáculos (idealmente 80–100%).
+
+::: {#fig-fresnel}
+```{.tikz}
+%%| filename: fresnel-zona
+%%| alt: Elipsoide da zona de Fresnel entre duas antenas com obstáculo invadindo a parte inferior
+\begin{tikzpicture}[font=\footnotesize]
+  % terra/curvatura leve
+  \draw[manualgray] (-0.3,0) -- (10.3,0);
+  % torres
+  \draw[manualgray, line width=1.5pt] (0,0) -- (0,2.6);
+  \draw[manualgray, line width=1.5pt] (10,0) -- (10,2.6);
+  \node[ponto] (a) at (0,2.4) {}; \node[ponto] (b) at (10,2.4) {};
+  \node[manualgray, anchor=south] at (0,2.6) {Antena A};
+  \node[manualgray, anchor=south] at (10,2.6) {Antena B};
+  % linha de visada
+  \draw[destaque, manualred] (a) -- (b);
+  \node[manualred, font=\scriptsize, anchor=south] at (5,2.45) {linha de visada (LOS)};
+  % elipsoide fresnel
+  \draw[curva, manualblue] (0,2.4) .. controls (3.3,3.6) and (6.7,3.6) .. (10,2.4);
+  \draw[curva, manualblue] (0,2.4) .. controls (3.3,1.2) and (6.7,1.2) .. (10,2.4);
+  \node[manualblue, font=\scriptsize] at (5,3.3) {1ª zona de Fresnel (raio $r$)};
+  % obstaculo invadindo
+  \fill[manualgreen!30] (5.6,0) -- (6.4,0) -- (6.0,1.7) -- cycle;
+  \node[manualgreen!60!black, font=\scriptsize, anchor=west] at (6.4,1.2) {árvore invade a zona!};
+\end{tikzpicture}
+```
+A zona de Fresnel é um **elipsoide** ao redor da LOS. Mesmo com visada óptica, um
+obstáculo que entra no elipsoide (a árvore) **difrata** e degrada o sinal.
 :::
+
+## Exercício resolvido — raio de Fresnel {#sec-fresnel-exercicio}
+
+Enlace de **d = 9 km** em **f = 5,5 GHz**. Raio máximo da 1ª zona:
+
+$$r = 17{,}32\sqrt{\frac{9}{4 \times 5{,}5}} = 17{,}32\sqrt{\frac{9}{22}} =
+17{,}32\sqrt{0{,}409} = 17{,}32 \times 0{,}640 \approx \mathbf{11{,}1\ m}.$$
+
+Ou seja, no meio do enlace é preciso **~11 m livres** ao redor da linha de visada (e
+manter ≥ 60% → ~6,7 m). Some a isso a **altura dos obstáculos** e a **curvatura da
+Terra** (relevante acima de ~10–15 km) para definir a **altura das torres**. É por
+isso que enlaces longos exigem torres altas: não é só "ver", é **liberar o
+elipsoide**.
+
+## Curvatura da Terra e altura de torre {#sec-fresnel-terra}
+
+Em enlaces longos, a **Terra "sobe"** entre as antenas (a protuberância cresce com o
+quadrado da distância), reduzindo a folga. O projeto soma três coisas para achar a
+**altura de torre** necessária: altura dos **obstáculos** + raio de **Fresnel** (60%)
++ **protuberância da Terra**. Ferramentas de planejamento (com perfil de relevo via
+mapa/SRTM) automatizam essa conta — use-as antes de subir em torre.
+
+## Do levantamento ao enlace estável {#sec-fresnel-processo}
+
+1. **Trace o perfil** do terreno entre os pontos (software com relevo + obstáculos).
+2. **Calcule Fresnel** (60%) e a **protuberância da Terra** ao longo do caminho.
+3. **Defina alturas de torre** para liberar o elipsoide com folga.
+4. **Monte o link budget** (capítulo @sec-radio-fund): FSPL, ganhos, $P_{Rx}$, margem.
+5. **Valide em campo:** alinhe pelas leituras de sinal/SNR e teste vazão.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Vegetação que cresce é a falha silenciosa.** Um enlace fechado em projeto cai
+  meses depois porque uma árvore cresceu para dentro da Fresnel — ainda mais
+  **molhada** após a chuva (5 GHz sofre muito). Preveja folga e reavalie podas.
+- **Visada óptica engana.** "Dá pra ver a torre" não basta: rode o cálculo de
+  Fresnel. A maioria dos enlaces "instáveis no vento/chuva" é Fresnel obstruída,
+  não falta de potência.
+- **Alte a torre, não só a potência.** Quando o link está marginal, ganhar **altura**
+  (liberar Fresnel) costuma resolver mais que aumentar EIRP (que ainda esbarra na
+  Anatel — capítulo @sec-ptp-ptmp).
+- **Planeje com relevo (SRTM/mapas):** faça o perfil e o cálculo **antes** da visita;
+  subir em torre para descobrir que não fecha é caro.
+- **Documente o enlace** (alturas, azimute, Fresnel, link budget, margem) como você
+  documenta a planta óptica (capítulo @sec-doc-georref) — base do diagnóstico futuro.
+:::
+
+## Resumo e checklist {#sec-resumo-44}
+
+- LOS de **rádio** exige a **zona de Fresnel livre** (≥ 60%), não só visada óptica.
+- Raio máximo: $r = 17{,}32\sqrt{d/(4f)}$ (d em km, f em GHz) — calcule e libere.
+- Em enlaces longos, some **Fresnel + protuberância da Terra + obstáculos** para a
+  **altura de torre**.
+- **Vegetação e chuva** comem a folga; projete e reavalie com margem.
+
+**Checklist do capítulo**
+
+- [ ] Diferencio visada óptica de visada de rádio (Fresnel).
+- [ ] Calculo o raio da 1ª zona de Fresnel e exijo ≥ 60% livre.
+- [ ] Considero a curvatura da Terra na altura das torres.
+- [ ] Faço o perfil com relevo e valido alinhamento/SNR em campo.

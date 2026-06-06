@@ -2,6 +2,125 @@
 title: "Enlaces PTP e PTMP; Antenas e Ganho"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Duas topologias de rádio {#sec-ptp-ptmp}
+
+No rádio do provedor (capítulo @sec-radio-fund) há duas arquiteturas fundamentais,
+análogas às topologias da camada física (capítulo @sec-topologias-classicas):
+**ponto a ponto (PtP)** liga **dois** locais com um enlace dedicado; **ponto
+multiponto (PtMP)** liga **uma** estação-base a **vários** clientes. A escolha define
+capacidade, custo e como o espectro é compartilhado — e tipicamente as duas convivem:
+**PtP no *backhaul*** (levar capacidade à torre) e **PtMP no acesso** (distribuir aos
+assinantes rurais).
+
+::: {#fig-ptp-ptmp}
+```{.tikz}
+%%| filename: ptp-ptmp
+%%| alt: Enlace PtP entre duas torres e enlace PtMP de uma base para vários clientes
+\begin{tikzpicture}[font=\footnotesize,
+    t/.style={draw=manualgray, fill=manualgreen!14, minimum width=10mm, minimum height=8mm, align=center},
+    c/.style={draw=manualgray, fill=manualblue!10, minimum width=9mm, minimum height=6mm, align=center}]
+  % PtP
+  \node[manualblue, anchor=west] at (-0.3,2.4) {\textbf{PtP — backhaul dedicado}};
+  \node[t] (a) at (0.4,1.4) {Torre A};
+  \node[t] (b) at (4.4,1.4) {Torre B};
+  \draw[vetor, manualred] (a) -- node[above,font=\scriptsize]{enlace dedicado} (b);
+
+  % PtMP
+  \node[manualblue, anchor=west] at (6,2.4) {\textbf{PtMP — acesso}};
+  \node[t] (base) at (7,1.4) {Base\\(setorial)};
+  \node[c] (c1) at (10,2.2) {cliente};
+  \node[c] (c2) at (10.2,1.4) {cliente};
+  \node[c] (c3) at (10,0.6) {cliente};
+  \draw[vetor, manualgreen] (base)--(c1);
+  \draw[vetor, manualgreen] (base)--(c2);
+  \draw[vetor, manualgreen] (base)--(c3);
+\end{tikzpicture}
+```
+**PtP** dedica todo o enlace a dois pontos (alta capacidade, *backhaul*); **PtMP**
+compartilha uma base setorial entre vários clientes (acesso, menor custo por
+assinante).
 :::
+
+| Critério | PtP | PtMP |
+|---|---|---|
+| Liga | 2 pontos | 1 base → N clientes |
+| Capacidade por cliente | alta (dedicada) | compartilhada |
+| Antena | parabólica diretiva (alto ganho) | base setorial + cliente diretivo |
+| Custo por cliente | alto | **baixo** |
+| Uso típico | *backhaul* entre torres | acesso rural ao assinante |
+
+No PtMP, a base **arbitra** o acesso ao meio (TDMA/polling proprietário — capítulo
+@sec-tecnologias-radio), como a PON faz no *upstream* (capítulo @sec-gpon) — é um
+**meio compartilhado** e está sujeito a *overbooking* (capítulo @sec-grandezas).
+
+## Antenas: ganho e diretividade {#sec-antenas-ganho}
+
+O **ganho** de uma antena (em **dBi**) não cria energia — ele **concentra** a energia
+numa direção, como uma lente concentra luz. Mais ganho = feixe mais **estreito** e
+mais **alcance**, mas exige **mira mais precisa**. Tipos:
+
+| Antena | Ganho típico | Feixe | Uso |
+|---|---|---|---|
+| **Omnidirecional** | 8–12 dBi | 360° | base de área pequena (muito sujeita a interferência) |
+| **Setorial** | 14–20 dBi | 60–120° | base PtMP (vários setores cobrem 360°) |
+| **Painel / grade** | 19–24 dBi | estreito | cliente PtMP |
+| **Parabólica (dish)** | 25–34 dBi | muito estreito | **PtP de longa distância** |
+
+A escolha equilibra **alcance × abertura**: a base setorial cobre uma fatia com vários
+clientes; o cliente usa antena diretiva apontada à base; o *backhaul* PtP usa
+parabólicas de alto ganho dos dois lados.
+
+## EIRP: potência efetiva irradiada {#sec-antenas-eirp}
+
+O que importa para alcance — **e para a Anatel** — não é só a potência do rádio, mas a
+**EIRP** (*Effective Isotropic Radiated Power*):
+
+$$\text{EIRP (dBm)} = P_{Tx} - \text{perdas cabo} + G_{\text{antena}}.$$
+
+Ou seja, **potência do rádio + ganho da antena** (menos perdas de cabo/conector). A
+Anatel limita a **EIRP máxima** por faixa (ex.: limites específicos em 5 GHz). **Subir
+o ganho da antena aumenta a EIRP** — então não basta olhar a potência do rádio: uma
+antena de alto ganho pode estourar o limite legal. Projete a EIRP **dentro do limite**
+e use o ganho para **sensibilidade/SNR**, não para violar a regra.
+
+## Polarização e MIMO {#sec-antenas-polarizacao}
+
+- **Polarização** (vertical/horizontal): alinhe a polarização das duas pontas; cruzar
+  polarização entre enlaces vizinhos **reduz interferência** (reuso de frequência).
+- **MIMO / dual-pol:** antenas modernas transmitem em **duas polarizações
+  simultâneas** (2×2 MIMO), dobrando a capacidade no mesmo canal — recurso central das
+  tecnologias atuais (capítulo @sec-tecnologias-radio).
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **PtP de fibra→torre, PtMP torre→cliente:** *backhaul* PtP de alta capacidade
+  (parabólicas) leva a banda à torre; setoriais distribuem aos assinantes. Não
+  alimente uma base PtMP por um PtP subdimensionado — vira gargalo de todos.
+- **Mira é tudo no PtP:** feixe estreito (parabólica) exige alinhamento fino; use o
+  indicador de sinal do rádio e mire para o **pico** (cuidado com lóbulos
+  secundários). Poucos graus de erro derrubam a SNR.
+- **EIRP dentro da Anatel:** calcule potência do rádio + ganho da antena − cabo; não
+  estoure o limite da faixa. Excesso é ilegal **e** gera interferência na sua própria
+  rede.
+- **Evite omni em base:** a omnidirecional capta interferência de 360° — prefira
+  **setoriais** (melhor SNR, reuso de canal por setor).
+- **Dual-pol/MIMO** onde possível: dobra capacidade sem mais espectro; alinhe
+  polarização e planeje reuso entre setores.
+:::
+
+## Resumo e checklist {#sec-resumo-43}
+
+- **PtP** = enlace dedicado (backhaul, parabólicas); **PtMP** = base → N clientes
+  (acesso, setoriais), meio **compartilhado**.
+- **Ganho (dBi)** concentra energia: mais alcance e feixe mais estreito (mira mais
+  difícil).
+- **EIRP** = potência + ganho − perdas; respeite o **limite da Anatel** por faixa.
+- **Polarização/MIMO** aumentam capacidade e reduzem interferência.
+
+**Checklist do capítulo**
+
+- [ ] Escolho PtP (backhaul) vs. PtMP (acesso) conforme o papel do enlace.
+- [ ] Seleciono a antena (omni/setorial/painel/parabólica) pelo ganho e abertura.
+- [ ] Calculo a EIRP e a mantenho dentro do limite da Anatel.
+- [ ] Alinho polarização e uso MIMO/dual-pol para capacidade e reuso.

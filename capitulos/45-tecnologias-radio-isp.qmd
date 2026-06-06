@@ -2,6 +2,123 @@
 title: "Tecnologias de Rádio para ISP"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Do conceito ao equipamento {#sec-tecnologias-radio}
+
+Vistos os fundamentos (capítulo @sec-radio-fund), as topologias (capítulo
+@sec-ptp-ptmp) e a Fresnel (capítulo @sec-fresnel), falta o **concreto**: quais
+**tecnologias e padrões** o WISP usa, suas limitações e como integrá-las à rede do
+provedor. O objetivo é entregar internet rural com **estabilidade e gerência**
+comparáveis às da fibra — autenticando no mesmo BNG/RADIUS, com VLAN por cliente e
+QoS. Este capítulo fecha a Parte IX conectando o rádio à operação de ISP (Parte X).
+
+## Famílias de tecnologia {#sec-tec-familias}
+
+| Tecnologia | Faixa | Perfil | Uso |
+|---|---|---|---|
+| **Wi-Fi (802.11) "puro"** | 2,4/5 GHz | barato, CSMA, sem QoS bom | legado, curtos PtP |
+| **TDMA proprietário** (airMAX, etc.) | 5 GHz | base agenda slots, escala melhor | **PtMP de acesso** |
+| **TDD/OFDMA moderno** (LTE/5G fixo, tecnologias "AX") | licenciado e não | alta capacidade, NLOS parcial | acesso denso/rural avançado |
+| **Backhaul PtP licenciado** | 11–80 GHz | enorme capacidade, exige visada | torre↔torre |
+
+A maioria dos WISPs brasileiros usa **TDMA proprietário em 5 GHz** para o acesso PtMP
+(supera o Wi-Fi puro no problema do "nó escondido" e do *overbooking*) e **PtP** (5
+GHz não licenciado ou faixas licenciadas) para *backhaul*.
+
+## Por que TDMA vence o Wi-Fi puro no PtMP {#sec-tec-tdma}
+
+O Wi-Fi "puro" usa **CSMA/CA** (escuta antes de transmitir, como a Ethernet antiga —
+capítulo @sec-ethernet-csmacd). Em PtMP de longa distância isso falha pelo problema do
+**nó escondido**: dois clientes que não se ouvem transmitem juntos e **colidem** na
+base, derrubando a vazão. O **TDMA** resolve dando à base o controle: ela **agenda
+slots de tempo** para cada cliente (como a OLT faz no *upstream* PON — capítulo
+@sec-gpon-dba), eliminando colisões e dando **previsibilidade** e melhor uso do
+espectro. Por isso é o padrão de acesso WISP.
+
+## Recursos que aumentam capacidade {#sec-tec-capacidade}
+
+- **MIMO / dual-pol** (capítulo @sec-ptp-ptmp) — dobra a capacidade no mesmo canal.
+- **Modulação adaptativa** — ajusta QPSK↔256-QAM conforme a **SNR** (capítulo
+  @sec-radio-snr): mantém o link de pé em chuva (cai para modulação robusta) e
+  aproveita SNR boa.
+- **Largura de canal** — 20/40/80 MHz: mais banda por canal, mas mais sujeito a
+  interferência e menos canais disponíveis.
+- **Reuso de frequência por setor/polarização** — planejar canais entre setores da
+  base para não se interferirem.
+
+## Integração com a rede do provedor {#sec-tec-integracao}
+
+O rádio não é uma "ilha": ele entrega o cliente à **mesma** infraestrutura da fibra:
+
+::: {#fig-radio-integracao}
+```{.tikz}
+%%| filename: radio-integracao
+%%| alt: Fibra até a torre, base PtMP ao cliente, VLAN por cliente subindo ao BNG/RADIUS
+\begin{tikzpicture}[font=\footnotesize,
+    b/.style={draw=manualgray, rounded corners=2pt, minimum height=8mm, align=center}]
+  \node[b, fill=manualblue!10] (bng) at (0,0) {BNG\\+RADIUS};
+  \node[b, fill=manualgreen!14] (torre) at (3.2,0) {Torre\\(FTTA)};
+  \node[b, fill=manualyellow!16] (base) at (6.2,0) {Base PtMP};
+  \node[b, fill=manualred!10] (cli) at (9.2,0) {Cliente\\(CPE)};
+  \draw[curva, manualgreen] (bng) -- node[above,font=\scriptsize]{fibra} (torre);
+  \draw[curva] (torre) -- (base);
+  \draw[vetor, manualred] (base) -- node[above,font=\scriptsize]{rádio} (cli);
+  \node[manualgray, font=\scriptsize, below=1mm of base, align=center] {VLAN/cliente, PPPoE/IPoE};
+\end{tikzpicture}
+```
+O cliente de rádio entra na **mesma** cadeia: CPE → base → torre (alimentada por
+fibra) → BNG/RADIUS, com **VLAN por cliente** e PPPoE/IPoE, como na PON.
 :::
+
+- **VLAN por cliente** (capítulo @sec-switching) também no rádio, para isolar e
+  rastrear.
+- **PPPoE/IPoE + RADIUS** (capítulos @sec-bng-pppoe, @sec-radius) autenticam o
+  cliente de rádio igual ao de fibra — mesmo *billing*, mesmo controle.
+- **QoS/rate-limit** (capítulo @sec-qos) via RADIUS — mas atenção: no rádio o gargalo
+  pode ser o **ar** (SNR/overbooking da base), não só o plano.
+- **Monitoramento** (capítulo @sec-monitoramento) por SNMP: SNR, capacidade da base,
+  clientes por setor, *airtime*.
+
+## Limitações que o cliente precisa entender {#sec-tec-limitacoes}
+
+Rádio **não é fibra**: tem **latência e jitter maiores e variáveis**, capacidade
+**compartilhada** por setor, e é **sensível ao clima/vegetação**. Gerencie a
+expectativa: para navegação/streaming funciona muito bem; para quem exige latência
+ultrabaixa e estável (alguns jogos), a fibra é superior. **Dimensione a base** (clientes
+por setor, *airtime*) para não saturar — *overbooking* de rádio mal feito é o
+equivalente da PON lotada (capítulo @sec-grandezas).
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **TDMA proprietário em 5 GHz** para acesso PtMP; **não use Wi-Fi puro** em PtMP
+  longo (nó escondido mata a vazão).
+- **FTTA + integração total:** fibra na torre, e o cliente de rádio autentica no
+  **mesmo BNG/RADIUS** com **VLAN/cliente** — opere fibra e rádio como **uma rede
+  só**, não dois mundos.
+- **Vigie o "airtime" da base, não só Mbps:** uma base pode ter banda no backhaul mas
+  estar saturada de **tempo de ar** (muitos clientes/retransmissões). Esse é o
+  *overbooking* real do rádio.
+- **Modulação adaptativa + margem:** deixe o link cair de modulação na chuva sem
+  derrubar; projete SNR com folga (capítulo @sec-radio-fund).
+- **Respeite a Anatel** (EIRP/faixa, capítulo @sec-ptp-ptmp) e **planeje canais** por
+  setor/polarização para reuso sem auto-interferência.
+- **Eduque o cliente rural:** rádio é excelente, mas tem limites de latência/clima —
+  expectativa alinhada reduz cancelamento.
+:::
+
+## Resumo e checklist {#sec-resumo-45}
+
+- WISP usa **TDMA proprietário (5 GHz)** no acesso PtMP e **PtP** no *backhaul*; Wi-Fi
+  puro sofre com **nó escondido**.
+- Capacidade vem de **MIMO/dual-pol, modulação adaptativa, largura de canal e reuso**.
+- O cliente de rádio integra-se à **mesma rede** (VLAN/cliente, PPPoE/IPoE+RADIUS,
+  QoS, SNMP).
+- Rádio tem **latência/jitter maiores** e é **compartilhado/sensível ao clima**;
+  dimensione *airtime* e alinhe expectativa.
+
+**Checklist do capítulo**
+
+- [ ] Escolho TDMA em vez de Wi-Fi puro para PtMP de acesso.
+- [ ] Uso MIMO, modulação adaptativa e reuso de canal para capacidade.
+- [ ] Integro o cliente de rádio ao BNG/RADIUS com VLAN por cliente.
+- [ ] Monitoro airtime/SNR e dimensiono a base contra saturação.
