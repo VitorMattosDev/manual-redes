@@ -73,6 +73,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -610,8 +639,19 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#sec-fibra-principios" id="toc-sec-fibra-principios" class="nav-link active" data-scroll-target="#sec-fibra-principios"><span class="header-section-number">8.1</span> Por que a luz fica presa na fibra</a></li>
+  <li><a href="#sec-fibra-na" id="toc-sec-fibra-na" class="nav-link" data-scroll-target="#sec-fibra-na"><span class="header-section-number">8.2</span> Abertura numérica e ângulo de aceitação</a></li>
+  <li><a href="#sec-fibra-atenuacao" id="toc-sec-fibra-atenuacao" class="nav-link" data-scroll-target="#sec-fibra-atenuacao"><span class="header-section-number">8.3</span> Atenuação: para onde a luz “some”</a></li>
+  <li><a href="#sec-fibra-dispersao" id="toc-sec-fibra-dispersao" class="nav-link" data-scroll-target="#sec-fibra-dispersao"><span class="header-section-number">8.4</span> Dispersão: por que o pulso “borra”</a></li>
+  <li><a href="#sec-fibra-modos" id="toc-sec-fibra-modos" class="nav-link" data-scroll-target="#sec-fibra-modos"><span class="header-section-number">8.5</span> Modos: por que monomodo domina o acesso</a></li>
+  <li><a href="#sec-resumo-07" id="toc-sec-resumo-07" class="nav-link" data-scroll-target="#sec-resumo-07"><span class="header-section-number">8.6</span> Resumo e checklist</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/07-fibra-principios.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -635,21 +675,321 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="sec-fibra-principios" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="sec-fibra-principios"><span class="header-section-number">8.1</span> Por que a luz fica presa na fibra</h2>
+<p>A fibra óptica transporta informação como <strong>pulsos de luz</strong>. Para o provedor, isso é o que torna possível levar gigabits por dezenas de quilômetros com perda mínima — mas para operar, medir e consertar a planta é preciso entender <strong>por que a luz não escapa do vidro</strong>. A resposta é a <strong>reflexão interna total</strong>, e dela derivam todos os conceitos práticos (atenuação, dispersão, janelas, orçamento de potência).</p>
+<p>A fibra é feita de <strong>sílica ultrapura</strong> em duas regiões concêntricas com <strong>índices de refração diferentes</strong>: um <strong>núcleo</strong> (índice maior, <span class="math inline">\(n_1\)</span>) e uma <strong>casca</strong> (índice menor, <span class="math inline">\(n_2\)</span>). Quando a luz tenta sair do núcleo para a casca com ângulo maior que o <strong>ângulo crítico</strong>, ela é <strong>totalmente refletida</strong> de volta — e assim “quica” ao longo do núcleo por quilômetros.</p>
+<div id="fig-reflexao-total" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-reflexao-total-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="256.313494pt" height="59.945923pt" viewbox="-68.014948 -68.014953 256.313494 59.945923">
+<defs>
+<path id="tz_reflexao_total_g0-110" d="M1.594022-1.307098C1.617933-1.42665 1.697634-1.729514 1.721544-1.849066C1.833126-2.279452 1.833126-2.287422 2.016438-2.550436C2.279452-2.940971 2.654047-3.291656 3.188045-3.291656C3.474969-3.291656 3.642341-3.124284 3.642341-2.749689C3.642341-2.311333 3.307597-1.40274 3.156164-1.012204C3.052553-.749191 3.052553-.70137 3.052553-.597758C3.052553-.143462 3.427148 .079701 3.769863 .079701C4.550934 .079701 4.877709-1.036115 4.877709-1.139726C4.877709-1.219427 4.813948-1.243337 4.758157-1.243337C4.662516-1.243337 4.646575-1.187547 4.622665-1.107846C4.431382-.454296 4.096638-.143462 3.793773-.143462C3.666252-.143462 3.602491-.223163 3.602491-.406476S3.666252-.765131 3.745953-.964384C3.865504-1.267248 4.216189-2.183811 4.216189-2.630137C4.216189-3.227895 3.801743-3.514819 3.227895-3.514819C2.582316-3.514819 2.16787-3.124284 1.936737-2.82142C1.880946-3.259776 1.530262-3.514819 1.123786-3.514819C.836862-3.514819 .637609-3.331507 .510087-3.084433C.318804-2.709838 .239103-2.311333 .239103-2.295392C.239103-2.223661 .294894-2.191781 .358655-2.191781C.462267-2.191781 .470237-2.223661 .526027-2.430884C.621669-2.82142 .765131-3.291656 1.099875-3.291656C1.307098-3.291656 1.354919-3.092403 1.354919-2.917061C1.354919-2.773599 1.315068-2.622167 1.251308-2.359153C1.235367-2.295392 1.115816-1.825156 1.083935-1.713574L.789041-.518057C.757161-.398506 .70934-.199253 .70934-.167372C.70934 .01594 .860772 .079701 .964384 .079701C1.107846 .079701 1.227397-.01594 1.283188-.111582C1.307098-.159402 1.370859-.430386 1.41071-.597758L1.594022-1.307098Z"></path>
+<path id="tz_reflexao_total_g1-49" d="M2.145953-3.795766C2.145953-3.975093 2.122042-3.975093 1.942715-3.975093C1.548194-3.592528 .938481-3.592528 .723288-3.592528V-3.359402C.878705-3.359402 1.273225-3.359402 1.63188-3.526775V-.508095C1.63188-.310834 1.63188-.233126 1.016189-.233126H.759153V0C1.08792-.02391 1.554172-.02391 1.888917-.02391S2.689913-.02391 3.01868 0V-.233126H2.761644C2.145953-.233126 2.145953-.310834 2.145953-.508095V-3.795766Z"></path>
+<path id="tz_reflexao_total_g1-50" d="M3.21594-1.117808H2.99477C2.982814-1.034122 2.923039-.639601 2.833375-.573848C2.791532-.537983 2.307347-.537983 2.223661-.537983H1.105853L1.870984-1.159651C2.074222-1.321046 2.606227-1.703611 2.791532-1.882939C2.970859-2.062267 3.21594-2.367123 3.21594-2.791532C3.21594-3.53873 2.540473-3.975093 1.739477-3.975093C.968369-3.975093 .430386-3.466999 .430386-2.905106C.430386-2.600249 .687422-2.564384 .753176-2.564384C.902615-2.564384 1.075965-2.67198 1.075965-2.887173C1.075965-3.01868 .998257-3.209963 .735243-3.209963C.872727-3.514819 1.23736-3.741968 1.649813-3.741968C2.27746-3.741968 2.612204-3.275716 2.612204-2.791532C2.612204-2.367123 2.331258-1.93076 1.912827-1.548194L.496139-.251059C.436364-.191283 .430386-.185305 .430386 0H3.030635L3.21594-1.117808Z"></path>
+<path id="tz_reflexao_total_g2-19" d="M3.156164-4.98132C3.243836-5.045081 3.315567-5.116812 3.315567-5.244334C3.315567-5.427646 3.148194-5.563138 3.004732-5.563138C2.972852-5.563138 2.86127-5.563138 2.757659-5.435616L1.737484-4.224159L1.904857-4.040847L3.156164-4.98132Z"></path>
+<path id="tz_reflexao_total_g2-40" d="M2.654047 1.992528C2.717808 1.992528 2.81345 1.992528 2.81345 1.896887C2.81345 1.865006 2.805479 1.857036 2.701868 1.753425C1.609963 .72528 1.338979-.757161 1.338979-1.992528C1.338979-4.28792 2.287422-5.363885 2.693898-5.730511C2.805479-5.834122 2.81345-5.842092 2.81345-5.881943S2.781569-5.977584 2.701868-5.977584C2.574346-5.977584 2.175841-5.571108 2.11208-5.499377C1.044085-4.383562 .820922-2.948941 .820922-1.992528C.820922-.207223 1.570112 1.227397 2.654047 1.992528Z"></path>
+<path id="tz_reflexao_total_g2-41" d="M2.462765-1.992528C2.462765-2.749689 2.335243-3.658281 1.841096-4.598755C1.45056-5.332005 .72528-5.977584 .581818-5.977584C.502117-5.977584 .478207-5.921793 .478207-5.881943C.478207-5.850062 .478207-5.834122 .573848-5.738481C1.689664-4.678456 1.944707-3.219925 1.944707-1.992528C1.944707 .294894 .996264 1.378829 .589788 1.745455C.486177 1.849066 .478207 1.857036 .478207 1.896887S.502117 1.992528 .581818 1.992528C.70934 1.992528 1.107846 1.586052 1.171606 1.514321C2.239601 .398506 2.462765-1.036115 2.462765-1.992528Z"></path>
+<path id="tz_reflexao_total_g2-44" d="M1.490411-.119552C1.490411 .119552 1.490411 .773101 .884682 1.338979C.860772 1.362889 .836862 1.378829 .836862 1.42665C.836862 1.498381 .908593 1.546202 .948443 1.546202C1.052055 1.546202 1.713574 .924533 1.713574-.03188C1.713574-.470237 1.554172-.884682 1.171606-.884682C.908593-.884682 .73325-.67746 .73325-.446326C.73325-.207223 .900623 0 1.179577 0C1.354919 0 1.466501-.095641 1.490411-.119552Z"></path>
+<path id="tz_reflexao_total_g2-97" d="M3.347447-2.375093C3.347447-3.156164 2.590286-3.55467 1.865006-3.55467C1.203487-3.55467 .613699-3.299626 .613699-2.773599C.613699-2.534496 .781071-2.391034 .988294-2.391034C1.211457-2.391034 1.362889-2.550436 1.362889-2.765629C1.362889-2.956912 1.243337-3.092403 1.067995-3.132254C1.362889-3.331507 1.793275-3.331507 1.849066-3.331507C2.295392-3.331507 2.741719-3.020672 2.741719-2.367123V-2.12005C2.279452-2.096139 1.745455-2.072229 1.187547-1.841096C.486177-1.538232 .350685-1.075965 .350685-.812951C.350685-.127522 1.155666 .079701 1.705604 .079701C2.287422 .079701 2.646077-.247073 2.82142-.565878C2.86127-.263014 3.068493 .039851 3.419178 .039851C3.498879 .039851 4.176339 .00797 4.176339-.71731V-1.155666H3.929265V-.71731C3.929265-.390535 3.809714-.263014 3.642341-.263014C3.347447-.263014 3.347447-.629639 3.347447-.71731V-2.375093ZM2.741719-1.123786C2.741719-.350685 2.088169-.143462 1.769365-.143462C1.354919-.143462 1.004234-.422416 1.004234-.804981C1.004234-1.331009 1.498381-1.872976 2.741719-1.912827V-1.123786Z"></path>
+<path id="tz_reflexao_total_g2-99" d="M2.933001-3.164134C2.709838-3.092403 2.677958-2.909091 2.677958-2.81345C2.677958-2.598257 2.82939-2.438854 3.052553-2.438854C3.259776-2.438854 3.427148-2.582316 3.427148-2.82142C3.427148-3.315567 2.885181-3.55467 2.13599-3.55467C1.028144-3.55467 .278954-2.669988 .278954-1.721544C.278954-.70934 1.107846 .079701 2.11208 .079701C3.235866 .079701 3.514819-.860772 3.514819-.956413S3.411208-1.052055 3.387298-1.052055C3.331507-1.052055 3.291656-1.044085 3.267746-.964384C3.211955-.797011 2.988792-.167372 2.191781-.167372C1.697634-.167372 .988294-.549938 .988294-1.729514C.988294-2.87721 1.578082-3.307597 2.1599-3.307597C2.231631-3.307597 2.654047-3.307597 2.933001-3.164134Z"></path>
+<path id="tz_reflexao_total_g2-101" d="M3.291656-1.817186C3.466999-1.817186 3.514819-1.817186 3.514819-2.000498C3.514819-2.709838 3.124284-3.55467 2.000498-3.55467C1.012204-3.55467 .239103-2.733748 .239103-1.745455C.239103-.71731 1.099875 .079701 2.10411 .079701C3.116314 .079701 3.514819-.773101 3.514819-.956413C3.514819-.988294 3.490909-1.067995 3.387298-1.067995C3.299626-1.067995 3.283686-1.012204 3.267746-.964384C2.980822-.191283 2.295392-.167372 2.15193-.167372C1.793275-.167372 1.42665-.334745 1.187547-.70137S.948443-1.578082 .948443-1.817186H3.291656ZM.956413-2.024408C1.028144-3.140224 1.705604-3.331507 2.000498-3.331507C2.933001-3.331507 2.964882-2.207721 2.972852-2.024408H.956413Z"></path>
+<path id="tz_reflexao_total_g2-105" d="M1.554172-4.909589C1.554172-5.140722 1.370859-5.355915 1.107846-5.355915C.876712-5.355915 .669489-5.172603 .669489-4.917559C.669489-4.638605 .900623-4.471233 1.107846-4.471233C1.3868-4.471233 1.554172-4.702366 1.554172-4.909589ZM.358655-3.427148V-3.164134C.868742-3.164134 .940473-3.116314 .940473-2.725778V-.621669C.940473-.263014 .844832-.263014 .334745-.263014V0C.645579-.02391 1.091905-.02391 1.211457-.02391C1.315068-.02391 1.793275-.02391 2.072229 0V-.263014C1.554172-.263014 1.522291-.302864 1.522291-.613699V-3.514819L.358655-3.427148Z"></path>
+<path id="tz_reflexao_total_g2-108" d="M1.522291-5.531258L.334745-5.443587V-5.180573C.876712-5.180573 .940473-5.124782 .940473-4.734247V-.621669C.940473-.263014 .844832-.263014 .334745-.263014V0C.645579-.02391 1.091905-.02391 1.227397-.02391C1.3868-.02391 1.817186-.02391 2.12802 0V-.263014C1.617933-.263014 1.522291-.263014 1.522291-.621669V-5.531258Z"></path>
+<path id="tz_reflexao_total_g2-109" d="M6.224658-2.414944C6.224658-3.060523 5.945704-3.514819 5.076961-3.514819C4.343711-3.514819 3.977086-3.012702 3.849564-2.781569C3.706102-3.355417 3.251806-3.514819 2.733748-3.514819C1.960648-3.514819 1.594022-2.964882 1.490411-2.749689H1.482441V-3.514819L.326775-3.427148V-3.164134C.868742-3.164134 .932503-3.108344 .932503-2.717808V-.621669C.932503-.263014 .836862-.263014 .326775-.263014V0C.669489-.02391 1.020174-.02391 1.235367-.02391C1.466501-.02391 1.801245-.02391 2.14396 0V-.263014C1.633873-.263014 1.538232-.263014 1.538232-.621669V-2.064259C1.538232-2.901121 2.16787-3.291656 2.669988-3.291656C3.188045-3.291656 3.275716-2.885181 3.275716-2.446824V-.621669C3.275716-.263014 3.180075-.263014 2.669988-.263014V0C3.012702-.02391 3.363387-.02391 3.57858-.02391C3.809714-.02391 4.144458-.02391 4.487173 0V-.263014C3.977086-.263014 3.881445-.263014 3.881445-.621669V-2.064259C3.881445-2.901121 4.511083-3.291656 5.0132-3.291656C5.531258-3.291656 5.618929-2.885181 5.618929-2.446824V-.621669C5.618929-.263014 5.523288-.263014 5.0132-.263014V0C5.355915-.02391 5.7066-.02391 5.921793-.02391C6.152927-.02391 6.487671-.02391 6.830386 0V-.263014C6.320299-.263014 6.224658-.263014 6.224658-.621669V-2.414944Z"></path>
+<path id="tz_reflexao_total_g2-110" d="M3.873474-2.414944C3.873474-3.084433 3.57061-3.514819 2.733748-3.514819C1.944707-3.514819 1.586052-2.940971 1.490411-2.749689H1.482441V-3.514819L.326775-3.427148V-3.164134C.868742-3.164134 .932503-3.108344 .932503-2.717808V-.621669C.932503-.263014 .836862-.263014 .326775-.263014V0C.669489-.02391 1.020174-.02391 1.235367-.02391C1.466501-.02391 1.801245-.02391 2.14396 0V-.263014C1.633873-.263014 1.538232-.263014 1.538232-.621669V-2.064259C1.538232-2.901121 2.175841-3.291656 2.662017-3.291656S3.267746-2.948941 3.267746-2.446824V-.621669C3.267746-.263014 3.172105-.263014 2.662017-.263014V0C3.004732-.02391 3.355417-.02391 3.57061-.02391C3.801743-.02391 4.136488-.02391 4.479203 0V-.263014C3.969116-.263014 3.873474-.263014 3.873474-.621669V-2.414944Z"></path>
+<path id="tz_reflexao_total_g2-111" d="M3.985056-1.697634C3.985056-2.693898 3.164134-3.55467 2.11208-3.55467S.239103-2.693898 .239103-1.697634S1.091905 .079701 2.11208 .079701C3.140224 .079701 3.985056-.70137 3.985056-1.697634ZM2.11208-.167372C1.681694-.167372 1.346949-.374595 1.171606-.653549C.972354-.980324 .948443-1.370859 .948443-1.769365C.948443-2.072229 .948443-2.550436 1.195517-2.893151C1.40274-3.172105 1.737484-3.331507 2.11208-3.331507C2.526526-3.331507 2.86924-3.132254 3.052553-2.8533C3.267746-2.518555 3.275716-2.088169 3.275716-1.769365C3.275716-1.40274 3.259776-.964384 3.036613-.629639C2.82142-.310834 2.462765-.167372 2.11208-.167372Z"></path>
+<path id="tz_reflexao_total_g2-114" d="M1.466501-1.817186C1.466501-2.414944 1.713574-3.275716 2.478705-3.291656C2.430884-3.259776 2.351183-3.196015 2.351183-3.012702C2.351183-2.765629 2.542466-2.654047 2.701868-2.654047C2.893151-2.654047 3.060523-2.781569 3.060523-3.012702C3.060523-3.291656 2.805479-3.514819 2.454795-3.514819C1.936737-3.514819 1.586052-3.124284 1.41868-2.677958H1.41071V-3.514819L.278954-3.427148V-3.164134C.820922-3.164134 .884682-3.108344 .884682-2.717808V-.621669C.884682-.263014 .789041-.263014 .278954-.263014V0C.589788-.02391 1.028144-.02391 1.219427-.02391C1.689664-.02391 1.705604-.02391 2.223661 0V-.263014H2.064259C1.482441-.263014 1.466501-.350685 1.466501-.637609V-1.817186Z"></path>
+<path id="tz_reflexao_total_g2-115" d="M2.83736-3.347447C2.83736-3.474969 2.83736-3.55467 2.733748-3.55467C2.693898-3.55467 2.669988-3.55467 2.542466-3.427148C2.526526-3.419178 2.454795-3.347447 2.430884-3.347447C2.422914-3.347447 2.406974-3.347447 2.359153-3.379328C2.231631-3.466999 2.000498-3.55467 1.641843-3.55467C.526027-3.55467 .278954-2.948941 .278954-2.566376C.278954-2.16787 .573848-1.936737 .597758-1.912827C.916563-1.673724 1.099875-1.641843 1.633873-1.546202C2.008468-1.474471 2.622167-1.362889 2.622167-.820922C2.622167-.510087 2.414944-.143462 1.681694-.143462C.876712-.143462 .645579-.765131 .541968-1.187547C.510087-1.291158 .502117-1.331009 .406476-1.331009C.278954-1.331009 .278954-1.267248 .278954-1.115816V-.127522C.278954 0 .278954 .079701 .382565 .079701C.430386 .079701 .438356 .071731 .581818-.079701C.621669-.119552 .70934-.223163 .749191-.263014C1.107846 .063761 1.482441 .079701 1.689664 .079701C2.701868 .079701 3.052553-.502117 3.052553-1.028144C3.052553-1.41071 2.82142-1.968618 1.872976-2.14396C1.809215-2.1599 1.362889-2.239601 1.331009-2.239601C1.083935-2.295392 .70934-2.462765 .70934-2.781569C.70934-3.020672 .884682-3.355417 1.641843-3.355417C2.534496-3.355417 2.574346-2.701868 2.590286-2.478705C2.598257-2.414944 2.654047-2.391034 2.709838-2.391034C2.83736-2.391034 2.83736-2.446824 2.83736-2.598257V-3.347447Z"></path>
+<path id="tz_reflexao_total_g2-117" d="M2.662017-3.427148V-3.164134C3.203985-3.164134 3.267746-3.108344 3.267746-2.717808V-1.331009C3.267746-.645579 2.8533-.143462 2.255542-.143462C1.570112-.143462 1.538232-.486177 1.538232-.884682V-3.514819L.326775-3.427148V-3.164134C.932503-3.164134 .932503-3.140224 .932503-2.430884V-1.235367C.932503-.661519 .932503 .079701 2.207721 .079701C2.956912 .079701 3.243836-.494147 3.283686-.565878H3.291656V.079701L4.479203 0V-.263014C3.937235-.263014 3.873474-.318804 3.873474-.70934V-3.514819L2.662017-3.427148Z"></path>
+</defs>
+<g id="tz_reflexao_total_page1">
+<g stroke-miterlimit="10" transform="translate(-67.417199,-8.26828)scale(0.996264,-0.996264)">
+<g fill="#000" stroke="#000">
+<g stroke-width="0.4">
+<g fill="#f2f8fe" stroke="#f2f8fe">
+<path d="M0 0V45.52455H256.07469V0ZM256.07469 45.52455" stroke="none"></path>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<path d="M0 0H256.07469" fill="none"></path>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<path d="M0 45.52455H256.07469" fill="none"></path>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g fill="#6c757d" stroke="#6c757d">
+</g>
+<g transform="translate(6.37842,50.63774)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.417199,-8.26828)scale(-1,-1)">
+<g fill="#6c757d">
+<g stroke="none">
+<g fill="#6c757d">
+<use x="-67.417199" y="-8.26828" href="#tz_reflexao_total_g2-99"></use>
+<use x="-63.653481" y="-8.26828" href="#tz_reflexao_total_g2-97"></use>
+<use x="-59.419298" y="-8.26828" href="#tz_reflexao_total_g2-115"></use>
+<use x="-56.078995" y="-8.26828" href="#tz_reflexao_total_g2-99"></use>
+<use x="-52.315277" y="-8.26828" href="#tz_reflexao_total_g2-97"></use>
+<use x="-45.258306" y="-8.26828" href="#tz_reflexao_total_g2-40"></use>
+<use x="-41.965052" y="-8.26828" href="#tz_reflexao_total_g0-110"></use>
+<use x="-36.82685" y="-7.161332" href="#tz_reflexao_total_g1-50"></use>
+<use x="-32.675806" y="-8.26828" href="#tz_reflexao_total_g2-44"></use>
+<use x="-27.500693" y="-8.26828" href="#tz_reflexao_total_g2-109"></use>
+<use x="-20.443722" y="-8.26828" href="#tz_reflexao_total_g2-101"></use>
+<use x="-16.680004" y="-8.26828" href="#tz_reflexao_total_g2-110"></use>
+<use x="-11.975356" y="-8.26828" href="#tz_reflexao_total_g2-111"></use>
+<use x="-7.741173" y="-8.26828" href="#tz_reflexao_total_g2-114"></use>
+<use x="-4.441003" y="-8.26828" href="#tz_reflexao_total_g2-41"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#ffefe4" stroke="#ffefe4">
+<path d="M0 11.38092V34.1432H256.07469V11.38092ZM256.07469 34.1432" stroke="none"></path>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g stroke-width="0.4">
+<g stroke-dasharray="3.0,3.0" stroke-dashoffset="0.0">
+<path d="M0 11.38092H256.07469" fill="none"></path>
+</g>
+</g>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g stroke-width="0.4">
+<g stroke-dasharray="3.0,3.0" stroke-dashoffset="0.0">
+<path d="M0 34.1432H256.07469" fill="none"></path>
+</g>
+</g>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<g fill="#6c757d" stroke="#6c757d">
+</g>
+<g transform="translate(6.37842,20.76227)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.417199,-8.26828)scale(-1,-1)">
+<g fill="#6c757d">
+<g stroke="none">
+<g fill="#6c757d">
+<use x="-67.417199" y="-8.26828" href="#tz_reflexao_total_g2-110"></use>
+<use x="-62.477319" y="-8.26828" href="#tz_reflexao_total_g2-19"></use>
+<use x="-62.712551" y="-8.26828" href="#tz_reflexao_total_g2-117"></use>
+<use x="-58.007904" y="-8.26828" href="#tz_reflexao_total_g2-99"></use>
+<use x="-54.244186" y="-8.26828" href="#tz_reflexao_total_g2-108"></use>
+<use x="-51.891862" y="-8.26828" href="#tz_reflexao_total_g2-101"></use>
+<use x="-48.128144" y="-8.26828" href="#tz_reflexao_total_g2-111"></use>
+<use x="-41.071172" y="-8.26828" href="#tz_reflexao_total_g2-40"></use>
+<use x="-37.777919" y="-8.26828" href="#tz_reflexao_total_g0-110"></use>
+<use x="-32.639717" y="-7.161332" href="#tz_reflexao_total_g1-49"></use>
+<use x="-28.488672" y="-8.26828" href="#tz_reflexao_total_g2-44"></use>
+<use x="-23.31356" y="-8.26828" href="#tz_reflexao_total_g2-109"></use>
+<use x="-16.256588" y="-8.26828" href="#tz_reflexao_total_g2-97"></use>
+<use x="-12.022406" y="-8.26828" href="#tz_reflexao_total_g2-105"></use>
+<use x="-9.670082" y="-8.26828" href="#tz_reflexao_total_g2-111"></use>
+<use x="-5.435899" y="-8.26828" href="#tz_reflexao_total_g2-114"></use>
+<use x="-2.135729" y="-8.26828" href="#tz_reflexao_total_g2-41"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<g fill="#d7433b" stroke="#d7433b">
+<path d="M0 12.80363L42.67911 32.72047L85.35823 12.80363L128.03734 32.72047L170.71646 12.80363L213.39557 32.72047L256.07469 12.80363" fill="none"></path>
+</g>
+</g>
+</g>
+<g fill="#000">
+<g fill="#d7433b">
+<g fill="#000">
+<g fill="#d7433b">
+<path d="M44.51773 32.72047C44.51773 33.73592 43.69455 34.5591 42.67911 34.5591S40.84048 33.73592 40.84048 32.72047C40.84048 31.70503 41.66367 30.88185 42.67911 30.88185S44.51773 31.70503 44.51773 32.72047ZM42.67911 32.72047" stroke="none"></path>
+</g>
+</g>
+<g transform="translate(42.67911,32.72047)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.417199,-8.26828)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#000">
+<g fill="#d7433b">
+<g fill="#000">
+<g fill="#d7433b">
+<path d="M129.87596 32.72047C129.87596 33.73592 129.05278 34.5591 128.03734 34.5591S126.19872 33.73592 126.19872 32.72047C126.19872 31.70503 127.0219 30.88185 128.03734 30.88185S129.87596 31.70503 129.87596 32.72047ZM128.03734 32.72047" stroke="none"></path>
+</g>
+</g>
+<g transform="translate(128.03734,32.72047)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.417199,-8.26828)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#000">
+<g fill="#d7433b">
+<g fill="#000">
+<g fill="#d7433b">
+<path d="M215.23419 32.72047C215.23419 33.73592 214.41101 34.5591 213.39557 34.5591S211.55695 33.73592 211.55695 32.72047C211.55695 31.70503 212.38013 30.88185 213.39557 30.88185S215.23419 31.70503 215.23419 32.72047ZM213.39557 32.72047" stroke="none"></path>
+</g>
+</g>
+<g transform="translate(213.39557,32.72047)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.417199,-8.26828)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#000">
+<g fill="#d7433b">
+<g fill="#000">
+<g fill="#d7433b">
+<path d="M87.19685 12.80363C87.19685 13.81908 86.37367 14.64226 85.35823 14.64226S83.5196 13.81908 83.5196 12.80363C83.5196 11.7882 84.34279 10.96501 85.35823 10.96501S87.19685 11.7882 87.19685 12.80363ZM85.35823 12.80363" stroke="none"></path>
+</g>
+</g>
+<g transform="translate(85.35823,12.80363)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.417199,-8.26828)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#000">
+<g fill="#d7433b">
+<g fill="#000">
+<g fill="#d7433b">
+<path d="M172.55508 12.80363C172.55508 13.81908 171.7319 14.64226 170.71646 14.64226S168.87784 13.81908 168.87784 12.80363C168.87784 11.7882 169.70102 10.96501 170.71646 10.96501S172.55508 11.7882 172.55508 12.80363ZM170.71646 12.80363" stroke="none"></path>
+</g>
+</g>
+<g transform="translate(170.71646,12.80363)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.417199,-8.26828)scale(-1,-1)">
+<g fill="#000">
+<g stroke="none"></g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>
 </div>
-<div class="callout-title-container flex-fill">
-Nota
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-reflexao-total-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;8.1: Reflexão interna total: o raio que incide na fronteira núcleo–casca acima do ângulo crítico é totalmente refletido e se propaga ao longo da fibra.
+</figcaption>
+</figure>
 </div>
+</section>
+<section id="sec-fibra-na" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="sec-fibra-na"><span class="header-section-number">8.2</span> Abertura numérica e ângulo de aceitação</h2>
+<p>Nem toda luz que chega à ponta da fibra entra de forma útil. Só os raios dentro de um <strong>cone de aceitação</strong> se acoplam ao núcleo; o resto vaza. Esse cone é medido pela <strong>abertura numérica (NA)</strong>: <span class="math display">\[\mathrm{NA} = \sqrt{n_1^2 - n_2^2} = \sin\theta_{\text{ac}}.\]</span> Uma NA maior aceita mais luz (bom para acoplamento), mas favorece muitos modos de propagação — o que, como veremos, <strong>piora a dispersão</strong>. É um dos motivos pelos quais a fibra de longa distância (monomodo) tem NA pequena e núcleo minúsculo.</p>
+</section>
+<section id="sec-fibra-atenuacao" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="sec-fibra-atenuacao"><span class="header-section-number">8.3</span> Atenuação: para onde a luz “some”</h2>
+<p><strong>Atenuação</strong> é a perda de potência óptica ao longo da fibra, medida em <strong>dB/km</strong>. Suas causas físicas:</p>
+<ul>
+<li><strong>Absorção</strong> — impurezas (sobretudo íons OH⁻, o “pico de água”) e a própria sílica convertem luz em calor.</li>
+<li><strong>Espalhamento Rayleigh</strong> — flutuações microscópicas de densidade desviam luz; domina nos comprimentos de onda curtos (cai com <span class="math inline">\(1/\lambda^4\)</span>).</li>
+<li><strong>Perdas por curvatura</strong> — dobras fechadas (<em>macrobending</em>) e microdeformações (<em>microbending</em>) deixam a luz escapar. <strong>Causa nº 1 de chamado em planta:</strong> um <em>drop</em> dobrado demais atrás de um móvel.</li>
+</ul>
+<p>Como a atenuação varia com o comprimento de onda, há <strong>janelas</strong> de menor perda — exatamente onde a fibra é operada:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Janela</th>
+<th>λ</th>
+<th>Atenuação típica</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2ª (O)</td>
+<td>1310 nm</td>
+<td>~0,33 dB/km</td>
+<td><em>upstream</em> GPON, curtas</td>
+</tr>
+<tr class="even">
+<td>—</td>
+<td>1383 nm</td>
+<td>pico de água (alta)</td>
+<td>evitado (salvo fibra <em>low water peak</em>)</td>
+</tr>
+<tr class="odd">
+<td>3ª (C)</td>
+<td>1550 nm</td>
+<td>~0,20 dB/km</td>
+<td><em>backbone</em>, DWDM, RF overlay</td>
+</tr>
+<tr class="even">
+<td>down GPON</td>
+<td>1490 nm</td>
+<td>~0,28 dB/km</td>
+<td><em>downstream</em> GPON</td>
+</tr>
+</tbody>
+</table>
+<p>A escala em <strong>dB</strong> é a linguagem da fibra porque é <strong>logarítmica e aditiva</strong>: perdas de trechos, conectores, fusões e splitters simplesmente <strong>somam</strong> em dB (capítulo <span class="quarto-unresolved-ref">?sec-orcamento</span>). Lembre: <span class="math inline">\(-3\,\text{dB}\)</span> = metade da potência; <span class="math inline">\(-10\,\text{dB}\)</span> = um décimo.</p>
+</section>
+<section id="sec-fibra-dispersao" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="sec-fibra-dispersao"><span class="header-section-number">8.4</span> Dispersão: por que o pulso “borra”</h2>
+<p>Mesmo sem perder potência, um pulso pode <strong>alargar no tempo</strong> ao viajar — é a <strong>dispersão</strong>, que limita a taxa de bits e a distância. Dois tipos importam:</p>
+<ul>
+<li><strong>Dispersão modal</strong> — em fibra <strong>multimodo</strong>, raios em ângulos diferentes percorrem caminhos de comprimentos diferentes e chegam em instantes distintos. É severa; por isso multimodo só serve para curtas distâncias.</li>
+<li><strong>Dispersão cromática</strong> — comprimentos de onda ligeiramente diferentes (todo laser real tem largura espectral) viajam a velocidades distintas. Domina em <strong>monomodo</strong> e cresce com a distância e a taxa; é gerenciada com lasers de espectro estreito (DFB) e, em DWDM longo, com fibras/compensadores específicos.</li>
+</ul>
+<p>Quando os pulsos se sobrepõem, o receptor confunde bits (<strong>ISI</strong> — interferência intersimbólica) e a taxa de erro sobe. Dispersão é o motivo de a banda da fibra, por maior que seja, <strong>não ser infinita</strong> em um enlace real.</p>
+</section>
+<section id="sec-fibra-modos" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="sec-fibra-modos"><span class="header-section-number">8.5</span> Modos: por que monomodo domina o acesso</h2>
+<p>Um “modo” é um caminho permitido para a luz no núcleo. Se o núcleo é largo (~50 µm), cabem <strong>muitos modos</strong> (multimodo, MMF) e surge dispersão modal. Se é estreito o bastante (~9 µm) para o comprimento de onda usado, só <strong>um modo</strong> propaga (monomodo, SMF) — sem dispersão modal e com alcance enorme. <strong>Toda a planta PON e o <em>backbone</em> do provedor são monomodo</strong>; multimodo fica restrito a <em>patch cords</em> curtos dentro do POP/datacenter. O capítulo <a href="08-fibra-tipos-caracteristicas.html#sec-fibra-tipos" class="quarto-xref"><span>Seção 9.1</span></a> detalha os tipos comerciais (G.652, G.657 etc.).</p>
+<div class="callout-provedor">
+<p><strong>Na prática do provedor</strong></p>
+<p>A física vira regra de campo:</p>
+<ul>
+<li><strong>dB é tudo.</strong> Aprenda a pensar em dB: cada conector ~0,3–0,5 dB, cada fusão ~0,05–0,1 dB, cada km a ~0,35 dB (1310) ou ~0,20 dB (1550). O orçamento de potência (capítulo <span class="quarto-unresolved-ref">?sec-orcamento</span>) é só uma soma dessas perdas.</li>
+<li><strong>Macrobending é o vilão silencioso.</strong> Um <em>drop</em> dobrado em curva fechada ou prensado por um portão derruba a potência e o cliente cai no horário em que o sol esquenta o cabo. Fibras <strong>G.657</strong> (insensíveis a curvatura) reduzem isso no intradomiciliar.</li>
+<li><strong>Por que 1550 nm chega mais longe.</strong> Menor atenuação → mais quilômetros por dB. Por isso <em>backbone</em> e overlay de TV usam 1550, e GPON reserva 1490/1310 para o serviço de dados.</li>
+<li><strong>Cuidado com o pico de água (1383 nm).</strong> Em fibras antigas, esse comprimento é inutilizável; fibras <em>low water peak</em> (G.652.D) liberam toda a banda — relevante ao planejar CWDM.</li>
+</ul>
 </div>
-<div class="callout-body-container callout-body">
-<p>Capítulo a ser desenvolvido pelo Claude Code (ver <code>PROMPT-CLAUDE-CODE.md</code> e <code>CLAUDE.md</code>).</p>
-</div>
-</div>
+</section>
+<section id="sec-resumo-07" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="sec-resumo-07"><span class="header-section-number">8.6</span> Resumo e checklist</h2>
+<ul>
+<li>A luz fica presa por <strong>reflexão interna total</strong> entre núcleo (<span class="math inline">\(n_1\)</span>) e casca (<span class="math inline">\(n_2\)</span>); o cone de entrada é a <strong>NA</strong>.</li>
+<li><strong>Atenuação</strong> (dB/km) vem de absorção, Rayleigh e <strong>curvaturas</strong>; em dB as perdas <strong>somam</strong>.</li>
+<li><strong>Dispersão</strong> (modal em MMF, cromática em SMF) alarga o pulso e limita taxa × distância.</li>
+<li><strong>Monomodo</strong> (núcleo ~9 µm) domina acesso e <em>backbone</em>; <strong>multimodo</strong> só em curtas distâncias.</li>
+</ul>
+<p><strong>Checklist do capítulo</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox">Explico a reflexão interna total e o papel do ângulo crítico/NA.</label></li>
+<li><label><input type="checkbox">Sei converter perdas em dB e por que elas somam.</label></li>
+<li><label><input type="checkbox">Diferencio dispersão modal de cromática e seu impacto.</label></li>
+<li><label><input type="checkbox">Justifico monomodo no acesso e o uso de 1310/1490/1550 nm em GPON.</label></li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1069,4 +1409,4 @@ Nota
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/07-fibra-principios.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/07-fibra-principios.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>

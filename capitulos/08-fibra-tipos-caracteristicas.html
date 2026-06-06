@@ -610,8 +610,19 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#sec-fibra-tipos" id="toc-sec-fibra-tipos" class="nav-link active" data-scroll-target="#sec-fibra-tipos"><span class="header-section-number">9.1</span> Escolher a fibra certa é decisão de projeto</a></li>
+  <li><a href="#sec-fibra-mono-multi" id="toc-sec-fibra-mono-multi" class="nav-link" data-scroll-target="#sec-fibra-mono-multi"><span class="header-section-number">9.2</span> Monomodo vs.&nbsp;multimodo</a></li>
+  <li><a href="#sec-fibra-g65x" id="toc-sec-fibra-g65x" class="nav-link" data-scroll-target="#sec-fibra-g65x"><span class="header-section-number">9.3</span> As normas de monomodo (ITU-T G.65x)</a></li>
+  <li><a href="#sec-fibra-atenuacao-pratica" id="toc-sec-fibra-atenuacao-pratica" class="nav-link" data-scroll-target="#sec-fibra-atenuacao-pratica"><span class="header-section-number">9.4</span> Atenuação na prática e o orçamento</a></li>
+  <li><a href="#sec-fibra-dispersao-limite" id="toc-sec-fibra-dispersao-limite" class="nav-link" data-scroll-target="#sec-fibra-dispersao-limite"><span class="header-section-number">9.5</span> Dispersão e o limite de banda × distância</a></li>
+  <li><a href="#sec-resumo-08" id="toc-sec-resumo-08" class="nav-link" data-scroll-target="#sec-resumo-08"><span class="header-section-number">9.6</span> Resumo e checklist</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/08-fibra-tipos-caracteristicas.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -635,21 +646,336 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="sec-fibra-tipos" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="sec-fibra-tipos"><span class="header-section-number">9.1</span> Escolher a fibra certa é decisão de projeto</h2>
+<p>No capítulo <a href="07-fibra-principios.html#sec-fibra-principios" class="quarto-xref"><span>Seção 8.1</span></a> vimos a física; aqui vemos <strong>o que se compra</strong>. Especificar a fibra errada custa caro: uma multimodo num enlace de 20 km simplesmente não fecha, e uma G.652 comum no intradomiciliar gera chamados por curvatura. O provedor precisa conhecer os <strong>tipos comerciais</strong> (normas ITU-T G.65x) e suas <strong>características-chave</strong>: diâmetro do núcleo, atenuação, dispersão e sensibilidade a curvatura.</p>
+</section>
+<section id="sec-fibra-mono-multi" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="sec-fibra-mono-multi"><span class="header-section-number">9.2</span> Monomodo vs.&nbsp;multimodo</h2>
+<div id="fig-mono-multi" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mono-multi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="171.274162pt" height="84.040139pt" viewbox="-68.014948 -68.014953 171.274162 84.040139">
+<defs>
+<path id="tz_mono_multi_g0-181" d="M.908593-3.459029C.661519-3.435118 .430386-3.419178 .390535-3.419178C.334745-3.419178 .326775-3.403238 .326775-3.283686V-3.148194H.470237C.549938-3.148194 .661519-3.132254 .72528-3.116314C.932503-3.052553 .924533-3.148194 .924533-.884682C.924533 1.474471 .964384 1.251308 .573848 1.275218L.326775 1.291158V1.41868V1.538232H1.243337H2.1599V1.41868V1.291158L1.912827 1.275218C1.546202 1.251308 1.554172 1.267248 1.554172 .565878V.00797L1.761395 .047821C2.064259 .111582 2.462765 .087671 2.669988 0C2.8533-.087671 3.052553-.247073 3.180075-.430386L3.267746-.541968V-.223163C3.267746 0 3.275716 .087671 3.299626 .087671S3.57858 .063761 3.865504 .039851S4.407472 0 4.431382 0S4.463263-.039851 4.463263-.127522V-.263014H4.319801C4.24807-.263014 4.128518-.278954 4.064757-.294894C3.865504-.358655 3.865504-.318804 3.865504-2.008468C3.865504-3.188045 3.857534-3.506849 3.825654-3.506849C3.809714-3.506849 3.5467-3.482939 3.251806-3.459029S2.693898-3.419178 2.669988-3.419178S2.638107-3.371357 2.638107-3.283686V-3.148194H2.781569C3.004732-3.148194 3.140224-3.092403 3.188045-2.996762C3.259776-2.86924 3.259776-1.195517 3.188045-.940473C3.100374-.613699 2.901121-.342715 2.638107-.223163C2.438854-.135492 1.984558-.135492 1.801245-.231133C1.562142-.358655 1.570112-.294894 1.562142-2.000498L1.554172-3.506849L1.458531-3.498879C1.40274-3.498879 1.155666-3.482939 .908593-3.459029Z"></path>
+<path id="tz_mono_multi_g1-77" d="M4.614695-1.036115L2.614197-5.228394C2.502615-5.467497 2.391034-5.467497 2.215691-5.467497H.398506V-5.053051H1.259278V-.629639C1.259278-.462267 1.251308-.454296 1.028144-.430386C.924533-.422416 .6934-.414446 .621669-.414446H.398506V0C1.028144-.02391 1.044085-.02391 1.506351-.02391S1.984558-.02391 2.614197 0V-.414446H2.391034C2.183811-.414446 2.15193-.414446 1.968618-.438356C1.761395-.462267 1.753425-.470237 1.753425-.629639V-4.933499H1.761395L4.000996-.239103C4.072727-.095641 4.152428 0 4.319801 0C4.519054 0 4.582814-.135492 4.630635-.231133L6.926027-5.037111H6.933998V-.414446H6.073225V0C6.4-.02391 7.0934-.02391 7.452055-.02391S8.50411-.02391 8.830884 0V-.414446H7.970112V-5.053051H8.830884V-5.467497H7.013699C6.830386-5.467497 6.734745-5.459527 6.623163-5.236364L4.614695-1.036115Z"></path>
+<path id="tz_mono_multi_g1-100" d="M3.076463-5.467497V-5.053051C3.5467-5.053051 3.602491-5.053051 3.602491-4.742217V-3.251806C3.172105-3.5467 2.757659-3.594521 2.462765-3.594521C1.115816-3.594521 .326775-2.797509 .326775-1.769365C.326775-.72528 1.099875 .055791 2.367123 .055791C2.948941 .055791 3.347447-.175342 3.55467-.334745V.055791L5.053051 0V-.414446C4.582814-.414446 4.527024-.414446 4.527024-.72528V-5.531258L3.076463-5.467497ZM3.55467-.884682C3.180075-.358655 2.709838-.278954 2.438854-.278954C1.40274-.278954 1.40274-1.267248 1.40274-1.745455C1.40274-2.247572 1.40274-3.259776 2.542466-3.259776C2.909091-3.259776 3.283686-3.108344 3.55467-2.765629V-.884682Z"></path>
+<path id="tz_mono_multi_g1-105" d="M1.992528-4.901619C1.992528-5.244334 1.713574-5.539228 1.354919-5.539228C1.012204-5.539228 .71731-5.268244 .71731-4.901619S1.012204-4.26401 1.354919-4.26401C1.713574-4.26401 1.992528-4.558904 1.992528-4.901619ZM.494147-3.53076V-3.116314C.940473-3.116314 .996264-3.116314 .996264-2.81345V-.414446H.470237V0C.932503-.02391 1.020174-.02391 1.44259-.02391C1.769365-.02391 2.000498-.02391 2.391034 0V-.414446H1.920797V-3.594521L.494147-3.53076Z"></path>
+<path id="tz_mono_multi_g1-108" d="M1.920797-5.531258L.470237-5.467497V-5.053051C.940473-5.053051 .996264-5.053051 .996264-4.742217V-.414446H.470237V0C.932503-.02391 1.012204-.02391 1.458531-.02391S1.984558-.02391 2.446824 0V-.414446H1.920797V-5.531258Z"></path>
+<path id="tz_mono_multi_g1-109" d="M7.364384-2.414944C7.364384-3.371357 6.782565-3.594521 6.049315-3.594521C5.212453-3.594521 4.774097-3.108344 4.606725-2.86127C4.415442-3.482939 3.881445-3.594521 3.339477-3.594521C2.375093-3.594521 1.944707-2.956912 1.849066-2.781569H1.841096V-3.594521L.446326-3.53076V-3.116314C.916563-3.116314 .972354-3.116314 .972354-2.805479V-.414446H.446326V0C.876712-.02391 1.155666-.02391 1.458531-.02391C1.769365-.02391 2.040349-.02391 2.470735 0V-.414446H1.944707V-2.016438C1.944707-2.901121 2.709838-3.259776 3.219925-3.259776C3.498879-3.259776 3.682192-3.124284 3.682192-2.502615V-.414446H3.156164V0C3.58655-.02391 3.865504-.02391 4.168369-.02391C4.479203-.02391 4.750187-.02391 5.180573 0V-.414446H4.654545V-2.016438C4.654545-2.901121 5.419676-3.259776 5.929763-3.259776C6.208717-3.259776 6.39203-3.124284 6.39203-2.502615V-.414446H5.866002V0C6.296389-.02391 6.575342-.02391 6.878207-.02391C7.189041-.02391 7.460025-.02391 7.890411 0V-.414446H7.364384V-2.414944Z"></path>
+<path id="tz_mono_multi_g1-110" d="M4.654545-2.414944C4.654545-3.387298 4.048817-3.594521 3.339477-3.594521C2.375093-3.594521 1.944707-2.956912 1.849066-2.781569H1.841096V-3.594521L.446326-3.53076V-3.116314C.916563-3.116314 .972354-3.116314 .972354-2.805479V-.414446H.446326V0C.876712-.02391 1.155666-.02391 1.458531-.02391C1.769365-.02391 2.040349-.02391 2.470735 0V-.414446H1.944707V-2.016438C1.944707-2.901121 2.709838-3.259776 3.219925-3.259776C3.498879-3.259776 3.682192-3.124284 3.682192-2.502615V-.414446H3.156164V0C3.58655-.02391 3.865504-.02391 4.168369-.02391C4.479203-.02391 4.750187-.02391 5.180573 0V-.414446H4.654545V-2.414944Z"></path>
+<path id="tz_mono_multi_g1-111" d="M4.606725-1.737484C4.606725-2.741719 3.897385-3.626401 2.438854-3.626401C.972354-3.626401 .270984-2.733748 .270984-1.737484C.270984-.789041 .972354 .055791 2.438854 .055791C3.921295 .055791 4.606725-.797011 4.606725-1.737484ZM2.438854-.318804C1.346949-.318804 1.346949-1.139726 1.346949-1.833126C1.346949-2.486675 1.346949-3.291656 2.438854-3.291656S3.53076-2.478705 3.53076-1.833126C3.53076-1.139726 3.53076-.318804 2.438854-.318804Z"></path>
+<path id="tz_mono_multi_g1-116" d="M1.841096-3.124284H3.084433V-3.53873H1.841096V-5.061021H1.39477C1.3868-4.27198 .980324-3.474969 .183313-3.459029V-3.124284H.868742V-.980324C.868742-.159402 1.514321 .055791 2.191781 .055791C2.797509 .055791 3.243836-.350685 3.243836-.980324V-1.3868H2.797509V-.996264C2.797509-.446326 2.494645-.318804 2.311333-.318804C1.849066-.318804 1.841096-.74122 1.841096-.956413V-3.124284Z"></path>
+<path id="tz_mono_multi_g1-117" d="M3.156164-3.53076V-3.116314C3.626401-3.116314 3.682192-3.116314 3.682192-2.805479V-1.291158C3.682192-.68543 3.259776-.278954 2.614197-.278954S1.944707-.462267 1.944707-.868742V-3.594521L.446326-3.53076V-3.116314C.916563-3.116314 .972354-3.116314 .972354-2.805479V-.980324C.972354-.087671 1.721544 .055791 2.502615 .055791C2.765629 .055791 3.299626 .055791 3.730012-.502117V.055791L5.180573 0V-.414446C4.710336-.414446 4.654545-.414446 4.654545-.72528V-3.594521L3.156164-3.53076Z"></path>
+<path id="tz_mono_multi_g2-19" d="M3.156164-4.98132C3.243836-5.045081 3.315567-5.116812 3.315567-5.244334C3.315567-5.427646 3.148194-5.563138 3.004732-5.563138C2.972852-5.563138 2.86127-5.563138 2.757659-5.435616L1.737484-4.224159L1.904857-4.040847L3.156164-4.98132Z"></path>
+<path id="tz_mono_multi_g2-40" d="M2.654047 1.992528C2.717808 1.992528 2.81345 1.992528 2.81345 1.896887C2.81345 1.865006 2.805479 1.857036 2.701868 1.753425C1.609963 .72528 1.338979-.757161 1.338979-1.992528C1.338979-4.28792 2.287422-5.363885 2.693898-5.730511C2.805479-5.834122 2.81345-5.842092 2.81345-5.881943S2.781569-5.977584 2.701868-5.977584C2.574346-5.977584 2.175841-5.571108 2.11208-5.499377C1.044085-4.383562 .820922-2.948941 .820922-1.992528C.820922-.207223 1.570112 1.227397 2.654047 1.992528Z"></path>
+<path id="tz_mono_multi_g2-41" d="M2.462765-1.992528C2.462765-2.749689 2.335243-3.658281 1.841096-4.598755C1.45056-5.332005 .72528-5.977584 .581818-5.977584C.502117-5.977584 .478207-5.921793 .478207-5.881943C.478207-5.850062 .478207-5.834122 .573848-5.738481C1.689664-4.678456 1.944707-3.219925 1.944707-1.992528C1.944707 .294894 .996264 1.378829 .589788 1.745455C.486177 1.849066 .478207 1.857036 .478207 1.896887S.502117 1.992528 .581818 1.992528C.70934 1.992528 1.107846 1.586052 1.171606 1.514321C2.239601 .398506 2.462765-1.036115 2.462765-1.992528Z"></path>
+<path id="tz_mono_multi_g2-48" d="M3.897385-2.542466C3.897385-3.395268 3.809714-3.913325 3.5467-4.423412C3.196015-5.124782 2.550436-5.300125 2.11208-5.300125C1.107846-5.300125 .74122-4.550934 .629639-4.327771C.342715-3.745953 .326775-2.956912 .326775-2.542466C.326775-2.016438 .350685-1.211457 .73325-.573848C1.099875 .01594 1.689664 .167372 2.11208 .167372C2.494645 .167372 3.180075 .047821 3.57858-.74122C3.873474-1.315068 3.897385-2.024408 3.897385-2.542466ZM2.11208-.055791C1.841096-.055791 1.291158-.183313 1.123786-1.020174C1.036115-1.474471 1.036115-2.223661 1.036115-2.638107C1.036115-3.188045 1.036115-3.745953 1.123786-4.184309C1.291158-4.99726 1.912827-5.076961 2.11208-5.076961C2.383064-5.076961 2.933001-4.941469 3.092403-4.216189C3.188045-3.777833 3.188045-3.180075 3.188045-2.638107C3.188045-2.16787 3.188045-1.45056 3.092403-1.004234C2.925031-.167372 2.375093-.055791 2.11208-.055791Z"></path>
+<path id="tz_mono_multi_g2-53" d="M1.115816-4.479203C1.219427-4.447323 1.538232-4.367621 1.872976-4.367621C2.86924-4.367621 3.474969-5.068991 3.474969-5.188543C3.474969-5.276214 3.419178-5.300125 3.379328-5.300125C3.363387-5.300125 3.347447-5.300125 3.275716-5.260274C2.964882-5.140722 2.598257-5.045081 2.16787-5.045081C1.697634-5.045081 1.307098-5.164633 1.060025-5.260274C.980324-5.300125 .964384-5.300125 .956413-5.300125C.852802-5.300125 .852802-5.212453 .852802-5.068991V-2.733748C.852802-2.590286 .852802-2.494645 .980324-2.494645C1.044085-2.494645 1.067995-2.526526 1.107846-2.590286C1.203487-2.709838 1.506351-3.116314 2.183811-3.116314C2.630137-3.116314 2.84533-2.749689 2.917061-2.598257C3.052553-2.311333 3.068493-1.944707 3.068493-1.633873C3.068493-1.338979 3.060523-.908593 2.83736-.557908C2.685928-.318804 2.367123-.071731 1.944707-.071731C1.42665-.071731 .916563-.398506 .73325-.916563C.757161-.908593 .804981-.908593 .812951-.908593C1.036115-.908593 1.211457-1.052055 1.211457-1.299128C1.211457-1.594022 .980324-1.697634 .820922-1.697634C.67746-1.697634 .422416-1.617933 .422416-1.275218C.422416-.557908 1.044085 .167372 1.960648 .167372C2.956912 .167372 3.801743-.605729 3.801743-1.594022C3.801743-2.518555 3.132254-3.339477 2.191781-3.339477C1.793275-3.339477 1.41868-3.211955 1.115816-2.940971V-4.479203Z"></path>
+<path id="tz_mono_multi_g2-57" d="M3.124284-2.351183C3.124284-.406476 2.199751-.071731 1.737484-.071731C1.570112-.071731 1.155666-.095641 .940473-.342715C1.291158-.374595 1.315068-.637609 1.315068-.71731C1.315068-.956413 1.131756-1.091905 .940473-1.091905C.797011-1.091905 .565878-1.004234 .565878-.70137C.565878-.159402 1.012204 .167372 1.745455 .167372C2.83736 .167372 3.873474-.916563 3.873474-2.622167C3.873474-4.694396 2.956912-5.300125 2.13599-5.300125C1.195517-5.300125 .350685-4.566874 .350685-3.52279C.350685-2.494645 1.123786-1.745455 2.024408-1.745455C2.590286-1.745455 2.933001-2.10411 3.124284-2.510585V-2.351183ZM2.056289-1.968618C1.689664-1.968618 1.458531-2.13599 1.283188-2.430884C1.099875-2.725778 1.099875-3.108344 1.099875-3.514819C1.099875-3.985056 1.099875-4.319801 1.315068-4.646575C1.514321-4.933499 1.769365-5.092902 2.14396-5.092902C2.677958-5.092902 2.909091-4.566874 2.933001-4.527024C3.100374-4.136488 3.108344-3.514819 3.108344-3.355417C3.108344-2.725778 2.765629-1.968618 2.056289-1.968618Z"></path>
+<path id="tz_mono_multi_g2-99" d="M2.933001-3.164134C2.709838-3.092403 2.677958-2.909091 2.677958-2.81345C2.677958-2.598257 2.82939-2.438854 3.052553-2.438854C3.259776-2.438854 3.427148-2.582316 3.427148-2.82142C3.427148-3.315567 2.885181-3.55467 2.13599-3.55467C1.028144-3.55467 .278954-2.669988 .278954-1.721544C.278954-.70934 1.107846 .079701 2.11208 .079701C3.235866 .079701 3.514819-.860772 3.514819-.956413S3.411208-1.052055 3.387298-1.052055C3.331507-1.052055 3.291656-1.044085 3.267746-.964384C3.211955-.797011 2.988792-.167372 2.191781-.167372C1.697634-.167372 .988294-.549938 .988294-1.729514C.988294-2.87721 1.578082-3.307597 2.1599-3.307597C2.231631-3.307597 2.654047-3.307597 2.933001-3.164134Z"></path>
+<path id="tz_mono_multi_g2-101" d="M3.291656-1.817186C3.466999-1.817186 3.514819-1.817186 3.514819-2.000498C3.514819-2.709838 3.124284-3.55467 2.000498-3.55467C1.012204-3.55467 .239103-2.733748 .239103-1.745455C.239103-.71731 1.099875 .079701 2.10411 .079701C3.116314 .079701 3.514819-.773101 3.514819-.956413C3.514819-.988294 3.490909-1.067995 3.387298-1.067995C3.299626-1.067995 3.283686-1.012204 3.267746-.964384C2.980822-.191283 2.295392-.167372 2.15193-.167372C1.793275-.167372 1.42665-.334745 1.187547-.70137S.948443-1.578082 .948443-1.817186H3.291656ZM.956413-2.024408C1.028144-3.140224 1.705604-3.331507 2.000498-3.331507C2.933001-3.331507 2.964882-2.207721 2.972852-2.024408H.956413Z"></path>
+<path id="tz_mono_multi_g2-108" d="M1.522291-5.531258L.334745-5.443587V-5.180573C.876712-5.180573 .940473-5.124782 .940473-4.734247V-.621669C.940473-.263014 .844832-.263014 .334745-.263014V0C.645579-.02391 1.091905-.02391 1.227397-.02391C1.3868-.02391 1.817186-.02391 2.12802 0V-.263014C1.617933-.263014 1.522291-.263014 1.522291-.621669V-5.531258Z"></path>
+<path id="tz_mono_multi_g2-109" d="M6.224658-2.414944C6.224658-3.060523 5.945704-3.514819 5.076961-3.514819C4.343711-3.514819 3.977086-3.012702 3.849564-2.781569C3.706102-3.355417 3.251806-3.514819 2.733748-3.514819C1.960648-3.514819 1.594022-2.964882 1.490411-2.749689H1.482441V-3.514819L.326775-3.427148V-3.164134C.868742-3.164134 .932503-3.108344 .932503-2.717808V-.621669C.932503-.263014 .836862-.263014 .326775-.263014V0C.669489-.02391 1.020174-.02391 1.235367-.02391C1.466501-.02391 1.801245-.02391 2.14396 0V-.263014C1.633873-.263014 1.538232-.263014 1.538232-.621669V-2.064259C1.538232-2.901121 2.16787-3.291656 2.669988-3.291656C3.188045-3.291656 3.275716-2.885181 3.275716-2.446824V-.621669C3.275716-.263014 3.180075-.263014 2.669988-.263014V0C3.012702-.02391 3.363387-.02391 3.57858-.02391C3.809714-.02391 4.144458-.02391 4.487173 0V-.263014C3.977086-.263014 3.881445-.263014 3.881445-.621669V-2.064259C3.881445-2.901121 4.511083-3.291656 5.0132-3.291656C5.531258-3.291656 5.618929-2.885181 5.618929-2.446824V-.621669C5.618929-.263014 5.523288-.263014 5.0132-.263014V0C5.355915-.02391 5.7066-.02391 5.921793-.02391C6.152927-.02391 6.487671-.02391 6.830386 0V-.263014C6.320299-.263014 6.224658-.263014 6.224658-.621669V-2.414944Z"></path>
+<path id="tz_mono_multi_g2-110" d="M3.873474-2.414944C3.873474-3.084433 3.57061-3.514819 2.733748-3.514819C1.944707-3.514819 1.586052-2.940971 1.490411-2.749689H1.482441V-3.514819L.326775-3.427148V-3.164134C.868742-3.164134 .932503-3.108344 .932503-2.717808V-.621669C.932503-.263014 .836862-.263014 .326775-.263014V0C.669489-.02391 1.020174-.02391 1.235367-.02391C1.466501-.02391 1.801245-.02391 2.14396 0V-.263014C1.633873-.263014 1.538232-.263014 1.538232-.621669V-2.064259C1.538232-2.901121 2.175841-3.291656 2.662017-3.291656S3.267746-2.948941 3.267746-2.446824V-.621669C3.267746-.263014 3.172105-.263014 2.662017-.263014V0C3.004732-.02391 3.355417-.02391 3.57061-.02391C3.801743-.02391 4.136488-.02391 4.479203 0V-.263014C3.969116-.263014 3.873474-.263014 3.873474-.621669V-2.414944Z"></path>
+<path id="tz_mono_multi_g2-111" d="M3.985056-1.697634C3.985056-2.693898 3.164134-3.55467 2.11208-3.55467S.239103-2.693898 .239103-1.697634S1.091905 .079701 2.11208 .079701C3.140224 .079701 3.985056-.70137 3.985056-1.697634ZM2.11208-.167372C1.681694-.167372 1.346949-.374595 1.171606-.653549C.972354-.980324 .948443-1.370859 .948443-1.769365C.948443-2.072229 .948443-2.550436 1.195517-2.893151C1.40274-3.172105 1.737484-3.331507 2.11208-3.331507C2.526526-3.331507 2.86924-3.132254 3.052553-2.8533C3.267746-2.518555 3.275716-2.088169 3.275716-1.769365C3.275716-1.40274 3.259776-.964384 3.036613-.629639C2.82142-.310834 2.462765-.167372 2.11208-.167372Z"></path>
+<path id="tz_mono_multi_g2-117" d="M2.662017-3.427148V-3.164134C3.203985-3.164134 3.267746-3.108344 3.267746-2.717808V-1.331009C3.267746-.645579 2.8533-.143462 2.255542-.143462C1.570112-.143462 1.538232-.486177 1.538232-.884682V-3.514819L.326775-3.427148V-3.164134C.932503-3.164134 .932503-3.140224 .932503-2.430884V-1.235367C.932503-.661519 .932503 .079701 2.207721 .079701C2.956912 .079701 3.243836-.494147 3.283686-.565878H3.291656V.079701L4.479203 0V-.263014C3.937235-.263014 3.873474-.318804 3.873474-.70934V-3.514819L2.662017-3.427148Z"></path>
+</defs>
+<g id="tz_mono_multi_page1">
+<g stroke-miterlimit="10" transform="translate(-67.417199,4.487536)scale(0.996264,-0.996264)">
+<g fill="#000" stroke="#000">
+<g stroke-width="0.4">
+<g fill="#2780e3" stroke="#2780e3">
+<g fill="#2780e3" stroke="#2780e3">
+</g>
+<g transform="translate(3.53297,63.44139)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.417199,4.487536)scale(-1,-1)">
+<g fill="#2780e3">
+<g stroke="none">
+<g fill="#2780e3">
+<use x="-67.417199" y="4.487536" href="#tz_mono_multi_g1-77"></use>
+<use x="-58.179562" y="4.487536" href="#tz_mono_multi_g1-117"></use>
+<use x="-52.755414" y="4.487536" href="#tz_mono_multi_g1-108"></use>
+<use x="-50.04334" y="4.487536" href="#tz_mono_multi_g1-116"></use>
+<use x="-46.246437" y="4.487536" href="#tz_mono_multi_g1-105"></use>
+<use x="-43.534363" y="4.487536" href="#tz_mono_multi_g1-109"></use>
+<use x="-35.398141" y="4.487536" href="#tz_mono_multi_g1-111"></use>
+<use x="-30.245193" y="4.487536" href="#tz_mono_multi_g1-100"></use>
+<use x="-24.821045" y="4.487536" href="#tz_mono_multi_g1-111"></use>
+<use x="-17.116523" y="4.487536" href="#tz_mono_multi_g2-40"></use>
+<use x="-13.82327" y="4.487536" href="#tz_mono_multi_g2-110"></use>
+<use x="-8.88339" y="4.487536" href="#tz_mono_multi_g2-19"></use>
+<use x="-9.118622" y="4.487536" href="#tz_mono_multi_g2-117"></use>
+<use x="-4.413974" y="4.487536" href="#tz_mono_multi_g2-99"></use>
+<use x="-.650256" y="4.487536" href="#tz_mono_multi_g2-108"></use>
+<use x="1.702068" y="4.487536" href="#tz_mono_multi_g2-101"></use>
+<use x="5.465786" y="4.487536" href="#tz_mono_multi_g2-111"></use>
+<use x="15.345546" y="4.487536" href="#tz_mono_multi_g2-53"></use>
+<use x="19.579728" y="4.487536" href="#tz_mono_multi_g2-48"></use>
+<use x="26.6367" y="4.487536" href="#tz_mono_multi_g0-181"></use>
+<use x="31.340131" y="4.487536" href="#tz_mono_multi_g2-109"></use>
+<use x="38.397103" y="4.487536" href="#tz_mono_multi_g2-41"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#f2f8fe" stroke="#f2f8fe">
+<path d="M0 34.1432V56.90549H170.71646V34.1432ZM170.71646 56.90549" stroke="none"></path>
+</g>
+<g fill="#ffecdf" stroke="#ffecdf">
+<path d="M0 39.83366V51.21501H170.71646V39.83366ZM170.71646 51.21501" stroke="none"></path>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<path d="M0 34.1432H170.71646M0 56.90549H170.71646" fill="none"></path>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<g fill="#d7433b" stroke="#d7433b">
+<path d="M0 45.52455L28.45274 50.64584L56.90549 40.40283L85.35823 50.64584L113.81097 40.40283L142.26372 50.64584L170.71646 40.40283" fill="none"></path>
+</g>
+</g>
+</g>
+<g fill="#d7433b" stroke="#d7433b">
+<g stroke-width="0.8">
+<g fill="#3fb618" stroke="#3fb618">
+<path d="M0 45.52455H170.71646" fill="none"></path>
+</g>
+</g>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g fill="#2780e3" stroke="#2780e3">
+</g>
+<g transform="translate(3.53297,17.91682)">
+<g stroke="none" transform="scale(-1.00375,1.00375)translate(-67.417199,4.487536)scale(-1,-1)">
+<g fill="#2780e3">
+<g stroke="none">
+<g fill="#2780e3">
+<use x="-67.417199" y="4.487536" href="#tz_mono_multi_g1-77"></use>
+<use x="-58.179562" y="4.487536" href="#tz_mono_multi_g1-111"></use>
+<use x="-53.297829" y="4.487536" href="#tz_mono_multi_g1-110"></use>
+<use x="-47.873681" y="4.487536" href="#tz_mono_multi_g1-111"></use>
+<use x="-42.991948" y="4.487536" href="#tz_mono_multi_g1-109"></use>
+<use x="-34.855726" y="4.487536" href="#tz_mono_multi_g1-111"></use>
+<use x="-29.702778" y="4.487536" href="#tz_mono_multi_g1-100"></use>
+<use x="-24.27863" y="4.487536" href="#tz_mono_multi_g1-111"></use>
+<use x="-16.574108" y="4.487536" href="#tz_mono_multi_g2-40"></use>
+<use x="-13.280855" y="4.487536" href="#tz_mono_multi_g2-110"></use>
+<use x="-8.340975" y="4.487536" href="#tz_mono_multi_g2-19"></use>
+<use x="-8.576207" y="4.487536" href="#tz_mono_multi_g2-117"></use>
+<use x="-3.87156" y="4.487536" href="#tz_mono_multi_g2-99"></use>
+<use x="-.107841" y="4.487536" href="#tz_mono_multi_g2-108"></use>
+<use x="2.244482" y="4.487536" href="#tz_mono_multi_g2-101"></use>
+<use x="6.0082" y="4.487536" href="#tz_mono_multi_g2-111"></use>
+<use x="15.88796" y="4.487536" href="#tz_mono_multi_g2-57"></use>
+<use x="22.944932" y="4.487536" href="#tz_mono_multi_g0-181"></use>
+<use x="27.648363" y="4.487536" href="#tz_mono_multi_g2-109"></use>
+<use x="34.705335" y="4.487536" href="#tz_mono_multi_g2-41"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill="#f2f8fe" stroke="#f2f8fe">
+<path d="M0-11.38092V11.38092H170.71646V-11.38092ZM170.71646 11.38092" stroke="none"></path>
+</g>
+<g fill="#ffecdf" stroke="#ffecdf">
+<path d="M0-1.70709V1.70709H170.71646V-1.70709ZM170.71646 1.70709" stroke="none"></path>
+</g>
+<g fill="#6c757d" stroke="#6c757d">
+<path d="M0-11.38092H170.71646M0 11.38092H170.71646" fill="none"></path>
+</g>
+<g fill="#2780e3" stroke="#2780e3">
+<g stroke-width="1.2">
+<g fill="#d7433b" stroke="#d7433b">
+<path d="M0 0H170.71646" fill="none"></path>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>
 </div>
-<div class="callout-title-container flex-fill">
-Nota
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mono-multi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;9.1: Na multimodo cabem vários “modos” (caminhos), que chegam em tempos diferentes (dispersão modal); na monomodo só um modo propaga — alcance muito maior.
+</figcaption>
+</figure>
 </div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Característica</th>
+<th>Multimodo (MMF)</th>
+<th>Monomodo (SMF)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Núcleo</td>
+<td>~50 / 62,5 µm</td>
+<td>~9 µm</td>
+</tr>
+<tr class="even">
+<td>Fonte</td>
+<td>LED / VCSEL</td>
+<td>laser (FP/DFB)</td>
+</tr>
+<tr class="odd">
+<td>Alcance</td>
+<td>até ~ centenas de m</td>
+<td>dezenas de km</td>
+</tr>
+<tr class="even">
+<td>Dispersão limitante</td>
+<td>modal</td>
+<td>cromática</td>
+</tr>
+<tr class="odd">
+<td>Cor da capa (padrão)</td>
+<td>aqua/violeta (OM3/OM4)</td>
+<td>amarela</td>
+</tr>
+<tr class="even">
+<td>Uso no ISP</td>
+<td><em>patch</em> intra-POP/datacenter</td>
+<td><strong>acesso + backbone</strong></td>
+</tr>
+</tbody>
+</table>
+<p>A regra prática: <strong>fora do POP, é sempre monomodo amarela</strong>. Multimodo (OM3/OM4) só faz sentido em ligações curtas e baratas dentro do <em>rack</em> (ex.: empilhamento de switches a 10/40G).</p>
+</section>
+<section id="sec-fibra-g65x" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="sec-fibra-g65x"><span class="header-section-number">9.3</span> As normas de monomodo (ITU-T G.65x)</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Norma</th>
+<th>Apelido</th>
+<th>Destaque</th>
+<th>Onde usar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>G.652.D</strong></td>
+<td>SMF padrão <em>low water peak</em></td>
+<td>barata, banda cheia (libera 1383 nm)</td>
+<td>rede primária/secundária, backbone curto</td>
+</tr>
+<tr class="even">
+<td><strong>G.655</strong></td>
+<td>NZDSF</td>
+<td>dispersão controlada em 1550</td>
+<td>DWDM de longa distância</td>
+</tr>
+<tr class="odd">
+<td><strong>G.657.A1</strong></td>
+<td><em>bend-insensitive</em></td>
+<td>tolera curvas, compatível com G.652</td>
+<td><em>drop</em> e intradomiciliar</td>
+</tr>
+<tr class="even">
+<td><strong>G.657.A2/B</strong></td>
+<td><em>low bend radius</em></td>
+<td>curvas muito fechadas (~7,5 mm)</td>
+<td>dentro da casa, CTOs apertadas</td>
+</tr>
+</tbody>
+</table>
+<p>Para um WISP/ISP regional típico: <strong>G.652.D</strong> nos troncos e <strong>G.657.A1/A2</strong> do <em>drop</em> até a ONT. A compatibilidade entre G.652 e G.657.A é total (mesma geometria de campo modal), então emendar uma na outra não gera perda relevante.</p>
+</section>
+<section id="sec-fibra-atenuacao-pratica" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="sec-fibra-atenuacao-pratica"><span class="header-section-number">9.4</span> Atenuação na prática e o orçamento</h2>
+<p>Cada elemento da planta consome dB. Estes são <strong>valores de referência de campo</strong> (use os do fabricante quando os tiver):</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Elemento</th>
+<th>Perda típica</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fibra SMF <span class="citation" data-cites="1310">(<a href="referencias.html#ref-1310" role="doc-biblioref"><strong>1310?</strong></a>)</span> nm</td>
+<td>~0,33 dB/km</td>
+</tr>
+<tr class="even">
+<td>Fibra SMF <span class="citation" data-cites="1490">(<a href="referencias.html#ref-1490" role="doc-biblioref"><strong>1490?</strong></a>)</span> nm</td>
+<td>~0,28 dB/km</td>
+</tr>
+<tr class="odd">
+<td>Fibra SMF <span class="citation" data-cites="1550">(<a href="referencias.html#ref-1550" role="doc-biblioref"><strong>1550?</strong></a>)</span> nm</td>
+<td>~0,20 dB/km</td>
+</tr>
+<tr class="even">
+<td>Fusão (emenda por fusão)</td>
+<td>0,05–0,10 dB</td>
+</tr>
+<tr class="odd">
+<td>Conector (par)</td>
+<td>0,3–0,5 dB</td>
+</tr>
+<tr class="even">
+<td>Splitter 1:2</td>
+<td>~3,5 dB</td>
+</tr>
+<tr class="odd">
+<td>Splitter 1:8</td>
+<td>~10,5 dB</td>
+</tr>
+<tr class="even">
+<td>Splitter 1:16</td>
+<td>~13,5 dB</td>
+</tr>
+<tr class="odd">
+<td>Splitter 1:32</td>
+<td>~17,5 dB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exemplo rápido.</strong> Um enlace de 12 km <span class="citation" data-cites="1490">(<a href="referencias.html#ref-1490" role="doc-biblioref"><strong>1490?</strong></a>)</span> nm com 2 conectores e 3 fusões: <code>12 × 0,28 = 3,36</code> (fibra) <code>+ 2 × 0,4 = 0,8</code> (conectores) <code>+ 3 × 0,08 = 0,24</code> (fusões) <code>≈ 4,4 dB</code>. Some os splitters e compare com o orçamento da OLT (capítulo <span class="quarto-unresolved-ref">?sec-orcamento</span>) — é assim que se sabe, <strong>antes de ir a campo</strong>, se o enlace fecha.</p>
+</section>
+<section id="sec-fibra-dispersao-limite" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="sec-fibra-dispersao-limite"><span class="header-section-number">9.5</span> Dispersão e o limite de banda × distância</h2>
+<p>Em monomodo, a <strong>dispersão cromática</strong> (em ps/(nm·km)) define até onde se pode ir a uma dada taxa. Para GPON (2,5/1,25 Gbps) e os ~20 km típicos, a dispersão não é o gargalo — a <strong>atenuação</strong> é. Mas ao subir para <strong>XGS-PON (10G)</strong> ou DWDM de <em>backbone</em>, a dispersão volta a importar e exige lasers de espectro estreito (DFB) e, às vezes, fibras G.655 ou compensação. Mensagem: <strong>no acesso, dimensione por potência; no transporte de alta taxa, vigie também a dispersão.</strong></p>
+<div class="callout-provedor">
+<p><strong>Na prática do provedor</strong></p>
+<ul>
+<li><strong>Padronize o estoque:</strong> G.652.D em bobinas de tronco e cabos auto-sustentados (AS) da rede aérea; G.657.A1/A2 em <em>drop</em> e cordões internos. Menos SKUs, menos erro de campo.</li>
+<li><strong>Capa amarela = monomodo.</strong> Treine a equipe: viu fibra colorida (aqua/violeta) na rua, alguém comprou multimodo errado.</li>
+<li><strong>Conector é onde mais se perde.</strong> Prefira <strong>fusão</strong> a conectores em emendas permanentes; reserve conectores (SC/APC) para pontos de manobra (DIO, CTO, ONT).</li>
+<li><strong>Documente a atenuação esperada</strong> de cada PON no projeto. Quando o OTDR (capítulo <span class="quarto-unresolved-ref">?sec-otdr</span>) acusar um valor acima do previsto, você já sabe que há evento novo (curvatura, fusão ruim, conector sujo).</li>
+</ul>
 </div>
-<div class="callout-body-container callout-body">
-<p>Capítulo a ser desenvolvido pelo Claude Code (ver <code>PROMPT-CLAUDE-CODE.md</code> e <code>CLAUDE.md</code>).</p>
-</div>
-</div>
+</section>
+<section id="sec-resumo-08" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="sec-resumo-08"><span class="header-section-number">9.6</span> Resumo e checklist</h2>
+<ul>
+<li><strong>Monomodo amarela</strong> fora do POP; <strong>multimodo</strong> só em <em>patch</em> curto interno.</li>
+<li>Conheça as normas: <strong>G.652.D</strong> (tronco) e <strong>G.657.A</strong> (<em>drop</em>/interno, insensível a curvatura).</li>
+<li>Memorize as <strong>perdas de referência</strong> (km, fusão, conector, splitter) — são a base do orçamento.</li>
+<li>No acesso o limite é <strong>potência</strong>; em alta taxa/longa distância entra a <strong>dispersão</strong>.</li>
+</ul>
+<p><strong>Checklist do capítulo</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox">Escolho monomodo vs.&nbsp;multimodo pelo alcance e local.</label></li>
+<li><label><input type="checkbox">Seleciono a norma G.65x adequada a tronco e a <em>drop</em>/interno.</label></li>
+<li><label><input type="checkbox">Estimo a atenuação total de um enlace somando dB.</label></li>
+<li><label><input type="checkbox">Sei quando a dispersão (não a potência) passa a limitar o enlace.</label></li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1069,4 +1395,4 @@ Nota
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/08-fibra-tipos-caracteristicas.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/08-fibra-tipos-caracteristicas.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>

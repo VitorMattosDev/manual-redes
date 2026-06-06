@@ -529,7 +529,73 @@
     "href": "capitulos/07-fibra-principios.html",
     "title": "8  Fibra Óptica: Princípios Físicos",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "8.1 Por que a luz fica presa na fibra\nA fibra óptica transporta informação como pulsos de luz. Para o provedor, isso é o que torna possível levar gigabits por dezenas de quilômetros com perda mínima — mas para operar, medir e consertar a planta é preciso entender por que a luz não escapa do vidro. A resposta é a reflexão interna total, e dela derivam todos os conceitos práticos (atenuação, dispersão, janelas, orçamento de potência).\nA fibra é feita de sílica ultrapura em duas regiões concêntricas com índices de refração diferentes: um núcleo (índice maior, \\(n_1\\)) e uma casca (índice menor, \\(n_2\\)). Quando a luz tenta sair do núcleo para a casca com ângulo maior que o ângulo crítico, ela é totalmente refletida de volta — e assim “quica” ao longo do núcleo por quilômetros.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Fibra Óptica: Princípios Físicos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/07-fibra-principios.html#sec-fibra-principios",
+    "href": "capitulos/07-fibra-principios.html#sec-fibra-principios",
+    "title": "8  Fibra Óptica: Princípios Físicos",
+    "section": "",
+    "text": "Figura 8.1: Reflexão interna total: o raio que incide na fronteira núcleo–casca acima do ângulo crítico é totalmente refletido e se propaga ao longo da fibra.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Fibra Óptica: Princípios Físicos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/07-fibra-principios.html#sec-fibra-na",
+    "href": "capitulos/07-fibra-principios.html#sec-fibra-na",
+    "title": "8  Fibra Óptica: Princípios Físicos",
+    "section": "8.2 Abertura numérica e ângulo de aceitação",
+    "text": "8.2 Abertura numérica e ângulo de aceitação\nNem toda luz que chega à ponta da fibra entra de forma útil. Só os raios dentro de um cone de aceitação se acoplam ao núcleo; o resto vaza. Esse cone é medido pela abertura numérica (NA): \\[\\mathrm{NA} = \\sqrt{n_1^2 - n_2^2} = \\sin\\theta_{\\text{ac}}.\\] Uma NA maior aceita mais luz (bom para acoplamento), mas favorece muitos modos de propagação — o que, como veremos, piora a dispersão. É um dos motivos pelos quais a fibra de longa distância (monomodo) tem NA pequena e núcleo minúsculo.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Fibra Óptica: Princípios Físicos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/07-fibra-principios.html#sec-fibra-atenuacao",
+    "href": "capitulos/07-fibra-principios.html#sec-fibra-atenuacao",
+    "title": "8  Fibra Óptica: Princípios Físicos",
+    "section": "8.3 Atenuação: para onde a luz “some”",
+    "text": "8.3 Atenuação: para onde a luz “some”\nAtenuação é a perda de potência óptica ao longo da fibra, medida em dB/km. Suas causas físicas:\n\nAbsorção — impurezas (sobretudo íons OH⁻, o “pico de água”) e a própria sílica convertem luz em calor.\nEspalhamento Rayleigh — flutuações microscópicas de densidade desviam luz; domina nos comprimentos de onda curtos (cai com \\(1/\\lambda^4\\)).\nPerdas por curvatura — dobras fechadas (macrobending) e microdeformações (microbending) deixam a luz escapar. Causa nº 1 de chamado em planta: um drop dobrado demais atrás de um móvel.\n\nComo a atenuação varia com o comprimento de onda, há janelas de menor perda — exatamente onde a fibra é operada:\n\n\n\n\n\n\n\n\n\nJanela\nλ\nAtenuação típica\nUso\n\n\n\n\n2ª (O)\n1310 nm\n~0,33 dB/km\nupstream GPON, curtas\n\n\n—\n1383 nm\npico de água (alta)\nevitado (salvo fibra low water peak)\n\n\n3ª (C)\n1550 nm\n~0,20 dB/km\nbackbone, DWDM, RF overlay\n\n\ndown GPON\n1490 nm\n~0,28 dB/km\ndownstream GPON\n\n\n\nA escala em dB é a linguagem da fibra porque é logarítmica e aditiva: perdas de trechos, conectores, fusões e splitters simplesmente somam em dB (capítulo ?sec-orcamento). Lembre: \\(-3\\,\\text{dB}\\) = metade da potência; \\(-10\\,\\text{dB}\\) = um décimo.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Fibra Óptica: Princípios Físicos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/07-fibra-principios.html#sec-fibra-dispersao",
+    "href": "capitulos/07-fibra-principios.html#sec-fibra-dispersao",
+    "title": "8  Fibra Óptica: Princípios Físicos",
+    "section": "8.4 Dispersão: por que o pulso “borra”",
+    "text": "8.4 Dispersão: por que o pulso “borra”\nMesmo sem perder potência, um pulso pode alargar no tempo ao viajar — é a dispersão, que limita a taxa de bits e a distância. Dois tipos importam:\n\nDispersão modal — em fibra multimodo, raios em ângulos diferentes percorrem caminhos de comprimentos diferentes e chegam em instantes distintos. É severa; por isso multimodo só serve para curtas distâncias.\nDispersão cromática — comprimentos de onda ligeiramente diferentes (todo laser real tem largura espectral) viajam a velocidades distintas. Domina em monomodo e cresce com a distância e a taxa; é gerenciada com lasers de espectro estreito (DFB) e, em DWDM longo, com fibras/compensadores específicos.\n\nQuando os pulsos se sobrepõem, o receptor confunde bits (ISI — interferência intersimbólica) e a taxa de erro sobe. Dispersão é o motivo de a banda da fibra, por maior que seja, não ser infinita em um enlace real.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Fibra Óptica: Princípios Físicos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/07-fibra-principios.html#sec-fibra-modos",
+    "href": "capitulos/07-fibra-principios.html#sec-fibra-modos",
+    "title": "8  Fibra Óptica: Princípios Físicos",
+    "section": "8.5 Modos: por que monomodo domina o acesso",
+    "text": "8.5 Modos: por que monomodo domina o acesso\nUm “modo” é um caminho permitido para a luz no núcleo. Se o núcleo é largo (~50 µm), cabem muitos modos (multimodo, MMF) e surge dispersão modal. Se é estreito o bastante (~9 µm) para o comprimento de onda usado, só um modo propaga (monomodo, SMF) — sem dispersão modal e com alcance enorme. Toda a planta PON e o backbone do provedor são monomodo; multimodo fica restrito a patch cords curtos dentro do POP/datacenter. O capítulo Seção 9.1 detalha os tipos comerciais (G.652, G.657 etc.).\n\nNa prática do provedor\nA física vira regra de campo:\n\ndB é tudo. Aprenda a pensar em dB: cada conector ~0,3–0,5 dB, cada fusão ~0,05–0,1 dB, cada km a ~0,35 dB (1310) ou ~0,20 dB (1550). O orçamento de potência (capítulo ?sec-orcamento) é só uma soma dessas perdas.\nMacrobending é o vilão silencioso. Um drop dobrado em curva fechada ou prensado por um portão derruba a potência e o cliente cai no horário em que o sol esquenta o cabo. Fibras G.657 (insensíveis a curvatura) reduzem isso no intradomiciliar.\nPor que 1550 nm chega mais longe. Menor atenuação → mais quilômetros por dB. Por isso backbone e overlay de TV usam 1550, e GPON reserva 1490/1310 para o serviço de dados.\nCuidado com o pico de água (1383 nm). Em fibras antigas, esse comprimento é inutilizável; fibras low water peak (G.652.D) liberam toda a banda — relevante ao planejar CWDM.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Fibra Óptica: Princípios Físicos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/07-fibra-principios.html#sec-resumo-07",
+    "href": "capitulos/07-fibra-principios.html#sec-resumo-07",
+    "title": "8  Fibra Óptica: Princípios Físicos",
+    "section": "8.6 Resumo e checklist",
+    "text": "8.6 Resumo e checklist\n\nA luz fica presa por reflexão interna total entre núcleo (\\(n_1\\)) e casca (\\(n_2\\)); o cone de entrada é a NA.\nAtenuação (dB/km) vem de absorção, Rayleigh e curvaturas; em dB as perdas somam.\nDispersão (modal em MMF, cromática em SMF) alarga o pulso e limita taxa × distância.\nMonomodo (núcleo ~9 µm) domina acesso e backbone; multimodo só em curtas distâncias.\n\nChecklist do capítulo\n\nExplico a reflexão interna total e o papel do ângulo crítico/NA.\nSei converter perdas em dB e por que elas somam.\nDiferencio dispersão modal de cromática e seu impacto.\nJustifico monomodo no acesso e o uso de 1310/1490/1550 nm em GPON.",
     "crumbs": [
       "Parte II — Camada Física e Fibra Óptica",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Fibra Óptica: Princípios Físicos</span>"
@@ -540,7 +606,62 @@
     "href": "capitulos/08-fibra-tipos-caracteristicas.html",
     "title": "9  Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "9.1 Escolher a fibra certa é decisão de projeto\nNo capítulo Seção 8.1 vimos a física; aqui vemos o que se compra. Especificar a fibra errada custa caro: uma multimodo num enlace de 20 km simplesmente não fecha, e uma G.652 comum no intradomiciliar gera chamados por curvatura. O provedor precisa conhecer os tipos comerciais (normas ITU-T G.65x) e suas características-chave: diâmetro do núcleo, atenuação, dispersão e sensibilidade a curvatura.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/08-fibra-tipos-caracteristicas.html#sec-fibra-mono-multi",
+    "href": "capitulos/08-fibra-tipos-caracteristicas.html#sec-fibra-mono-multi",
+    "title": "9  Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)",
+    "section": "9.2 Monomodo vs. multimodo",
+    "text": "9.2 Monomodo vs. multimodo\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 9.1: Na multimodo cabem vários “modos” (caminhos), que chegam em tempos diferentes (dispersão modal); na monomodo só um modo propaga — alcance muito maior.\n\n\n\n\n\n\nCaracterística\nMultimodo (MMF)\nMonomodo (SMF)\n\n\n\n\nNúcleo\n~50 / 62,5 µm\n~9 µm\n\n\nFonte\nLED / VCSEL\nlaser (FP/DFB)\n\n\nAlcance\naté ~ centenas de m\ndezenas de km\n\n\nDispersão limitante\nmodal\ncromática\n\n\nCor da capa (padrão)\naqua/violeta (OM3/OM4)\namarela\n\n\nUso no ISP\npatch intra-POP/datacenter\nacesso + backbone\n\n\n\nA regra prática: fora do POP, é sempre monomodo amarela. Multimodo (OM3/OM4) só faz sentido em ligações curtas e baratas dentro do rack (ex.: empilhamento de switches a 10/40G).",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/08-fibra-tipos-caracteristicas.html#sec-fibra-g65x",
+    "href": "capitulos/08-fibra-tipos-caracteristicas.html#sec-fibra-g65x",
+    "title": "9  Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)",
+    "section": "9.3 As normas de monomodo (ITU-T G.65x)",
+    "text": "9.3 As normas de monomodo (ITU-T G.65x)\n\n\n\n\n\n\n\n\n\nNorma\nApelido\nDestaque\nOnde usar\n\n\n\n\nG.652.D\nSMF padrão low water peak\nbarata, banda cheia (libera 1383 nm)\nrede primária/secundária, backbone curto\n\n\nG.655\nNZDSF\ndispersão controlada em 1550\nDWDM de longa distância\n\n\nG.657.A1\nbend-insensitive\ntolera curvas, compatível com G.652\ndrop e intradomiciliar\n\n\nG.657.A2/B\nlow bend radius\ncurvas muito fechadas (~7,5 mm)\ndentro da casa, CTOs apertadas\n\n\n\nPara um WISP/ISP regional típico: G.652.D nos troncos e G.657.A1/A2 do drop até a ONT. A compatibilidade entre G.652 e G.657.A é total (mesma geometria de campo modal), então emendar uma na outra não gera perda relevante.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/08-fibra-tipos-caracteristicas.html#sec-fibra-atenuacao-pratica",
+    "href": "capitulos/08-fibra-tipos-caracteristicas.html#sec-fibra-atenuacao-pratica",
+    "title": "9  Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)",
+    "section": "9.4 Atenuação na prática e o orçamento",
+    "text": "9.4 Atenuação na prática e o orçamento\nCada elemento da planta consome dB. Estes são valores de referência de campo (use os do fabricante quando os tiver):\n\n\n\nElemento\nPerda típica\n\n\n\n\nFibra SMF (1310?) nm\n~0,33 dB/km\n\n\nFibra SMF (1490?) nm\n~0,28 dB/km\n\n\nFibra SMF (1550?) nm\n~0,20 dB/km\n\n\nFusão (emenda por fusão)\n0,05–0,10 dB\n\n\nConector (par)\n0,3–0,5 dB\n\n\nSplitter 1:2\n~3,5 dB\n\n\nSplitter 1:8\n~10,5 dB\n\n\nSplitter 1:16\n~13,5 dB\n\n\nSplitter 1:32\n~17,5 dB\n\n\n\nExemplo rápido. Um enlace de 12 km (1490?) nm com 2 conectores e 3 fusões: 12 × 0,28 = 3,36 (fibra) + 2 × 0,4 = 0,8 (conectores) + 3 × 0,08 = 0,24 (fusões) ≈ 4,4 dB. Some os splitters e compare com o orçamento da OLT (capítulo ?sec-orcamento) — é assim que se sabe, antes de ir a campo, se o enlace fecha.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/08-fibra-tipos-caracteristicas.html#sec-fibra-dispersao-limite",
+    "href": "capitulos/08-fibra-tipos-caracteristicas.html#sec-fibra-dispersao-limite",
+    "title": "9  Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)",
+    "section": "9.5 Dispersão e o limite de banda × distância",
+    "text": "9.5 Dispersão e o limite de banda × distância\nEm monomodo, a dispersão cromática (em ps/(nm·km)) define até onde se pode ir a uma dada taxa. Para GPON (2,5/1,25 Gbps) e os ~20 km típicos, a dispersão não é o gargalo — a atenuação é. Mas ao subir para XGS-PON (10G) ou DWDM de backbone, a dispersão volta a importar e exige lasers de espectro estreito (DFB) e, às vezes, fibras G.655 ou compensação. Mensagem: no acesso, dimensione por potência; no transporte de alta taxa, vigie também a dispersão.\n\nNa prática do provedor\n\nPadronize o estoque: G.652.D em bobinas de tronco e cabos auto-sustentados (AS) da rede aérea; G.657.A1/A2 em drop e cordões internos. Menos SKUs, menos erro de campo.\nCapa amarela = monomodo. Treine a equipe: viu fibra colorida (aqua/violeta) na rua, alguém comprou multimodo errado.\nConector é onde mais se perde. Prefira fusão a conectores em emendas permanentes; reserve conectores (SC/APC) para pontos de manobra (DIO, CTO, ONT).\nDocumente a atenuação esperada de cada PON no projeto. Quando o OTDR (capítulo ?sec-otdr) acusar um valor acima do previsto, você já sabe que há evento novo (curvatura, fusão ruim, conector sujo).",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/08-fibra-tipos-caracteristicas.html#sec-resumo-08",
+    "href": "capitulos/08-fibra-tipos-caracteristicas.html#sec-resumo-08",
+    "title": "9  Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)",
+    "section": "9.6 Resumo e checklist",
+    "text": "9.6 Resumo e checklist\n\nMonomodo amarela fora do POP; multimodo só em patch curto interno.\nConheça as normas: G.652.D (tronco) e G.657.A (drop/interno, insensível a curvatura).\nMemorize as perdas de referência (km, fusão, conector, splitter) — são a base do orçamento.\nNo acesso o limite é potência; em alta taxa/longa distância entra a dispersão.\n\nChecklist do capítulo\n\nEscolho monomodo vs. multimodo pelo alcance e local.\nSeleciono a norma G.65x adequada a tronco e a drop/interno.\nEstimo a atenuação total de um enlace somando dB.\nSei quando a dispersão (não a potência) passa a limitar o enlace.",
     "crumbs": [
       "Parte II — Camada Física e Fibra Óptica",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)</span>"
@@ -551,7 +672,73 @@
     "href": "capitulos/09-conectores-polimentos.html",
     "title": "10  Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "10.1 O ponto onde a luz troca de cabo\nConector óptico é onde duas fibras se encontram de forma desmontável. É também onde mais se perde sinal e onde mais nascem defeitos: um conector sujo ou de polimento errado degrada a PON inteira. Para o provedor, dominar conectores e polimentos é o que separa uma instalação que “fica boa por anos” de uma que volta em chamado. Dois conceitos medem a qualidade de um conector:",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/09-conectores-polimentos.html#sec-conectores",
+    "href": "capitulos/09-conectores-polimentos.html#sec-conectores",
+    "title": "10  Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)",
+    "section": "",
+    "text": "Perda de inserção (IL) — quanta luz se perde ao atravessar o par (dB; quanto menor, melhor; alvo &lt; 0,5 dB).\nPerda de retorno (RL / ORL) — quanta luz é refletida de volta (dB negativo; quanto mais negativo, melhor; reflexão atrapalha lasers e a leitura do OTDR).",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/09-conectores-polimentos.html#sec-conectores-tipos",
+    "href": "capitulos/09-conectores-polimentos.html#sec-conectores-tipos",
+    "title": "10  Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)",
+    "section": "10.2 Tipos de conector: SC, LC, FC",
+    "text": "10.2 Tipos de conector: SC, LC, FC\n\n\n\n\n\n\n\n\n\nConector\nEncaixe\nFerrolho\nOnde aparece\n\n\n\n\nSC\npush-pull (clica)\n2,5 mm\nOLT, DIO, CTO, ONT — padrão da PON brasileira\n\n\nLC\ntrava tipo RJ\n1,25 mm (pequeno)\nalta densidade: switches, transceivers SFP\n\n\nFC\nrosca\n2,5 mm\ninstrumentos (OTDR, power-meter), legado\n\n\n\nNo acesso GPON brasileiro o SC é dominante (especialmente SC/APC, verde). O LC reina onde há densidade — um switch com 48 portas SFP+ usa LC para caber. FC sobrevive em bancada e equipamentos de medição.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/09-conectores-polimentos.html#sec-conectores-polimento",
+    "href": "capitulos/09-conectores-polimentos.html#sec-conectores-polimento",
+    "title": "10  Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)",
+    "section": "10.3 Polimentos: PC, UPC e APC",
+    "text": "10.3 Polimentos: PC, UPC e APC\nO polimento é a geometria da face do ferrolho, e define a reflexão:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 10.1: Geometria das faces: PC (plano) reflete de volta; UPC (abaulado) reduz a reflexão; APC (angulado 8°) desvia a reflexão para a casca — a melhor ORL.\n\n\n\n\n\n\n\n\n\n\n\n\nPolimento\nCor (SC)\nORL típica\nUso\n\n\n\n\nPC\n—\n~ −40 dB\nlegado\n\n\nUPC\nazul\n~ −50 dB\nEthernet/dados ponto a ponto\n\n\nAPC\nverde\n~ −60 dB ou melhor\nPON, RF overlay (TV), GPON\n\n\n\nPor que APC na PON: a reflexão de volta atrapalha os lasers da OLT/ONT e, com overlay de TV em 1550 nm, causa ruído visível. O corte em 8° joga a luz refletida para fora do núcleo. Regra de ouro: em GPON, tudo verde (APC).",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/09-conectores-polimentos.html#sec-conectores-regra",
+    "href": "capitulos/09-conectores-polimentos.html#sec-conectores-regra",
+    "title": "10  Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)",
+    "section": "10.4 A regra que evita o pior erro de campo",
+    "text": "10.4 A regra que evita o pior erro de campo\nNunca conecte APC com UPC/PC. As faces (uma angulada, outra reta) não encostam direito: a perda dispara, a reflexão piora e você pode danificar o ferrolho. Cor é o lembrete físico: verde só casa com verde. Um adaptador híbrido APC↔︎UPC existe para casos específicos (com fibra interna), mas no campo a regra prática é manter o padrão APC em toda a PON.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/09-conectores-polimentos.html#sec-conectores-limpeza",
+    "href": "capitulos/09-conectores-polimentos.html#sec-conectores-limpeza",
+    "title": "10  Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)",
+    "section": "10.5 Limpeza: o conserto mais barato que existe",
+    "text": "10.5 Limpeza: o conserto mais barato que existe\nA maioria das perdas anômalas em conector é sujeira — uma partícula de poeira no ferrolho de 2,5 mm bloqueia uma fração enorme do núcleo de 9 µm. Antes de trocar qualquer coisa:\n\nInspecione com microscópio de fibra (sonda de 200×/400×) — não confie no olho.\nLimpe com caneta de limpeza (click cleaner) ou lenço + álcool isopropílico e bastão; sempre a seco depois.\nTampe o que não está em uso (poeira entra em minutos).\n\n\nNa prática do provedor\n\nPadrão único: SC/APC (verde) em toda a PON — OLT, DIO, splitter, CTO e ONT. Padronizar elimina o erro APC×UPC e simplifica o estoque de cordões e adaptadores.\n“Cliente sem sinal após visita” muitas vezes é conector sujo na ONT ou cordão verde trocado por azul por engano. Cheque a cor e limpe antes de suspeitar da fibra.\nInclua um inspecionador de fibra no kit do técnico. O custo da sonda se paga na primeira visita evitada — sujeira invisível a olho nu é a causa raiz mais comum de IL/ORL ruins.\nLC/UPC azul aparece nos transceivers (SFP) dos switches no POP; não confunda com a planta externa, que é SC/APC verde.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/09-conectores-polimentos.html#sec-resumo-09",
+    "href": "capitulos/09-conectores-polimentos.html#sec-resumo-09",
+    "title": "10  Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)",
+    "section": "10.6 Resumo e checklist",
+    "text": "10.6 Resumo e checklist\n\nConector se mede por IL (inserção, baixo é bom) e ORL (retorno, mais negativo é bom).\nSC domina o acesso, LC a alta densidade, FC os instrumentos.\nPolimento: APC (verde) na PON; UPC (azul) em dados; nunca misture APC com UPC.\nA causa nº 1 de perda em conector é sujeira — inspecione e limpe antes de trocar.\n\nChecklist do capítulo\n\nIdentifico SC/LC/FC e onde cada um é usado.\nSei por que a PON usa APC e o que significa a cor verde.\nNunca conecto APC com UPC/PC.\nInspeciono e limpo conectores antes de concluir que a fibra está ruim.",
     "crumbs": [
       "Parte II — Camada Física e Fibra Óptica",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)</span>"
@@ -562,7 +749,73 @@
     "href": "capitulos/10-emendas-fusao.html",
     "title": "11  Emendas: Fusão e Mecânica",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "11.1 Unir fibras de forma permanente\nConectores (capítulo Seção 10.1) servem para pontos que se desmontam; quando a junção é permanente — emendar um cabo de tronco, sangrar uma fibra para uma CTO, reparar um rompimento — usa-se emenda. Há duas técnicas: fusão (a luz atravessa vidro soldado a vidro, perda baixíssima) e emenda mecânica (alinhamento sem solda, perda maior, hoje quase só para emergência). Para o provedor, fusão de qualidade é o que mantém o orçamento de potência saudável ao longo de anos.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Emendas: Fusão e Mecânica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/10-emendas-fusao.html#sec-emendas-comparacao",
+    "href": "capitulos/10-emendas-fusao.html#sec-emendas-comparacao",
+    "title": "11  Emendas: Fusão e Mecânica",
+    "section": "11.2 Fusão vs. mecânica",
+    "text": "11.2 Fusão vs. mecânica\n\n\n\n\n\n\n\n\nCritério\nFusão\nMecânica\n\n\n\n\nPerda típica\n0,05–0,10 dB\n0,2–0,75 dB\n\n\nReflexão (ORL)\nexcelente\npior\n\n\nCusto por emenda\nbaixo (após comprar a máquina)\nconector/elemento caro\n\n\nEquipamento\nmáquina de fusão\nalicate/kit de alinhamento\n\n\nDurabilidade\npermanente, estável\naceitável, menos estável\n\n\nQuando usar\ntudo no dia a dia\nreparo emergencial sem fusora\n\n\n\nA conclusão prática é direta: fusão para tudo; mecânica só quebra-galho.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Emendas: Fusão e Mecânica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/10-emendas-fusao.html#sec-emendas-processo",
+    "href": "capitulos/10-emendas-fusao.html#sec-emendas-processo",
+    "title": "11  Emendas: Fusão e Mecânica",
+    "section": "11.3 O processo de fusão, passo a passo",
+    "text": "11.3 O processo de fusão, passo a passo\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 11.1: As cinco etapas da fusão. A clivagem (corte perfeitamente perpendicular) é a que mais influencia a perda final.\n\n\n\n\nDecapar — remover a capa/acrilato, expondo a casca; limpar com álcool. Nada de gordura ou poeira.\nClivar — cortar a ponta a 90° com clivador calibrado. Um corte torto é a causa nº 1 de fusão ruim e de emenda que “estala”.\nAlinhar — a fusora alinha as fibras (por núcleo, nas boas; por casca, nas básicas) entre os eletrodos.\nFundir — um arco elétrico funde as pontas; a máquina estima a perda e faz o teste de tração.\nProteger — envolver a emenda no tubete termo-retrátil e acomodar na bandeja da caixa de emenda (CEO/CTO).",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Emendas: Fusão e Mecânica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/10-emendas-fusao.html#sec-emendas-perda",
+    "href": "capitulos/10-emendas-fusao.html#sec-emendas-perda",
+    "title": "11  Emendas: Fusão e Mecânica",
+    "section": "11.4 O que o número da máquina significa",
+    "text": "11.4 O que o número da máquina significa\nA fusora exibe uma perda estimada (ex.: 0,02 dB). É uma estimativa óptica do alinhamento — não substitui a medição real com OTDR (capítulo ?sec-otdr), mas é um bom filtro de qualidade no ato. Valores de referência:\n\n\n\nEstimativa\nInterpretação\n\n\n\n\n≤ 0,05 dB\nexcelente\n\n\n0,05–0,10 dB\naceitável (planta de campo)\n\n\n0,10–0,30 dB\nrefazer se for tronco/PON crítica\n\n\n&gt; 0,30 dB ou “bolha”/“linha”\nrefazer sempre\n\n\n\nRefazer uma fusão custa 2 minutos; um chamado por PON degradada custa uma visita. Em rede primária, onde a emenda afeta dezenas de clientes, seja rigoroso.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Emendas: Fusão e Mecânica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/10-emendas-fusao.html#sec-emendas-orcamento",
+    "href": "capitulos/10-emendas-fusao.html#sec-emendas-orcamento",
+    "title": "11  Emendas: Fusão e Mecânica",
+    "section": "11.5 Por que cada fusão importa no orçamento",
+    "text": "11.5 Por que cada fusão importa no orçamento\nLembre que perdas somam em dB (capítulo Seção 8.1). Uma PON real acumula várias fusões entre OLT, splitters e CTOs. Dez fusões a 0,08 dB são 0,8 dB; as mesmas dez a 0,03 dB são 0,3 dB — meio dB de folga que pode ser a diferença entre um cliente na borda funcionar ou ficar abaixo da sensibilidade da ONT. Por isso a meta de fusão alimenta diretamente o orçamento de potência (capítulo ?sec-orcamento).",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Emendas: Fusão e Mecânica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/10-emendas-fusao.html#sec-emendas-caixas",
+    "href": "capitulos/10-emendas-fusao.html#sec-emendas-caixas",
+    "title": "11  Emendas: Fusão e Mecânica",
+    "section": "11.6 Caixas de emenda e organização",
+    "text": "11.6 Caixas de emenda e organização\nA emenda mora em uma caixa de emenda óptica (CEO) ou na CTO (capítulo ?sec-cto). Regras de acomodação que evitam perda e retrabalho:\n\nRaio de curvatura respeitado nas bandejas (curva fechada = macrobending = perda).\nReserva técnica (sobra de fibra) para refazer emendas no futuro sem precisar de cabo novo.\nIdentificação de cada fibra/tubo por cor (padrão de cores do cabo) — essencial para achar a fibra certa anos depois.\nVedação contra umidade; caixa aberta na rua = água = corrosão e perda.\n\n\nNa prática do provedor\n\nCalibre o clivador e troque a lâmina no intervalo recomendado. Mais fusões ruins vêm de clivagem do que da própria fusora.\nLimpe os eletrodos e faça a manutenção periódica da fusora; eletrodo gasto eleva a perda de todas as emendas do dia.\nMeta de campo: ≤ 0,1 dB por fusão; em rede primária, refaça acima de 0,1 dB — ali a emenda multiplica impacto por todos os clientes a jusante.\nDocumente cada emenda (caixa, bandeja, posição, fibra) no georreferenciamento (capítulo ?sec-doc-georref). Sem isso, o próximo reparo vira caça ao tesouro.\nTenha kit de emenda mecânica no carro só para emergência (rompimento à noite, sem fusora disponível) e substitua por fusão assim que possível.",
+    "crumbs": [
+      "Parte II — Camada Física e Fibra Óptica",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Emendas: Fusão e Mecânica</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/10-emendas-fusao.html#sec-resumo-10",
+    "href": "capitulos/10-emendas-fusao.html#sec-resumo-10",
+    "title": "11  Emendas: Fusão e Mecânica",
+    "section": "11.7 Resumo e checklist",
+    "text": "11.7 Resumo e checklist\n\nFusão (0,05–0,10 dB) é o padrão; mecânica (0,2–0,75 dB) só emergência.\nA clivagem a 90° é o passo que mais decide a perda — clivador calibrado.\nA estimativa da fusora filtra qualidade, mas OTDR dá o número real.\nCada fusão entra no orçamento de potência; em rede primária, seja rigoroso e documente.\n\nChecklist do capítulo\n\nSei as cinco etapas da fusão e por que a clivagem é crítica.\nInterpreto a perda estimada e sei quando refazer.\nAcomodo a emenda respeitando raio, reserva e vedação.\nRegistro cada emenda na documentação da planta.",
     "crumbs": [
       "Parte II — Camada Física e Fibra Óptica",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Emendas: Fusão e Mecânica</span>"
