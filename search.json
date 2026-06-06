@@ -419,7 +419,7 @@
     "href": "capitulos/05-meios-transmissao.html#sec-meios-radio",
     "title": "6  Meios de Transmissão",
     "section": "6.4 Meios não guiados: o rádio",
-    "text": "6.4 Meios não guiados: o rádio\nNo rádio, a informação modula uma onda eletromagnética que se propaga pelo ar. É a solução para áreas rurais onde puxar fibra é inviável economicamente. O meio é compartilhado e aberto, o que traz características próprias:\n\nA propagação depende de frequência, potência (EIRP), antenas e linha de visada — precisa de zona de Fresnel livre (capítulo ?sec-fresnel).\nSofre com interferência, clima (chuva atenua mais em frequências altas) e obstáculos (árvores, relevo).\nA banda disponível é regulada (Anatel). As faixas mais usadas por WISPs:\n\n\n\n\n\n\n\n\n\nFaixa\nUso típico\nObservação\n\n\n\n\n2,4 GHz\nPtMP longo alcance\ncongestionada, mais penetrante\n\n\n5 GHz\nPtP/PtMP padrão WISP\nbom equilíbrio alcance/banda\n\n\n≥ 11 GHz licenciado\nbackhaul PtP\nalta banda, exige visada limpa\n\n\n\nA Parte IX trata rádio em profundidade. O ponto aqui: rádio complementa a fibra no provedor — fibra onde dá, rádio onde não dá.",
+    "text": "6.4 Meios não guiados: o rádio\nNo rádio, a informação modula uma onda eletromagnética que se propaga pelo ar. É a solução para áreas rurais onde puxar fibra é inviável economicamente. O meio é compartilhado e aberto, o que traz características próprias:\n\nA propagação depende de frequência, potência (EIRP), antenas e linha de visada — precisa de zona de Fresnel livre (capítulo Seção 45.1).\nSofre com interferência, clima (chuva atenua mais em frequências altas) e obstáculos (árvores, relevo).\nA banda disponível é regulada (Anatel). As faixas mais usadas por WISPs:\n\n\n\n\n\n\n\n\n\nFaixa\nUso típico\nObservação\n\n\n\n\n2,4 GHz\nPtMP longo alcance\ncongestionada, mais penetrante\n\n\n5 GHz\nPtP/PtMP padrão WISP\nbom equilíbrio alcance/banda\n\n\n≥ 11 GHz licenciado\nbackhaul PtP\nalta banda, exige visada limpa\n\n\n\nA Parte IX trata rádio em profundidade. O ponto aqui: rádio complementa a fibra no provedor — fibra onde dá, rádio onde não dá.",
     "crumbs": [
       "Parte I — Fundamentos e Modelos de Rede",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Meios de Transmissão</span>"
@@ -1926,7 +1926,7 @@
     "href": "capitulos/27-arquitetura-fttx.html#sec-fttx-variantes",
     "title": "28  Arquitetura FTTx (FTTH, FTTB, FTTC)",
     "section": "28.2 As variantes de FTTx",
-    "text": "28.2 As variantes de FTTx\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 28.1: FTTH leva fibra até a casa (ONT); FTTB para no prédio (cobre interno); FTTC para no armário de rua (cobre/DSL no trecho final). Menos cobre = melhor.\n\n\n\n\n\n\n\n\n\n\n\n\nSigla\nFibra chega até\nTrecho final\nComentário\n\n\n\n\nFTTH\na casa/ONT\nnenhum (fibra total)\npadrão do ISP moderno\n\n\nFTTB\no prédio\ncobre/LAN interna\ncondomínios verticais\n\n\nFTTC\no armário de rua\ncobre/DSL\nlegado, transição\n\n\nFTTA\na antena (torre)\nrádio\nbackhaul de rádio rural\n\n\n\nNo provedor regional, FTTH+GPON domina o acesso urbano; FTTA (fibra até a torre, capítulo ?sec-radio-fund) é como se leva capacidade ao rádio rural.",
+    "text": "28.2 As variantes de FTTx\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 28.1: FTTH leva fibra até a casa (ONT); FTTB para no prédio (cobre interno); FTTC para no armário de rua (cobre/DSL no trecho final). Menos cobre = melhor.\n\n\n\n\n\n\n\n\n\n\n\n\nSigla\nFibra chega até\nTrecho final\nComentário\n\n\n\n\nFTTH\na casa/ONT\nnenhum (fibra total)\npadrão do ISP moderno\n\n\nFTTB\no prédio\ncobre/LAN interna\ncondomínios verticais\n\n\nFTTC\no armário de rua\ncobre/DSL\nlegado, transição\n\n\nFTTA\na antena (torre)\nrádio\nbackhaul de rádio rural\n\n\n\nNo provedor regional, FTTH+GPON domina o acesso urbano; FTTA (fibra até a torre, capítulo Seção 43.1) é como se leva capacidade ao rádio rural.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>28</span>  <span class='chapter-title'>Arquitetura FTTx (FTTH, FTTB, FTTC)</span>"
@@ -2927,7 +2927,73 @@
     "href": "capitulos/42-radio-fundamentos-propagacao.html",
     "title": "43  Rádio: Fundamentos e Propagação",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "43.1 Quando a fibra não chega\nHá lugares onde puxar fibra é inviável: sítios isolados, fazendas, comunidades rurais distantes do último poste (capítulo Seção 6.4). Ali o provedor leva internet por rádio — ondas eletromagnéticas pelo ar — tipicamente a partir de uma torre alimentada por fibra (FTTA, capítulo Seção 28.1). O rádio é mais barato e rápido de implantar que fibra em área dispersa, mas é um meio aberto, compartilhado e sujeito ao ambiente: clima, obstáculos, interferência. Entender a propagação é o que separa um enlace de rádio estável de um que cai toda chuva.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>43</span>  <span class='chapter-title'>Rádio: Fundamentos e Propagação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/42-radio-fundamentos-propagacao.html#sec-radio-frequencia",
+    "href": "capitulos/42-radio-fundamentos-propagacao.html#sec-radio-frequencia",
+    "title": "43  Rádio: Fundamentos e Propagação",
+    "section": "43.2 Frequência, comprimento de onda e banda",
+    "text": "43.2 Frequência, comprimento de onda e banda\nO sinal de rádio é uma onda com frequência (Hz) e comprimento de onda (\\(\\lambda = c/f\\)). Duas tendências físicas governam tudo:\n\nFrequências mais altas (5 GHz, 11 GHz+) → mais banda disponível, antenas menores e mais diretivas, mas menor alcance e mais sensíveis a obstáculos e chuva.\nFrequências mais baixas (2,4 GHz) → mais penetração e alcance, mas pouca banda e mais congestionamento.\n\nAs faixas usadas por WISPs no Brasil (reguladas pela Anatel, capítulo Seção 2.5):\n\n\n\n\n\n\n\n\n\nFaixa\nBanda\nCaracterística\nUso\n\n\n\n\n2,4 GHz\nestreita, congestionada\npenetra mais\nPtMP de longo alcance\n\n\n5 GHz\nlarga\nequilíbrio\npadrão WISP (PtP e PtMP)\n\n\n11–24 GHz (licenciado)\nmuito larga\nexige visada limpa\nbackhaul PtP de alta capacidade\n\n\n60 GHz\nenorme\nalcance curto, chuva forte atenua\nenlaces curtos urbanos",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>43</span>  <span class='chapter-title'>Rádio: Fundamentos e Propagação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/42-radio-fundamentos-propagacao.html#sec-radio-linkbudget",
+    "href": "capitulos/42-radio-fundamentos-propagacao.html#sec-radio-linkbudget",
+    "title": "43  Rádio: Fundamentos e Propagação",
+    "section": "43.3 A equação do enlace (link budget)",
+    "text": "43.3 A equação do enlace (link budget)\nAssim como a fibra tem orçamento de potência (capítulo Seção 34.1), o rádio tem o orçamento de enlace. A potência que chega ao receptor é:\n\\[P_{Rx} = P_{Tx} + G_{Tx} + G_{Rx} - \\text{perdas} - \\text{FSPL}\\]\nonde \\(G\\) são os ganhos das antenas (dBi) e FSPL é a perda no espaço livre. O \\(P_{Rx}\\) tem de ficar acima da sensibilidade do rádio, com margem de desvanecimento (fade margin) — a folga para chuva, variação e desalinhamento.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 43.1: Orçamento de enlace: a potência transmitida, somada aos ganhos das antenas e descontada a perda no caminho (FSPL), tem de chegar acima da sensibilidade com margem.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>43</span>  <span class='chapter-title'>Rádio: Fundamentos e Propagação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/42-radio-fundamentos-propagacao.html#sec-radio-fspl",
+    "href": "capitulos/42-radio-fundamentos-propagacao.html#sec-radio-fspl",
+    "title": "43  Rádio: Fundamentos e Propagação",
+    "section": "43.4 FSPL: a perda no espaço livre",
+    "text": "43.4 FSPL: a perda no espaço livre\nA FSPL (Free Space Path Loss) é a atenuação que o sinal sofre só por se espalhar no ar — cresce com a distância e com a frequência:\n\\[\\text{FSPL (dB)} = 32{,}45 + 20\\log_{10}(d_{km}) + 20\\log_{10}(f_{MHz}).\\]\nExemplo: enlace de 10 km em 5.500 MHz: FSPL = 32,45 + 20·log(10) + 20·log(5500) = 32,45 + 20 + 74,8 ≈ 127,3 dB. Essa perda enorme é compensada pelos ganhos de antena (uma parabólica de 5 GHz dá 25–30 dBi de cada lado) — por isso enlaces PtP usam antenas direcionais de alto ganho.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>43</span>  <span class='chapter-title'>Rádio: Fundamentos e Propagação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/42-radio-fundamentos-propagacao.html#sec-radio-degradacao",
+    "href": "capitulos/42-radio-fundamentos-propagacao.html#sec-radio-degradacao",
+    "title": "43  Rádio: Fundamentos e Propagação",
+    "section": "43.5 O que degrada o sinal",
+    "text": "43.5 O que degrada o sinal\n\nObstáculos (relevo, árvores, prédios) — bloqueiam ou difratam; exigem visada e zona de Fresnel livre (capítulo Seção 45.1).\nChuva — atenua mais em frequências altas (crítico ≥ 11 GHz); dimensione margem para o pior caso climático regional.\nVegetação — folhagem (sobretudo molhada) absorve muito em 5 GHz; uma árvore que cresce derruba o enlace meses depois.\nInterferência — outros emissores na mesma faixa (meio compartilhado); 2,4/5 GHz não licenciados são disputados. Reduz a SNR e a vazão.\nMultipercurso — reflexões (água, telhados) chegam defasadas e se cancelam; MIMO e diversidade ajudam (capítulo Seção 46.1).",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>43</span>  <span class='chapter-title'>Rádio: Fundamentos e Propagação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/42-radio-fundamentos-propagacao.html#sec-radio-snr",
+    "href": "capitulos/42-radio-fundamentos-propagacao.html#sec-radio-snr",
+    "title": "43  Rádio: Fundamentos e Propagação",
+    "section": "43.6 SNR e a relação com a vazão",
+    "text": "43.6 SNR e a relação com a vazão\nA SNR (relação sinal/ruído) determina qual modulação o rádio consegue usar (QPSK, 16-QAM, 64-QAM, 256-QAM…) e, portanto, a vazão. SNR alta → modulação densa → mais Mbps; SNR baixa → o rádio “cai” para modulação robusta e lenta (ou perde o link). Por isso margem e baixa interferência valem mais que potência bruta: um enlace com SNR folgada entrega banda alta e estável.\n\nNa prática do provedor\n\nMargem de desvanecimento ≥ 10–20 dB. Nunca projete o rádio no limite: chuva, vegetação que cresce e interferência nova comem a folga. Enlace “no talo” cai no primeiro temporal.\nBackhaul de fibra na torre (FTTA): leve fibra até a torre e distribua por rádio só o último salto — assim o cliente rural tem a capacidade da fibra atrás do rádio.\nRespeite a Anatel: potência/EIRP máximos e faixas homologadas (capítulo Seção 46.1). Estourar EIRP é ilegal e gera interferência (e multa).\nFaça levantamento de espectro antes de instalar: em 5 GHz congestionado, escolha canal limpo (analisador) — interferência derruba SNR e vazão mesmo com sinal forte.\nDocumente o link budget de cada enlace (distância, frequência, antenas, FSPL, margem) como você documenta o orçamento óptico — é a base do diagnóstico.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>43</span>  <span class='chapter-title'>Rádio: Fundamentos e Propagação</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/42-radio-fundamentos-propagacao.html#sec-resumo-42",
+    "href": "capitulos/42-radio-fundamentos-propagacao.html#sec-resumo-42",
+    "title": "43  Rádio: Fundamentos e Propagação",
+    "section": "43.7 Resumo e checklist",
+    "text": "43.7 Resumo e checklist\n\nRádio é meio aberto/compartilhado; frequência alta = mais banda/menos alcance, baixa = mais alcance/menos banda.\nO orçamento de enlace (\\(P_{Rx} = P_{Tx}+G-\\text{perdas}-\\)FSPL) tem de ficar acima da sensibilidade com margem.\nFSPL cresce com distância e frequência; antenas de alto ganho compensam.\nSNR define a modulação e a vazão; chuva, vegetação e interferência são os vilões.\n\nChecklist do capítulo\n\nEscolho a faixa (2,4/5/11+ GHz) pelo alcance, banda e visada.\nCalculo a FSPL e monto o orçamento de enlace com margem.\nRelaciono SNR com modulação e vazão.\nProjeto com margem ≥ 10–20 dB e respeito a Anatel.",
     "crumbs": [
       "Parte IX — Redes via Rádio (Áreas Rurais)",
       "<span class='chapter-number'>43</span>  <span class='chapter-title'>Rádio: Fundamentos e Propagação</span>"
@@ -2938,7 +3004,62 @@
     "href": "capitulos/43-ptp-ptmp-antenas.html",
     "title": "44  Enlaces PTP e PTMP; Antenas e Ganho",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "44.1 Duas topologias de rádio\nNo rádio do provedor (capítulo Seção 43.1) há duas arquiteturas fundamentais, análogas às topologias da camada física (capítulo Seção 5.3): ponto a ponto (PtP) liga dois locais com um enlace dedicado; ponto multiponto (PtMP) liga uma estação-base a vários clientes. A escolha define capacidade, custo e como o espectro é compartilhado — e tipicamente as duas convivem: PtP no backhaul (levar capacidade à torre) e PtMP no acesso (distribuir aos assinantes rurais).\nNo PtMP, a base arbitra o acesso ao meio (TDMA/polling proprietário — capítulo Seção 46.1), como a PON faz no upstream (capítulo Seção 29.1) — é um meio compartilhado e está sujeito a overbooking (capítulo Seção 7.1).",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>44</span>  <span class='chapter-title'>Enlaces PTP e PTMP; Antenas e Ganho</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/43-ptp-ptmp-antenas.html#sec-ptp-ptmp",
+    "href": "capitulos/43-ptp-ptmp-antenas.html#sec-ptp-ptmp",
+    "title": "44  Enlaces PTP e PTMP; Antenas e Ganho",
+    "section": "",
+    "text": "Figura 44.1: PtP dedica todo o enlace a dois pontos (alta capacidade, backhaul); PtMP compartilha uma base setorial entre vários clientes (acesso, menor custo por assinante).\n\n\n\n\n\n\n\n\n\n\n\nCritério\nPtP\nPtMP\n\n\n\n\nLiga\n2 pontos\n1 base → N clientes\n\n\nCapacidade por cliente\nalta (dedicada)\ncompartilhada\n\n\nAntena\nparabólica diretiva (alto ganho)\nbase setorial + cliente diretivo\n\n\nCusto por cliente\nalto\nbaixo\n\n\nUso típico\nbackhaul entre torres\nacesso rural ao assinante",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>44</span>  <span class='chapter-title'>Enlaces PTP e PTMP; Antenas e Ganho</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/43-ptp-ptmp-antenas.html#sec-antenas-ganho",
+    "href": "capitulos/43-ptp-ptmp-antenas.html#sec-antenas-ganho",
+    "title": "44  Enlaces PTP e PTMP; Antenas e Ganho",
+    "section": "44.2 Antenas: ganho e diretividade",
+    "text": "44.2 Antenas: ganho e diretividade\nO ganho de uma antena (em dBi) não cria energia — ele concentra a energia numa direção, como uma lente concentra luz. Mais ganho = feixe mais estreito e mais alcance, mas exige mira mais precisa. Tipos:\n\n\n\n\n\n\n\n\n\nAntena\nGanho típico\nFeixe\nUso\n\n\n\n\nOmnidirecional\n8–12 dBi\n360°\nbase de área pequena (muito sujeita a interferência)\n\n\nSetorial\n14–20 dBi\n60–120°\nbase PtMP (vários setores cobrem 360°)\n\n\nPainel / grade\n19–24 dBi\nestreito\ncliente PtMP\n\n\nParabólica (dish)\n25–34 dBi\nmuito estreito\nPtP de longa distância\n\n\n\nA escolha equilibra alcance × abertura: a base setorial cobre uma fatia com vários clientes; o cliente usa antena diretiva apontada à base; o backhaul PtP usa parabólicas de alto ganho dos dois lados.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>44</span>  <span class='chapter-title'>Enlaces PTP e PTMP; Antenas e Ganho</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/43-ptp-ptmp-antenas.html#sec-antenas-eirp",
+    "href": "capitulos/43-ptp-ptmp-antenas.html#sec-antenas-eirp",
+    "title": "44  Enlaces PTP e PTMP; Antenas e Ganho",
+    "section": "44.3 EIRP: potência efetiva irradiada",
+    "text": "44.3 EIRP: potência efetiva irradiada\nO que importa para alcance — e para a Anatel — não é só a potência do rádio, mas a EIRP (Effective Isotropic Radiated Power):\n\\[\\text{EIRP (dBm)} = P_{Tx} - \\text{perdas cabo} + G_{\\text{antena}}.\\]\nOu seja, potência do rádio + ganho da antena (menos perdas de cabo/conector). A Anatel limita a EIRP máxima por faixa (ex.: limites específicos em 5 GHz). Subir o ganho da antena aumenta a EIRP — então não basta olhar a potência do rádio: uma antena de alto ganho pode estourar o limite legal. Projete a EIRP dentro do limite e use o ganho para sensibilidade/SNR, não para violar a regra.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>44</span>  <span class='chapter-title'>Enlaces PTP e PTMP; Antenas e Ganho</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/43-ptp-ptmp-antenas.html#sec-antenas-polarizacao",
+    "href": "capitulos/43-ptp-ptmp-antenas.html#sec-antenas-polarizacao",
+    "title": "44  Enlaces PTP e PTMP; Antenas e Ganho",
+    "section": "44.4 Polarização e MIMO",
+    "text": "44.4 Polarização e MIMO\n\nPolarização (vertical/horizontal): alinhe a polarização das duas pontas; cruzar polarização entre enlaces vizinhos reduz interferência (reuso de frequência).\nMIMO / dual-pol: antenas modernas transmitem em duas polarizações simultâneas (2×2 MIMO), dobrando a capacidade no mesmo canal — recurso central das tecnologias atuais (capítulo Seção 46.1).\n\n\nNa prática do provedor\n\nPtP de fibra→torre, PtMP torre→cliente: backhaul PtP de alta capacidade (parabólicas) leva a banda à torre; setoriais distribuem aos assinantes. Não alimente uma base PtMP por um PtP subdimensionado — vira gargalo de todos.\nMira é tudo no PtP: feixe estreito (parabólica) exige alinhamento fino; use o indicador de sinal do rádio e mire para o pico (cuidado com lóbulos secundários). Poucos graus de erro derrubam a SNR.\nEIRP dentro da Anatel: calcule potência do rádio + ganho da antena − cabo; não estoure o limite da faixa. Excesso é ilegal e gera interferência na sua própria rede.\nEvite omni em base: a omnidirecional capta interferência de 360° — prefira setoriais (melhor SNR, reuso de canal por setor).\nDual-pol/MIMO onde possível: dobra capacidade sem mais espectro; alinhe polarização e planeje reuso entre setores.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>44</span>  <span class='chapter-title'>Enlaces PTP e PTMP; Antenas e Ganho</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/43-ptp-ptmp-antenas.html#sec-resumo-43",
+    "href": "capitulos/43-ptp-ptmp-antenas.html#sec-resumo-43",
+    "title": "44  Enlaces PTP e PTMP; Antenas e Ganho",
+    "section": "44.5 Resumo e checklist",
+    "text": "44.5 Resumo e checklist\n\nPtP = enlace dedicado (backhaul, parabólicas); PtMP = base → N clientes (acesso, setoriais), meio compartilhado.\nGanho (dBi) concentra energia: mais alcance e feixe mais estreito (mira mais difícil).\nEIRP = potência + ganho − perdas; respeite o limite da Anatel por faixa.\nPolarização/MIMO aumentam capacidade e reduzem interferência.\n\nChecklist do capítulo\n\nEscolho PtP (backhaul) vs. PtMP (acesso) conforme o papel do enlace.\nSeleciono a antena (omni/setorial/painel/parabólica) pelo ganho e abertura.\nCalculo a EIRP e a mantenho dentro do limite da Anatel.\nAlinho polarização e uso MIMO/dual-pol para capacidade e reuso.",
     "crumbs": [
       "Parte IX — Redes via Rádio (Áreas Rurais)",
       "<span class='chapter-number'>44</span>  <span class='chapter-title'>Enlaces PTP e PTMP; Antenas e Ganho</span>"
@@ -2949,7 +3070,73 @@
     "href": "capitulos/44-visada-fresnel-enlace.html",
     "title": "45  Visada (LOS), Zona de Fresnel e Cálculo de Enlace",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "45.1 Ver não é o bastante\nPara um enlace de rádio funcionar bem (capítulo Seção 43.1), não basta as duas antenas se enxergarem (linha de visada, LOS). A onda de rádio viaja por um volume ao redor da linha reta — a zona de Fresnel — e esse volume precisa estar desobstruído. Um morro, uma árvore ou um telhado que “só encosta” na linha de visada já invade a zona de Fresnel e degrada o sinal por difração. Calcular e liberar a zona de Fresnel é o cuidado que mais decide a estabilidade de um enlace PtP/PtMP — e a fonte nº 1 de enlaces que “funcionam mas caem”.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>45</span>  <span class='chapter-title'>Visada (LOS), Zona de Fresnel e Cálculo de Enlace</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/44-visada-fresnel-enlace.html#sec-fresnel-los",
+    "href": "capitulos/44-visada-fresnel-enlace.html#sec-fresnel-los",
+    "title": "45  Visada (LOS), Zona de Fresnel e Cálculo de Enlace",
+    "section": "45.2 Linha de visada: óptica vs. de rádio",
+    "text": "45.2 Linha de visada: óptica vs. de rádio\n\nLOS óptica — você vê o outro ponto a olho/binóculo.\nLOS de rádio — além de ver, a zona de Fresnel está livre. É mais exigente: pode haver visada óptica perfeita e, ainda assim, a vegetação na base da linha invadir a Fresnel e arruinar o enlace.\n\nHá também enlaces NLOS/nLOS (sem visada total), que algumas tecnologias toleram em frequências baixas via difração/reflexão — mas com perda e instabilidade. A regra de ouro é projetar para LOS de rádio plena.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>45</span>  <span class='chapter-title'>Visada (LOS), Zona de Fresnel e Cálculo de Enlace</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/44-visada-fresnel-enlace.html#sec-fresnel-zona",
+    "href": "capitulos/44-visada-fresnel-enlace.html#sec-fresnel-zona",
+    "title": "45  Visada (LOS), Zona de Fresnel e Cálculo de Enlace",
+    "section": "45.3 A zona de Fresnel",
+    "text": "45.3 A zona de Fresnel\nA primeira zona de Fresnel é um elipsoide entre as antenas. Seu raio máximo (no meio do enlace) é:\n\\[r = 17{,}32 \\sqrt{\\frac{d}{4f}} \\quad [\\text{m}]\\]\ncom d em km (distância total) e f em GHz. A recomendação prática: manter ≥ 60% da primeira zona livre de obstáculos (idealmente 80–100%).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 45.1: A zona de Fresnel é um elipsoide ao redor da LOS. Mesmo com visada óptica, um obstáculo que entra no elipsoide (a árvore) difrata e degrada o sinal.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>45</span>  <span class='chapter-title'>Visada (LOS), Zona de Fresnel e Cálculo de Enlace</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/44-visada-fresnel-enlace.html#sec-fresnel-exercicio",
+    "href": "capitulos/44-visada-fresnel-enlace.html#sec-fresnel-exercicio",
+    "title": "45  Visada (LOS), Zona de Fresnel e Cálculo de Enlace",
+    "section": "45.4 Exercício resolvido — raio de Fresnel",
+    "text": "45.4 Exercício resolvido — raio de Fresnel\nEnlace de d = 9 km em f = 5,5 GHz. Raio máximo da 1ª zona:\n\\[r = 17{,}32\\sqrt{\\frac{9}{4 \\times 5{,}5}} = 17{,}32\\sqrt{\\frac{9}{22}} =\n17{,}32\\sqrt{0{,}409} = 17{,}32 \\times 0{,}640 \\approx \\mathbf{11{,}1\\ m}.\\]\nOu seja, no meio do enlace é preciso ~11 m livres ao redor da linha de visada (e manter ≥ 60% → ~6,7 m). Some a isso a altura dos obstáculos e a curvatura da Terra (relevante acima de ~10–15 km) para definir a altura das torres. É por isso que enlaces longos exigem torres altas: não é só “ver”, é liberar o elipsoide.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>45</span>  <span class='chapter-title'>Visada (LOS), Zona de Fresnel e Cálculo de Enlace</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/44-visada-fresnel-enlace.html#sec-fresnel-terra",
+    "href": "capitulos/44-visada-fresnel-enlace.html#sec-fresnel-terra",
+    "title": "45  Visada (LOS), Zona de Fresnel e Cálculo de Enlace",
+    "section": "45.5 Curvatura da Terra e altura de torre",
+    "text": "45.5 Curvatura da Terra e altura de torre\nEm enlaces longos, a Terra “sobe” entre as antenas (a protuberância cresce com o quadrado da distância), reduzindo a folga. O projeto soma três coisas para achar a altura de torre necessária: altura dos obstáculos + raio de Fresnel (60%) + protuberância da Terra. Ferramentas de planejamento (com perfil de relevo via mapa/SRTM) automatizam essa conta — use-as antes de subir em torre.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>45</span>  <span class='chapter-title'>Visada (LOS), Zona de Fresnel e Cálculo de Enlace</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/44-visada-fresnel-enlace.html#sec-fresnel-processo",
+    "href": "capitulos/44-visada-fresnel-enlace.html#sec-fresnel-processo",
+    "title": "45  Visada (LOS), Zona de Fresnel e Cálculo de Enlace",
+    "section": "45.6 Do levantamento ao enlace estável",
+    "text": "45.6 Do levantamento ao enlace estável\n\nTrace o perfil do terreno entre os pontos (software com relevo + obstáculos).\nCalcule Fresnel (60%) e a protuberância da Terra ao longo do caminho.\nDefina alturas de torre para liberar o elipsoide com folga.\nMonte o link budget (capítulo Seção 43.1): FSPL, ganhos, \\(P_{Rx}\\), margem.\nValide em campo: alinhe pelas leituras de sinal/SNR e teste vazão.\n\n\nNa prática do provedor\n\nVegetação que cresce é a falha silenciosa. Um enlace fechado em projeto cai meses depois porque uma árvore cresceu para dentro da Fresnel — ainda mais molhada após a chuva (5 GHz sofre muito). Preveja folga e reavalie podas.\nVisada óptica engana. “Dá pra ver a torre” não basta: rode o cálculo de Fresnel. A maioria dos enlaces “instáveis no vento/chuva” é Fresnel obstruída, não falta de potência.\nAlte a torre, não só a potência. Quando o link está marginal, ganhar altura (liberar Fresnel) costuma resolver mais que aumentar EIRP (que ainda esbarra na Anatel — capítulo Seção 44.1).\nPlaneje com relevo (SRTM/mapas): faça o perfil e o cálculo antes da visita; subir em torre para descobrir que não fecha é caro.\nDocumente o enlace (alturas, azimute, Fresnel, link budget, margem) como você documenta a planta óptica (capítulo Seção 39.1) — base do diagnóstico futuro.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>45</span>  <span class='chapter-title'>Visada (LOS), Zona de Fresnel e Cálculo de Enlace</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/44-visada-fresnel-enlace.html#sec-resumo-44",
+    "href": "capitulos/44-visada-fresnel-enlace.html#sec-resumo-44",
+    "title": "45  Visada (LOS), Zona de Fresnel e Cálculo de Enlace",
+    "section": "45.7 Resumo e checklist",
+    "text": "45.7 Resumo e checklist\n\nLOS de rádio exige a zona de Fresnel livre (≥ 60%), não só visada óptica.\nRaio máximo: \\(r = 17{,}32\\sqrt{d/(4f)}\\) (d em km, f em GHz) — calcule e libere.\nEm enlaces longos, some Fresnel + protuberância da Terra + obstáculos para a altura de torre.\nVegetação e chuva comem a folga; projete e reavalie com margem.\n\nChecklist do capítulo\n\nDiferencio visada óptica de visada de rádio (Fresnel).\nCalculo o raio da 1ª zona de Fresnel e exijo ≥ 60% livre.\nConsidero a curvatura da Terra na altura das torres.\nFaço o perfil com relevo e valido alinhamento/SNR em campo.",
     "crumbs": [
       "Parte IX — Redes via Rádio (Áreas Rurais)",
       "<span class='chapter-number'>45</span>  <span class='chapter-title'>Visada (LOS), Zona de Fresnel e Cálculo de Enlace</span>"
@@ -2960,7 +3147,73 @@
     "href": "capitulos/45-tecnologias-radio-isp.html",
     "title": "46  Tecnologias de Rádio para ISP",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "46.1 Do conceito ao equipamento\nVistos os fundamentos (capítulo Seção 43.1), as topologias (capítulo Seção 44.1) e a Fresnel (capítulo Seção 45.1), falta o concreto: quais tecnologias e padrões o WISP usa, suas limitações e como integrá-las à rede do provedor. O objetivo é entregar internet rural com estabilidade e gerência comparáveis às da fibra — autenticando no mesmo BNG/RADIUS, com VLAN por cliente e QoS. Este capítulo fecha a Parte IX conectando o rádio à operação de ISP (Parte X).",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>46</span>  <span class='chapter-title'>Tecnologias de Rádio para ISP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/45-tecnologias-radio-isp.html#sec-tec-familias",
+    "href": "capitulos/45-tecnologias-radio-isp.html#sec-tec-familias",
+    "title": "46  Tecnologias de Rádio para ISP",
+    "section": "46.2 Famílias de tecnologia",
+    "text": "46.2 Famílias de tecnologia\n\n\n\n\n\n\n\n\n\nTecnologia\nFaixa\nPerfil\nUso\n\n\n\n\nWi-Fi (802.11) “puro”\n2,4/5 GHz\nbarato, CSMA, sem QoS bom\nlegado, curtos PtP\n\n\nTDMA proprietário (airMAX, etc.)\n5 GHz\nbase agenda slots, escala melhor\nPtMP de acesso\n\n\nTDD/OFDMA moderno (LTE/5G fixo, tecnologias “AX”)\nlicenciado e não\nalta capacidade, NLOS parcial\nacesso denso/rural avançado\n\n\nBackhaul PtP licenciado\n11–80 GHz\nenorme capacidade, exige visada\ntorre↔︎torre\n\n\n\nA maioria dos WISPs brasileiros usa TDMA proprietário em 5 GHz para o acesso PtMP (supera o Wi-Fi puro no problema do “nó escondido” e do overbooking) e PtP (5 GHz não licenciado ou faixas licenciadas) para backhaul.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>46</span>  <span class='chapter-title'>Tecnologias de Rádio para ISP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/45-tecnologias-radio-isp.html#sec-tec-tdma",
+    "href": "capitulos/45-tecnologias-radio-isp.html#sec-tec-tdma",
+    "title": "46  Tecnologias de Rádio para ISP",
+    "section": "46.3 Por que TDMA vence o Wi-Fi puro no PtMP",
+    "text": "46.3 Por que TDMA vence o Wi-Fi puro no PtMP\nO Wi-Fi “puro” usa CSMA/CA (escuta antes de transmitir, como a Ethernet antiga — capítulo Seção 12.5). Em PtMP de longa distância isso falha pelo problema do nó escondido: dois clientes que não se ouvem transmitem juntos e colidem na base, derrubando a vazão. O TDMA resolve dando à base o controle: ela agenda slots de tempo para cada cliente (como a OLT faz no upstream PON — capítulo Seção 29.3), eliminando colisões e dando previsibilidade e melhor uso do espectro. Por isso é o padrão de acesso WISP.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>46</span>  <span class='chapter-title'>Tecnologias de Rádio para ISP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/45-tecnologias-radio-isp.html#sec-tec-capacidade",
+    "href": "capitulos/45-tecnologias-radio-isp.html#sec-tec-capacidade",
+    "title": "46  Tecnologias de Rádio para ISP",
+    "section": "46.4 Recursos que aumentam capacidade",
+    "text": "46.4 Recursos que aumentam capacidade\n\nMIMO / dual-pol (capítulo Seção 44.1) — dobra a capacidade no mesmo canal.\nModulação adaptativa — ajusta QPSK↔︎256-QAM conforme a SNR (capítulo Seção 43.6): mantém o link de pé em chuva (cai para modulação robusta) e aproveita SNR boa.\nLargura de canal — 20/40/80 MHz: mais banda por canal, mas mais sujeito a interferência e menos canais disponíveis.\nReuso de frequência por setor/polarização — planejar canais entre setores da base para não se interferirem.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>46</span>  <span class='chapter-title'>Tecnologias de Rádio para ISP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/45-tecnologias-radio-isp.html#sec-tec-integracao",
+    "href": "capitulos/45-tecnologias-radio-isp.html#sec-tec-integracao",
+    "title": "46  Tecnologias de Rádio para ISP",
+    "section": "46.5 Integração com a rede do provedor",
+    "text": "46.5 Integração com a rede do provedor\nO rádio não é uma “ilha”: ele entrega o cliente à mesma infraestrutura da fibra:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 46.1: O cliente de rádio entra na mesma cadeia: CPE → base → torre (alimentada por fibra) → BNG/RADIUS, com VLAN por cliente e PPPoE/IPoE, como na PON.\n\n\n\n\nVLAN por cliente (capítulo Seção 14.1) também no rádio, para isolar e rastrear.\nPPPoE/IPoE + RADIUS (capítulos ?sec-bng-pppoe, ?sec-radius) autenticam o cliente de rádio igual ao de fibra — mesmo billing, mesmo controle.\nQoS/rate-limit (capítulo Seção 27.1) via RADIUS — mas atenção: no rádio o gargalo pode ser o ar (SNR/overbooking da base), não só o plano.\nMonitoramento (capítulo ?sec-monitoramento) por SNMP: SNR, capacidade da base, clientes por setor, airtime.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>46</span>  <span class='chapter-title'>Tecnologias de Rádio para ISP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/45-tecnologias-radio-isp.html#sec-tec-limitacoes",
+    "href": "capitulos/45-tecnologias-radio-isp.html#sec-tec-limitacoes",
+    "title": "46  Tecnologias de Rádio para ISP",
+    "section": "46.6 Limitações que o cliente precisa entender",
+    "text": "46.6 Limitações que o cliente precisa entender\nRádio não é fibra: tem latência e jitter maiores e variáveis, capacidade compartilhada por setor, e é sensível ao clima/vegetação. Gerencie a expectativa: para navegação/streaming funciona muito bem; para quem exige latência ultrabaixa e estável (alguns jogos), a fibra é superior. Dimensione a base (clientes por setor, airtime) para não saturar — overbooking de rádio mal feito é o equivalente da PON lotada (capítulo Seção 7.1).\n\nNa prática do provedor\n\nTDMA proprietário em 5 GHz para acesso PtMP; não use Wi-Fi puro em PtMP longo (nó escondido mata a vazão).\nFTTA + integração total: fibra na torre, e o cliente de rádio autentica no mesmo BNG/RADIUS com VLAN/cliente — opere fibra e rádio como uma rede só, não dois mundos.\nVigie o “airtime” da base, não só Mbps: uma base pode ter banda no backhaul mas estar saturada de tempo de ar (muitos clientes/retransmissões). Esse é o overbooking real do rádio.\nModulação adaptativa + margem: deixe o link cair de modulação na chuva sem derrubar; projete SNR com folga (capítulo Seção 43.1).\nRespeite a Anatel (EIRP/faixa, capítulo Seção 44.1) e planeje canais por setor/polarização para reuso sem auto-interferência.\nEduque o cliente rural: rádio é excelente, mas tem limites de latência/clima — expectativa alinhada reduz cancelamento.",
+    "crumbs": [
+      "Parte IX — Redes via Rádio (Áreas Rurais)",
+      "<span class='chapter-number'>46</span>  <span class='chapter-title'>Tecnologias de Rádio para ISP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/45-tecnologias-radio-isp.html#sec-resumo-45",
+    "href": "capitulos/45-tecnologias-radio-isp.html#sec-resumo-45",
+    "title": "46  Tecnologias de Rádio para ISP",
+    "section": "46.7 Resumo e checklist",
+    "text": "46.7 Resumo e checklist\n\nWISP usa TDMA proprietário (5 GHz) no acesso PtMP e PtP no backhaul; Wi-Fi puro sofre com nó escondido.\nCapacidade vem de MIMO/dual-pol, modulação adaptativa, largura de canal e reuso.\nO cliente de rádio integra-se à mesma rede (VLAN/cliente, PPPoE/IPoE+RADIUS, QoS, SNMP).\nRádio tem latência/jitter maiores e é compartilhado/sensível ao clima; dimensione airtime e alinhe expectativa.\n\nChecklist do capítulo\n\nEscolho TDMA em vez de Wi-Fi puro para PtMP de acesso.\nUso MIMO, modulação adaptativa e reuso de canal para capacidade.\nIntegro o cliente de rádio ao BNG/RADIUS com VLAN por cliente.\nMonitoro airtime/SNR e dimensiono a base contra saturação.",
     "crumbs": [
       "Parte IX — Redes via Rádio (Áreas Rurais)",
       "<span class='chapter-number'>46</span>  <span class='chapter-title'>Tecnologias de Rádio para ISP</span>"
