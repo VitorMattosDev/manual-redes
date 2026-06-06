@@ -2,6 +2,127 @@
 title: "DDoS e Mitigação"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## O ataque que enche o cano {#sec-ddos}
+
+Um **DDoS** (*Distributed Denial of Service*) tenta **esgotar um recurso** — banda do
+*link*, capacidade do BNG, CPU de um servidor — com tráfego em volume vindo de muitas
+fontes, tornando o serviço indisponível. Para o ISP, DDoS é dor dupla: o cliente é
+**alvo** (um cliente atacado pode saturar o *uplink* e derrubar **todos** os vizinhos)
+e a rede pode ser **abusada** como **refletor** (capítulo @sec-seguranca). Saber
+**detectar e mitigar** rápido é parte da operação — um ataque de dezenas de Gbps a um
+cliente pode tirar a cidade do ar se não for contido.
+
+## Tipos de ataque {#sec-ddos-tipos}
+
+| Tipo | Como funciona | Alvo |
+|---|---|---|
+| **Volumétrico** | inunda a **banda** (Gbps) | *uplink*/trânsito |
+| **Amplificação/reflexão** | abusa DNS/NTP/SSDP abertos para multiplicar | banda |
+| **Protocolo** | esgota **estado** (SYN flood) | BNG, firewall, servidor |
+| **Aplicação (L7)** | requisições "válidas" caras (HTTP flood) | servidor/serviço |
+
+O **volumétrico por amplificação** é o mais comum e perigoso para ISP: o atacante
+envia uma pequena consulta com **IP de origem forjado** (o da vítima) a milhares de
+servidores abertos (DNS/NTP), que respondem **muito maiores** para a vítima —
+multiplicando o tráfego dezenas a centenas de vezes.
+
+::: {#fig-amplificacao}
+```{.tikz}
+%%| filename: ddos-amplificacao
+%%| alt: Atacante com IP forjado consulta refletores abertos que enviam respostas grandes à vítima
+\begin{tikzpicture}[font=\footnotesize,
+    b/.style={draw=manualgray, rounded corners=2pt, minimum height=7mm, align=center}]
+  \node[b, fill=manualred!14] (atk) at (0,0) {Atacante\\(IP forjado=vítima)};
+  \node[b, fill=manualyellow!18] (r1) at (4,1.4) {Refletor\\(DNS/NTP aberto)};
+  \node[b, fill=manualyellow!18] (r2) at (4,0) {Refletor};
+  \node[b, fill=manualyellow!18] (r3) at (4,-1.4) {Refletor};
+  \node[b, fill=manualblue!12] (v) at (8.4,0) {VÍTIMA};
+  \draw[vetor, manualred] (atk)-- node[above,font=\scriptsize]{consulta pequena} (r1);
+  \draw[vetor, manualred] (atk)--(r2); \draw[vetor, manualred] (atk)--(r3);
+  \draw[vetor, manualblue, line width=1.3pt] (r1)-- node[above,font=\scriptsize]{resposta GRANDE} (v);
+  \draw[vetor, manualblue, line width=1.3pt] (r2)--(v);
+  \draw[vetor, manualblue, line width=1.3pt] (r3)--(v);
+\end{tikzpicture}
+```
+Amplificação: o atacante forja o IP da vítima e dispara consultas pequenas a muitos
+**refletores abertos**, que despejam respostas **grandes** sobre a vítima.
 :::
+
+## Detecção {#sec-ddos-deteccao}
+
+Você não mitiga o que não vê. A detecção vem do **monitoramento** (capítulo
+@sec-monitoramento):
+
+- **Flow (NetFlow/sFlow)** — identifica **anomalia de tráfego** (pico súbito para um
+  IP, muitos pacotes pequenos, portas de amplificação) e o **alvo**.
+- **Limiares e baseline** — tráfego muito acima do normal de um cliente/prefixo dispara
+  alarme.
+- **Alarmes de saturação** de *uplink*/BNG.
+
+A chave é detectar **rápido** e identificar o **IP-alvo** para agir antes de o ataque
+saturar o trânsito.
+
+## Mitigação {#sec-ddos-mitigacao-met}
+
+Da mais simples (e brutal) à mais sofisticada:
+
+- **RTBH (Remote Triggered Black Hole):** anuncia o IP-alvo para **descarte** (na sua
+  rede e, via **community BGP**, no upstream/IX — capítulo @sec-bgp). **Salva a rede**
+  derrubando **só** a vítima (o cliente atacado fica offline, mas os outros são
+  preservados). Defesa de emergência mais usada por ISP.
+- **Flowspec (BGP):** propaga **filtros** granulares (por porta/protocolo) — descarta
+  só o tráfego de ataque, **preservando** o cliente. Melhor que RTBH quando disponível.
+- **Scrubbing (depuração):** desvia o tráfego para um serviço que **limpa** (remove o
+  ataque, devolve o legítimo) — próprio ou contratado (upstream/CDN). Para alvos
+  críticos.
+- **Anti-spoofing (BCP38/uRPF)** e **fechar amplificadores** (capítulo @sec-seguranca):
+  **prevenção** — impede sua rede de **originar/refletir** ataques.
+
+| Técnica | Granularidade | Cliente-alvo |
+|---|---|---|
+| **RTBH** | descarta tudo do IP | fica offline (mas salva os outros) |
+| **Flowspec** | por porta/protocolo | preservado |
+| **Scrubbing** | limpa, devolve legítimo | preservado (melhor) |
+
+## Capacidade e parceiros {#sec-ddos-capacidade}
+
+Nenhum ISP regional tem banda para "absorver" um ataque de centenas de Gbps sozinho —
+a mitigação eficaz **depende de mover a defesa para perto da fonte**: do seu upstream
+(RTBH/Flowspec via community), do **IX.br** (que oferece recursos anti-DDoS) ou de um
+**serviço de scrubbing**. Por isso, **acordar communities de blackhole com os
+trânsitos** e participar do IX são preparações essenciais (capítulo @sec-bgp).
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Tenha RTBH pronto e acordado com o upstream ANTES do ataque.** No meio de um
+  DDoS de 50 Gbps não dá tempo de configurar; deixe a **community de blackhole** do
+  trânsito documentada e testada. RTBH é o "freio de emergência".
+- **Flowspec quando possível:** descarta só o ataque e mantém o cliente online —
+  bem melhor que blackhole, que sacrifica a vítima.
+- **Previna sendo bom vizinho:** **BCP38/uRPF** e **feche open resolver/NTP/SNMP**
+  (capítulo @sec-seguranca). Não ser **refletor** evita que sua rede vire arma (e caia
+  junto) e melhora sua reputação.
+- **Flow é os olhos:** sem NetFlow/sFlow você descobre o DDoS pelo telefone tocando.
+  Configure detecção por baseline e alarme do IP-alvo (capítulo @sec-monitoramento).
+- **Ofereça proteção como produto** ao corporativo (scrubbing/Flowspec): cliente que
+  já foi atacado paga por estar protegido.
+- **Plano de resposta:** quem aciona o quê (RTBH, upstream, IX), como comunica o
+  cliente, e como reverte quando o ataque cessa.
+:::
+
+## Resumo e checklist {#sec-resumo-52}
+
+- DDoS **esgota recursos** (banda, estado, CPU); o **volumétrico por amplificação** é o
+  mais comum e pode saturar seu trânsito.
+- **Detecte com flow** (anomalia + IP-alvo) e baseline; rapidez é tudo.
+- **Mitigue** com **RTBH** (emergência, sacrifica a vítima), **Flowspec** (filtra,
+  preserva) e **scrubbing** (limpa) — movendo a defesa **para o upstream/IX**.
+- **Previna** com **BCP38/uRPF** e fechando amplificadores: não ser arma nem refletor.
+
+**Checklist do capítulo**
+
+- [ ] Reconheço os tipos de DDoS e como funciona a amplificação.
+- [ ] Detecto ataque por flow/baseline e identifico o IP-alvo.
+- [ ] Tenho RTBH (community) acordado com upstream e uso Flowspec/scrubbing quando dá.
+- [ ] Previno com BCP38/uRPF e fecho open resolver/NTP/SNMP.

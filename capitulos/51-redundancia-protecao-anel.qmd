@@ -2,6 +2,134 @@
 title: "Redundância, Proteção e Anel Óptico"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Projetar para a falha {#sec-redundancia}
+
+Falhas **vão** acontecer: cabo rompido por retroescavadeira, fonte queimada, energia
+em falta, equipamento travado. A diferença entre um provedor amador e um profissional
+não é não ter falhas — é **a falha não derrubar o cliente**. **Redundância** é
+projetar a rede com **caminhos e componentes alternativos** que assumem
+automaticamente quando algo cai. Este capítulo cobre como medir disponibilidade e
+onde investir em redundância — do **anel óptico** no *backbone* (capítulo
+@sec-topologias-classicas) à energia no POP.
+
+## Disponibilidade: os "noves" {#sec-red-disponibilidade}
+
+Disponibilidade mede a fração do tempo em que o serviço está no ar:
+
+| Disponibilidade | Indisponibilidade/ano |
+|---|---|
+| 99% ("dois noves") | ~3,65 dias |
+| 99,9% ("três noves") | ~8,8 horas |
+| 99,99% ("quatro noves") | ~52 minutos |
+| 99,999% ("cinco noves") | ~5 minutos |
+
+Cada "nove" extra custa caro (mais redundância), então invista onde o **impacto** é
+maior: o **núcleo/backbone** e os **pontos de concentração** (OLT, BNG) afetam milhares;
+o *drop* de um cliente afeta um. **Priorize redundância pelo número de afetados.**
+
+## Os pontos únicos de falha (SPOF) {#sec-red-spof}
+
+Um **SPOF** (*Single Point of Failure*) é um elemento cuja falha **sozinha** derruba o
+serviço. O exercício central é **caçar SPOFs** e eliminá-los onde o impacto justifica:
+
+| Elemento | Risco | Redundância |
+|---|---|---|
+| Cabo de *backbone* | rompimento | **anel** (dois caminhos) |
+| OLT/BNG | hardware/energia | fontes/uplinks redundantes, par de equipamentos |
+| Trânsito IP | upstream cai | **≥ 2 trânsitos** + IX (capítulo @sec-bgp) |
+| Energia do POP | falta de luz | **nobreak + gerador** |
+| Servidor (DNS/RADIUS) | travamento | **2+ instâncias** redundantes |
+
+## O anel óptico {#sec-red-anel}
+
+A topologia **em anel** (capítulo @sec-topologias-classicas) é a defesa clássica do
+*backbone* contra **rompimento de cabo** — a causa nº 1 de queda em massa:
+
+::: {#fig-anel}
+```{.tikz}
+%%| filename: anel-otico
+%%| alt: Anel óptico entre POPs com rompimento em um trecho e tráfego reconvergindo pelo outro sentido
+\begin{tikzpicture}[font=\footnotesize,
+    p/.style={draw=manualgray, circle, fill=manualgreen!14, minimum size=10mm, inner sep=0pt}]
+  \node[p] (a) at (90:2.2) {POP A};
+  \node[p] (b) at (18:2.2) {POP B};
+  \node[p] (c) at (-54:2.2) {POP C};
+  \node[p] (d) at (-126:2.2) {POP D};
+  \node[p] (e) at (162:2.2) {POP E};
+  \draw[curva] (a)--(b)--(c)--(d)--(e)--(a);
+  % rompimento entre C e D
+  \draw[destaque, manualred, line width=1.4pt] (-80:2.4) -- (-100:2.4);
+  \node[manualred, font=\scriptsize] at (-90:3.0) {rompimento};
+  \node[manualblue, font=\scriptsize, align=center] at (0,0) {tráfego reconverge\\pelo outro sentido};
+\end{tikzpicture}
+```
+Anel óptico entre POPs: se um trecho rompe, o tráfego **reconverge pelo outro lado** do
+anel — a cidade continua online.
 :::
+
+A reconvergência rápida vem de mecanismos próprios:
+
+- **ERPS (G.8032)** — proteção de anel Ethernet, reconverge em **< 50 ms**.
+- **Proteção óptica (OLP)** — comuta para fibra reserva automaticamente.
+- **No nível 3:** OSPF/IS-IS + **BFD** (capítulo @sec-roteamento) detectam e reroteiam
+  rápido.
+
+Bem mais veloz que o **STP** clássico (segundos, capítulo @sec-switching) — por isso o
+anel de *backbone* usa ERPS/óptico, não STP.
+
+## Redundância na PON e no acesso {#sec-red-pon}
+
+Na **árvore PON** (capítulo @sec-fttx) a redundância total é cara (a fibra é
+compartilhada), mas há opções por nível de criticidade:
+
+- **Type B protection:** porta PON/fibra-tronco redundante até o splitter — protege o
+  trecho que afeta **toda a PON**.
+- **Type C:** redundância até a ONT (caro; só cliente crítico/corporativo).
+- **Dupla abordagem:** para cliente SLA, **duas fibras por caminhos físicos
+  distintos**.
+- **Rádio como backup:** um enlace de rádio (Parte IX) pode ser *backup* de um cliente
+  corporativo de fibra.
+
+## Energia: a redundância esquecida {#sec-red-energia}
+
+Boa parte das "quedas de rede" é, na verdade, **falta de energia** no POP/torre. A
+infraestrutura elétrica é redundância de primeira ordem:
+
+- **Nobreak/UPS** para a transição e picos curtos.
+- **Banco de baterias** dimensionado para a autonomia desejada.
+- **Gerador** para faltas longas (com combustível e manutenção!).
+- **Monitoramento de energia** (capítulo @sec-monitoramento) — alarme de falta de rede
+  elétrica antes de a bateria acabar.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Anel no backbone, sempre.** Rompimento de cabo é questão de *quando*, não *se*
+  (retroescavadeira, poda, acidente). ERPS/óptico reconverge em ms e ninguém percebe.
+- **Energia é a falha nº 1 disfarçada:** nobreak + **gerador** no POP central e
+  baterias nas torres; **monitore** a rede elétrica. Bateria que acaba às 2h da manhã
+  é apagão evitável.
+- **Distribua o risco (blast radius):** POPs menores e OLTs distribuídas em vez de uma
+  OLT gigante — uma falha afeta menos gente (capítulo @sec-olt).
+- **Redundância proporcional ao impacto:** invista pesado no **núcleo/BNG/OLT** e em
+  **2 trânsitos + IX** (capítulo @sec-bgp); no *drop* de residencial, o custo de
+  redundar não compensa. Ofereça **dupla abordagem** como produto a corporativo.
+- **Teste o failover.** Redundância nunca testada costuma falhar na hora H — simule
+  queda de trânsito, de BNG e de trecho de anel.
+:::
+
+## Resumo e checklist {#sec-resumo-51}
+
+- Disponibilidade mede-se em **"noves"**; invista onde o **impacto** (nº de afetados) é
+  maior.
+- **Cace SPOFs** e elimine-os: cabo (**anel**), equipamento (par/fontes), trânsito (2+
+  IX), energia (nobreak+gerador).
+- **Anel óptico + ERPS/óptico/BFD** reconverge em **< 50 ms** — muito além do STP.
+- **PON** redunda por níveis (Type B/C, dupla abordagem); **rádio** pode ser backup.
+
+**Checklist do capítulo**
+
+- [ ] Traduzo metas de SLA em "noves" e priorizo por impacto.
+- [ ] Identifico e elimino SPOFs no núcleo, acesso e energia.
+- [ ] Projeto anel de backbone com ERPS/proteção óptica + BFD.
+- [ ] Garanto energia redundante (nobreak/gerador) e **testo** o failover.

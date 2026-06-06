@@ -2,6 +2,110 @@
 title: "Segurança de Redes"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Proteger a rede, o cliente e a si mesmo {#sec-seguranca}
+
+Um provedor é, ao mesmo tempo, **alvo** (de ataques externos) e **arma potencial** (se
+sua rede for usada para atacar outros) e **guardião** (dos dados e da conectividade dos
+assinantes). Segurança no ISP não é um produto, é uma **postura em camadas**: proteger
+a **infraestrutura** (OLT, BNG, roteadores), o **acesso** (cliente não atacar cliente),
+a **borda** (anti-spoofing, anti-DDoS — capítulo @sec-ddos) e cumprir **obrigações
+legais** (Marco Civil, LGPD). Este capítulo organiza as defesas por onde elas atuam,
+amarrando o que vimos nas partes anteriores.
+
+## Defesa em camadas {#sec-seg-camadas}
+
+A segurança espelha as camadas OSI (capítulo @sec-osi-introducao) — cada uma com suas
+ameaças e defesas:
+
+| Camada | Ameaça típica | Defesa |
+|---|---|---|
+| **Física (1)** | acesso ao DIO/CTO, corte de fibra | trancas, vedação, vigilância |
+| **Enlace (2)** | ARP/MAC spoofing, rogue DHCP, loop | VLAN/cliente, DHCP Snooping, DAI, STP |
+| **Rede (3)** | IP spoofing, hijack BGP | uRPF, filtros, RPKI/ROA |
+| **Transporte (4)** | SYN flood, varredura | rate-limit, firewall stateful |
+| **Aplicação (7)** | DNS amplificação, brute-force | SNMPv3/SSH, hardening, anti-amplificação |
+
+## Protegendo a infraestrutura {#sec-seg-infra}
+
+Os equipamentos de rede são o alvo de maior valor — comprometer uma OLT/BNG/roteador é
+comprometer milhares de clientes:
+
+- **Gerência fora de banda e restrita:** SSH (não Telnet), **SNMPv3** (não v2c), tudo
+  por **ACL** na rede/loopback de gerência (capítulos @sec-outros-ssh, @sec-roteamento).
+- **Senhas fortes/chaves, MFA** no que suportar; **sem credenciais padrão**.
+- **Hardening:** desabilitar serviços inúteis, atualizar firmware, **logar acessos**.
+- **Control-plane policing:** proteger a CPU dos roteadores contra flood.
+- **Backup de configuração** versionado (e da base de planta/GIS, capítulo
+  @sec-doc-georref).
+
+## Protegendo o acesso (cliente ↔ cliente) {#sec-seg-acesso}
+
+Na rede de acesso, o risco é um assinante **atacar outro** ou **se passar por** outro:
+
+- **VLAN por cliente** (capítulo @sec-switching) isola o domínio de broadcast — mata
+  ARP spoofing entre vizinhos.
+- **DHCP Snooping + Dynamic ARP Inspection (DAI)** — bloqueiam *rogue DHCP* e ARP
+  forjado (capítulos @sec-arp, @sec-dhcp).
+- **uRPF / anti-spoofing** — descarta pacotes com IP de origem que não pertence ao
+  cliente (impede spoofing e participação em DDoS refletido).
+- **Port security / limite de MAC** — evita que o cliente pendure switch e injete
+  loop/MACs.
+- **AES na PON** (capítulo @sec-gpon) — protege o *downstream* broadcast do vizinho.
+
+## Não ser a arma do ataque {#sec-seg-amplificacao}
+
+Serviços mal configurados na sua rede viram **munição** para DDoS por amplificação
+contra terceiros (capítulo @sec-ddos):
+
+- **Open resolver DNS** (capítulo @sec-dns) — responda recursivo só à sua base, com
+  *rate-limit* (RRL).
+- **NTP/SNMP/SSDP abertos** — restrinja por ACL; desabilite *monlist* no NTP.
+- **BCP38 (anti-spoofing):** filtre na borda pacotes com origem falsa — é o que impede
+  sua rede de **originar** ataques refletidos.
+
+## Conformidade legal {#sec-seg-legal}
+
+No Brasil o ISP tem deveres legais que são **parte da segurança**:
+
+- **Marco Civil:** guarda de **logs de conexão** (quem teve qual IP/porta e quando) —
+  via RADIUS *accounting* + CGNAT com **NTP correto** (capítulos @sec-radius,
+  @sec-nat-cgnat).
+- **LGPD:** proteção dos **dados pessoais** dos assinantes (cadastro, tráfego);
+  acesso controlado, retenção mínima, segurança da base.
+- **Porta 25 Management** (capítulo @sec-outros-email): bloqueio de saída para conter
+  spam.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **O básico pega 90%:** sem Telnet, sem SNMPv2c público, sem senha padrão, gerência
+  por ACL, firmware atualizado. A maioria dos comprometimentos explora o trivial.
+- **Anti-spoofing (BCP38/uRPF) na borda e no acesso:** protege a internet **de você** e
+  você **de ser refletido** — e é frequentemente exigido por upstreams/IX.
+- **Feche os amplificadores:** open resolver, NTP/SNMP abertos. Um único resolver
+  aberto seu pode ser usado num ataque de centenas de Gbps a um terceiro — e te tira
+  do ar junto.
+- **VLAN/cliente + DHCP Snooping + DAI** são o pacote padrão de isolamento do acesso —
+  configure por padrão, não caso a caso.
+- **Logs + NTP + backup:** conformidade (Marco Civil/LGPD) e recuperação dependem de
+  horário correto, retenção adequada e backup de config/planta.
+- **Plano de resposta a incidente:** saiba o que fazer quando (não se) acontecer —
+  contatos de upstream/IX, *blackhole*, comunicação (capítulo @sec-ddos).
 :::
+
+## Resumo e checklist {#sec-resumo-50}
+
+- Segurança é **em camadas**: física, enlace (VLAN/DHCP Snooping/DAI), rede
+  (uRPF/RPKI), transporte/aplicação (firewall, hardening).
+- **Proteja a infraestrutura** (SSH/SNMPv3/ACL/backup) e o **acesso** (isolar e
+  anti-spoofing cliente↔cliente).
+- **Não seja a arma:** feche open resolver/NTP/SNMP e aplique **BCP38**.
+- **Conformidade** (Marco Civil/LGPD) com logs, NTP e proteção de dados é parte da
+  segurança.
+
+**Checklist do capítulo**
+
+- [ ] Mapeio ameaças e defesas por camada.
+- [ ] Faço hardening da gerência (SSH/SNMPv3/ACL/backup).
+- [ ] Isolo o acesso (VLAN/cliente, DHCP Snooping, DAI, uRPF).
+- [ ] Fecho amplificadores (BCP38) e cumpro Marco Civil/LGPD.
