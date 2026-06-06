@@ -2,6 +2,122 @@
 title: "Infraestrutura: Postes, Ferragens e Reserva Técnica"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## A obra civil que sustenta a fibra {#sec-infraestrutura}
+
+A fibra mais bem emendada do mundo não serve de nada pendurada errado. A **planta
+externa (OSP)** é, em boa parte, **obra de campo**: fixar cabos em postes, usar as
+**ferragens** corretas, manter **reserva técnica**, respeitar alturas e o
+compartilhamento com a rede elétrica. Fazer isso bem é o que evita rompimentos,
+multas da concessionária e a "rede aranha" perigosa. Este capítulo cobre a
+infraestrutura aérea — a mais comum no ISP brasileiro — e seus cuidados.
+
+## Aéreo vs. subterrâneo {#sec-infra-aereo-subterraneo}
+
+| Critério | Aéreo (postes) | Subterrâneo (dutos) |
+|---|---|---|
+| Custo de implantação | **baixo** | alto |
+| Velocidade de obra | rápida | lenta |
+| Exposição a danos | alta (carro, poda, vento) | baixa |
+| Estética/regulação | "rede aranha", pressão regulatória | limpo, exigido em áreas nobres |
+| Manutenção | fácil acesso | exige infraestrutura |
+
+No Brasil, a esmagadora maioria do ISP regional é **aéreo**, usando os **postes da
+concessionária de energia** mediante **contrato de compartilhamento**. Subterrâneo
+aparece em centros, condomínios e onde a regulação exige.
+
+## Postes e a faixa de ocupação {#sec-infra-postes}
+
+O poste é compartilhado em **faixas de altura**, da elétrica (alta, perigosa) à de
+telecom (baixa):
+
+::: {#fig-poste-faixas}
+```{.tikz}
+%%| filename: poste-faixas
+%%| alt: Poste com faixa de energia no topo, faixa de telecom abaixo e altura mínima ao solo
+\begin{tikzpicture}[font=\footnotesize]
+  % poste
+  \draw[manualgray, line width=2pt] (0,0) -- (0,6);
+  \node[manualgray, below] at (0,0) {solo};
+  % faixa energia
+  \draw[destaque, line width=1.2pt] (-1.3,5.4) -- (1.3,5.4);
+  \draw[destaque, line width=1.2pt] (-1.3,5.0) -- (1.3,5.0);
+  \draw[destaque, line width=1.2pt] (-1.3,4.6) -- (1.3,4.6);
+  \node[manualred, anchor=west] at (1.5,5.0) {energia (alta tensão / BT)};
+  % zona de seguranca
+  \draw[<->, manualgray] (0.6,4.6) -- (0.6,3.6) node[midway, right, font=\scriptsize]{zona de segurança};
+  % faixa telecom
+  \draw[curva, line width=1.2pt] (-1.3,3.6) -- (1.3,3.6);
+  \draw[curva, line width=1.2pt] (-1.3,3.2) -- (1.3,3.2);
+  \node[manualblue, anchor=west] at (1.5,3.4) {telecom (fibra, TV, telefone)};
+  % altura ao solo
+  \draw[<->, manualgray] (-0.5,3.2) -- (-0.5,0) node[midway, left, font=\scriptsize, rotate=90, anchor=south]{altura mín. ao solo};
+\end{tikzpicture}
+```
+Faixas do poste: **energia** no topo (zona perigosa), **zona de segurança** e a
+**faixa de telecom** abaixo, sempre acima da **altura mínima ao solo** (maior sobre
+vias de veículos).
 :::
+
+Regras práticas: respeitar a **zona de segurança** para a rede elétrica (risco de
+morte e de indução), manter **altura mínima ao solo** (maior sobre ruas que sobre
+calçadas), e **não sobrecarregar** o poste (peso/esforço somados de todos os
+ocupantes).
+
+## Ferragens essenciais {#sec-infra-ferragens}
+
+As **ferragens** fixam e organizam o cabo no poste:
+
+- **Alça pré-formada / esticador** — prende o cabo AS ao poste, ajustando a tensão do
+  vão.
+- **Suporte/abraçadeira (cinta)** — fixa a ferragem ao poste.
+- **Reserva (rolo de fibra)** — organiza a sobra de cabo.
+- **Identificação (plaqueta)** — etiqueta o cabo/ISP no poste (exigência comum).
+
+Usar a ferragem certa e a **tensão adequada** evita que o vão fique baixo demais
+(risco) ou esticado demais (perda por tração — capítulo @sec-fibra-principios).
+
+## Reserva técnica {#sec-infra-reserva}
+
+A **reserva técnica** é a **sobra de cabo** deixada em pontos estratégicos (em
+postes, perto de CEOs/CTOs), enrolada em suporte próprio. Para que serve:
+
+- **Refazer emendas** sem precisar de cabo novo (capítulo @sec-emendas).
+- **Reposicionar** caixas/postes.
+- **Reparar rompimentos** (puxar cabo de uma ponta).
+
+**Regra:** deixe reserva em **toda CEO/CTO** e em **vãos longos**. Reserva insuficiente
+transforma um reparo de 1 hora em uma obra de relançamento.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Contrato de compartilhamento de postes** com a concessionária é **pré-requisito
+  legal** — ocupar poste sem acordo gera multa e remoção. Planeje a ocupação e a
+  identificação (plaqueta) dos seus cabos.
+- **Zona de segurança da elétrica é questão de vida.** Equipe treinada, NR-10/NR-35
+  quando aplicável, e **nunca** invadir a faixa de energia. Indução e contato são
+  fatais.
+- **Reserva técnica generosa** em CEO/CTO e vãos longos: é o que diferencia um reparo
+  rápido de uma obra. Padronize o tamanho do laço de reserva.
+- **Combata a "rede aranha":** cabo frouxo, baixo ou mal fixado é rompimento certo
+  (caminhão, poda, vento) — a **causa nº 1 de queda em massa** junto com
+  retroescavadeira no subterrâneo. Tensão e altura corretas previnem.
+- **Documente o que está em cada poste** (capítulo @sec-doc-georref): qual cabo, qual
+  CTO, qual reserva — sem isso, manutenção noturna vira pesadelo.
+:::
+
+## Resumo e checklist {#sec-resumo-36}
+
+- A planta é majoritariamente **aérea**, em **postes compartilhados** (contrato com a
+  concessionária).
+- Respeite **faixa de telecom**, **zona de segurança** da elétrica e **altura ao
+  solo**.
+- Use as **ferragens corretas** com tensão adequada (nem baixo, nem esticado).
+- **Reserva técnica** em CEO/CTO e vãos longos é o que torna o reparo rápido.
+
+**Checklist do capítulo**
+
+- [ ] Sei as faixas do poste e a zona de segurança da rede elétrica.
+- [ ] Escolho e tensiono as ferragens corretamente.
+- [ ] Deixo reserva técnica padronizada em caixas e vãos longos.
+- [ ] Opero com contrato de compartilhamento e identificação dos cabos.

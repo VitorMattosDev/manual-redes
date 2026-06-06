@@ -2,6 +2,121 @@
 title: "Fusão em Campo e Certificação"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Da bancada para o poste {#sec-fusao-campo}
+
+A técnica de fusão (capítulo @sec-emendas) é a mesma na bancada e no campo, mas o
+**campo** acrescenta hostilidade: trabalho na altura do poste ou no chão, poeira,
+sol, umidade, pressa. E acrescenta uma etapa que define se a planta entra em produção
+com qualidade: a **certificação** — medir e **registrar** que cada trecho/emenda está
+dentro do especificado. Fusão de campo bem-feita + certificação documentada é o que
+permite ligar o cliente com confiança e ter referência para futuros reparos.
+
+## Boas práticas de fusão em campo {#sec-fusao-campo-praticas}
+
+O que muda em relação à bancada:
+
+- **Limpeza é mais difícil e mais crítica:** poeira do poste/rua contamina clivagem e
+  eletrodos. Trabalhe abrigado (tenda/van), limpe sempre.
+- **Clivador calibrado e lâmina em dia:** a clivagem a 90° (capítulo
+  @sec-emendas-processo) é o fator nº 1 da perda — em campo, degrada rápido.
+- **Eletrodos limpos:** poeira eleva a perda de todas as emendas do dia; faça a
+  manutenção da fusora.
+- **Acomodação na caixa (CEO/CTO):** respeite raio de curvatura nas bandejas, deixe
+  **reserva** e **vede** contra umidade (capítulo @sec-emendas-caixas).
+- **Identifique** cada fibra (cor/posição) antes de fechar.
+
+A **meta** continua ≤ 0,1 dB por fusão; em rede primária (afeta muitos clientes), seja
+rigoroso e refaça acima disso.
+
+## Por que certificar {#sec-fusao-certificacao}
+
+A estimativa da fusora não basta para entregar a planta. **Certificar** é medir com
+instrumento e **registrar** o resultado, criando a **linha de base** (*baseline*):
+
+- Prova que o trecho foi entregue **dentro do orçamento** (capítulo @sec-orcamento).
+- Vira **referência** para comparar quando houver problema (mudou em relação ao
+  baseline? há evento novo).
+- Documenta para o cliente corporativo/SLA e para a própria operação.
+
+## Os dois testes de certificação {#sec-fusao-testes}
+
+::: {#fig-certificacao}
+```{.tikz}
+%%| filename: certificacao-testes
+%%| alt: Teste de potência fim a fim com fonte e power-meter, e teste OTDR mapeando eventos
+\begin{tikzpicture}[font=\footnotesize,
+    b/.style={draw=manualgray, rounded corners=2pt, minimum width=18mm, minimum height=8mm, align=center}]
+  % teste insercao
+  \node[manualblue, anchor=west] at (-0.3,2.6) {\textbf{1. Perda de inserção (fim a fim)}};
+  \node[b, fill=manualgreen!14] (src) at (0.6,1.6) {Fonte\\(laser)};
+  \node[b, fill=manualred!12] (pm) at (6,1.6) {Power-meter};
+  \draw[curva, manualgreen] (src) -- node[above,font=\scriptsize]{enlace sob teste} (pm);
+  \node[manualgray, font=\scriptsize] at (3.3,0.9) {mede a perda TOTAL em dB};
+
+  % teste otdr
+  \node[manualblue, anchor=west] at (-0.3,0.1) {\textbf{2. OTDR (mapa de eventos)}};
+  \node[b, fill=manualyellow!18] (otdr) at (0.8,-1) {OTDR};
+  \draw[curva] (otdr) -- (6.5,-1);
+  \draw[destaque, manualred] (2.2,-1) -- (2.2,-0.6) node[above,font=\scriptsize]{fusão};
+  \draw[destaque, manualred] (4.0,-1) -- (4.0,-0.55) node[above,font=\scriptsize]{conector};
+  \draw[destaque, manualred] (5.6,-1) -- (5.6,-0.65) node[above,font=\scriptsize]{splitter};
+  \node[manualgray, font=\scriptsize] at (3.3,-1.6) {localiza e mede CADA evento};
+\end{tikzpicture}
+```
+Dois testes complementares: a **perda de inserção** (fonte + power-meter) dá a perda
+**total** fim a fim; o **OTDR** mapeia e mede **cada evento** ao longo da fibra.
 :::
+
+1. **Perda de inserção (fonte de luz + power-meter):** mede a **atenuação total** do
+   enlace em dB, no comprimento de onda de operação. É o teste que diz **"o enlace
+   fecha o orçamento?"**. Simples e definitivo para o número global.
+2. **OTDR (*Optical Time-Domain Reflectometer*):** envia pulsos e analisa o
+   retroespalhamento, **localizando e medindo cada evento** (fusão, conector,
+   splitter, curvatura, ruptura) e a distância de cada um (capítulos @sec-otdr e
+   @sec-interpretacao-otdr). É o teste que diz **"onde está e quanto perde cada
+   ponto?"**.
+
+Os dois são **complementares**: o power-meter dá a verdade do total; o OTDR mostra a
+**anatomia** do trecho. Para certificar PON, mede-se nos λ relevantes (1310/1490/1550).
+
+## O laudo de certificação {#sec-fusao-laudo}
+
+Certificar gera um **registro** que deve conter: trecho/identificação, data,
+comprimentos de onda, **perda total medida vs. orçamento previsto**, traço/eventos do
+OTDR e o **baseline** arquivado. Esse laudo, ligado ao georreferenciamento (capítulo
+@sec-doc-georref), é o que torna o próximo reparo rápido.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Certifique a rede primária sempre.** Ela afeta dezenas/centenas de clientes;
+  medir total (power-meter) **e** OTDR antes de produzir evita um chamado em massa por
+  uma fusão ruim no tronco.
+- **Guarde o baseline (OTDR + perda total)** de cada trecho. Quando algo degradar,
+  você compara com o baseline e **acha o evento novo** em minutos (capítulo
+  @sec-interpretacao-otdr) — em vez de medir do zero.
+- **Kit de campo do fusionista:** fusora + clivador calibrado (lâmina nova), álcool e
+  lenços, **microscópio de inspeção** (capítulo @sec-conectores), power-meter, OTDR,
+  VFL (localizador visual). Sem inspeção e medição, você "conserta às cegas".
+- **Refaça acima de 0,1 dB** em primária; em *drop* de cliente, a meta é o **Rx na
+  ONT** dentro da faixa (capítulo @sec-onu-potencia).
+- **Tenda/abrigo para fusão** em campo: poeira é inimiga da clivagem e dos eletrodos —
+  fusão a céu aberto e ventando rende emenda ruim.
+:::
+
+## Resumo e checklist {#sec-resumo-37}
+
+- Fusão de campo = mesma técnica da bancada + **disciplina contra poeira/umidade** e
+  acomodação correta.
+- **Certificar** = medir **e registrar**; cria o **baseline** que prova o orçamento e
+  acelera reparos.
+- Dois testes complementares: **perda de inserção** (total) e **OTDR** (evento a
+  evento).
+- **Laudo + georreferenciamento** tornam o próximo reparo rápido.
+
+**Checklist do capítulo**
+
+- [ ] Faço fusão de campo abrigado, com clivador/eletrodos em dia.
+- [ ] Certifico com power-meter (total) e OTDR (eventos) nos λ corretos.
+- [ ] Arquivo o baseline de cada trecho.
+- [ ] Priorizo certificação rigorosa na rede primária.

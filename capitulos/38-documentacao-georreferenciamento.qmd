@@ -2,6 +2,121 @@
 title: "Documentação e Georreferenciamento de Rede"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## A planta que ninguém vê — e que salva a operação {#sec-doc-georref}
+
+Uma rede óptica de provedor tem milhares de elementos espalhados pela cidade: postes,
+CEOs, CTOs, splitters, fusões, fibras por cor. **Onde está cada coisa? Qual fibra vai
+para qual cliente? Que splitter alimenta aquela CTO?** Sem **documentação** e
+**georreferenciamento**, cada reparo vira investigação, cada expansão vira
+adivinhação, e o tempo de reestabelecimento (e a insatisfação do cliente) explode.
+Documentar **não é burocracia: é a ferramenta operacional nº 1** que torna tudo o que
+vimos nas Partes VI–VII utilizável no dia a dia.
+
+## O que documentar {#sec-doc-o-que}
+
+A documentação cobre **três camadas** de informação:
+
+| Camada | O que registra | Exemplos |
+|---|---|---|
+| **Física/geográfica** | onde está | postes, caixas, rotas de cabo (coordenadas) |
+| **Lógica/conectividade** | o que liga a quê | fibra X (cor) → splitter → porta → cliente |
+| **Operacional** | medições e histórico | baseline OTDR, perda, data de fusão, reparos |
+
+Juntas, elas respondem em segundos: "o cliente Y está em qual CTO, qual porta de
+splitter, qual fibra, e qual era o Rx esperado?".
+
+## Georreferenciamento: a planta no mapa {#sec-doc-geo}
+
+**Georreferenciar** é colocar cada elemento em **coordenadas reais** sobre um mapa
+(GIS). Isso permite:
+
+::: {#fig-georref}
+```{.tikz}
+%%| filename: georref-mapa
+%%| alt: Mapa esquemático com POP, rota de cabo, CEO, CTOs e clientes georreferenciados
+\begin{tikzpicture}[font=\footnotesize,
+    p/.style={draw=manualgreen, fill=manualgreen!16, rounded corners=1pt, minimum size=6mm, inner sep=1pt},
+    cto/.style={draw=manualgray, fill=manualyellow!18, minimum size=5mm, inner sep=1pt},
+    cli/.style={fill=manualblue, circle, minimum size=2pt, inner sep=1.5pt}]
+  % ruas
+  \draw[auxiliar] (0,0) grid[step=1.5] (7.5,4.5);
+  \node[p] (pop) at (0.5,4) {POP};
+  \node[draw=manualred, fill=manualred!12, minimum size=5mm, inner sep=1pt] (ceo) at (3,3) {CEO};
+  \node[cto] (c1) at (4.5,4) {CTO1};
+  \node[cto] (c2) at (5,1.5) {CTO2};
+  \draw[curva, manualgreen] (pop) -- (ceo);
+  \draw[curva, manualgreen] (ceo) -- (c1);
+  \draw[curva, manualgreen] (ceo) -- (c2);
+  \foreach \p in {(4,4.5),(5,4.3),(4.7,3.6)}{ \node[cli] at \p {}; \draw[auxiliar] (c1) -- \p; }
+  \foreach \p in {(5.6,1.2),(4.4,1.0),(5.2,2.0)}{ \node[cli] at \p {}; \draw[auxiliar] (c2) -- \p; }
+\end{tikzpicture}
+```
+Planta georreferenciada: POP, rota de cabo, CEO e CTOs em coordenadas reais, com os
+clientes ligados a cada CTO. O mapa responde "quem é afetado se este trecho cair?".
 :::
+
+- **Localizar** fisicamente a falha (a CTO está nesta esquina, a 320 m do POP pela
+  rota X).
+- **Calcular impacto:** um rompimento neste trecho afeta **estas** CTOs e **estes**
+  clientes.
+- **Planejar expansão:** onde há capacidade (porta de splitter/fibra livre) perto de
+  um novo cliente.
+- **Despachar a equipe** direto ao ponto certo.
+
+## Ferramentas {#sec-doc-ferramentas}
+
+- **GIS / software de planta óptica** (ex.: sistemas dedicados de OSP) que modelam
+  conectividade **e** geografia.
+- **Mapas** (camadas sobre base cartográfica) com postes, caixas e rotas.
+- **Integração com OSS/sistema de gestão** e com a OLT — idealmente o cadastro do
+  cliente liga ao ponto físico (CTO/porta) e ao lógico (VLAN, ONT SN — capítulo
+  @sec-provisionamento).
+- **Diagrama esquemático** (a "árvore" lógica OLT→splitter→CTO→cliente) além do mapa.
+
+## Disciplina: documentar é processo {#sec-doc-disciplina}
+
+A documentação só vale se estiver **atualizada**. Isso exige **processo**:
+
+- **As-built:** toda obra/instalação atualiza a planta **ao concluir** (não "depois").
+- **Padrões de nomenclatura** consistentes (CEO/CTO/fibra/porta) — capítulo
+  @sec-cabos-cores.
+- **Ligação ao chamado:** ao reparar, registrar o que mudou (nova fusão, troca de
+  fibra) de volta na planta.
+- **Baseline** (OTDR/perda, capítulo @sec-fusao-campo) anexado ao trecho.
+
+Documentação desatualizada é **pior que nenhuma** — induz a equipe ao erro.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Documente desde o cliente nº 1.** Começar "depois que crescer" nunca acontece, e
+  recadastrar uma planta existente é caríssimo. Cadastro físico + lógico desde o
+  início.
+- **Cliente ↔ CTO ↔ porta ↔ fibra ↔ ONT(SN) ↔ VLAN:** essa cadeia ligada é o que faz
+  o suporte resolver rápido — "cliente caiu" vira "qual CTO/splitter, quem mais foi
+  afetado, qual o Rx esperado".
+- **Impacto de falha em 1 clique:** com georreferenciamento, um rompimento mostra
+  **quantos e quais** clientes caíram — prioriza reparo e comunica proativamente.
+- **As-built obrigatório:** instalação/obra só "fecha" quando a planta foi
+  atualizada. Coloque isso no processo da equipe, não na boa vontade.
+- **Backup da base de planta** (GIS/OSS) é tão crítico quanto backup de
+  configuração: perder a documentação é perder a operação.
+:::
+
+## Resumo e checklist {#sec-resumo-38}
+
+- Documente três camadas: **física/geográfica**, **lógica/conectividade** e
+  **operacional** (baseline).
+- **Georreferenciar** (GIS) permite localizar falhas, calcular impacto, planejar e
+  despachar.
+- Ligue **cliente ↔ CTO ↔ porta ↔ fibra ↔ ONT ↔ VLAN** — a cadeia que acelera o
+  suporte.
+- Mantenha por **processo** (as-built ao concluir); documentação desatualizada é pior
+  que nenhuma.
+
+**Checklist do capítulo**
+
+- [ ] Registro física, lógica e operacional de cada elemento.
+- [ ] Georreferencio postes/CEOs/CTOs/rotas e clientes por CTO.
+- [ ] Ligo o cadastro do cliente ao ponto físico e lógico da rede.
+- [ ] Atualizo a planta por processo (as-built) e faço backup da base.

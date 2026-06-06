@@ -2,6 +2,116 @@
 title: "Cabos Ópticos (Drop, Autossustentável, Espinha)"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## O cabo certo para cada trecho {#sec-cabos-opticos}
+
+A fibra (capítulo @sec-fibra-tipos) precisa de um **cabo** que a proteja e a leve do
+POP até a casa do cliente, atravessando postes, dutos e fachadas. Escolher o cabo
+errado encarece a obra ou gera falhas: um cabo sem sustentação na rede aérea, um
+*drop* rígido demais no intradomiciliar, ou contagem de fibras insuficiente no
+tronco. Este capítulo cobre os **tipos de cabo da planta externa (OSP)** e onde cada
+um se aplica, completando a visão física da Parte VI.
+
+## Anatomia de um cabo óptico {#sec-cabos-anatomia}
+
+::: {#fig-cabo-anatomia}
+```{.tikz}
+%%| filename: cabo-anatomia
+%%| alt: Corte de cabo óptico mostrando fibras, tubos loose, elemento de tração e capa
+\begin{tikzpicture}[font=\footnotesize]
+  % capa externa
+  \draw[manualgray, fill=manualgray!12] (0,0) circle (1.8);
+  \node[manualgray, anchor=west] at (2.0,1.4) {capa (PE)};
+  % elemento de tração central
+  \draw[manualred, fill=manualred!18] (0,0) circle (0.35);
+  \node[manualred, anchor=west] at (2.0,0.6) {elemento de tração};
+  % tubos loose com fibras
+  \foreach \a in {0,60,...,300}{
+    \draw[manualgreen, fill=manualgreen!16] (\a:1.05) circle (0.42);
+    \fill[manualblue] (\a:1.05) circle (0.06);
+  }
+  \node[manualgreen, anchor=west] at (2.0,-0.2) {tubos loose};
+  \node[manualblue, anchor=west] at (2.0,-1.0) {fibras (por cor)};
+\end{tikzpicture}
+```
+Corte típico: fibras (identificadas **por cor**) dentro de **tubos loose**, ao redor
+de um **elemento de tração** central, tudo sob uma **capa** de proteção.
 :::
+
+Elementos comuns:
+
+- **Fibras** — identificadas pelo **padrão de cores** (azul, laranja, verde,
+  marrom…), essencial para emendar a fibra certa (capítulo @sec-emendas).
+- **Tubos (loose tube)** — alojam as fibras com folga, protegendo de tração/umidade;
+  cabos *tight buffer* são mais para uso interno.
+- **Elemento de tração** — fio/fibra de aramida ou aço que aguenta o esforço
+  mecânico (vão entre postes).
+- **Capa** — PE para externo (UV, água); LSZH para interno (baixa fumaça).
+- **Geleia/elemento bloqueador de água** em cabos externos.
+
+## Tipos por aplicação {#sec-cabos-tipos}
+
+| Cabo | Onde | Características |
+|---|---|---|
+| **Drop (flat)** | CTO → casa | 1–2 fibras G.657, com fio de aço/aramida, fácil de manusear |
+| **Autossustentável (AS/ASU)** | rede aérea (postes) | tem sustentação própria, dispensa cordoalha; **espinha de peixe** |
+| **Espinha / lançamento por cordoalha** | rede aérea | preso a uma cordoalha de aço separada |
+| **Subterrâneo / dutado** | dutos, túneis | reforço contra esmagamento/roedores |
+| **CFOA / alta contagem** | tronco/primária | dezenas a centenas de fibras |
+
+- **Drop:** o trecho final (capítulo @sec-cto), **G.657** (insensível a curvatura);
+  o elo mais frágil — instale sem dobra/tração.
+- **AS (autossustentável):** o cavalo de batalha da rede aérea do ISP — leva a
+  primária/secundária entre postes **sem cordoalha separada**, identificado pelo
+  formato em "8" (mensageiro integrado) ou redondo com aramida.
+- **Alta contagem (espinha):** o tronco que sai do POP, com muitas fibras para servir
+  bairros inteiros (capítulo @sec-fttx).
+
+## Contagem de fibras e reserva {#sec-cabos-contagem}
+
+Dimensionar a **contagem** é planejamento de longo prazo: puxar cabo é caro, então
+**sobre-dimensiona-se**. Um tronco que hoje precisa de 12 fibras costuma ser lançado
+com 24/48 para crescimento e reserva. Regra prática: separe fibras para **serviço
+atual + expansão + reserva técnica** (reparo). Cabo sem fibra sobrando obriga a nova
+obra a cada crescimento.
+
+## Padrão de cores {#sec-cabos-cores}
+
+O **código de cores** identifica fibras e tubos de forma padronizada (azul, laranja,
+verde, marrom, cinza, branco, vermelho, preto, amarelo, violeta, rosa, aqua). Saber a
+sequência é o que permite, anos depois, **achar a fibra certa** numa CEO com dezenas
+de fibras. Combine com a **documentação** (capítulo @sec-doc-georref): cor + posição
++ registro = reparo rápido.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Padronize por trecho:** **AS** na rede aérea (primária/secundária), **drop
+  G.657** no cliente, **alta contagem** no tronco. Menos SKUs, menos erro de campo.
+- **Sobre-dimensione o tronco:** lance 2–4× a fibra necessária hoje. O custo extra do
+  cabo é pequeno perto do custo de **relançar** depois (mão de obra, autorização de
+  poste, trânsito).
+- **Respeite tração e raio de curvatura** no lançamento — esticar demais o cabo aéreo
+  ou dobrar no fechamento da CTO gera **macrobending** (capítulo
+  @sec-fibra-principios) e perda que só aparece semanas depois.
+- **Aluguel de poste é gargalo:** o cabo AS reduz ferragens, mas o **ponto de fixação
+  no poste** depende de acordo com a concessionária de energia (capítulo
+  @sec-infraestrutura). Planeje a ocupação.
+- **Cor + documentação sempre:** sem o código de cores registrado, uma CEO de 48
+  fibras vira loteria no próximo reparo.
+:::
+
+## Resumo e checklist {#sec-resumo-35}
+
+- O cabo protege e transporta a fibra; escolha por **trecho**: **drop** (cliente),
+  **AS** (aéreo), **alta contagem** (tronco), **dutado** (subterrâneo).
+- Conheça a **anatomia** (fibras por cor, tubos loose, tração, capa) e o **padrão de
+  cores**.
+- **Sobre-dimensione** a contagem do tronco (expansão + reserva).
+- Respeite **tração/curvatura** no lançamento para não criar perda futura.
+
+**Checklist do capítulo**
+
+- [ ] Seleciono o tipo de cabo certo para cada trecho da planta.
+- [ ] Identifico fibras/tubos pelo código de cores.
+- [ ] Dimensiono a contagem do tronco com folga de expansão e reserva.
+- [ ] Lanço o cabo respeitando tração e raio de curvatura.
