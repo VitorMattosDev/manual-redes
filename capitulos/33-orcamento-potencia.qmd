@@ -63,8 +63,8 @@ final deve ficar **bem acima** da linha de sensibilidade, com margem.
 
 | Elemento | Perda |
 |---|---|
-| Fibra @1490 nm | 0,28 dB/km |
-| Fibra @1310 nm | 0,33 dB/km |
+| Fibra em 1490 nm | 0,28 dB/km |
+| Fibra em 1310 nm | 0,33 dB/km |
 | Conector (par) | 0,3–0,5 dB |
 | Fusão | 0,05–0,10 dB |
 | Splitter 1:2 / 1:4 | 3,5 / 7,0 dB |
@@ -75,7 +75,7 @@ final deve ficar **bem acima** da linha de sensibilidade, com margem.
 ## Exercício resolvido 1 — árvore 1:2 + 1:8 {#sec-orcamento-ex1}
 
 **Cenário:** OLT GPON Classe C+ ($P_{Tx}=+5$ dBm, sensibilidade −28 dBm → orçamento
-**33 dB**). Árvore: **8 km** de fibra @1490 nm, splitter **1:2** na primária + **1:8**
+**33 dB**). Árvore: **8 km** de fibra em 1490 nm, splitter **1:2** na primária + **1:8**
 na CTO, **4 conectores** (DIO, splitter, CTO, ONT) e **3 fusões**. Margem 3 dB.
 
 Soma das perdas:
@@ -96,7 +96,7 @@ orçamento: `33 − 21,08 ≈ 12 dB`. **Fecha com folga**, dá até para estende
 
 ## Exercício resolvido 2 — onde quebra {#sec-orcamento-ex2}
 
-**Cenário:** mesma OLT, mas árvore agressiva: **18 km** @1490, splitter **1:64**, 4
+**Cenário:** mesma OLT, mas árvore agressiva: **18 km** em 1490 nm, splitter **1:64**, 4
 conectores, 5 fusões, margem 3 dB.
 
 | Item | Cálculo | dB |

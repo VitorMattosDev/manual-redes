@@ -2,6 +2,118 @@
 title: "SDN e Automação de Rede"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Operar a rede como software {#sec-sdn}
+
+Configurar equipamento por equipamento, na mão, via SSH (capítulo @sec-outros-ssh),
+não escala: é lento, propenso a erro e impossível de auditar quando a rede tem
+centenas de nós. **SDN** (*Software-Defined Networking*) e **automação** mudam a
+abordagem: a rede passa a ser **programável e gerida por software**, com configuração
+**versionada**, mudanças **automatizadas** e estado **consultável por API**. Para o
+ISP, isso significa **provisionar mais rápido**, **errar menos** e **reagir
+automaticamente** — do provisionamento de ONT (capítulo @sec-provisionamento) à
+mitigação de DDoS (capítulo @sec-ddos).
+
+## A ideia central do SDN {#sec-sdn-ideia}
+
+O SDN separa o **plano de controle** (a "inteligência" que decide as rotas/políticas)
+do **plano de dados** (o hardware que encaminha pacotes), centralizando o controle:
+
+::: {#fig-sdn}
+```{.tikz}
+%%| filename: sdn-planos
+%%| alt: Controlador SDN centralizado programando switches/roteadores via API, e aplicações acima
+\begin{tikzpicture}[font=\footnotesize,
+    b/.style={draw=manualgray, rounded corners=2pt, minimum height=8mm, align=center}]
+  \node[b, fill=manualyellow!18, minimum width=40mm] (app) at (0,2.2) {Aplicações / OSS / orquestração};
+  \node[b, fill=manualgreen!16, minimum width=40mm] (ctrl) at (0,0.9) {Controlador SDN (plano de controle)};
+  \node[b, fill=manualblue!12, minimum width=11mm] (s1) at (-2.6,-0.6) {Switch};
+  \node[b, fill=manualblue!12, minimum width=11mm] (s2) at (0,-0.6) {Roteador};
+  \node[b, fill=manualblue!12, minimum width=11mm] (s3) at (2.6,-0.6) {OLT};
+  \draw[vetor, manualgreen] (app)-- node[right,font=\scriptsize]{API (northbound)} (ctrl);
+  \draw[vetor, manualblue] (ctrl)-- node[left,font=\scriptsize]{} (s1);
+  \draw[vetor, manualblue] (ctrl)--(s2);
+  \draw[vetor, manualblue] (ctrl)-- node[right,font=\scriptsize]{southbound (NETCONF/OpenFlow)} (s3);
+  \node[manualgray, font=\scriptsize] at (0,-1.4) {plano de dados (encaminhamento)};
+\end{tikzpicture}
+```
+SDN: o **controlador** centraliza o plano de controle e programa os equipamentos
+(plano de dados) por APIs *southbound*; aplicações/OSS pedem serviços por API
+*northbound*.
 :::
+
+Na prática do ISP, "SDN puro" (OpenFlow) é menos comum; o que **realmente** transforma
+a operação é a **automação** sobre equipamentos tradicionais via **APIs e modelos**.
+
+## As ferramentas da automação {#sec-sdn-ferramentas}
+
+| Camada | Tecnologia | Para quê |
+|---|---|---|
+| **Configuração** | **NETCONF/RESTCONF + YANG** | configurar por modelo estruturado (não CLI frágil) |
+| **Telemetria** | *streaming telemetry*, gNMI | métricas em alta frequência (capítulo @sec-monitoramento) |
+| **Orquestração** | Ansible, scripts, Python | aplicar mudanças em massa, idempotentes |
+| **Versionamento** | Git | histórico, revisão, *rollback* da configuração |
+| **Fonte da verdade** | IPAM/inventário | dados que alimentam a automação |
+
+A combinação **"infraestrutura como código"** — config descrita em arquivos,
+versionada em Git, aplicada por Ansible/scripts — é o ganho mais acessível e imediato,
+mesmo sem um controlador SDN formal.
+
+## Casos de uso no ISP {#sec-sdn-casos}
+
+- **Provisionamento automático:** cadastro do cliente dispara, via API, a configuração
+  da ONT/OLT (capítulo @sec-provisionamento) e do RADIUS (capítulo @sec-radius) — *zero
+  touch*.
+- **Mudança em massa:** aplicar um ajuste (NTP, ACL, banner) em **todos** os switches
+  com um *playbook*, igual e auditável.
+- **Reação automática:** detecção de DDoS por flow dispara **RTBH/Flowspec** via API
+  (capítulo @sec-ddos).
+- **Backup e conformidade:** coletar e versionar configs automaticamente; detectar
+  desvio do padrão (*drift*).
+- **Self-service:** portal do cliente corporativo que aciona mudanças (banda, VPN) que
+  a automação aplica.
+
+## Segment Routing e a rede programável {#sec-sdn-sr}
+
+O **Segment Routing (SR/SRv6)** — evolução do MPLS (capítulo @sec-mpls) — encaixa-se
+no mundo SDN: o **caminho é codificado no próprio pacote** (lista de segmentos), sem
+estado por fluxo no núcleo, e um **controlador** pode computar caminhos otimizados
+(TE) centralmente. É a direção das redes de operadora modernas: **engenharia de
+tráfego dirigida por software**.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Comece pela automação, não pelo "SDN".** O maior ganho imediato é
+  **infraestrutura como código**: configs em **Git**, mudanças por **Ansible/scripts**,
+  e provisionamento por **API**. Não precisa de controlador OpenFlow para colher 80%
+  do benefício.
+- **Provisionamento zero-touch** é o caso que mais paga: ONT entra por SN, sistema
+  configura OLT + RADIUS automaticamente (capítulos @sec-provisionamento,
+  @sec-radius) — escala o crescimento sem inflar a equipe nem os erros.
+- **Fonte da verdade (IPAM/inventário)** alimenta a automação: sem dados confiáveis
+  (capítulo @sec-doc-georref), automatizar só **propaga erros mais rápido**.
+- **NETCONF/YANG > CLI scraping:** prefira APIs estruturadas a "raspar" CLI, que
+  quebra a cada mudança de firmware.
+- **Automação fecha o ciclo com monitoramento:** detecção (flow/SNMP, capítulo
+  @sec-monitoramento) → ação (RTBH/Flowspec, bloqueio, failover) sem humano no meio,
+  para incidentes conhecidos.
+- **Versione e teste:** mudança automatizada errada erra em **toda** a rede de uma vez
+  — Git + revisão + *rollback* + ambiente de teste são rede de segurança.
+:::
+
+## Resumo e checklist {#sec-resumo-54}
+
+- **SDN** separa controle e dados (controlador + APIs); no ISP, a **automação** sobre
+  equipamentos tradicionais é o ganho real.
+- Ferramentas: **NETCONF/YANG**, **telemetria**, **Ansible/Python**, **Git** e uma
+  **fonte da verdade** (IPAM).
+- Casos: **provisionamento zero-touch**, mudança em massa, **reação automática**
+  (DDoS), backup/conformidade.
+- **SR/SRv6** leva a engenharia de tráfego para o mundo programável.
+
+**Checklist do capítulo**
+
+- [ ] Explico a separação de planos do SDN e o papel das APIs.
+- [ ] Adoto infraestrutura como código (Git + Ansible/API) para mudanças.
+- [ ] Automatizo provisionamento ligando cadastro → OLT/RADIUS.
+- [ ] Fecho o ciclo detecção→ação e versiono/testo a automação.

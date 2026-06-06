@@ -2,6 +2,118 @@
 title: "MPLS e VPNs (L2VPN/L3VPN, VPLS)"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Quando o roteamento puro não basta {#sec-mpls}
+
+À medida que o provedor cresce, o roteamento IP puro (capítulo @sec-roteamento) começa
+a limitar: é difícil oferecer **VPNs corporativas** (interligar filiais de um cliente
+com isolamento), fazer **engenharia de tráfego** fina, e separar serviços. O **MPLS**
+(*Multiprotocol Label Switching*) resolve isso comutando pacotes por **rótulos
+(labels)** em vez de consultar o IP a cada salto, criando uma base flexível para
+**VPNs L2/L3**, *traffic engineering* e qualidade. É a tecnologia que transforma um ISP
+regional em um provedor capaz de vender **serviços** além de "banda".
+
+## Como o MPLS comuta {#sec-mpls-comutacao}
+
+No MPLS, na **entrada** da rede (roteador de borda, **PE** — *Provider Edge*) o pacote
+recebe um **rótulo**; os roteadores do núcleo (**P** — *Provider*) comutam **só pelo
+rótulo** (rápido, sem olhar o IP); na **saída**, o rótulo é removido. O caminho
+rotulado é um **LSP** (*Label Switched Path*).
+
+::: {#fig-mpls}
+```{.tikz}
+%%| filename: mpls-lsp
+%%| alt: Pacote entrando em PE com push de label, comutado por P routers, e pop no PE de saída
+\begin{tikzpicture}[font=\footnotesize,
+    r/.style={draw=manualgray, circle, fill=manualblue!12, minimum size=9mm, inner sep=0pt}]
+  \node[r, fill=manualgreen!16] (pe1) at (0,0) {PE1};
+  \node[r] (p1) at (2.6,0) {P};
+  \node[r] (p2) at (5.2,0) {P};
+  \node[r, fill=manualgreen!16] (pe2) at (7.8,0) {PE2};
+  \draw[vetor, manualblue] (pe1)--(p1); \draw[vetor, manualblue] (p1)--(p2); \draw[vetor, manualblue] (p2)--(pe2);
+  \node[manualred, font=\scriptsize, align=center] at (0,-1.0) {push label\\(classifica)};
+  \node[manualgray, font=\scriptsize, align=center] at (3.9,-1.0) {comuta por label (rápido)};
+  \node[manualred, font=\scriptsize, align=center] at (7.8,-1.0) {pop label\\(entrega)};
+  \node[manualblue, font=\scriptsize] at (3.9,0.6) {LSP (caminho rotulado)};
+\end{tikzpicture}
+```
+MPLS: o **PE** de entrada **empilha** um rótulo (classificando o pacote no serviço/LSP
+certo); os **P** comutam só por rótulo; o PE de saída **remove** e entrega. Rótulos
+podem ser **empilhados** (VPN sobre LSP).
 :::
+
+A "mágica" é o **empilhamento de rótulos**: um rótulo identifica o **LSP** (por onde
+ir) e outro o **serviço/VPN** (de quem é o pacote) — permitindo VPNs sobre a mesma
+infraestrutura.
+
+## L3VPN: roteamento isolado por cliente {#sec-mpls-l3vpn}
+
+A **L3VPN** (MPLS/BGP, RFC 4364) entrega a cada cliente uma **tabela de roteamento
+própria e isolada** (**VRF**) sobre o mesmo *backbone*. Filiais de uma empresa em
+cidades diferentes ficam na **mesma VPN** roteada, com endereçamento próprio
+(inclusive sobreposto ao de outro cliente — as VRFs isolam). O **MP-BGP** distribui as
+rotas de VPN entre os PEs. É o produto corporativo clássico: "interligar minhas
+unidades como se fossem uma rede só".
+
+## L2VPN e VPLS: estender a camada 2 {#sec-mpls-l2vpn}
+
+Quando o cliente quer que as pontas estejam no **mesmo domínio de camada 2** (mesma
+LAN/VLAN entre cidades):
+
+- **L2VPN ponto a ponto (VPWS / pseudowire):** "fio virtual" que transporta um enlace
+  L2 (uma VLAN) de um ponto a outro pela MPLS — como se fosse um cabo direto.
+- **VPLS:** emula um **switch** distribuído — várias pontas no **mesmo domínio de
+  broadcast** (multiponto), como uma LAN espalhada pela cidade.
+
+| Serviço | Camada | Entrega |
+|---|---|---|
+| **L3VPN** | 3 | roteamento isolado (VRF) entre sites |
+| **VPWS** (L2 p2p) | 2 | enlace ponto a ponto (pseudowire) |
+| **VPLS** | 2 | LAN multiponto (switch virtual) |
+
+## Engenharia de tráfego e segregação {#sec-mpls-te}
+
+Além de VPNs, o MPLS habilita:
+
+- **TE (Traffic Engineering):** direcionar LSPs por caminhos específicos (não só o
+  "mais curto"), reservando banda e contornando gargalos.
+- **FRR (Fast Reroute):** proteção em **< 50 ms** desviando o LSP para um caminho de
+  backup pré-calculado (complementa o anel, capítulo @sec-redundancia).
+- **Segregação de serviços:** voz, gestão, internet e VPNs de clientes em contextos
+  separados sobre a mesma rede.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **MPLS é o passo de "ISP que vende serviço".** Com L3VPN/VPLS você atende
+  **corporativo** (interligar filiais, MPLS dedicado) — receita maior e SLA — sobre o
+  mesmo *backbone* da internet residencial.
+- **Comece quando a escala pedir.** Um ISP pequeno roda bem com OSPF+BGP (capítulo
+  @sec-roteamento). Introduza MPLS quando precisar de **VPNs**, **TE** ou
+  **segregação** — não por modismo; ele adiciona complexidade.
+- **VPLS/L2VPN para clientes que querem "mesma LAN":** câmeras, PABX, redes que
+  dependem de broadcast entre unidades. VPWS para enlaces ponto a ponto.
+- **FRR + anel** dão resiliência de núcleo de operadora (< 50 ms) — combine com
+  BFD/ERPS (capítulo @sec-redundancia).
+- **Planeje o IGP primeiro:** MPLS apoia-se no IGP (OSPF/IS-IS) e em LDP/SR para
+  distribuir rótulos; uma base de roteamento limpa (loopbacks, sumarização) é
+  pré-requisito.
+- **Segment Routing (SR/SRv6)** é a evolução do MPLS clássico (menos protocolos de
+  rótulo, integra-se a SDN, capítulo @sec-sdn) — avalie ao modernizar.
+:::
+
+## Resumo e checklist {#sec-resumo-53}
+
+- **MPLS** comuta por **rótulos** (push no PE, swap nos P, pop no PE) sobre **LSPs**;
+  rótulos **empilháveis** habilitam VPNs.
+- **L3VPN** (VRF + MP-BGP) dá roteamento **isolado** por cliente; **L2VPN/VPLS**
+  estendem a **camada 2** (ponto a ponto / multiponto).
+- Habilita **TE**, **FRR (< 50 ms)** e **segregação** de serviços.
+- Adote **quando a escala/serviços pedirem**; apoia-se num IGP limpo; **SR/SRv6** é a
+  evolução.
+
+**Checklist do capítulo**
+
+- [ ] Explico push/swap/pop de rótulos e o conceito de LSP.
+- [ ] Diferencio L3VPN (VRF) de L2VPN/VPLS e quando usar cada um.
+- [ ] Sei o que MPLS habilita (TE, FRR, segregação) além de VPN.
+- [ ] Avalio adotar MPLS conforme escala e produtos corporativos.

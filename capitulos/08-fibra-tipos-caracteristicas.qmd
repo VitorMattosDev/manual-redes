@@ -71,9 +71,9 @@ Cada elemento da planta consome dB. Estes são **valores de referência de campo
 
 | Elemento | Perda típica |
 |---|---|
-| Fibra SMF @1310 nm | ~0,33 dB/km |
-| Fibra SMF @1490 nm | ~0,28 dB/km |
-| Fibra SMF @1550 nm | ~0,20 dB/km |
+| Fibra SMF em 1310 nm | ~0,33 dB/km |
+| Fibra SMF em 1490 nm | ~0,28 dB/km |
+| Fibra SMF em 1550 nm | ~0,20 dB/km |
 | Fusão (emenda por fusão) | 0,05–0,10 dB |
 | Conector (par) | 0,3–0,5 dB |
 | Splitter 1:2 | ~3,5 dB |
@@ -81,7 +81,7 @@ Cada elemento da planta consome dB. Estes são **valores de referência de campo
 | Splitter 1:16 | ~13,5 dB |
 | Splitter 1:32 | ~17,5 dB |
 
-**Exemplo rápido.** Um enlace de 12 km @1490 nm com 2 conectores e 3 fusões:
+**Exemplo rápido.** Um enlace de 12 km em 1490 nm com 2 conectores e 3 fusões:
 `12 × 0,28 = 3,36` (fibra) `+ 2 × 0,4 = 0,8` (conectores) `+ 3 × 0,08 = 0,24`
 (fusões) `≈ 4,4 dB`. Some os splitters e compare com o orçamento da OLT (capítulo
 @sec-orcamento) — é assim que se sabe, **antes de ir a campo**, se o enlace fecha.

@@ -2,6 +2,122 @@
 title: "Implantação de IPv6 no Provedor"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Tirar o IPv6 do papel {#sec-ipv6-isp}
+
+Vimos os fundamentos do IPv6 (capítulo @sec-ipv6) e por que ele importa: o IPv4
+acabou, o CGNAT (capítulo @sec-nat-cgnat) é caro e problemático, e o tráfego IPv6 no
+Brasil já é expressivo. Este capítulo fecha o manual com o **como**: o **plano de
+implantação** de IPv6 num provedor real, em **dual-stack**, do *backbone* ao
+assinante. É um projeto que toca **todas** as partes anteriores — endereçamento,
+roteamento, BNG, RADIUS, DNS, segurança — e por isso é o encerramento natural.
+
+## Por que implantar (de novo, com números) {#sec-ipv6-isp-porque}
+
+- **Alívio do CGNAT:** com dual-stack, **grande parte do tráfego** (vídeo, CDNs,
+  grandes plataformas) vai por **IPv6 nativo**, **fora** do CGNAT — menos sessões NAT,
+  menos *port exhaustion*, menos custo de IPv4 e menos chamados (jogos/consoles/
+  câmeras funcionam melhor).
+- **Endereço público real** por cliente — fim das limitações do CGNAT para quem
+  precisa de entrada.
+- **Futuro:** conteúdo e serviços crescentemente IPv6-only; estar pronto é competitivo.
+
+## A estratégia: dual-stack {#sec-ipv6-isp-dualstack}
+
+A abordagem recomendada é **dual-stack**: rodar **IPv4 e IPv6 em paralelo**, cada
+serviço escolhendo o que estiver disponível (apps preferem IPv6 quando há —
+*Happy Eyeballs*). Evita-se "ilhas" e a tradução fica mínima. Mecanismos de transição
+(NAT64/464XLAT, DS-Lite) existem para cenários IPv6-only, mas para a maioria dos ISPs
+regionais **dual-stack é o caminho mais simples e robusto**.
+
+## O plano de numeração {#sec-ipv6-isp-plano}
+
+Tudo começa pelo **endereçamento hierárquico** (capítulo @sec-ipv6), pensado para
+**sumarizar no BGP** (capítulo @sec-subredes):
+
+::: {#fig-ipv6-plano}
+```{.tikz}
+%%| filename: ipv6-plano
+%%| alt: Hierarquia de prefixos IPv6 do ISP: /32 para o ASN, /48 por POP, /56 por assinante, /64 por LAN
+\begin{tikzpicture}[font=\footnotesize,
+    b/.style={draw=manualgray, rounded corners=2pt, minimum height=8mm, align=center}]
+  \node[b, fill=manualblue!14, minimum width=30mm] (a) {/32 — alocação do ISP (NIC.br)};
+  \node[b, fill=manualgreen!14, minimum width=26mm, below=5mm of a] (pop) {/48 — por POP/região};
+  \node[b, fill=manualyellow!18, minimum width=22mm, below=5mm of pop] (cli) {/56 — por assinante (DHCPv6-PD)};
+  \node[b, fill=manualred!12, minimum width=18mm, below=5mm of cli] (lan) {/64 — por LAN do cliente};
+  \draw[vetor, manualblue] (a)--(pop); \draw[vetor, manualblue] (pop)--(cli); \draw[vetor, manualblue] (cli)--(lan);
+\end{tikzpicture}
+```
+Plano hierárquico: o **/32** do ISP fatia em **/48 por POP**, **/56 por assinante**
+(via DHCPv6-PD) e **/64 por LAN** — hierarquia que permite sumarizar no BGP.
 :::
+
+- **/32** do **Registro.br** para o seu ASN.
+- **/48 por POP/região** (sumarizável).
+- **/56 por assinante** (residencial) entregue por **DHCPv6-PD** (256 /64s para a casa).
+- **/64 por LAN** (regra inviolável do SLAAC).
+
+## O passo a passo da implantação {#sec-ipv6-isp-passos}
+
+1. **Obter o bloco** (/32) e **habilitar IPv6 no BGP** (capítulo @sec-bgp): anunciar o
+   /32, peering IPv6 no IX e trânsito dual-stack, **ROA/RPKI** também para IPv6.
+2. **Core/IGP dual-stack:** IPv6 no backbone (OSPFv3/IS-IS), loopbacks IPv6,
+   roteamento interno.
+3. **BNG:** habilitar IPv6 nas sessões — **RA** para o /64 do enlace e **DHCPv6-PD**
+   para o /56 do cliente; atributos no **RADIUS** (Delegated-IPv6-Prefix, capítulo
+   @sec-radius).
+4. **DNS dual-stack:** recursivo respondendo sobre IPv6 e servindo **AAAA**; publicar
+   AAAA dos seus serviços (capítulo @sec-dns).
+5. **CPE/ONT:** garantir que o equipamento do cliente faz **DHCPv6-PD + RA/SLAAC** na
+   LAN (capítulo @sec-onu-ont); homologar firmwares.
+6. **Segurança:** **não filtrar ICMPv6** (NDP/PMTUD), aplicar filtros equivalentes ao
+   IPv4, anti-spoofing também em IPv6 (capítulo @sec-seguranca).
+7. **Monitorar:** acompanhar a **adoção** (% de tráfego IPv6) e a saúde (capítulo
+   @sec-monitoramento).
+
+## Armadilhas comuns {#sec-ipv6-isp-armadilhas}
+
+- **Filtrar ICMPv6** — quebra NDP/SLAAC/PMTUD; o IPv6 **depende** dele (capítulo
+  @sec-icmp).
+- **Sub-rede menor que /64 na LAN** — quebra SLAAC; **LAN é sempre /64**.
+- **Esquecer segurança IPv6** — firewall só no IPv4 deixa o IPv6 **exposto**; aplique
+  paridade de políticas.
+- **CPE que não suporta PD** — sem DHCPv6-PD o cliente não recebe prefixo; homologue o
+  parque.
+- **DNS sem AAAA / reverso IPv6** — degrada a experiência e o e-mail.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Dual-stack é meta, não opção.** Cada % de tráfego que migra para IPv6 **alivia o
+  CGNAT** (menos NAT, menos custo de IPv4, menos chamado). Meça a adoção e celebre a
+  curva subindo.
+- **RADIUS entrega o /56:** padronize o atributo Delegated-IPv6-Prefix por plano
+  (capítulo @sec-radius); o BNG faz RA (/64 WAN) + PD (/56 LAN). É o coração da
+  entrega ao assinante.
+- **Homologue CPE/ONT com PD + firewall IPv6:** o elo fraco costuma ser o equipamento
+  do cliente. Sem PD não há IPv6 na casa; sem firewall IPv6, expõe a LAN.
+- **ICMPv6 liberado e segurança em paridade:** replique no IPv6 as proteções do IPv4
+  (anti-spoofing, ACLs) **sem** matar o NDP/PMTUD.
+- **BGP + RPKI também em IPv6:** anuncie o /32 sumarizado, com ROA; peering IPv6 no IX
+  traz o conteúdo nacional nativo.
+- **Vá incremental:** core → BNG → piloto de clientes → massa. Dual-stack permite
+  ligar IPv6 **sem** desligar nada — risco baixo, ganho crescente.
+:::
+
+## Resumo e checklist {#sec-resumo-55}
+
+- IPv6 em **dual-stack** alivia o CGNAT e prepara o ISP para o futuro; é projeto que
+  toca toda a rede.
+- **Plano hierárquico:** /32 → /48 (POP) → /56 (assinante via **DHCPv6-PD**) → /64
+  (LAN).
+- Passos: **BGP/RPKI**, core/IGP, **BNG (RA+PD via RADIUS)**, **DNS AAAA**, CPE,
+  segurança, monitorar adoção.
+- Evite as armadilhas: **não filtre ICMPv6**, **LAN sempre /64**, **segurança em
+  paridade**, **CPE com PD**.
+
+**Checklist do capítulo**
+
+- [ ] Defino o plano /32→/48→/56→/64 e a entrega por DHCPv6-PD.
+- [ ] Habilito IPv6 em BGP/RPKI, core, BNG (RADIUS) e DNS (AAAA).
+- [ ] Homologo CPE/ONT com PD e firewall IPv6.
+- [ ] Mantenho ICMPv6 liberado, segurança em paridade e meço a adoção.
