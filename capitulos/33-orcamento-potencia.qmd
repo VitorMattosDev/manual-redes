@@ -2,6 +2,156 @@
 title: "Orçamento de Potência Óptica (Power Budget)"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## A conta que decide se o cliente fecha {#sec-orcamento}
+
+O **orçamento de potência** (*power budget*) é **a** conta da PON: ela diz, **antes
+de ir a campo**, se o sinal que sai da OLT chega à ONT mais distante **acima da
+sensibilidade** — ou seja, se o cliente vai funcionar. É só uma **soma de dB** (todas
+as perdas do caminho), comparada ao que a OLT tem de orçamento. Dominar essa conta é
+o que transforma projeto em certeza e diagnóstico em método. Ela costura tudo que
+vimos na Parte VI: fibra (cap. @sec-fibra-principios), splitters (@sec-splitters),
+conectores (@sec-conectores), fusões (@sec-emendas) e a classe da OLT (@sec-gpon).
+
+## Os termos da conta {#sec-orcamento-termos}
+
+$$P_{Rx} = P_{Tx} - \big(\text{fibra} + \text{splitters} + \text{conectores} +
+\text{fusões} + \text{margem}\big)$$
+
+- **$P_{Tx}$** — potência que a OLT injeta (ex.: +5 dBm em GPON Classe C+).
+- **Perdas** — somadas em dB (capítulo @sec-fibra-principios): tudo atenua.
+- **Margem de segurança** — folga para envelhecimento, reparos futuros, sujeira
+  (tipicamente **3 dB**).
+- **$P_{Rx}$** — o que chega à ONT; tem de ficar **acima da sensibilidade** dela
+  (ex.: −28 dBm) — idealmente na faixa saudável (−8 a −24 dBm, capítulo
+  @sec-onu-potencia).
+
+O **orçamento da classe** (capítulo @sec-gpon) é a diferença entre $P_{Tx}$ e a
+sensibilidade: **B+ ≈ 28 dB**, **C+ ≈ 32 dB**. Sua soma de perdas + margem **tem de
+caber** nesse número.
+
+::: {#fig-orcamento-cascata}
+```{.tikz}
+%%| filename: orcamento-cascata
+%%| alt: Gráfico da potência óptica caindo ao longo do caminho da OLT até a ONT em degraus por elemento
+\begin{tikzpicture}
+\begin{axis}[
+    width=11cm, height=6cm,
+    xlabel={Caminho óptico (elementos)},
+    ylabel={Potência (dBm)},
+    xmin=0, xmax=10, ymin=-30, ymax=8,
+    ytick={5,0,-5,-10,-15,-20,-25,-28},
+    xtick={0.5,2,4,6,8,9.5},
+    xticklabels={OLT,fibra,1:2,fibra,1:8,ONT},
+    axis lines=left, font=\footnotesize,
+  ]
+  % degraus de queda
+  \addplot[curva, mark=*] coordinates {
+    (0.5,5) (2,4) (2.001,0.5) (4,-0.2) (4.001,-10.7) (6,-11.5) (8,-12.2) (9.5,-12.2)
+  };
+  % linha de sensibilidade
+  \addplot[destaque, dashed, domain=0:10] coordinates {(0,-28) (10,-28)};
+  \node[manualred, font=\footnotesize, anchor=west] at (axis cs:4.5,-26) {sensibilidade ($-28$ dBm)};
+  \node[manualblue, font=\footnotesize, anchor=west] at (axis cs:6,-9) {$P_{Rx}\approx-12$ dBm (ok)};
+\end{axis}
+\end{tikzpicture}
+```
+A potência cai em **degraus**: pequenos (fibra) e grandes (splitters). O $P_{Rx}$
+final deve ficar **bem acima** da linha de sensibilidade, com margem.
 :::
+
+## Valores de referência (de bolso) {#sec-orcamento-referencia}
+
+| Elemento | Perda |
+|---|---|
+| Fibra @1490 nm | 0,28 dB/km |
+| Fibra @1310 nm | 0,33 dB/km |
+| Conector (par) | 0,3–0,5 dB |
+| Fusão | 0,05–0,10 dB |
+| Splitter 1:2 / 1:4 | 3,5 / 7,0 dB |
+| Splitter 1:8 / 1:16 | 10,5 / 13,5 dB |
+| Splitter 1:32 / 1:64 | 17,5 / 21,0 dB |
+| Margem de segurança | ~3,0 dB |
+
+## Exercício resolvido 1 — árvore 1:2 + 1:8 {#sec-orcamento-ex1}
+
+**Cenário:** OLT GPON Classe C+ ($P_{Tx}=+5$ dBm, sensibilidade −28 dBm → orçamento
+**33 dB**). Árvore: **8 km** de fibra @1490 nm, splitter **1:2** na primária + **1:8**
+na CTO, **4 conectores** (DIO, splitter, CTO, ONT) e **3 fusões**. Margem 3 dB.
+
+Soma das perdas:
+
+| Item | Cálculo | dB |
+|---|---|---|
+| Fibra | 8 × 0,28 | 2,24 |
+| Splitter 1:2 | — | 3,50 |
+| Splitter 1:8 | — | 10,50 |
+| Conectores | 4 × 0,4 | 1,60 |
+| Fusões | 3 × 0,08 | 0,24 |
+| **Subtotal perdas** | | **18,08** |
+| Margem | | 3,00 |
+| **Total** | | **21,08 dB** |
+
+$P_{Rx} = +5 - 18,08 = \mathbf{-13,1\ dBm}$ — **na faixa saudável**. Sobra de
+orçamento: `33 − 21,08 ≈ 12 dB`. **Fecha com folga**, dá até para estender a árvore.
+
+## Exercício resolvido 2 — onde quebra {#sec-orcamento-ex2}
+
+**Cenário:** mesma OLT, mas árvore agressiva: **18 km** @1490, splitter **1:64**, 4
+conectores, 5 fusões, margem 3 dB.
+
+| Item | Cálculo | dB |
+|---|---|---|
+| Fibra | 18 × 0,28 | 5,04 |
+| Splitter 1:64 | — | 21,00 |
+| Conectores | 4 × 0,4 | 1,60 |
+| Fusões | 5 × 0,08 | 0,40 |
+| Margem | | 3,00 |
+| **Total** | | **31,04 dB** |
+
+$P_{Rx} = +5 - 28,04 = \mathbf{-23,0\ dBm}$. Ainda **acima** de −28, mas a sobra é só
+`33 − 31,04 ≈ 2 dB` — **perigoso**: qualquer conector sujo, uma fusão pior ou
+envelhecimento joga o cliente **abaixo da sensibilidade**. Solução: **reduzir a
+divisão** (1:32), **encurtar** a árvore, ou usar **classe maior**. É exatamente o
+tipo de erro que a conta pega **antes** do chamado.
+
+## Sentido reverso e simetria {#sec-orcamento-reverso}
+
+O orçamento vale **nos dois sentidos**: o *downstream* (OLT→ONT) e o *upstream*
+(ONT→OLT) usam λ diferentes (capítulo @sec-gpon) com atenuações ligeiramente
+distintas e potências de TX diferentes. Em GPON a ONT costuma ter TX menor; verifique
+**os dois sentidos**, mas na prática o *downstream* e a leitura de **Rx na ONT** e de
+**Rx na OLT** (a OLT informa quanto recebe de cada ONT) são as métricas operacionais
+do dia a dia.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Calcule por padrão de árvore, não por cliente:** defina 2–3 padrões (ex.: 1:2+1:8
+  urbano; 1:2+1:16 denso; tap em via longa) e tenha o orçamento de cada um pronto.
+  Instalação vira "cabe neste padrão?".
+- **Sempre 3 dB de margem.** Projeto no limite (sobra < 3 dB) volta como chamado:
+  sujeira, sol no *drop* (macrobending), uma fusão refeita pior — tudo come a folga.
+- **A OLT já te dá o Rx de cada ONT.** Compare o **medido** com o **previsto**: se a
+  ONT deveria estar em −13 e está em −22, há **evento novo** (conector sujo, dobra,
+  fusão ruim) — vá direto ao OTDR (capítulo @sec-otdr) em vez de trocar a ONT.
+- **Cliente "cai à tarde":** clássico de *drop* no limite que piora com o calor —
+  o orçamento estava apertado. Refaça a conta e o *drop*.
+- **Planeje XGS-PON no orçamento:** λ e sensibilidades diferentes mudam levemente a
+  conta; ao coexistir, valide a margem dos dois.
+:::
+
+## Resumo e checklist {#sec-resumo-33}
+
+- Orçamento = $P_{Tx}$ − (fibra + splitters + conectores + fusões + **margem**); o
+  resultado tem de ficar **acima da sensibilidade**.
+- O **splitter** é o maior item; a **margem de 3 dB** é inegociável.
+- Compare o **Rx medido** (OLT/ONT informam) com o **previsto** para localizar
+  eventos.
+- Quando a sobra fica < 3 dB: **reduza divisão**, **encurte** ou **suba a classe**.
+
+**Checklist do capítulo**
+
+- [ ] Monto a soma de perdas e calculo o $P_{Rx}$ de uma árvore.
+- [ ] Comparo o total com o orçamento da classe (B+ 28 / C+ 32 dB) e a sobra.
+- [ ] Sei reconhecer um projeto "no limite" e como corrigi-lo.
+- [ ] Uso o Rx medido vs. previsto para decidir entre OTDR e troca de equipamento.

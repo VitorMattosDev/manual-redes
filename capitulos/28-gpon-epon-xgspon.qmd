@@ -2,6 +2,128 @@
 title: "Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Como uma fibra atende muitos clientes {#sec-gpon}
+
+A **PON** (rede óptica passiva, capítulo @sec-fttx) faz uma única porta da OLT
+atender dezenas de assinantes por uma **árvore de splitters**. Mas se todos
+compartilham a mesma fibra, como evitar que os sinais colidam? A resposta está nos
+**padrões PON** — **GPON** (ITU-T G.984 [@itu_g984]), **EPON** (IEEE), **XGS-PON**
+(G.9807.1 [@itu_g9807]) e **NG-PON2** — que definem **comprimentos de onda**, **taxas**
+e o **mecanismo de arbitragem** do meio compartilhado. No Brasil, **GPON** é o padrão
+dominante, com **XGS-PON** como caminho de evolução.
+
+## Downstream, upstream e WDM {#sec-gpon-wdm}
+
+Na mesma fibra, *down* e *up* usam **comprimentos de onda diferentes** (WDM,
+capítulo @sec-duplex) — assim coexistem sem colidir entre si:
+
+::: {#fig-pon-tdma}
+```{.tikz}
+%%| filename: pon-tdma
+%%| alt: OLT enviando broadcast em downstream e ONTs transmitindo em slots de tempo TDMA no upstream
+\begin{tikzpicture}[font=\footnotesize,
+    on/.style={draw=manualgray, fill=manualblue!8, minimum width=12mm, minimum height=7mm, align=center}]
+  \node[draw=manualgreen, fill=manualgreen!14, minimum width=14mm, minimum height=9mm, align=center] (olt) at (0,0) {OLT};
+  \node[draw=manualgray, fill=manualyellow!18, circle, minimum size=8mm, inner sep=0pt] (sp) at (3,0) {1:N};
+  \node[on] (a) at (6,1.2) {ONT 1};
+  \node[on] (b) at (6,0) {ONT 2};
+  \node[on] (c) at (6,-1.2) {ONT 3};
+  \draw[curva, manualgreen] (olt)--(sp);
+  \draw[curva, manualgreen] (sp)--(a); \draw[curva, manualgreen] (sp)--(b); \draw[curva, manualgreen] (sp)--(c);
+  \node[manualgreen, align=center, font=\scriptsize] at (1.5,0.6) {\textbf{down 1490nm}\\broadcast p/ todos};
+  \node[manualred, align=center, font=\scriptsize] at (8.4,0) {\textbf{up 1310nm}\\TDMA: cada ONT\\no seu slot};
+  \draw[vetor, manualred] (a) to[bend right=12] (9.6,0.5);
+  \draw[vetor, manualred] (b) to[bend right=8] (9.6,0.1);
+  \draw[vetor, manualred] (c) to[bend right=4] (9.6,-0.3);
+\end{tikzpicture}
+```
+GPON: o **downstream** (1490 nm) é **broadcast** — todas as ONTs ouvem tudo, e cada
+uma filtra/decifra só o que é seu; o **upstream** (1310 nm) é **TDMA** — a OLT dá um
+*slot* de tempo a cada ONT para ninguém colidir.
 :::
+
+- **Downstream (OLT→ONTs):** **broadcast**. A OLT transmite para todos; cada ONT lê
+  só os quadros endereçados a ela (com cifragem **AES** para privacidade, já que o
+  vizinho recebe os mesmos bits).
+- **Upstream (ONTs→OLT):** **TDMA** (*Time Division Multiple Access*). A OLT
+  **agenda** *slots* de tempo (via DBA, abaixo) para cada ONT transmitir, evitando
+  colisão no meio compartilhado.
+
+## DBA: repartindo o upstream {#sec-gpon-dba}
+
+O **DBA** (*Dynamic Bandwidth Allocation*) é o cérebro do *upstream*: a OLT distribui
+os *slots* **dinamicamente** conforme a demanda de cada ONT, garantindo bandas
+mínimas contratadas e aproveitando a capacidade ociosa. É o DBA que permite o
+**overbooking** (capítulo @sec-grandezas) funcionar bem — quem precisa, recebe mais
+*slots* no instante.
+
+## Os padrões lado a lado {#sec-gpon-padroes}
+
+| Padrão | Órgão | Down | Up | λ down/up | Split típico |
+|---|---|---|---|---|---|
+| **GPON** | ITU-T G.984 | 2,488 Gbps | 1,244 Gbps | 1490/1310 nm | 1:64 (até 1:128) |
+| **EPON** | IEEE 802.3ah | 1,25 Gbps | 1,25 Gbps | 1490/1310 nm | 1:32 |
+| **XGS-PON** | ITU-T G.9807.1 | 9,953 Gbps | 9,953 Gbps | 1577/1270 nm | 1:64 |
+| **NG-PON2** | ITU-T G.989 | 4×10 Gbps (TWDM) | variável | múltiplos λ | 1:64 |
+
+Pontos práticos:
+
+- **GPON** é assimétrico (mais *down* que *up*), o que casa com o uso residencial.
+- **XGS-PON** é **simétrico 10G** e — crucial — usa **comprimentos de onda
+  diferentes** da GPON (1577/1270), o que permite **coexistência** na mesma fibra via
+  um *combiner* WDM: você sobrepõe XGS-PON à GPON existente e migra clientes
+  gradualmente.
+- **GPON e EPON não se misturam** (padrões/órgãos diferentes — capítulo
+  @sec-protocolos-padroes); ONT GPON não funciona em OLT EPON e vice-versa.
+
+## Distância e divisão: o limite real {#sec-gpon-limites}
+
+GPON especifica alcance lógico de até **20 km** (até 60 km com extensores) e divisão
+de até 1:128 — mas o **limite prático é o orçamento de potência** (capítulo
+@sec-orcamento), não o número no datasheet. Mais divisão = mais perda no splitter;
+mais distância = mais perda na fibra. As **classes ópticas** (B+, C+) definem quanto
+orçamento a OLT/ONT entrega:
+
+| Classe | Orçamento típico |
+|---|---|
+| **B+** | 28 dB |
+| **C+** | 32 dB |
+| C++ | 35 dB |
+
+Com Classe B+ (28 dB), um *split* 1:64 (~17,5 dB) deixa ~10 dB para fibra +
+conectores + fusões — isso define **quão longe** a árvore pode ir.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Padronize GPON Classe C+** para ganhar folga de orçamento (32 dB) — permite
+  *splits* maiores ou árvores mais longas com a mesma margem.
+- **Planeje a migração para XGS-PON** desde já: por usar λ distintos, ela **coexiste**
+  com a GPON na fibra; reserve isso para PONs lotadas ou clientes que pedem simétrico
+  10G, sem reconstruir planta.
+- **Overbooking consciente:** uma porta GPON (~2,5G down) com 64 clientes de 300M tem
+  *ratio* ~7,7:1 (capítulo @sec-grandezas). O **DBA** segura o pico, mas monitore a
+  **ocupação real** da porta PON; quando passar de ~80% no horário nobre, **divida a
+  PON** (mova clientes para outra porta) ou suba para XGS-PON.
+- **AES sempre ligado:** como o *downstream* é broadcast, a cifra protege o cliente
+  do vizinho na mesma árvore — não desabilite.
+- **Não tente GPON+EPON juntos:** são incompatíveis; escolha um ecossistema (no
+  Brasil, GPON).
+:::
+
+## Resumo e checklist {#sec-resumo-28}
+
+- PON resolve o meio compartilhado com **WDM** (down/up por λ), **broadcast+AES** no
+  *down* e **TDMA+DBA** no *up*.
+- **GPON** (2,5/1,25G, assimétrico) domina; **XGS-PON** (10G simétrico) **coexiste**
+  por usar λ diferentes.
+- **GPON ≠ EPON** (incompatíveis); o limite prático de distância/divisão é o
+  **orçamento de potência** e a **classe óptica** (B+/C+).
+- O **DBA** viabiliza o overbooking; monitore a ocupação da porta PON.
+
+**Checklist do capítulo**
+
+- [ ] Explico down (broadcast/AES) e up (TDMA/DBA) na GPON.
+- [ ] Comparo GPON, EPON e XGS-PON em taxa, λ e compatibilidade.
+- [ ] Sei por que XGS-PON coexiste com GPON na mesma fibra.
+- [ ] Relaciono classe óptica (B+/C+) ao orçamento e à distância/divisão.

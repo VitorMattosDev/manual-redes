@@ -2,6 +2,113 @@
 title: "OLT — Optical Line Terminal"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## O cérebro da rede óptica {#sec-olt}
+
+A **OLT** (*Optical Line Terminal*) é o equipamento que **origina** a rede PON: fica
+no **POP** do provedor e é a "cabeça" de todas as árvores de fibra que descem até os
+assinantes (capítulo @sec-fttx). De um lado, ela tem o **uplink** que a conecta ao
+*backbone*/agregador; do outro, **portas PON** que alimentam os splitters e ONTs. É
+na OLT que se **provisiona, autentica, mede e controla** cada ONT — por isso ela é,
+ao mesmo tempo, o ponto de maior concentração de clientes e o ponto de maior risco
+(uma OLT fora do ar derruba milhares de assinantes).
+
+## Anatomia: chassi, placas e portas {#sec-olt-anatomia}
+
+OLTs vêm em dois formatos: **chassi** (modular, grande, para POP central) e
+**pizza box** (compacta, 1U, para POPs menores/distribuídos). No modelo chassi:
+
+::: {#fig-olt-anatomia}
+```{.tikz}
+%%| filename: olt-anatomia
+%%| alt: Chassi de OLT com placas de uplink, placas PON e fontes/controladora redundantes
+\begin{tikzpicture}[font=\footnotesize,
+    sl/.style={draw=manualgray, minimum width=10mm, minimum height=22mm, align=center}]
+  \draw[draw=manualgray, thick] (-0.4,-0.3) rectangle (10.6,2.4);
+  \node[sl, fill=manualred!12] at (0.4,1.05) {Fonte\\A};
+  \node[sl, fill=manualred!12] at (1.6,1.05) {Fonte\\B};
+  \node[sl, fill=manualgreen!14] at (2.8,1.05) {Ctrl\\/MNGT};
+  \node[sl, fill=manualblue!12] at (4.0,1.05) {Uplink\\10/100G};
+  \node[sl, fill=manualyellow!18] at (5.4,1.05) {PON\\16p};
+  \node[sl, fill=manualyellow!18] at (6.6,1.05) {PON\\16p};
+  \node[sl, fill=manualyellow!18] at (7.8,1.05) {PON\\16p};
+  \node[sl, fill=manualyellow!18] at (9.0,1.05) {PON\\16p};
+  \node[manualgray, anchor=west] at (-0.4,-0.6) {fontes + controladora redundantes · placas de uplink · placas PON (cada porta = uma árvore)};
+\end{tikzpicture}
+```
+Chassi de OLT: **fontes** e **controladora** redundantes, placas de **uplink** (ao
+*backbone*) e placas **PON** (cada porta origina uma árvore de splitters/ONTs).
 :::
+
+- **Placas PON** — cada **porta** é uma árvore independente (uma PON), com seu
+  transceiver óptico (SFP PON da classe B+/C+, capítulo @sec-gpon).
+- **Placas de uplink** — agregam o tráfego de todas as PONs para o *backbone*
+  (10/40/100G).
+- **Controladora + fontes redundantes** — *switching* interno, gerência e
+  alimentação; redundância é essencial (capítulo @sec-redundancia).
+
+## O que a OLT faz {#sec-olt-funcoes}
+
+- **Termina a PON:** transmite o *downstream* (broadcast+AES) e agenda o *upstream*
+  (TDMA via **DBA**, capítulo @sec-gpon-dba).
+- **Autentica/registra ONTs:** descobre novas ONTs e as autoriza (por **SN** ou
+  senha — capítulo @sec-provisionamento).
+- **Aplica perfis de serviço:** velocidade (line profile), VLANs por cliente
+  (capítulo @sec-switching), QoS (capítulo @sec-qos).
+- **Mede a planta:** reporta a **potência óptica** recebida de cada ONT (Rx/Tx),
+  essencial para diagnóstico (capítulo @sec-orcamento).
+- **Faz a ponte L2/L3:** entrega o tráfego ao **BNG** (capítulo @sec-bng-pppoe) —
+  em modelo *bridge* (a OLT só comuta L2) ou, em alguns casos, roteando.
+
+## Uplink, VLANs e o caminho ao BNG {#sec-olt-uplink}
+
+A OLT normalmente opera em **bridge**: ela mapeia a **C-VLAN** de cada cliente
+(vinda da ONT) numa **S-VLAN** por PON/região (**Q-in-Q**, capítulo
+@sec-switching-qinq) e entrega tudo num **trunk** ao agregador/BNG, que termina o
+PPPoE/IPoE e roteia. Esse desenho mantém o **isolamento por cliente** da OLT até o
+BNG e a **rastreabilidade**. Dimensione o uplink para a soma realista das PONs
+(overbooking, capítulo @sec-grandezas).
+
+## Dimensionamento e adensamento {#sec-olt-dimensionamento}
+
+Quantos clientes por OLT? Multiplique **portas PON × split por porta**, descontando
+folga. Ex.: uma placa de 16 portas a 1:64 = **1024** clientes potenciais por placa.
+Mas o gargalo costuma ser o **uplink** e o **overbooking**: 16 PONs × 2,5G = 40G de
+*down* na placa — o uplink precisa acompanhar. **Regra:** não encha a OLT só porque
+"cabe ONT"; encha conforme o **uplink** e a **ocupação real** das PONs suportam.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Redundância onde dói:** fontes e uplink **redundantes** (e idealmente
+  controladora). Uma OLT é um **ponto de concentração** — sua queda é incidente de
+  milhares de clientes. Alimente o POP com **nobreak + gerador**.
+- **Energia e clima:** OLT esquenta e não gosta de calor; garanta **climatização** e
+  **aterramento** do POP. Falha térmica de OLT é causa real de queda em massa.
+- **Provisionamento padronizado:** *line/service profiles* prontos por plano; ONT
+  nova entra "por SN" com perfil aplicado automaticamente (capítulo
+  @sec-provisionamento) — menos erro humano.
+- **Monitore Rx de cada ONT pela OLT:** a OLT já te dá a potência recebida; alarme de
+  ONT chegando perto da sensibilidade (ex.: < −27 dBm) antecipa o chamado antes do
+  cliente cair (capítulo @sec-orcamento).
+- **Distribua o risco:** em vez de uma OLT gigante para a cidade toda, POPs menores
+  com OLTs *pizza box* reduzem o **raio de impacto** de uma falha e encurtam a fibra
+  (melhor orçamento).
+:::
+
+## Resumo e checklist {#sec-resumo-29}
+
+- A **OLT** origina a PON no POP: portas PON (uma árvore cada) + uplink ao
+  *backbone*.
+- Ela **termina a PON** (down/up, DBA), **autentica ONTs**, **aplica perfis** e
+  **mede potência**.
+- Opera em **bridge** com **Q-in-Q** (C-VLAN do cliente → S-VLAN da PON) até o
+  **BNG**.
+- Dimensione por **uplink + overbooking**, não só por "ONTs que cabem"; redundância e
+  energia são críticas.
+
+**Checklist do capítulo**
+
+- [ ] Descrevo a anatomia da OLT (PON, uplink, controladora, fontes).
+- [ ] Listo as funções da OLT (terminar PON, autenticar, perfis, medir).
+- [ ] Explico o Q-in-Q da OLT até o BNG e por que mantém isolamento.
+- [ ] Dimensiono clientes/OLT pelo uplink e ocupação, com redundância de energia.

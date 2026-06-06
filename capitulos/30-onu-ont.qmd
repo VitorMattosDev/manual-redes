@@ -2,6 +2,124 @@
 title: "ONU e ONT"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## A ponta da rede óptica {#sec-onu-ont}
+
+A **ONT/ONU** é o equipamento que fica **na casa do assinante** — a outra ponta da
+PON, oposta à OLT (capítulo @sec-olt). É ela que **converte a luz em Ethernet/Wi-Fi**
+e entrega o serviço ao cliente. É também o equipamento mais numeroso da rede (um por
+assinante) e o que mais aparece no suporte: LED de *LOS*, potência óptica, Wi-Fi, e
+reset. Dominar a ONT — seus tipos, sinais e o que medir nela — resolve a maioria dos
+chamados de acesso.
+
+## ONU vs. ONT: a diferença {#sec-onu-vs-ont}
+
+Os termos são usados quase como sinônimos, mas há distinção formal:
+
+- **ONU** (*Optical Network Unit*) — termina a fibra, mas **entrega a outro
+  equipamento** (um roteador/switch do cliente). Sem Wi-Fi/roteamento próprio.
+- **ONT** (*Optical Network Terminal*) — termina a fibra **e** entrega o serviço
+  final (tem roteador, Wi-Fi, portas LAN, VoIP). É o **ONT/roteador** típico
+  residencial.
+
+Na prática brasileira fala-se "ONU/ONT" indistintamente; o que importa é se o
+aparelho é **bridge** (só converte, o cliente usa o próprio roteador) ou **router**
+(faz PPPoE/NAT/Wi-Fi).
+
+## Anatomia e os LEDs que importam {#sec-onu-anatomia}
+
+::: {#fig-ont}
+```{.tikz}
+%%| filename: ont-frente
+%%| alt: ONT com porta óptica, portas LAN, telefone e LEDs PON LOS e Internet
+\begin{tikzpicture}[font=\footnotesize]
+  \draw[draw=manualgray, thick, rounded corners=3pt] (0,0) rectangle (8,2.2);
+  % LEDs
+  \node[ponto, fill=manualgreen] (p1) at (1,1.7) {}; \node[anchor=west,font=\scriptsize] at (1.15,1.7) {Power};
+  \node[ponto, fill=manualgreen] (p2) at (1,1.25) {}; \node[anchor=west,font=\scriptsize] at (1.15,1.25) {PON};
+  \node[ponto, fill=manualred] (p3) at (1,0.8) {}; \node[anchor=west,font=\scriptsize] at (1.15,0.8) {LOS (alarme)};
+  \node[ponto, fill=manualblue] (p4) at (1,0.35) {}; \node[anchor=west,font=\scriptsize] at (1.15,0.35) {Internet};
+  % portas
+  \node[draw=manualgray, fill=manualyellow!18, minimum width=8mm, minimum height=6mm] (opt) at (4.2,1.1) {óptica};
+  \node[draw=manualgray, fill=manualblue!10, minimum width=6mm, minimum height=6mm] (l1) at (5.4,1.1) {LAN};
+  \node[draw=manualgray, fill=manualblue!10, minimum width=6mm, minimum height=6mm] (l2) at (6.2,1.1) {LAN};
+  \node[draw=manualgray, fill=manualgreen!12, minimum width=6mm, minimum height=6mm] (tel) at (7.1,1.1) {TEL};
+\end{tikzpicture}
+```
+Frente/traseira de uma ONT: **óptica** (SC/APC verde), portas **LAN**, **TEL** (VoIP)
+e os LEDs. O **LOS vermelho** é o sinal nº 1 de problema de fibra.
 :::
+
+Os LEDs contam a história em camadas (capítulo @sec-osi-encapsulamento):
+
+| LED | Estado | Significado |
+|---|---|---|
+| **Power** | aceso | tem energia |
+| **PON** | aceso fixo | **autenticou** na OLT (camada 1/2 ok) |
+| **PON** | piscando | tentando registrar |
+| **LOS** | **vermelho** | **sem luz** — fibra rompida, conector solto/sujo, dobra |
+| **Internet** | aceso | PPPoE/IP subiu (camada 3) |
+
+**Regra de campo:** **LOS aceso = problema óptico (camada 1)** — nada acima funciona.
+Cheque conector (verde, limpo), *drop* (dobras), e a potência antes de qualquer outra
+coisa.
+
+## Potência óptica: o número que diz tudo {#sec-onu-potencia}
+
+A ONT mede e reporta sua **potência óptica recebida (Rx)** em **dBm**. É a métrica
+mais importante do acesso óptico:
+
+| Rx na ONT | Estado |
+|---|---|
+| −8 a −24 dBm | **faixa saudável** (GPON típico) |
+| −25 a −27 dBm | **limítrofe** — atenção, perto da sensibilidade |
+| < −27/−28 dBm | **abaixo da sensibilidade** — cai/instável |
+| sem leitura / LOS | sem sinal — camada 1 |
+
+Esse valor sai do **orçamento de potência** (capítulo @sec-orcamento): TX da OLT
+menos todas as perdas (fibra, splitters, conectores, fusões). Uma ONT que **piora ao
+longo do dia** (sol esquenta o cabo) sugere **macrobending** no *drop* (capítulo
+@sec-fibra-principios).
+
+## Provisionamento e gerência {#sec-onu-provisionamento}
+
+A ONT é identificada por um **número de série (SN)** (e/ou MAC). Ao plugá-la, a OLT a
+**descobre**; o provedor a **autoriza** e aplica o perfil de serviço (capítulo
+@sec-provisionamento). Para gerência remota em massa, usa-se o **TR-069** (ACS):
+configurar Wi-Fi, atualizar firmware, ler diagnósticos e dar suporte **sem ir à
+casa** do cliente.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Roteiro de chamado pela ONT (de baixo para cima, capítulo @sec-osi-encapsulamento):**
+  Power? → **LOS/PON** (camada 1: óptica) → **Internet** (PPPoE/IP) → Wi-Fi/LAN.
+  Pular etapa custa visita.
+- **Leia a potência remotamente** (pela OLT e/ou TR-069) **antes de despachar
+  técnico**. Rx em −26 dBm e piorando = problema na fibra/drop, não na ONT — leve
+  fibra/conector, não outra ONT.
+- **Homologue modelos de ONT** e padronize firmware via **TR-069/ACS**; ONT
+  "paralela" não homologada gera incompatibilidade e dor de suporte.
+- **Wi-Fi é metade dos chamados de "internet lenta".** A fibra entrega 300M na ONT,
+  mas o Wi-Fi do cliente entrega 40M no quarto dos fundos. Saiba diferenciar
+  (teste cabeado vs. Wi-Fi) antes de culpar a rede.
+- **Bridge vs. router:** decida o modelo (ONT bridge + roteador do cliente, ou ONT
+  router fazendo tudo) conforme seu controle/suporte; ONT router com TR-069 dá mais
+  gerência remota.
+:::
+
+## Resumo e checklist {#sec-resumo-30}
+
+- A **ONT/ONU** termina a PON na casa do cliente; **ONU** entrega a outro equipamento,
+  **ONT** já roteia/Wi-Fi.
+- Os **LEDs** mapeiam camadas: **LOS vermelho = camada 1** (óptica), Internet =
+  camada 3.
+- A **potência Rx (dBm)** é a métrica-chave; faixa saudável ~−8 a −24, problema
+  abaixo de ~−27.
+- Identificada por **SN**; gerenciada em massa por **TR-069/ACS**.
+
+**Checklist do capítulo**
+
+- [ ] Diferencio ONU (bridge) de ONT (router) e quando usar cada uma.
+- [ ] Interpreto os LEDs (LOS, PON, Internet) por camada.
+- [ ] Leio a potência Rx e sei a faixa saudável vs. limítrofe.
+- [ ] Uso TR-069 para gerenciar/diagnosticar a ONT remotamente.

@@ -2,6 +2,122 @@
 title: "DIO, CTO e Redes Primária e Secundária"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## A planta entre a OLT e o cliente {#sec-cto}
+
+Entre a **OLT** (capítulo @sec-olt) e a **ONT** (capítulo @sec-onu-ont) há toda uma
+infraestrutura física de organização e distribuição da fibra: o **DIO** no POP, a
+**rede primária**, os **splitters**, as **CTOs** e a **rede secundária** até o
+*drop*. Conhecer cada elemento — onde fica, o que faz, como se identifica — é
+essencial para projetar, expandir e, sobretudo, **consertar** a planta. Este capítulo
+amarra os componentes físicos no caminho fim a fim.
+
+## O caminho físico em camadas {#sec-cto-caminho}
+
+::: {#fig-planta-pon}
+```{.tikz}
+%%| filename: planta-pon
+%%| alt: Caminho da OLT pelo DIO, rede primária, splitter, CTO, rede secundária e drop até a ONT
+\begin{tikzpicture}[font=\footnotesize,
+    b/.style={draw=manualgray, rounded corners=2pt, minimum height=8mm, align=center}]
+  \node[b, fill=manualgreen!14] (olt) at (0,0) {OLT};
+  \node[b, fill=manualblue!10] (dio) at (2,0) {DIO};
+  \node[b, fill=manualyellow!18] (sp) at (5,0) {Splitter\\(CEO)};
+  \node[b, fill=manualyellow!18] (cto) at (8,0) {CTO};
+  \node[b, fill=manualred!10] (ont) at (11,0) {ONT};
+  \draw[curva, manualgreen] (olt)--(dio);
+  \draw[curva, manualgreen] (dio)-- node[above,font=\scriptsize]{\textbf{rede primária}} (sp);
+  \draw[curva, manualgreen] (sp)-- node[above,font=\scriptsize]{\textbf{secundária}} (cto);
+  \draw[curva, manualgreen] (cto)-- node[above,font=\scriptsize]{\textbf{drop}} (ont);
+  \node[manualgray, font=\scriptsize, below=1mm of dio] {POP};
+  \node[manualgray, font=\scriptsize, below=1mm of cto] {poste/rua};
+  \node[manualgray, font=\scriptsize, below=1mm of ont] {casa};
+\end{tikzpicture}
+```
+Da OLT à ONT: **DIO** (POP) → **rede primária** → **splitter** (em CEO) → **CTO** →
+**rede secundária**/**drop** → **ONT**. Cada trecho tem dono e função claros.
 :::
+
+## DIO — Distribuidor Interno Óptico {#sec-cto-dio}
+
+O **DIO** é o **bastidor de organização** das fibras **dentro do POP**. É onde as
+fibras da OLT, dos cabos de tronco e dos *uplinks* são **terminadas em conectores
+(SC/APC)**, identificadas e **manobradas** (você conecta/desconecta cordões para
+rotear sinais). Funções:
+
+- **Terminar** os cabos externos (fusão do cabo a *pigtails* conectorizados).
+- **Organizar** com folga/reserva e identificação clara.
+- **Proteger** as fibras e permitir **manobra** sem mexer no cabo externo.
+
+Um DIO bem organizado é o que torna manutenção e expansão rápidas; um DIO bagunçado é
+fonte de erro e *downtime*.
+
+## Rede primária e secundária {#sec-cto-primaria-secundaria}
+
+A planta de distribuição se divide em dois trechos:
+
+| Trecho | De → Até | Característica |
+|---|---|---|
+| **Rede primária** | DIO/OLT → 1º splitter (CEO) | cabo de **alta contagem** de fibras, tronco |
+| **Rede secundária** | splitter/CTO → cliente | cabos menores, capilaridade, **drop** |
+
+A **rede primária** é o "tronco" robusto que sai do POP; a **secundária** é a
+"capilaridade" que chega às ruas e casas. O ponto de transição costuma ser o
+**splitter** (em uma **CEO** — Caixa de Emenda Óptica) ou a própria **CTO**.
+
+## CTO e CEO {#sec-cto-cto-ceo}
+
+- **CTO** (*Caixa de Terminação Óptica*) — a caixa **no poste/fachada** onde os
+  **drops dos clientes se conectam** (normalmente via conector SC/APC ou adaptador).
+  Costuma abrigar um **splitter** (ex.: 1:8 ou 1:16) e tem **portas de saída** para
+  cada assinante. É o ponto de presença da rede secundária mais próximo do cliente.
+- **CEO** (*Caixa de Emenda Óptica*) — caixa de **emenda/passagem** (fusões,
+  derivações, *splitters* da primária), normalmente **sem terminação de cliente**.
+
+A **CTO é onde o técnico instala** o cliente: leva o *drop* da casa até uma **porta
+livre** da CTO e conecta. Por isso a contagem de portas e a **reserva** na CTO
+definem quantos clientes aquele ponto ainda comporta.
+
+## Drop e cabo AS {#sec-cto-drop}
+
+- **Drop** — o cabo (geralmente *flat*/auto-sustentado de 1–2 fibras, **G.657**) que
+  liga a **CTO à ONT** na casa. É o trecho mais sujeito a **dobras e tração** —
+  causa nº 1 de degradação óptica (capítulo @sec-fibra-principios).
+- **Cabo AS** (*auto-sustentado*) — cabo com elemento de tração que **se sustenta
+  entre postes sem cordoalha** separada, muito usado na rede aérea (primária e
+  secundária) do ISP. Simplifica a planta aérea.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Identifique tudo:** DIO, CEO, CTO e cada fibra/porta. Uma planta sem
+  identificação consistente (e sem o georreferenciamento, capítulo @sec-doc-georref)
+  transforma cada reparo em caça ao tesouro e multiplica o tempo de
+  reestabelecimento.
+- **Reserva técnica em toda caixa:** sobra de fibra na CEO/CTO para refazer fusões e
+  portas livres na CTO para novos clientes. Planta sem reserva = retrabalho a cada
+  expansão.
+- **Drop é o elo fraco:** instale com **raio de curvatura** respeitado e sem tração
+  excessiva; oriente o cliente a não prender/dobrar. Cliente que "cai quando esquenta"
+  costuma ter *drop* dobrado (macrobending).
+- **CTO no ponto certo:** posicione CTOs para minimizar comprimento de *drop* e
+  equilibrar o orçamento (capítulo @sec-orcamento). CTO longe demais = *drop* longo =
+  perda e tração.
+- **Vedação:** caixa aberta/malvedada na rua = umidade = corrosão e perda. Feche e
+  vede sempre.
+:::
+
+## Resumo e checklist {#sec-resumo-32}
+
+- **DIO** organiza/termina as fibras **no POP**; permite manobra sem mexer no cabo.
+- **Rede primária** (tronco, alta contagem) vai do POP ao splitter; **secundária**
+  (capilaridade) vai do splitter/CTO ao cliente.
+- **CTO** termina os **drops dos clientes** (e costuma abrigar splitter); **CEO** é
+  emenda/passagem.
+- **Drop** (G.657) é o elo mais frágil; **cabo AS** sustenta a rede aérea.
+
+**Checklist do capítulo**
+
+- [ ] Descrevo o caminho DIO→primária→splitter→CTO→secundária→drop→ONT.
+- [ ] Diferencio DIO, CEO e CTO e o que cada um abriga.
+- [ ] Sei por que o *drop* é o ponto mais sujeito a falha óptica.
+- [ ] Mantenho identificação, reserva e vedação em toda caixa.

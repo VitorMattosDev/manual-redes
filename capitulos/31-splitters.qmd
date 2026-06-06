@@ -2,6 +2,138 @@
 title: "Splitters Ópticos"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## O divisor que faz a PON existir {#sec-splitters}
+
+O **splitter** (divisor óptico) é o componente **passivo** que pega a luz de **uma**
+fibra e a divide entre **várias** — é o que permite a uma porta da OLT atender
+dezenas de assinantes (capítulo @sec-fttx). Por ser passivo (sem energia, sem
+eletrônica), é barato e confiável, mas tem um custo físico inescapável: **cada
+divisão atenua o sinal**. Saber as perdas de cada tipo de splitter e como combiná-los
+em cascata é o que separa um projeto PON que fecha de um que deixa o cliente da borda
+sem sinal.
+
+## Como funciona e por que atenua {#sec-splitters-funcionamento}
+
+O splitter divide a **potência** da luz entre as saídas. Dividir em 2 corta a
+potência pela metade — **−3 dB** (capítulo @sec-fibra-principios). Dividir em 4 são
+duas divisões (−6 dB ideal), em 8 são três (−9 dB ideal), e assim por diante. Na
+prática, soma-se a **perda de excesso** (imperfeições), resultando nos valores reais:
+
+::: {#fig-splitter-cascata}
+```{.tikz}
+%%| filename: splitter-cascata
+%%| alt: Splitter 1:2 seguido de splitters 1:8 em cascata distribuindo para clientes
+\begin{tikzpicture}[font=\footnotesize,
+    sp/.style={draw=manualgray, fill=manualyellow!18, minimum width=10mm, minimum height=12mm, align=center}]
+  \node[draw=manualgreen, fill=manualgreen!14, minimum width=12mm, minimum height=8mm] (olt) at (0,0) {OLT};
+  \node[sp] (s1) at (3,0) {1:2\\-3,5 dB};
+  \node[sp] (s2a) at (6,1.2) {1:8\\-10,5 dB};
+  \node[sp] (s2b) at (6,-1.2) {1:8\\-10,5 dB};
+  \node[draw=manualgray, fill=manualblue!8, minimum width=12mm, align=center] (c1) at (9,1.6) {8 clientes};
+  \node[draw=manualgray, fill=manualblue!8, minimum width=12mm, align=center] (c2) at (9,0.8) {(CTO)};
+  \node[draw=manualgray, fill=manualblue!8, minimum width=12mm, align=center] (c3) at (9,-1.2) {8 clientes};
+  \draw[curva, manualgreen] (olt)--(s1);
+  \draw[curva, manualgreen] (s1)--(s2a); \draw[curva, manualgreen] (s1)--(s2b);
+  \draw[curva, manualgreen] (s2a)--(c1); \draw[curva, manualgreen] (s2a)--(c2);
+  \draw[curva, manualgreen] (s2b)--(c3);
+  \node[manualred, font=\scriptsize] at (6,2.4) {cascata: 1:2 + 1:8 = 1:16 ($\approx$14 dB)};
+\end{tikzpicture}
+```
+Cascata típica: um **1:2** na rede primária alimenta dois **1:8** nas CTOs. A perda
+total é a **soma** (em dB) das perdas de cada estágio.
 :::
+
+## Tabela de perdas por razão de divisão {#sec-splitters-perdas}
+
+| Splitter | Perda típica (dB) | Saídas |
+|---|---|---|
+| 1:2 | 3,5 | 2 |
+| 1:4 | 7,0 | 4 |
+| 1:8 | 10,5 | 8 |
+| 1:16 | 13,5 | 16 |
+| 1:32 | 17,5 | 32 |
+| 1:64 | 21,0 | 64 |
+
+Cada vez que se **dobra** a divisão, somam-se ~3,0–3,5 dB. **Esses números são o
+maior item do orçamento de potência** (capítulo @sec-orcamento) — muito mais que a
+fibra ou os conectores.
+
+## Balanceado vs. desbalanceado {#sec-splitters-balanceado}
+
+- **Balanceado:** divide a potência **igualmente** entre as saídas (o 1:8 dá ~10,5
+  dB em cada porta). É o padrão na **distribuição** (CTO atendendo vários clientes
+  parecidos).
+- **Desbalanceado (tap):** divide **desigualmente**, ex.: 10/90 (tira 10% numa saída
+  e deixa 90% seguir). Útil em **topologia em cascata ao longo de uma via** (rede
+  "em linha"): cada CTO ao longo da rua "sangra" um pouco do sinal e deixa o resto
+  passar para a próxima — assim os clientes distantes ainda recebem potência adequada.
+
+::: {#fig-splitter-desbalanceado}
+```{.tikz}
+%%| filename: splitter-tap
+%%| alt: Splitters desbalanceados em linha ao longo de uma via, cada um derivando parte do sinal
+\begin{tikzpicture}[font=\footnotesize,
+    t/.style={draw=manualgray, fill=manualyellow!18, minimum width=9mm, minimum height=8mm, align=center}]
+  \node[draw=manualgreen, fill=manualgreen!14, minimum width=10mm] (olt) at (0,0) {OLT};
+  \node[t] (t1) at (2.4,0) {5/95};
+  \node[t] (t2) at (5,0) {10/90};
+  \node[t] (t3) at (7.6,0) {1:8};
+  \draw[curva, manualgreen] (olt)--(t1)--(t2)--(t3);
+  \draw[destaque, manualred] (t1) -- ++(0,-1) node[below,font=\scriptsize]{CTO 1};
+  \draw[destaque, manualred] (t2) -- ++(0,-1) node[below,font=\scriptsize]{CTO 2};
+  \draw[destaque, manualred] (t3) -- ++(0,-1) node[below,font=\scriptsize]{CTO 3};
+  \node[manualgray, font=\scriptsize] at (5,1) {cada tap deriva um pouco e deixa o resto seguir};
+\end{tikzpicture}
+```
+Splitters desbalanceados (*tap*) em linha: úteis em ruas longas, equilibram a
+potência entre CTOs próximas e distantes.
+:::
+
+## Cálculo de cascata: exemplo {#sec-splitters-cascata}
+
+Uma árvore com **1:2** (primária) + **1:8** (na CTO) = divisão total **1:16**, mas a
+perda é a **soma**:
+
+`3,5 (1:2) + 10,5 (1:8) = 14,0 dB` de perda de splitters.
+
+Compare com um **1:16 único** (13,5 dB): a cascata 1:2+1:8 perde **0,5 dB a mais**,
+mas dá **flexibilidade de topologia** (o 1:2 fica na rede primária, os 1:8 espalhados
+nas CTOs). O projetista escolhe entre **menor perda** (splitter único) e **melhor
+distribuição geográfica** (cascata).
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Padronize a árvore:** muitos ISPs usam **1:2 na primária + 1:8 (ou 1:16) na
+  CTO**, totalizando 1:16 ou 1:32. Defina o padrão e calcule o orçamento **uma vez**
+  por padrão (capítulo @sec-orcamento).
+- **Cada saída do splitter é um cliente potencial** — mas **não encha 100%**: deixe
+  portas de reserva para reparo e crescimento. Splitter lotado = nova visita só para
+  expandir.
+- **Tap (desbalanceado) em ruas longas/rurais:** equilibra a potência ao longo da
+  via para o cliente do fim não ficar abaixo da sensibilidade. Em loteamento denso,
+  use balanceado na CTO.
+- **Splitter é passivo, mas o conector dele não:** a maior parte das "perdas
+  fantasma" perto do splitter é **conector sujo** na entrada/saída (capítulo
+  @sec-conectores) — inspecione antes de culpar o componente.
+- **Overbooking nasce aqui:** a razão de divisão define quantos clientes dividem a
+  porta PON (capítulo @sec-gpon); 1:64 economiza fibra mas concentra mais gente na
+  mesma banda — equilibre com o uplink.
+:::
+
+## Resumo e checklist {#sec-resumo-31}
+
+- O splitter é **passivo** e divide **potência** — dobrar a divisão custa ~3 dB; é o
+  **maior item** do orçamento.
+- Memorize a tabela (1:8 ≈ 10,5 dB; 1:16 ≈ 13,5; 1:32 ≈ 17,5; 1:64 ≈ 21).
+- **Balanceado** distribui igual (CTO); **desbalanceado/tap** distribui ao longo de
+  vias longas.
+- Em **cascata**, as perdas **somam**; escolha entre menor perda (único) e melhor
+  geografia (cascata), com **portas de reserva**.
+
+**Checklist do capítulo**
+
+- [ ] Estimo a perda de qualquer splitter e de uma cascata somando dB.
+- [ ] Escolho balanceado vs. desbalanceado conforme a topologia da via.
+- [ ] Deixo portas de reserva e relaciono divisão com overbooking.
+- [ ] Suspeito de conector sujo antes de culpar o splitter.

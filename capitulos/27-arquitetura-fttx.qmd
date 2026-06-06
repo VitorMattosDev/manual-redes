@@ -2,6 +2,128 @@
 title: "Arquitetura FTTx (FTTH, FTTB, FTTC)"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Até onde a fibra vai {#sec-fttx}
+
+**FTTx** (*Fiber To The x*) é o guarda-chuva das arquiteturas que levam fibra
+**mais perto do cliente** — e o "x" diz **até onde**. Quanto mais perto a fibra
+chega, melhor o desempenho e menor o trecho metálico/rádio final, mas maior o custo
+de implantação. Para o provedor, escolher a arquitetura FTTx é uma decisão de
+**custo × desempenho × densidade**, e na prática brasileira a esmagadora maioria é
+**FTTH com GPON** (capítulo @sec-gpon). Este capítulo situa as variantes e introduz a
+divisão **ativa vs. passiva** e o caminho físico da rede.
+
+## As variantes de FTTx {#sec-fttx-variantes}
+
+::: {#fig-fttx}
+```{.tikz}
+%%| filename: fttx-variantes
+%%| alt: Comparação FTTH, FTTB, FTTC mostrando até onde a fibra chega e o trecho final
+\begin{tikzpicture}[font=\footnotesize,
+    olt/.style={draw=manualgreen, fill=manualgreen!14, minimum width=12mm, minimum height=8mm, align=center},
+    casa/.style={draw=manualgray, fill=manualblue!8, minimum width=10mm, minimum height=8mm, align=center}]
+  % FTTH
+  \node[font=\bfseries, manualblue, anchor=west] at (-0.3,2.6) {FTTH — fibra até a casa};
+  \node[olt] (o1) at (0,2) {OLT};
+  \node[casa] (c1) at (7,2) {ONT\\(casa)};
+  \draw[curva, manualgreen] (o1) -- node[above,font=\scriptsize]{fibra toda} (c1);
+
+  % FTTB
+  \node[font=\bfseries, manualblue, anchor=west] at (-0.3,1.1) {FTTB — fibra até o prédio};
+  \node[olt] (o2) at (0,0.5) {OLT};
+  \node[draw=manualgray, fill=manualyellow!16, minimum width=12mm, align=center] (b2) at (5,0.5) {prédio\\(switch)};
+  \node[casa] (c2) at (7.6,0.5) {aptos};
+  \draw[curva, manualgreen] (o2) -- (b2);
+  \draw[destaque, manualred] (b2) -- node[above,font=\scriptsize]{cobre} (c2);
+
+  % FTTC
+  \node[font=\bfseries, manualblue, anchor=west] at (-0.3,-0.4) {FTTC — fibra até o armário};
+  \node[olt] (o3) at (0,-1) {OLT};
+  \node[draw=manualgray, fill=manualyellow!16, minimum width=12mm, align=center] (b3) at (4,-1) {armário};
+  \node[casa] (c3) at (7,-1) {casas};
+  \draw[curva, manualgreen] (o3) -- (b3);
+  \draw[destaque, manualred] (b3) -- node[above,font=\scriptsize]{cobre/DSL} (c3);
+\end{tikzpicture}
+```
+FTTH leva fibra **até a casa** (ONT); FTTB para no **prédio** (cobre interno); FTTC
+para no **armário** de rua (cobre/DSL no trecho final). Menos cobre = melhor.
 :::
+
+| Sigla | Fibra chega até | Trecho final | Comentário |
+|---|---|---|---|
+| **FTTH** | a casa/ONT | nenhum (fibra total) | **padrão do ISP moderno** |
+| **FTTB** | o prédio | cobre/LAN interna | condomínios verticais |
+| **FTTC** | o armário de rua | cobre/DSL | legado, transição |
+| FTTA | a antena (torre) | rádio | *backhaul* de rádio rural |
+
+No provedor regional, **FTTH+GPON** domina o acesso urbano; **FTTA** (fibra até a
+torre, capítulo @sec-radio-fund) é como se leva capacidade ao rádio rural.
+
+## Rede ativa vs. passiva {#sec-fttx-ativa-passiva}
+
+Há duas grandes filosofias para distribuir a fibra:
+
+- **AON (Ativa) / ponto a ponto:** uma fibra dedicada por cliente, com equipamento
+  **ativo** (switch, energia) no meio do caminho. Banda dedicada e simples de
+  isolar, mas **caro** (muita fibra, muitas portas, energia em campo).
+- **PON (Passiva):** uma fibra da OLT é **dividida por splitters passivos** (sem
+  energia) para atender **muitos clientes** (capítulo @sec-splitters). É **muito mais
+  barata** por assinante e dispensa energia entre a OLT e a ONT — por isso domina o
+  FTTH. Custo: banda **compartilhada** na árvore e diagnóstico mais sutil (capítulo
+  @sec-gpon).
+
+A escolha quase universal no acesso residencial é **PON**, pela economia. AON
+aparece em nichos (cliente corporativo que exige fibra dedicada).
+
+## O caminho físico fim a fim {#sec-fttx-caminho}
+
+Na arquitetura PON/FTTH, a fibra percorre uma **árvore** (capítulo @sec-topologias-classicas):
+
+1. **OLT** (no POP, capítulo @sec-olt) origina a PON; cada **porta PON** atende uma
+   árvore.
+2. **DIO** (*Distribuidor Interno Óptico*, capítulo @sec-cto) organiza as fibras no
+   POP.
+3. **Rede primária** — cabo de tronco da OLT/DIO até o primeiro ponto de divisão.
+4. **Splitter** — divide o sinal (1:8, 1:16…) — pode haver **cascata** (capítulo
+   @sec-splitters).
+5. **CTO** (*Caixa de Terminação Óptica*) — onde os **drops** dos clientes se
+   conectam (rede secundária).
+6. **Drop** — cabo da CTO até a casa.
+7. **ONT/ONU** — equipamento na ponta do assinante (capítulo @sec-onu-ont).
+
+Cada elemento desse caminho **consome dB**, e a soma tem de caber no **orçamento de
+potência** (capítulo @sec-orcamento) — é a costura entre arquitetura e física.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Padronize FTTH+GPON** no acesso urbano e **FTTA** (fibra na torre) para levar
+  capacidade ao rádio rural — assim o último salto rural é rádio, mas alimentado por
+  fibra.
+- **Projete a árvore pensando no orçamento:** a taxa de divisão total (ex.: 1:64) e a
+  distância definem se o cliente mais distante fecha o *link* (capítulo
+  @sec-orcamento). Não "estique" a árvore sem refazer a conta.
+- **Reserva e expansão:** deixe fibras de reserva no tronco e portas livres no
+  splitter/CTO; crescer depois sem reserva é refazer planta.
+- **FTTB em prédios:** leve a fibra ao condomínio e resolva o vertical conforme o
+  caso (ONT por apto é o ideal; switch interno é compromisso).
+- **Documente a árvore** (OLT→porta→splitter→CTO→cliente) no georreferenciamento
+  (capítulo @sec-doc-georref) desde o dia 1 — sem isso, manutenção vira caos.
+:::
+
+## Resumo e checklist {#sec-resumo-27}
+
+- **FTTx** = fibra até "x"; **FTTH** (até a casa) é o padrão, **FTTA** alimenta o
+  rádio rural.
+- **PON (passiva)** vence no acesso por **custo** (splitter sem energia, fibra
+  compartilhada); **AON** é nicho.
+- O caminho físico é uma **árvore**: OLT → DIO → primária → splitter → CTO → drop →
+  ONT.
+- Arquitetura e **orçamento de potência** andam juntos — toda divisão/distância
+  custa dB.
+
+**Checklist do capítulo**
+
+- [ ] Diferencio FTTH/FTTB/FTTC/FTTA e onde cada um se aplica.
+- [ ] Explico por que PON é mais barata que AON no acesso.
+- [ ] Descrevo o caminho físico OLT→ONT e seus elementos.
+- [ ] Relaciono taxa de divisão e distância ao orçamento de potência.

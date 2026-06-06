@@ -2,6 +2,121 @@
 title: "Provisionamento PON (VLANs por Cliente, Perfis, ONT)"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Do cabo plugado ao cliente navegando {#sec-provisionamento}
+
+Provisionar é o conjunto de passos que transforma uma **ONT recém-instalada** em um
+**cliente com serviço**: a OLT descobre a ONT, o provedor a autoriza, aplica perfis
+de **velocidade** e **VLAN**, e o tráfego sobe até o **BNG** que autentica e entrega
+IP. É a junção de tudo da Parte VI com as camadas de enlace/rede (Partes III–IV) e a
+operação de ISP (Parte X). Um provisionamento **padronizado e automatizado** é o que
+permite escalar (centenas de instalações/mês) com baixo erro.
+
+## O fluxo de provisionamento {#sec-provisionamento-fluxo}
+
+::: {#fig-provisionamento}
+```{.tikz}
+%%| filename: provisionamento-fluxo
+%%| alt: Fluxo de provisionamento ONT: descoberta por SN, autorização, perfis, VLAN, PPPoE e serviço
+\begin{tikzpicture}[font=\footnotesize, node distance=4.5mm,
+    s/.style={draw=manualgray, rounded corners=2pt, fill=manualblue!8, minimum width=30mm, minimum height=8mm, align=center}]
+  \node[s] (a) {1. ONT descoberta (SN) na OLT};
+  \node[s, below=of a] (b) {2. Autorizar / vincular ao cliente};
+  \node[s, below=of b] (c) {3. Aplicar line + service profile (velocidade)};
+  \node[s, below=of c] (d) {4. Mapear C-VLAN do cliente (Q-in-Q p/ BNG)};
+  \node[s, below=of d] (e) {5. PPPoE/IPoE autentica no BNG (RADIUS)};
+  \node[s, fill=manualgreen!14, below=of e] (f) {6. IP entregue → cliente online};
+  \draw[vetor, manualblue] (a)--(b); \draw[vetor, manualblue] (b)--(c);
+  \draw[vetor, manualblue] (c)--(d); \draw[vetor, manualblue] (d)--(e);
+  \draw[vetor, manualblue] (e)--(f);
+\end{tikzpicture}
+```
+Fluxo típico: descoberta por **SN** → autorização → **perfis** de velocidade →
+**VLAN** (Q-in-Q até o BNG) → **PPPoE/IPoE + RADIUS** → IP e serviço.
 :::
+
+1. **Descoberta** — plugada a ONT, a OLT a detecta pelo **número de série (SN)**
+   (e/ou senha) — capítulo @sec-onu-ont.
+2. **Autorização** — o provedor vincula aquele SN ao cliente/contrato e a uma
+   **porta PON**.
+3. **Perfis** — aplica **line profile** (parâmetros PON/DBA) e **service profile**
+   (velocidade, número de portas/SSID).
+4. **VLAN** — mapeia a **C-VLAN** do cliente; a OLT empilha a **S-VLAN** da PON
+   (**Q-in-Q**, capítulo @sec-switching) e entrega ao **BNG**.
+5. **Autenticação** — o cliente sobe **PPPoE** (ou **IPoE**), autenticado pelo
+   **RADIUS** (capítulo @sec-radius).
+6. **Serviço** — o BNG entrega IP (e prefixo IPv6) e aplica o **rate-limit** do plano
+   (capítulo @sec-qos).
+
+## Perfis: line profile e service profile {#sec-provisionamento-perfis}
+
+A OLT trabalha com **perfis reutilizáveis** — a chave para escalar sem erro:
+
+- **Line profile (DBA/T-CONT/GEM):** define como a ONT usa a PON — bandas mínima e
+  máxima do *upstream* (via DBA, capítulo @sec-gpon-dba), filas e mapeamento de
+  serviços. Costuma haver um por **plano de velocidade**.
+- **Service profile:** define a "cara" do serviço na ONT — quantas portas LAN/POTS,
+  VLANs, modo *bridge* ou *router*, SSID Wi-Fi.
+
+**Padronize:** um conjunto de perfis por plano (ex.: `300M`, `500M`, `1G`) e a ONT
+nova herda tudo ao ser autorizada. Mudar o cliente de plano = trocar o perfil.
+
+## VLAN por cliente na prática {#sec-provisionamento-vlan}
+
+O modelo dominante dá a **cada cliente sua C-VLAN** (capítulo
+@sec-switching-isp), empilhada numa **S-VLAN por PON/OLT** via Q-in-Q. Isso garante:
+
+- **Isolamento** L2 entre assinantes (mata ARP spoofing entre vizinhos da mesma PON).
+- **Rastreabilidade** — a dupla de VLANs identifica o cliente da ONT ao BNG.
+- **Política/QoS** por cliente.
+
+A C-VLAN é configurada na ONT (ou pela OLT no perfil) e a OLT cuida do empilhamento —
+o BNG vê o cliente já isolado.
+
+## PPPoE vs. IPoE no provisionamento {#sec-provisionamento-pppoe-ipoe}
+
+Duas formas de autenticar/entregar IP (capítulo @sec-bng-pppoe):
+
+| Aspecto | PPPoE | IPoE (DHCP) |
+|---|---|---|
+| Autenticação | usuário/senha | Opção 82 + RADIUS |
+| Controle/billing | forte (sessão explícita) | bom (via DHCP/RADIUS) |
+| Experiência | exige configurar sessão | "plug and play" |
+| MTU | 1492 (precisa MSS clamp) | 1500 |
+
+A escolha depende do controle desejado; muitos ISPs brasileiros usam **PPPoE** pela
+gestão de sessão e *billing* simples, com **RADIUS** atribuindo velocidade, IP e
+prefixo IPv6.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Automatize com perfis + sistema/OSS:** ONT nova entra **por SN** com perfil do
+  plano aplicado automaticamente; integre OLT ↔ sistema de gestão (provisionamento
+  via API/NETCONF, capítulo @sec-sdn). Provisionar a mão em escala é fonte de erro.
+- **Velocidade vem do RADIUS, não da ONT:** o *rate-limit* do plano é atributo
+  RADIUS no BNG (capítulo @sec-qos) — *upgrade* sem tocar no equipamento do cliente.
+- **TR-069/ACS para a casa do cliente:** Wi-Fi, firmware e diagnóstico remoto da ONT
+  (capítulo @sec-onu-ont) — menos visitas técnicas.
+- **Checklist de ativação:** SN autorizado? potência Rx na faixa (capítulo
+  @sec-orcamento)? C-VLAN correta? PPPoE autenticou (RADIUS)? IP/IPv6 entregues?
+  Esse roteiro evita "instalei mas não navega".
+- **Erro nº 1:** VLAN errada no perfil/uplink → ONT autentica na OLT (PON aceso) mas
+  cliente **não navega**. Confira o caminho da VLAN ONT→OLT→BNG (capítulo
+  @sec-switching) antes de suspeitar de fibra.
+:::
+
+## Resumo e checklist {#sec-resumo-34}
+
+- Provisionar = **descobrir (SN) → autorizar → perfis → VLAN (Q-in-Q) →
+  PPPoE/IPoE+RADIUS → IP**.
+- **Perfis** (line/service) por plano são a chave para escalar sem erro.
+- **VLAN por cliente** isola e rastreia da ONT ao BNG; a **velocidade** vem do
+  **RADIUS**.
+- Automatize por **SN + OSS** e gerencie a ONT por **TR-069**.
+
+**Checklist do capítulo**
+
+- [ ] Descrevo o fluxo de provisionamento ponta a ponta.
+- [ ] Sei o que vai em line profile vs. service profile.
+- [ ] Configuro a C-VLAN do cliente e seu empilhamento Q-in-Q ao BNG.
+- [ ] Uso o checklist de ativação para isolar "autenticou mas não navega".
