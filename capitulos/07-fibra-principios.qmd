@@ -2,6 +2,145 @@
 title: "Fibra Óptica: Princípios Físicos"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Por que a luz fica presa na fibra {#sec-fibra-principios}
+
+A fibra óptica transporta informação como **pulsos de luz**. Para o provedor, isso
+é o que torna possível levar gigabits por dezenas de quilômetros com perda mínima —
+mas para operar, medir e consertar a planta é preciso entender **por que a luz não
+escapa do vidro**. A resposta é a **reflexão interna total**, e dela derivam todos
+os conceitos práticos (atenuação, dispersão, janelas, orçamento de potência).
+
+A fibra é feita de **sílica ultrapura** em duas regiões concêntricas com **índices
+de refração diferentes**: um **núcleo** (índice maior, $n_1$) e uma **casca**
+(índice menor, $n_2$). Quando a luz tenta sair do núcleo para a casca com ângulo
+maior que o **ângulo crítico**, ela é **totalmente refletida** de volta — e assim
+"quica" ao longo do núcleo por quilômetros.
+
+::: {#fig-reflexao-total}
+```{.tikz}
+%%| filename: reflexao-total
+%%| alt: Luz refletindo internamente dentro do núcleo da fibra entre núcleo e casca
+\begin{tikzpicture}[font=\footnotesize]
+  % casca
+  \fill[manualblue!6] (0,0) rectangle (9,1.6);
+  \draw[manualgray] (0,0) -- (9,0);
+  \draw[manualgray] (0,1.6) -- (9,1.6);
+  \node[manualgray, anchor=west] at (0.1,1.85) {casca ($n_2$, menor)};
+  % nucleo
+  \fill[manualyellow!12] (0,0.4) rectangle (9,1.2);
+  \draw[auxiliar] (0,0.4) -- (9,0.4);
+  \draw[auxiliar] (0,1.2) -- (9,1.2);
+  \node[manualgray, anchor=west] at (0.1,0.8) {núcleo ($n_1$, maior)};
+  % raio em zigue-zague
+  \draw[curva, manualred] (0,0.45)
+    -- (1.5,1.15) -- (3.0,0.45) -- (4.5,1.15) -- (6.0,0.45) -- (7.5,1.15) -- (9,0.45);
+  \foreach \x in {1.5,4.5,7.5}{ \node[ponto, fill=manualred] at (\x,1.15) {}; }
+  \foreach \x in {3.0,6.0}{ \node[ponto, fill=manualred] at (\x,0.45) {}; }
+\end{tikzpicture}
+```
+Reflexão interna total: o raio que incide na fronteira núcleo–casca acima do ângulo
+crítico é totalmente refletido e se propaga ao longo da fibra.
 :::
+
+## Abertura numérica e ângulo de aceitação {#sec-fibra-na}
+
+Nem toda luz que chega à ponta da fibra entra de forma útil. Só os raios dentro de
+um **cone de aceitação** se acoplam ao núcleo; o resto vaza. Esse cone é medido pela
+**abertura numérica (NA)**:
+$$\mathrm{NA} = \sqrt{n_1^2 - n_2^2} = \sin\theta_{\text{ac}}.$$
+Uma NA maior aceita mais luz (bom para acoplamento), mas favorece muitos modos de
+propagação — o que, como veremos, **piora a dispersão**. É um dos motivos pelos
+quais a fibra de longa distância (monomodo) tem NA pequena e núcleo minúsculo.
+
+## Atenuação: para onde a luz "some" {#sec-fibra-atenuacao}
+
+**Atenuação** é a perda de potência óptica ao longo da fibra, medida em **dB/km**.
+Suas causas físicas:
+
+- **Absorção** — impurezas (sobretudo íons OH⁻, o "pico de água") e a própria
+  sílica convertem luz em calor.
+- **Espalhamento Rayleigh** — flutuações microscópicas de densidade desviam luz;
+  domina nos comprimentos de onda curtos (cai com $1/\lambda^4$).
+- **Perdas por curvatura** — dobras fechadas (*macrobending*) e microdeformações
+  (*microbending*) deixam a luz escapar. **Causa nº 1 de chamado em planta:** um
+  *drop* dobrado demais atrás de um móvel.
+
+Como a atenuação varia com o comprimento de onda, há **janelas** de menor perda —
+exatamente onde a fibra é operada:
+
+| Janela | λ | Atenuação típica | Uso |
+|---|---|---|---|
+| 2ª (O) | 1310 nm | ~0,33 dB/km | *upstream* GPON, curtas |
+| — | 1383 nm | pico de água (alta) | evitado (salvo fibra *low water peak*) |
+| 3ª (C) | 1550 nm | ~0,20 dB/km | *backbone*, DWDM, RF overlay |
+| down GPON | 1490 nm | ~0,28 dB/km | *downstream* GPON |
+
+A escala em **dB** é a linguagem da fibra porque é **logarítmica e aditiva**:
+perdas de trechos, conectores, fusões e splitters simplesmente **somam** em dB
+(capítulo @sec-orcamento). Lembre: $-3\,\text{dB}$ = metade da potência;
+$-10\,\text{dB}$ = um décimo.
+
+## Dispersão: por que o pulso "borra" {#sec-fibra-dispersao}
+
+Mesmo sem perder potência, um pulso pode **alargar no tempo** ao viajar — é a
+**dispersão**, que limita a taxa de bits e a distância. Dois tipos importam:
+
+- **Dispersão modal** — em fibra **multimodo**, raios em ângulos diferentes
+  percorrem caminhos de comprimentos diferentes e chegam em instantes distintos.
+  É severa; por isso multimodo só serve para curtas distâncias.
+- **Dispersão cromática** — comprimentos de onda ligeiramente diferentes (todo
+  laser real tem largura espectral) viajam a velocidades distintas. Domina em
+  **monomodo** e cresce com a distância e a taxa; é gerenciada com lasers de
+  espectro estreito (DFB) e, em DWDM longo, com fibras/compensadores específicos.
+
+Quando os pulsos se sobrepõem, o receptor confunde bits (**ISI** — interferência
+intersimbólica) e a taxa de erro sobe. Dispersão é o motivo de a banda da fibra,
+por maior que seja, **não ser infinita** em um enlace real.
+
+## Modos: por que monomodo domina o acesso {#sec-fibra-modos}
+
+Um "modo" é um caminho permitido para a luz no núcleo. Se o núcleo é largo
+(~50 µm), cabem **muitos modos** (multimodo, MMF) e surge dispersão modal. Se é
+estreito o bastante (~9 µm) para o comprimento de onda usado, só **um modo**
+propaga (monomodo, SMF) — sem dispersão modal e com alcance enorme. **Toda a planta
+PON e o *backbone* do provedor são monomodo**; multimodo fica restrito a *patch
+cords* curtos dentro do POP/datacenter. O capítulo @sec-fibra-tipos detalha os
+tipos comerciais (G.652, G.657 etc.).
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+A física vira regra de campo:
+
+- **dB é tudo.** Aprenda a pensar em dB: cada conector ~0,3–0,5 dB, cada fusão
+  ~0,05–0,1 dB, cada km a ~0,35 dB (1310) ou ~0,20 dB (1550). O orçamento de
+  potência (capítulo @sec-orcamento) é só uma soma dessas perdas.
+- **Macrobending é o vilão silencioso.** Um *drop* dobrado em curva fechada ou
+  prensado por um portão derruba a potência e o cliente cai no horário em que o sol
+  esquenta o cabo. Fibras **G.657** (insensíveis a curvatura) reduzem isso no
+  intradomiciliar.
+- **Por que 1550 nm chega mais longe.** Menor atenuação → mais quilômetros por dB.
+  Por isso *backbone* e overlay de TV usam 1550, e GPON reserva 1490/1310 para o
+  serviço de dados.
+- **Cuidado com o pico de água (1383 nm).** Em fibras antigas, esse comprimento é
+  inutilizável; fibras *low water peak* (G.652.D) liberam toda a banda — relevante
+  ao planejar CWDM.
+:::
+
+## Resumo e checklist {#sec-resumo-07}
+
+- A luz fica presa por **reflexão interna total** entre núcleo ($n_1$) e casca
+  ($n_2$); o cone de entrada é a **NA**.
+- **Atenuação** (dB/km) vem de absorção, Rayleigh e **curvaturas**; em dB as perdas
+  **somam**.
+- **Dispersão** (modal em MMF, cromática em SMF) alarga o pulso e limita taxa ×
+  distância.
+- **Monomodo** (núcleo ~9 µm) domina acesso e *backbone*; **multimodo** só em
+  curtas distâncias.
+
+**Checklist do capítulo**
+
+- [ ] Explico a reflexão interna total e o papel do ângulo crítico/NA.
+- [ ] Sei converter perdas em dB e por que elas somam.
+- [ ] Diferencio dispersão modal de cromática e seu impacto.
+- [ ] Justifico monomodo no acesso e o uso de 1310/1490/1550 nm em GPON.

@@ -2,6 +2,133 @@
 title: "Conectores e Polimentos (SC, LC, FC; PC, UPC, APC)"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## O ponto onde a luz troca de cabo {#sec-conectores}
+
+Conector óptico é onde duas fibras se encontram de forma **desmontável**. É também
+onde mais se perde sinal e onde mais nascem defeitos: um conector **sujo** ou de
+**polimento errado** degrada a PON inteira. Para o provedor, dominar conectores e
+polimentos é o que separa uma instalação que "fica boa por anos" de uma que volta
+em chamado. Dois conceitos medem a qualidade de um conector:
+
+- **Perda de inserção (IL)** — quanta luz se perde ao atravessar o par (dB; quanto
+  menor, melhor; alvo < 0,5 dB).
+- **Perda de retorno (RL / ORL)** — quanta luz é **refletida de volta** (dB
+  negativo; quanto **mais negativo**, melhor; reflexão atrapalha lasers e a leitura
+  do OTDR).
+
+## Tipos de conector: SC, LC, FC {#sec-conectores-tipos}
+
+| Conector | Encaixe | Ferrolho | Onde aparece |
+|---|---|---|---|
+| **SC** | *push-pull* (clica) | 2,5 mm | OLT, DIO, CTO, ONT — padrão da PON brasileira |
+| **LC** | trava tipo RJ | 1,25 mm (pequeno) | alta densidade: switches, *transceivers* SFP |
+| **FC** | rosca | 2,5 mm | instrumentos (OTDR, power-meter), legado |
+
+No acesso GPON brasileiro o **SC é dominante** (especialmente **SC/APC**, verde). O
+**LC** reina onde há densidade — um switch com 48 portas SFP+ usa LC para caber.
+**FC** sobrevive em bancada e equipamentos de medição.
+
+## Polimentos: PC, UPC e APC {#sec-conectores-polimento}
+
+O **polimento** é a geometria da face do ferrolho, e define a reflexão:
+
+::: {#fig-polimentos}
+```{.tikz}
+%%| filename: polimentos
+%%| alt: Faces de polimento PC plana, UPC abaulada e APC angulada a 8 graus com reflexão desviada
+\begin{tikzpicture}[font=\footnotesize]
+  % PC
+  \node[manualblue] at (1,2.2) {\textbf{PC} (plano)};
+  \fill[manualyellow!18] (0,0) rectangle (1,1.7);
+  \draw[manualgray] (0,0) rectangle (1,1.7);
+  \draw[vetor, manualred] (-0.9,0.85) -- (-0.05,0.85);
+  \draw[vetor, manualred] (-0.05,0.95) -- (-0.9,0.95);
+  \node[manualgray] at (0.5,-0.4) {reflexão volta};
+
+  % UPC
+  \begin{scope}[xshift=3.4cm]
+    \node[manualblue] at (1,2.2) {\textbf{UPC} (abaulado)};
+    \fill[manualyellow!18] (0,0) rectangle (0.85,1.7);
+    \draw[manualgray] (0,0) -- (0,1.7);
+    \draw[manualgray] (0,0) .. controls (1.05,0.4) and (1.05,1.3) .. (0,1.7);
+    \draw[vetor, manualgreen] (-0.9,0.85) -- (0.0,0.85);
+    \node[manualgray] at (0.5,-0.4) {menos reflexão};
+  \end{scope}
+
+  % APC
+  \begin{scope}[xshift=6.8cm]
+    \node[manualblue] at (1,2.2) {\textbf{APC} (8°)};
+    \fill[manualyellow!18] (0,0) -- (0.85,0.25) -- (0.85,1.45) -- (0,1.7) -- cycle;
+    \draw[manualgray] (0,0) -- (0,1.7);
+    \draw[manualgray] (0.85,0.25) -- (0,0) (0,1.7) -- (0.85,1.45);
+    \draw[vetor, manualgreen] (-0.9,0.85) -- (0.0,0.85);
+    \draw[vetor, manualgray] (0.0,0.85) -- (0.7,0.2);
+    \node[manualgray] at (0.5,-0.4) {reflexão desviada};
+  \end{scope}
+\end{tikzpicture}
+```
+Geometria das faces: **PC** (plano) reflete de volta; **UPC** (abaulado) reduz a
+reflexão; **APC** (angulado 8°) desvia a reflexão para a casca — a melhor ORL.
 :::
+
+| Polimento | Cor (SC) | ORL típica | Uso |
+|---|---|---|---|
+| **PC** | — | ~ −40 dB | legado |
+| **UPC** | azul | ~ −50 dB | Ethernet/dados ponto a ponto |
+| **APC** | **verde** | ~ −60 dB ou melhor | **PON, RF overlay (TV), GPON** |
+
+Por que **APC na PON**: a reflexão de volta atrapalha os lasers da OLT/ONT e, com
+overlay de TV em 1550 nm, causa ruído visível. O corte em **8°** joga a luz
+refletida para fora do núcleo. **Regra de ouro:** em GPON, **tudo verde (APC)**.
+
+## A regra que evita o pior erro de campo {#sec-conectores-regra}
+
+**Nunca conecte APC com UPC/PC.** As faces (uma angulada, outra reta) não encostam
+direito: a perda dispara, a reflexão piora e você pode **danificar o ferrolho**.
+Cor é o lembrete físico: **verde só casa com verde**. Um adaptador híbrido
+APC↔UPC existe para casos específicos (com fibra interna), mas no campo a regra
+prática é manter o padrão **APC em toda a PON**.
+
+## Limpeza: o conserto mais barato que existe {#sec-conectores-limpeza}
+
+A **maioria** das perdas anômalas em conector é **sujeira** — uma partícula de
+poeira no ferrolho de 2,5 mm bloqueia uma fração enorme do núcleo de 9 µm. Antes de
+trocar qualquer coisa:
+
+1. **Inspecione** com microscópio de fibra (sonda de 200×/400×) — não confie no
+   olho.
+2. **Limpe** com caneta de limpeza (*click cleaner*) ou lenço + álcool isopropílico
+   e bastão; sempre a seco depois.
+3. **Tampe** o que não está em uso (poeira entra em minutos).
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Padrão único: SC/APC (verde) em toda a PON** — OLT, DIO, splitter, CTO e ONT.
+  Padronizar elimina o erro APC×UPC e simplifica o estoque de cordões e adaptadores.
+- **"Cliente sem sinal após visita"** muitas vezes é conector sujo na ONT ou
+  cordão verde trocado por azul por engano. Cheque a **cor** e **limpe** antes de
+  suspeitar da fibra.
+- **Inclua um inspecionador de fibra no kit do técnico.** O custo da sonda se paga
+  na primeira visita evitada — sujeira invisível a olho nu é a causa raiz mais
+  comum de IL/ORL ruins.
+- **LC/UPC azul** aparece nos *transceivers* (SFP) dos switches no POP; não confunda
+  com a planta externa, que é SC/APC verde.
+:::
+
+## Resumo e checklist {#sec-resumo-09}
+
+- Conector se mede por **IL** (inserção, baixo é bom) e **ORL** (retorno, mais
+  negativo é bom).
+- **SC** domina o acesso, **LC** a alta densidade, **FC** os instrumentos.
+- Polimento: **APC (verde)** na PON; **UPC (azul)** em dados; **nunca misture
+  APC com UPC**.
+- A causa nº 1 de perda em conector é **sujeira** — inspecione e limpe antes de
+  trocar.
+
+**Checklist do capítulo**
+
+- [ ] Identifico SC/LC/FC e onde cada um é usado.
+- [ ] Sei por que a PON usa APC e o que significa a cor verde.
+- [ ] Nunca conecto APC com UPC/PC.
+- [ ] Inspeciono e limpo conectores antes de concluir que a fibra está ruim.

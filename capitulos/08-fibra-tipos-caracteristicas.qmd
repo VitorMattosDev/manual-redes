@@ -2,6 +2,127 @@
 title: "Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Escolher a fibra certa é decisão de projeto {#sec-fibra-tipos}
+
+No capítulo @sec-fibra-principios vimos a física; aqui vemos **o que se compra**.
+Especificar a fibra errada custa caro: uma multimodo num enlace de 20 km
+simplesmente não fecha, e uma G.652 comum no intradomiciliar gera chamados por
+curvatura. O provedor precisa conhecer os **tipos comerciais** (normas ITU-T G.65x)
+e suas **características-chave**: diâmetro do núcleo, atenuação, dispersão e
+sensibilidade a curvatura.
+
+## Monomodo vs. multimodo {#sec-fibra-mono-multi}
+
+::: {#fig-mono-multi}
+```{.tikz}
+%%| filename: mono-multi
+%%| alt: Comparação entre fibra multimodo com vários raios e monomodo com um único raio
+\begin{tikzpicture}[font=\footnotesize]
+  % Multimodo
+  \node[manualblue, anchor=west] at (0,2.3) {\textbf{Multimodo} (núcleo ~50 µm)};
+  \fill[manualblue!6] (0,1.2) rectangle (6,2.0);
+  \fill[manualyellow!14] (0,1.4) rectangle (6,1.8);
+  \draw[manualgray] (0,1.2)--(6,1.2) (0,2.0)--(6,2.0);
+  \draw[curva, manualred] (0,1.6) -- (1,1.78) -- (2,1.42) -- (3,1.78) -- (4,1.42) -- (5,1.78) -- (6,1.42);
+  \draw[destaque, manualgreen] (0,1.6) -- (6,1.6);
+
+  % Monomodo
+  \node[manualblue, anchor=west] at (0,0.7) {\textbf{Monomodo} (núcleo ~9 µm)};
+  \fill[manualblue!6] (0,-0.4) rectangle (6,0.4);
+  \fill[manualyellow!14] (0,-0.06) rectangle (6,0.06);
+  \draw[manualgray] (0,-0.4)--(6,-0.4) (0,0.4)--(6,0.4);
+  \draw[curva, manualred] (0,0) -- (6,0);
+\end{tikzpicture}
+```
+Na multimodo cabem vários "modos" (caminhos), que chegam em tempos diferentes
+(dispersão modal); na monomodo só um modo propaga — alcance muito maior.
 :::
+
+| Característica | Multimodo (MMF) | Monomodo (SMF) |
+|---|---|---|
+| Núcleo | ~50 / 62,5 µm | ~9 µm |
+| Fonte | LED / VCSEL | laser (FP/DFB) |
+| Alcance | até ~ centenas de m | dezenas de km |
+| Dispersão limitante | modal | cromática |
+| Cor da capa (padrão) | aqua/violeta (OM3/OM4) | amarela |
+| Uso no ISP | *patch* intra-POP/datacenter | **acesso + backbone** |
+
+A regra prática: **fora do POP, é sempre monomodo amarela**. Multimodo (OM3/OM4)
+só faz sentido em ligações curtas e baratas dentro do *rack* (ex.: empilhamento de
+switches a 10/40G).
+
+## As normas de monomodo (ITU-T G.65x) {#sec-fibra-g65x}
+
+| Norma | Apelido | Destaque | Onde usar |
+|---|---|---|---|
+| **G.652.D** | SMF padrão *low water peak* | barata, banda cheia (libera 1383 nm) | rede primária/secundária, backbone curto |
+| **G.655** | NZDSF | dispersão controlada em 1550 | DWDM de longa distância |
+| **G.657.A1** | *bend-insensitive* | tolera curvas, compatível com G.652 | *drop* e intradomiciliar |
+| **G.657.A2/B** | *low bend radius* | curvas muito fechadas (~7,5 mm) | dentro da casa, CTOs apertadas |
+
+Para um WISP/ISP regional típico: **G.652.D** nos troncos e **G.657.A1/A2** do
+*drop* até a ONT. A compatibilidade entre G.652 e G.657.A é total (mesma geometria
+de campo modal), então emendar uma na outra não gera perda relevante.
+
+## Atenuação na prática e o orçamento {#sec-fibra-atenuacao-pratica}
+
+Cada elemento da planta consome dB. Estes são **valores de referência de campo**
+(use os do fabricante quando os tiver):
+
+| Elemento | Perda típica |
+|---|---|
+| Fibra SMF @1310 nm | ~0,33 dB/km |
+| Fibra SMF @1490 nm | ~0,28 dB/km |
+| Fibra SMF @1550 nm | ~0,20 dB/km |
+| Fusão (emenda por fusão) | 0,05–0,10 dB |
+| Conector (par) | 0,3–0,5 dB |
+| Splitter 1:2 | ~3,5 dB |
+| Splitter 1:8 | ~10,5 dB |
+| Splitter 1:16 | ~13,5 dB |
+| Splitter 1:32 | ~17,5 dB |
+
+**Exemplo rápido.** Um enlace de 12 km @1490 nm com 2 conectores e 3 fusões:
+`12 × 0,28 = 3,36` (fibra) `+ 2 × 0,4 = 0,8` (conectores) `+ 3 × 0,08 = 0,24`
+(fusões) `≈ 4,4 dB`. Some os splitters e compare com o orçamento da OLT (capítulo
+@sec-orcamento) — é assim que se sabe, **antes de ir a campo**, se o enlace fecha.
+
+## Dispersão e o limite de banda × distância {#sec-fibra-dispersao-limite}
+
+Em monomodo, a **dispersão cromática** (em ps/(nm·km)) define até onde se pode ir a
+uma dada taxa. Para GPON (2,5/1,25 Gbps) e os ~20 km típicos, a dispersão não é o
+gargalo — a **atenuação** é. Mas ao subir para **XGS-PON (10G)** ou DWDM de
+*backbone*, a dispersão volta a importar e exige lasers de espectro estreito (DFB) e,
+às vezes, fibras G.655 ou compensação. Mensagem: **no acesso, dimensione por
+potência; no transporte de alta taxa, vigie também a dispersão.**
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Padronize o estoque:** G.652.D em bobinas de tronco e cabos auto-sustentados
+  (AS) da rede aérea; G.657.A1/A2 em *drop* e cordões internos. Menos SKUs, menos
+  erro de campo.
+- **Capa amarela = monomodo.** Treine a equipe: viu fibra colorida (aqua/violeta)
+  na rua, alguém comprou multimodo errado.
+- **Conector é onde mais se perde.** Prefira **fusão** a conectores em emendas
+  permanentes; reserve conectores (SC/APC) para pontos de manobra (DIO, CTO, ONT).
+- **Documente a atenuação esperada** de cada PON no projeto. Quando o OTDR
+  (capítulo @sec-otdr) acusar um valor acima do previsto, você já sabe que há
+  evento novo (curvatura, fusão ruim, conector sujo).
+:::
+
+## Resumo e checklist {#sec-resumo-08}
+
+- **Monomodo amarela** fora do POP; **multimodo** só em *patch* curto interno.
+- Conheça as normas: **G.652.D** (tronco) e **G.657.A** (*drop*/interno,
+  insensível a curvatura).
+- Memorize as **perdas de referência** (km, fusão, conector, splitter) — são a base
+  do orçamento.
+- No acesso o limite é **potência**; em alta taxa/longa distância entra a
+  **dispersão**.
+
+**Checklist do capítulo**
+
+- [ ] Escolho monomodo vs. multimodo pelo alcance e local.
+- [ ] Seleciono a norma G.65x adequada a tronco e a *drop*/interno.
+- [ ] Estimo a atenuação total de um enlace somando dB.
+- [ ] Sei quando a dispersão (não a potência) passa a limitar o enlace.
