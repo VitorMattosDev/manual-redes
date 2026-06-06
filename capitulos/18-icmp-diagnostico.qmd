@@ -2,6 +2,124 @@
 title: "ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## A camada 3 falando consigo mesma {#sec-icmp}
+
+O IP entrega pacotes em "melhor esforço" (capítulo @sec-ip-ipv4) — mas quando algo
+dá errado (host inalcançável, TTL esgotado, pacote grande demais), **alguém precisa
+avisar**. Esse mensageiro é o **ICMP** (*Internet Control Message Protocol*). Não
+transporta dados de usuário: transporta **mensagens de controle e erro** sobre o
+próprio IP. Para o provedor, o ICMP é a **base de quase todo diagnóstico de rede** —
+`ping`, `traceroute`, `mtr`, PMTUD. Saber lê-lo separa o palpite do diagnóstico.
+
+## Tipos de mensagem essenciais {#sec-icmp-tipos}
+
+| Mensagem | Quando | Para que serve |
+|---|---|---|
+| **Echo Request/Reply** | `ping` | testar alcance e medir RTT |
+| **Time Exceeded** | TTL chegou a 0 | base do **traceroute** |
+| **Destination Unreachable** | sem rota/porta/host | diz *por que* não chegou |
+| **Fragmentation Needed (DF)** | pacote > MTU com DF | base do **PMTUD** |
+| **Redirect** | rota melhor existe | otimização (cuidado: risco de segurança) |
+
+No "Destination Unreachable", o **código** detalha: *network unreachable* (problema
+de rota), *host unreachable* (vizinho não responde), *port unreachable* (nada ouvindo
+naquela porta UDP). Esse código é ouro no diagnóstico.
+
+## ping: o primeiro teste {#sec-icmp-ping}
+
+`ping` envia **Echo Request** e cronometra o **Echo Reply**. O que ele revela:
+
+- **Responde?** Sim → camada 3 alcança o destino. Não → pode ser falha real **ou**
+  ICMP bloqueado (muitos servidores filtram ping).
+- **RTT** (tempo) → latência; **variação** → jitter (capítulo @sec-grandezas).
+- **Perda** → percentual de pacotes sem resposta.
+
+Opções úteis no provedor: tamanho do pacote (`-s`/`-l`) e **não fragmentar**
+(`-M do` no Linux, `-f` no Windows) para sondar MTU.
+
+## traceroute / mtr: o caminho salto a salto {#sec-icmp-traceroute}
+
+O **traceroute** explora o **TTL** (capítulo @sec-ip-ttl): envia pacotes com TTL
+crescente (1, 2, 3…). Cada roteador que zera o TTL devolve um **Time Exceeded**,
+revelando seu IP. Assim se desenha o caminho **e o RTT de cada salto**.
+
+::: {#fig-traceroute}
+```{.tikz}
+%%| filename: traceroute-ttl
+%%| alt: Traceroute enviando pacotes com TTL crescente e cada roteador respondendo Time Exceeded
+\begin{tikzpicture}[font=\footnotesize,
+    r/.style={draw=manualgray, circle, fill=manualblue!10, minimum size=8mm, inner sep=0pt}]
+  \node[r, fill=manualgreen!14] (h) at (0,0) {PC};
+  \node[r] (r1) at (2.4,0) {R1};
+  \node[r] (r2) at (4.8,0) {R2};
+  \node[r] (r3) at (7.2,0) {R3};
+  \node[r, fill=manualred!12] (d) at (9.6,0) {Dst};
+  \draw[curva] (h)--(r1)--(r2)--(r3)--(d);
+  \draw[vetor, manualred] (h) to[bend left=45] node[above,font=\scriptsize]{TTL=1} (r1);
+  \draw[vetor, manualred] (h) to[bend left=30] node[above,font=\scriptsize]{TTL=2} (r2);
+  \draw[vetor, manualred] (h) to[bend left=20] node[above,font=\scriptsize]{TTL=3} (r3);
+  \node[manualgray, below=5mm of r2, align=center] {cada salto devolve\\\textbf{ICMP Time Exceeded}};
+\end{tikzpicture}
+```
+Traceroute: TTL crescente faz cada roteador "se denunciar" com um Time Exceeded,
+mapeando o caminho e o RTT por salto.
 :::
+
+O **`mtr`** combina ping + traceroute contínuo: roda por dezenas de pacotes e mostra
+**perda e latência por salto** em tempo real — a melhor ferramenta para achar **onde**
+a rede dói. Cuidado ao interpretar: **perda só num salto intermediário** (mas não nos
+seguintes) costuma ser *rate-limit* de ICMP daquele roteador, **não** perda real do
+caminho. O que importa é a perda **no destino** e a **tendência** a partir de um salto.
+
+## PMTUD: descobrir o MTU do caminho {#sec-icmp-pmtud}
+
+O **Path MTU Discovery** usa o ICMP "*Fragmentation Needed*": a origem manda pacotes
+**grandes com DF**; se algum enlace tem MTU menor, o roteador descarta e avisa, e a
+origem reduz. **Se esse ICMP for bloqueado, o PMTUD quebra** — o sintoma clássico de
+PPPoE (MTU 1492): conexões abrem mas **travam em transferências grandes** ("alguns
+sites não abrem"). Solução: **não bloquear ICMP** e usar **MSS clamping** no BNG
+(capítulo @sec-ip-fragmentacao).
+
+Sondagem manual de MTU (Windows): `ping -f -l 1472 destino` (1472 + 28 de cabeçalho
+= 1500). Se vier "*Packet needs to be fragmented but DF set*", reduza até passar —
+você achou o MTU do caminho.
+
+## ICMPv6: ainda mais essencial {#sec-icmp-icmpv6}
+
+Em IPv6 (capítulo @sec-ipv6) o **ICMPv6** é **parte estrutural** do protocolo: o
+**NDP** (descoberta de vizinho, RS/RA do SLAAC) roda **sobre ICMPv6**. Por isso a
+regra é categórica: **nunca bloqueie ICMPv6 indiscriminadamente** — você derrubaria a
+própria conectividade IPv6 (sem NDP não há resolução de vizinho; sem RA não há
+endereço).
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Roteiro de chamado "internet lenta/caindo":** `ping` no gateway (camada 1/2/3
+  local) → `ping` num IP do **IX/CDN local** (sua rede) → `mtr` até um destino
+  conhecido. O salto onde a perda/RTT **começa e persiste** indica o responsável
+  (você, o trânsito ou o destino).
+- **Não filtre ICMP no agregado/BNG:** libere ao menos *Echo*, *Time Exceeded* e
+  *Frag Needed* (e os tipos de NDP no IPv6). Filtrar tudo cega o suporte e quebra
+  PMTUD/SLAAC.
+- **Rate-limit de ICMP** nos roteadores é normal e gera "perda" fantasma em saltos
+  intermediários do `mtr` — não confunda com problema real.
+- **Monitore por ICMP com cautela:** sondas de *ping* a OLTs/rádios são ótimas, mas
+  combine com SNMP (capítulo @sec-monitoramento) para não depender só de ICMP, que
+  pode estar despriorizado.
+:::
+
+## Resumo e checklist {#sec-resumo-18}
+
+- **ICMP** carrega controle/erro do IP; é a base de `ping`, `traceroute`, `mtr` e
+  **PMTUD**.
+- **Echo** testa alcance/RTT; **Time Exceeded** (via TTL) sustenta o traceroute.
+- **Fragmentation Needed** faz o PMTUD; bloqueá-lo causa "site não abre" no PPPoE.
+- **ICMPv6** é **estrutural** (NDP/SLAAC) — jamais bloqueie por atacado.
+
+**Checklist do capítulo**
+
+- [ ] Interpreto resposta/RTT/perda do `ping` e o código do *Unreachable*.
+- [ ] Uso `mtr` e sei distinguir perda real de *rate-limit* intermediário.
+- [ ] Sondo o MTU do caminho com `ping -f -l` e ligo isso ao MSS clamping.
+- [ ] Sei por que ICMPv6 não pode ser bloqueado.

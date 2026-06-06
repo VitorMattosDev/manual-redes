@@ -2,6 +2,118 @@
 title: "NAT e CGNAT"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Esticar o IPv4 que acabou {#sec-nat-cgnat}
+
+Com o IPv4 esgotado (capítulo @sec-ip-ipv4), é impossível dar um endereço público a
+cada dispositivo. O **NAT** (*Network Address Translation*) contorna isso traduzindo
+muitos endereços **privados** (RFC 1918) em **um** público. Na casa do cliente, o
+roteador já faz NAT. No provedor, quando nem **endereços públicos para cada
+assinante** sobram, entra o **CGNAT** (*Carrier-Grade NAT*): um NAT em escala de
+operadora que compartilha **um IPv4 público entre dezenas/centenas de assinantes**.
+É uma muleta cara e cheia de efeitos colaterais — daí a urgência do IPv6 (capítulo
+@sec-ipv6).
+
+## Como o NAT funciona (NAPT/PAT) {#sec-nat-funcionamento}
+
+O tipo usado na prática é o **NAPT** (*Network Address Port Translation*, ou PAT):
+traduz **IP + porta**, multiplexando muitas conexões internas em um IP público pela
+**porta de origem**.
+
+::: {#fig-nat}
+```{.tikz}
+%%| filename: nat-traducao
+%%| alt: NAT traduzindo IP e porta privados para um IP público, mantendo tabela de tradução
+\begin{tikzpicture}[font=\footnotesize,
+    h/.style={draw=manualgray, rounded corners=2pt, fill=manualblue!8, minimum width=26mm, minimum height=9mm, align=center},
+    nat/.style={draw=manualgreen, fill=manualgreen!12, rounded corners=2pt, minimum width=20mm, minimum height=14mm, align=center}]
+  \node[h] (a) at (0,0.8) {PC A 10.0.0.2:5000};
+  \node[h] (b) at (0,-0.8) {PC B 10.0.0.3:5000};
+  \node[nat] (n) at (3.6,0) {NAT/PAT};
+  \node[h, fill=manualred!10] (net) at (8,0) {Internet\\(IP púb. 200.1.1.1)};
+  \draw[vetor, manualblue] (a) -- (n);
+  \draw[vetor, manualblue] (b) -- (n);
+  \draw[vetor, manualred] (n) -- node[above,font=\scriptsize, align=center]
+    {200.1.1.1:40001 (A)\\200.1.1.1:40002 (B)} (net);
+\end{tikzpicture}
+```
+NAPT/PAT: dois hosts internos com a mesma porta saem pelo mesmo IP público em
+portas distintas; a **tabela de tradução** sabe devolver cada resposta ao dono.
 :::
+
+A tradução guarda uma **entrada de estado** (IP:porta interno ↔ IP:porta externo)
+por conexão. Quando a resposta volta, o NAT consulta a tabela e reescreve de volta. O
+problema: **conexões de fora para dentro não têm entrada** — por isso, atrás de NAT,
+não dá para "abrir porta" sem **port forwarding**.
+
+## CGNAT: NAT na escala do provedor {#sec-cgnat}
+
+O CGNAT adiciona uma **segunda camada de NAT** na borda do ISP. O fluxo típico:
+
+```
+LAN cliente (192.168.0.x)  →  NAT do roteador do cliente
+   →  CGNAT do provedor (100.64.0.0/10)  →  IPv4 público compartilhado
+```
+
+Usa-se o bloco **`100.64.0.0/10`** (RFC 6598, capítulo @sec-enderecamento) entre o
+roteador do cliente e o CGNAT, **justamente para não colidir** com o `10/8`/`192.168`
+que o cliente já usa em casa (duplo NAT sem ambiguidade). Cada IP público é
+compartilhado por **N assinantes**, divididos por **blocos de portas**.
+
+## Os efeitos colaterais (e as obrigações legais) {#sec-cgnat-problemas}
+
+O CGNAT **quebra coisas** e **gera obrigações**:
+
+| Problema | Impacto |
+|---|---|
+| Sem porta de entrada | câmeras, DVR, jogos com *host*, P2P, VPN entrante falham |
+| *Port exhaustion* | poucas portas por cliente → conexões falham em pico |
+| Geolocalização errada | serviços acham o cliente em outra cidade |
+| Reputação compartilhada | um cliente abusador faz o IP cair em *blacklist* (CAPTCHA pra todos) |
+| **Logs (Marco Civil)** | obrigação legal de **registrar quem usou qual porta/quando** |
+
+A **alocação de portas por bloco** (em vez de dinâmica) reduz o volume de log: em vez
+de registrar cada conexão, registra-se "cliente X = portas 1024–2047 no IP Y das 10h
+às 12h". Isso é **essencial** para cumprir o **Marco Civil da Internet** sem explodir
+o armazenamento de logs.
+
+## Dimensionando o CGNAT {#sec-cgnat-dimensionamento}
+
+Quantos clientes por IP público? Cada IPv4 tem ~64.512 portas úteis (acima de 1024).
+Se você reservar **2.048 portas por assinante**, cabem `64512 / 2048 ≈ 31` clientes
+por IP. Com 1.024 portas, ~63 clientes. **Trade-off:** mais clientes por IP
+economiza endereços, mas aumenta *port exhaustion* (apps modernos abrem **centenas**
+de conexões). Monitore o uso de portas e ajuste o *ratio*.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **IPv6 é a saída real.** Rode **dual-stack**: o tráfego IPv6 (boa parte de vídeo e
+  CDNs) **não passa pelo CGNAT**, aliviando a tabela de estado, reduzindo *port
+  exhaustion* e cortando custo de IPv4. CGNAT vira ponte, não destino.
+- **Reserve portas por bloco** (não dinâmico) para **minimizar logs** e cumprir o
+  Marco Civil; guarde a tabela cliente↔IP↔faixa de portas↔tempo.
+- **Ofereça IP público fixo como produto** (avulso/empresarial) para quem precisa de
+  câmera/servidor/VPN entrante — resolve o cliente e gera receita.
+- **CGNAT carrier-grade** (NPU/placa dedicada ou roteador robusto): a tabela de
+  estado e a tradução em *line-rate* derrubam a CPU de um roteador comum no pico.
+- **Atenção a CAPTCHA/blacklist:** monitore reputação dos IPs compartilhados; isole
+  ou notifique o assinante abusador antes que o IP inteiro seja punido.
+:::
+
+## Resumo e checklist {#sec-resumo-19}
+
+- **NAT/NAPT** multiplexa muitos privados em um público por **IP+porta**; entrada
+  espontânea exige *port forwarding*.
+- **CGNAT** é o NAT do ISP, usa **`100.64.0.0/10`** e compartilha um público entre
+  dezenas de clientes.
+- Efeitos: sem porta de entrada, *port exhaustion*, geolocalização, reputação e
+  **logs do Marco Civil**.
+- **Dual-stack IPv6** é a verdadeira solução; CGNAT bem dimensionado e **logado por
+  bloco de portas** é o paliativo.
+
+**Checklist do capítulo**
+
+- [ ] Explico NAPT e por que não há entrada sem *forwarding*.
+- [ ] Desenho o duplo NAT cliente→CGNAT com o `100.64.0.0/10`.
+- [ ] Dimensiono clientes por IP pelo número de portas e monitoro exhaustion.
+- [ ] Configuro alocação por bloco de portas para cumprir o Marco Civil.

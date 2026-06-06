@@ -2,6 +2,122 @@
 title: "O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## O protocolo que une a internet {#sec-ip-ipv4}
+
+O **IP** (*Internet Protocol*, IPv4 — RFC 791 [@rfc791]) é a **camada 3**: o
+endereçamento lógico e o roteamento fim a fim. É a "cintura estreita" do modelo
+TCP/IP (capítulo @sec-tcpip-introducao) — tudo passa por ele. O IP é
+**não confiável** e **sem conexão** ("melhor esforço"): ele tenta entregar o pacote,
+mas não garante chegada, ordem ou ausência de duplicatas — essas garantias, quando
+necessárias, são do TCP (camada 4). Entender o **cabeçalho IPv4** é o que permite
+diagnosticar MTU, TTL, fragmentação e QoS no provedor.
+
+## O cabeçalho IPv4 campo a campo {#sec-ip-cabecalho}
+
+::: {#fig-cabecalho-ipv4}
+```{.tikz}
+%%| filename: cabecalho-ipv4
+%%| alt: Cabeçalho IPv4 organizado em linhas de 32 bits com seus campos
+\begin{tikzpicture}[font=\footnotesize, x=3.6mm, y=7mm,
+    f/.style={draw=manualgray, fill=manualblue!8, minimum height=7mm, align=center, inner sep=1pt}]
+  % regua de bits
+  \node[manualgray] at (16,4.6) {\itshape 32 bits};
+  % linha 1
+  \node[f, minimum width=3.6*4mm] at (2,4)  {Ver};
+  \node[f, minimum width=3.6*4mm] at (6,4)  {IHL};
+  \node[f, minimum width=3.6*8mm] at (12,4) {DSCP/ECN};
+  \node[f, minimum width=3.6*16mm] at (24,4){Comprimento total};
+  % linha 2
+  \node[f, minimum width=3.6*16mm] at (8,3) {Identification};
+  \node[f, fill=manualred!14, minimum width=3.6*4mm] at (18,3){Flags};
+  \node[f, minimum width=3.6*12mm] at (26,3){Fragment offset};
+  % linha 3
+  \node[f, fill=manualred!14, minimum width=3.6*8mm] at (4,2) {TTL};
+  \node[f, fill=manualgreen!14, minimum width=3.6*8mm] at (12,2){Protocolo};
+  \node[f, minimum width=3.6*16mm] at (24,2){Checksum cabeçalho};
+  % linha 4-5
+  \node[f, fill=manualgreen!18, minimum width=3.6*32mm] at (16,1){Endereço de ORIGEM (32 b)};
+  \node[f, fill=manualgreen!18, minimum width=3.6*32mm] at (16,0){Endereço de DESTINO (32 b)};
+\end{tikzpicture}
+```
+Cabeçalho IPv4 (20 bytes sem opções). Em destaque: **TTL** e **Flags/offset**
+(fragmentação) e os **endereços** de origem/destino, base do roteamento.
 :::
+
+Os campos que mais importam na operação:
+
+| Campo | Função | Relevância no ISP |
+|---|---|---|
+| **Versão** | 4 (IPv4) | distingue de IPv6 (6) |
+| **IHL** | tamanho do cabeçalho | normalmente 20 B |
+| **DSCP/ECN** | marcação de QoS | prioriza voz/vídeo (capítulo @sec-qos) |
+| **Comprimento total** | tamanho do pacote | relação com MTU |
+| **Identification/Flags/Offset** | **fragmentação** | DF + MTU = "site não abre" |
+| **TTL** | limite de saltos | evita loops; base do traceroute |
+| **Protocolo** | o que vem dentro | 6=TCP, 17=UDP, 1=ICMP |
+| **Checksum** | erro do cabeçalho | recalculado a cada salto |
+| **Origem/Destino** | endereços IP | decisão de roteamento |
+
+## TTL: o seguro contra loops {#sec-ip-ttl}
+
+O **TTL** (*Time To Live*) é um contador que **cada roteador decrementa em 1**.
+Quando chega a **zero**, o pacote é **descartado** e o roteador devolve um **ICMP
+Time Exceeded** à origem. Isso impede que pacotes circulem para sempre em um loop de
+roteamento (lembre: a camada 2 **não tem** esse mecanismo — por isso o STP é vital,
+capítulo @sec-switching). O **traceroute** (capítulo @sec-icmp) explora justamente
+o TTL: envia pacotes com TTL 1, 2, 3… e coleta os ICMP de cada salto para mapear o
+caminho.
+
+## Fragmentação e MTU {#sec-ip-fragmentacao}
+
+Se um pacote é **maior que o MTU** do próximo enlace, o IPv4 pode **fragmentá-lo** em
+pedaços que são remontados **só no destino** (campos Identification/Flags/Offset).
+Mas a fragmentação é **cara e frágil**: perder um fragmento descarta o pacote
+inteiro, e firewalls às vezes bloqueiam fragmentos. Por isso usa-se o bit **DF**
+(*Don't Fragment*): o roteador, em vez de fragmentar, **descarta** e manda um ICMP
+"*Fragmentation Needed*", e a origem reduz o tamanho — é o **Path MTU Discovery**.
+
+**A armadilha clássica do provedor:** PPPoE reduz o MTU para **1492** (capítulo
+@sec-tcpip-encapsulamento). Se o ICMP "*Frag Needed*" for bloqueado em algum ponto,
+o PMTUD quebra e o cliente vê **"alguns sites não abrem"** (carregam o cabeçalho,
+travam no conteúdo grande). A correção é o **MSS clamping** no BNG, que força o TCP a
+anunciar um MSS compatível (ex.: 1452).
+
+## Endereço IPv4: 32 bits {#sec-ip-endereco}
+
+Um endereço IPv4 tem **32 bits**, escritos em **decimal pontuado** (4 octetos),
+ex.: `192.168.0.1`. São ~4,3 bilhões de endereços — **insuficientes** para o mundo
+atual, o que motivou **CIDR/VLSM** (capítulo @sec-subredes), **NAT/CGNAT** (capítulo
+@sec-nat-cgnat) e a transição para **IPv6** (capítulo @sec-ipv6). O capítulo
+@sec-enderecamento detalha classes, máscaras e endereços especiais.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **DSCP é dinheiro de QoS:** marque voz (EF) e gestão em classes próprias na borda
+  e respeite a marcação no core; sem isso, congestionamento estraga VoIP do cliente
+  corporativo.
+- **MSS clamping no BNG é obrigatório** em PPPoE: configure (ex.: `clamp mss to
+  pmtu` ou MSS 1452) e poupe-se de uma enxurrada de chamados "Netflix abre, banco
+  não".
+- **Não bloqueie ICMP cegamente:** filtrar todo ICMP quebra o PMTUD e o diagnóstico.
+  Permita *Frag Needed* e *Time Exceeded*.
+- **TTL no traceroute** é seu mapa: quando o cliente reclama de lentidão "na
+  internet", o `traceroute`/`mtr` mostra em qual salto (seu, do trânsito, do
+  destino) o RTT dispara.
+:::
+
+## Resumo e checklist {#sec-resumo-14}
+
+- IP (camada 3) é **melhor esforço**, sem conexão; garante endereçamento e
+  roteamento, não entrega.
+- **TTL** evita loops e sustenta o **traceroute**; cada salto decrementa.
+- **Fragmentação/DF/PMTUD** + PPPoE (MTU 1492) ⇒ use **MSS clamping** no BNG.
+- O endereço tem **32 bits**; a escassez levou a CIDR/NAT/IPv6.
+
+**Checklist do capítulo**
+
+- [ ] Reconheço os campos-chave do cabeçalho IPv4 e seu uso operacional.
+- [ ] Explico TTL e como o traceroute o usa.
+- [ ] Diagnostico "site não abre" como problema de MTU/PMTUD e aplico MSS clamping.
+- [ ] Sei por que não se deve bloquear todo ICMP.

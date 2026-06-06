@@ -2,6 +2,106 @@
 title: "Endereçamento IPv4: Classes e Máscaras de Sub-rede"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Rede e host dentro de um endereço {#sec-enderecamento}
+
+Um endereço IPv4 de 32 bits (capítulo @sec-ip-ipv4) não é monolítico: ele se divide
+em uma parte de **rede** (identifica a sub-rede) e uma parte de **host** (identifica
+a máquina dentro dela). Quem define essa divisão é a **máscara de sub-rede**.
+Dominar essa separação é a base de **tudo** que vem a seguir — sub-redes, CIDR,
+VLSM, roteamento — e do trabalho diário de planejar blocos IP no provedor (pools de
+PPPoE, gerência, *links* ponto a ponto, CGNAT).
+
+## Bits, octetos e binário {#sec-enderecamento-binario}
+
+O endereço se escreve em **decimal pontuado** (`192.168.0.1`), mas a mágica acontece
+em **binário**. Cada octeto = 8 bits = 0–255. Vale memorizar os **valores de bit**:
+
+| Bit | 128 | 64 | 32 | 16 | 8 | 4 | 2 | 1 |
+|---|---|---|---|---|---|---|---|---|
+
+Assim `192 = 11000000` (128+64) e `200 = 11001000`. **Toda** conta de sub-rede
+(capítulo @sec-subredes) é, no fundo, manipular esses bits. Sem o binário, sub-rede
+vira decoreba; com ele, vira aritmética simples.
+
+## A máscara de sub-rede {#sec-enderecamento-mascara}
+
+A **máscara** é uma sequência de **1s** (parte de rede) seguida de **0s** (parte de
+host). Ex.: `255.255.255.0` = `11111111.11111111.11111111.00000000` = **24 bits de
+rede** → notação **CIDR /24**. Para achar o **endereço de rede**, faz-se um **E
+lógico (AND)** entre IP e máscara:
+
+```
+IP    192.168.10.37  = 11000000.10101000.00001010.00100101
+Másc. 255.255.255.0  = 11111111.11111111.11111111.00000000
+AND → 192.168.10.0   = endereço de REDE
+```
+
+Em qualquer bloco, dois endereços são **reservados**: o **endereço de rede** (todos
+os bits de host em 0) e o **broadcast** (todos em 1). Os **utilizáveis** são os do
+meio.
+
+## Classes (A, B, C, D, E): história que ainda ecoa {#sec-enderecamento-classes}
+
+Antes do CIDR, o IPv4 era dividido em **classes** com máscara fixa:
+
+| Classe | 1º octeto | Máscara default | Hosts/rede | Uso |
+|---|---|---|---|---|
+| **A** | 1–126 | /8 (255.0.0.0) | ~16,7 M | grandes |
+| **B** | 128–191 | /16 (255.255.0.0) | ~65 k | médias |
+| **C** | 192–223 | /24 (255.255.255.0) | 254 | pequenas |
+| **D** | 224–239 | — | — | **multicast** |
+| **E** | 240–255 | — | — | reservada |
+
+O modelo classful **desperdiçava** endereços (uma empresa com 300 hosts precisava de
+uma classe B inteira de 65 mil) e foi substituído pelo **CIDR** (sem classes,
+capítulo @sec-subredes). Mas a nomenclatura sobrevive na conversa do dia a dia
+("uma classe C" = um /24).
+
+## Endereços especiais e privados {#sec-enderecamento-especiais}
+
+Nem todo endereço é roteável na internet. Os que o provedor mais usa:
+
+| Bloco | Tipo | Uso |
+|---|---|---|
+| `10.0.0.0/8` | privado (RFC 1918) | rede interna, gerência |
+| `172.16.0.0/12` | privado | rede interna |
+| `192.168.0.0/16` | privado | LAN do cliente |
+| **`100.64.0.0/10`** | **CGNAT (RFC 6598)** | endereçar assinantes atrás de CGNAT |
+| `127.0.0.0/8` | loopback | `localhost` |
+| `169.254.0.0/16` | link-local (APIPA) | sem DHCP |
+| `224.0.0.0/4` | multicast | IPTV, OSPF, etc. |
+
+O bloco **`100.64.0.0/10`** é especialmente importante: foi criado para o **CGNAT**
+(capítulo @sec-nat-cgnat), justamente para o ISP endereçar milhares de assinantes
+sem colidir com o `10/8` que o cliente já usa em casa.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Planeje o espaço privado com disciplina:** reserve faixas distintas para
+  **gerência** (OLTs, switches, rádios), **links ponto a ponto** (/30 ou /31),
+  **loopbacks** (/32) e **pools de cliente**. Misturar tudo no `10/8` sem padrão
+  gera conflito e dor no roteamento.
+- **`/31` em links ponto a ponto** (RFC 3021) economiza: em vez de /30 (4 endereços,
+  2 úteis), o /31 usa os 2 endereços como os dois lados do enlace — útil em redes com
+  muitos *links* de transporte.
+- **Use `100.64.0.0/10` para CGNAT**, nunca o `10/8` exposto ao cliente — senão
+  colide com a LAN doméstica e cria roteamento ambíguo.
+- **Documente em um IPAM.** Saber qual /24 é de qual POP/serviço é o que mantém o
+  BGP e o CGNAT sãos quando a rede cresce.
 :::
+
+## Resumo e checklist {#sec-resumo-15}
+
+- O IP se divide em **rede + host**; a **máscara** (1s/0s) define onde.
+- **AND** entre IP e máscara dá o **endereço de rede**; rede e broadcast são
+  reservados.
+- **Classes** são história; hoje é **CIDR**, mas "/24 = classe C" persiste na fala.
+- Conheça os **privados** (RFC 1918) e o **`100.64.0.0/10`** do CGNAT.
+
+**Checklist do capítulo**
+
+- [ ] Converto octetos entre decimal e binário de cabeça.
+- [ ] Calculo o endereço de rede com AND.
+- [ ] Identifico blocos privados e o bloco de CGNAT.
+- [ ] Planejo faixas separadas para gerência, links, loopbacks e clientes.

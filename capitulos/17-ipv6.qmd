@@ -2,6 +2,122 @@
 title: "IPv6: Endereçamento, SLAAC e Sub-redes"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Por que o provedor precisa de IPv6 {#sec-ipv6}
+
+O IPv4 acabou: os 4,3 bilhões de endereços (capítulo @sec-ip-ipv4) há muito não
+cabem na internet, e o ISP sobrevive com **CGNAT** (capítulo @sec-nat-cgnat), que
+custa caro, quebra aplicações e dificulta rastreabilidade. O **IPv6** resolve a raiz
+do problema com **128 bits** de endereço — espaço praticamente inesgotável — e
+permite **endereço público real** para cada cliente, dispensando NAT. No Brasil, com
+o IX.br medindo tráfego IPv6 expressivo, **implantar IPv6 é estratégico**, não
+opcional (capítulo @sec-ipv6-isp detalha o *deployment*). Aqui cobrimos os
+fundamentos.
+
+## O endereço de 128 bits {#sec-ipv6-endereco}
+
+Escreve-se em **8 grupos de 4 hexadecimais** separados por `:`, ex.:
+`2001:0db8:0000:0000:0000:ff00:0042:8329`. Regras de abreviação:
+
+- **Zeros à esquerda** de cada grupo podem cair: `0db8 → db8`, `0000 → 0`.
+- **Uma** sequência de grupos zero vira `::` (só uma vez): o exemplo acima fica
+  `2001:db8::ff00:42:8329`.
+
+Estrutura típica de um endereço **unicast global**:
+
+::: {#fig-ipv6-estrutura}
+```{.tikz}
+%%| filename: ipv6-estrutura
+%%| alt: Endereço IPv6 dividido em prefixo global, ID de sub-rede e identificador de interface
+\begin{tikzpicture}[font=\footnotesize, node distance=0pt,
+    c/.style={draw=manualgray, minimum height=11mm, align=center}]
+  \node[c, fill=manualblue!14, minimum width=42mm] (gp) {Prefixo de roteamento global\\(ex.: /48 do ISP)};
+  \node[c, fill=manualgreen!16, minimum width=24mm, right=of gp] (sn) {Sub-rede\\(16 b → /64)};
+  \node[c, fill=manualyellow!18, minimum width=42mm, right=of sn] (iid) {Interface ID\\(64 bits)};
+  \node[manualgray, below=2mm of gp.south] {atribuído ao provedor};
+  \node[manualgray, below=2mm of sn.south] {você escolhe a LAN};
+  \node[manualgray, below=2mm of iid.south] {host (SLAAC/EUI-64 ou aleatório)};
+\end{tikzpicture}
+```
+Anatomia de um IPv6 unicast global: prefixo do ISP + ID de sub-rede + 64 bits de
+interface. **Toda LAN é um /64** — essa é a regra que organiza tudo.
 :::
+
+## Tipos de endereço {#sec-ipv6-tipos}
+
+IPv6 **não tem broadcast** — usa *multicast* e um novo tipo, *anycast*:
+
+| Tipo | Prefixo | Papel |
+|---|---|---|
+| **Unicast global (GUA)** | `2000::/3` | público, roteável (substitui o IPv4 público) |
+| **Link-local (LLA)** | `fe80::/10` | obrigatório, só no enlace; base do NDP |
+| **Unique local (ULA)** | `fc00::/7` | privado (análogo ao RFC 1918) |
+| **Multicast** | `ff00::/8` | grupos (ex.: `ff02::1` = todos os nós do link) |
+| **Loopback** | `::1/128` | localhost |
+
+Cada interface tem **vários** endereços ao mesmo tempo (sempre um link-local + um ou
+mais globais). O **link-local** é a cola: NDP, roteamento e descoberta de vizinho
+funcionam sobre ele.
+
+## SLAAC, NDP e DHCPv6 {#sec-ipv6-slaac}
+
+Em IPv6 o host pode se **autoconfigurar** sem servidor, via **SLAAC** (*Stateless
+Address Autoconfiguration*):
+
+1. O host gera seu **link-local** (`fe80::…`).
+2. Envia um **Router Solicitation (RS)** (ICMPv6).
+3. O roteador responde com **Router Advertisement (RA)**, contendo o **prefixo /64**.
+4. O host **monta seu endereço global** combinando o prefixo + Interface ID
+   (EUI-64 a partir do MAC, ou aleatório por privacidade).
+
+Não há **ARP**: o **NDP** (*Neighbor Discovery*, capítulo @sec-arp) faz a resolução
+vizinho↔endereço por multicast. Quando o ISP precisa entregar mais que um /64 (a casa
+do cliente quer várias sub-redes), usa-se **DHCPv6-PD** (*Prefix Delegation*): o BNG
+delega um **/56 ou /48** ao roteador do cliente, que reparte em /64s internos.
+
+## Sub-redes em IPv6: pense diferente {#sec-ipv6-subredes}
+
+Esqueça a economia de endereços do IPv4. Em IPv6 a conta é de **prefixos**, não de
+hosts:
+
+| Prefixo | Quantas /64 contém | Uso típico no ISP |
+|---|---|---|
+| /32 | 4 bilhões de /64 | alocação do registro ao ISP grande |
+| /48 | 65.536 /64 | site corporativo / POP |
+| /56 | 256 /64 | **delegação típica ao assinante residencial** |
+| /64 | 1 (uma LAN) | **toda rede de acesso/LAN** |
+
+A **regra inviolável: a LAN é sempre /64** (SLAAC exige). Não se "economiza" fazendo
+/120 — quebra a autoconfiguração. Sobra espaço para todos: um único /32 do ISP
+comporta milhões de clientes com /56 cada.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Plano de numeração:** receba seu **/32** (NIC.br) e fatie em **/48 por
+  POP/região** e **/56 por assinante** (via DHCPv6-PD no BNG). Mantenha hierarquia
+  para **sumarizar** no BGP (capítulo @sec-subredes).
+- **Dual-stack** é o caminho: rode IPv4+IPv6 juntos; o IPv6 alivia o CGNAT (menos
+  sessões NAT, menos custo, menos chamado de jogo/console).
+- **Não filtre ICMPv6!** Diferente do IPv4, IPv6 **depende** de ICMPv6 (RS/RA, NDP,
+  PMTUD). Bloquear ICMPv6 quebra a conectividade — libere os tipos essenciais.
+- **PPPoE/IPoE com IPv6:** entregue um /64 para o WAN/LAN via RA e delegue um /56 por
+  PD; configure o RADIUS (capítulo @sec-radius) para atribuir o prefixo por cliente.
+- **CGNAT só no IPv4:** com bom IPv6 dual-stack, grande parte do tráfego (vídeo,
+  CDNs) já vai por IPv6 nativo, reduzindo a pressão no CGNAT.
+:::
+
+## Resumo e checklist {#sec-resumo-17}
+
+- IPv6 tem **128 bits**; abrevia com supressão de zeros e `::` (uma vez).
+- **Sem broadcast**; usa multicast/anycast, **link-local** obrigatório e **NDP** no
+  lugar do ARP.
+- **SLAAC** autoconfigura via RA; **DHCPv6-PD** delega prefixo (/56) ao cliente.
+- **LAN = /64 sempre**; planeje /32→/48→/56 e rode **dual-stack** para aliviar o
+  CGNAT.
+
+**Checklist do capítulo**
+
+- [ ] Abrevio e expando endereços IPv6 corretamente.
+- [ ] Distingo GUA, LLA, ULA e multicast.
+- [ ] Explico SLAAC (RS/RA) e DHCPv6-PD para o assinante.
+- [ ] Planejo /32→/48→/56→/64 e sei por que a LAN é /64.

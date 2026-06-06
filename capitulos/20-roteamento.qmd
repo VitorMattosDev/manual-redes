@@ -2,6 +2,145 @@
 title: "Roteamento: Estático e Dinâmico (RIP, OSPF)"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Decidir o próximo salto {#sec-roteamento}
+
+Endereçar (capítulos @sec-enderecamento e @sec-subredes) é só metade da camada 3; a
+outra é **rotear**: decidir, para cada pacote, **por onde mandá-lo** rumo ao destino.
+Cada roteador mantém uma **tabela de rotas** e, ao receber um pacote, procura o
+prefixo de destino mais específico e o encaminha ao **próximo salto**. No provedor, o
+roteamento interno (entre POPs, OLTs, agregadores) é o que faz a rede funcionar como
+um todo coeso; o roteamento **externo** (com outros ISPs) é o BGP (capítulo
+@sec-bgp). Aqui tratamos o interno: estático, RIP e, sobretudo, **OSPF**.
+
+## A tabela de rotas e o longest prefix match {#sec-roteamento-tabela}
+
+A decisão segue a regra do **prefixo mais longo** (*longest prefix match*): entre
+rotas que casam com o destino, vence a **mais específica** (maior prefixo). Exemplo
+de tabela:
+
+| Destino | Próximo salto | Origem |
+|---|---|---|
+| `0.0.0.0/0` | 200.1.1.1 | estática (default) |
+| `10.0.0.0/8` | 10.10.0.2 | OSPF |
+| `10.20.0.0/16` | 10.10.0.6 | OSPF |
+| `10.20.5.0/24` | 10.10.0.10 | estática |
+
+Um pacote para `10.20.5.7` casa com três rotas (/8, /16, /24) → vence o **/24**. A
+**rota default** (`0.0.0.0/0`) é o "se nada mais casar, mande para a internet".
+
+## Roteamento estático {#sec-roteamento-estatico}
+
+São rotas **configuradas à mão**. Vantagens: simples, previsível, sem *overhead* de
+protocolo, controle total. Desvantagens: **não se adaptam** a falhas (se o caminho
+cai, a rota continua apontando para o buraco) e **não escalam** (centenas de rotas
+manuais = erro garantido). Uso ideal no ISP:
+
+- **Rota default** do agregador para a borda.
+- **Links ponto a ponto** estáveis e poucos.
+- **Rotas para clientes** com bloco fixo.
+
+Bom estático combina com **rastreamento** (ex.: *track*/BFD): a rota só fica ativa se
+o próximo salto responde, permitindo *failover* básico.
+
+## Roteamento dinâmico: a rede se descobre {#sec-roteamento-dinamico}
+
+Protocolos dinâmicos fazem os roteadores **trocarem informação** e calcularem rotas
+automaticamente, adaptando-se a falhas. Duas famílias:
+
+- **Vetor de distância** (ex.: **RIP**): cada roteador conta aos vizinhos "sei chegar
+  em X a N saltos". Simples, mas lento para convergir e limitado (RIP: máx. 15
+  saltos). **Praticamente aposentado** em redes sérias.
+- **Estado de enlace** (ex.: **OSPF**, **IS-IS**): cada roteador anuncia o estado de
+  seus *links* a todos; cada um monta um **mapa completo** e calcula o melhor caminho
+  por **Dijkstra**. Converge rápido e escala — é o padrão de IGP do provedor.
+
+| Critério | RIP | OSPF |
+|---|---|---|
+| Tipo | vetor de distância | estado de enlace |
+| Métrica | saltos (máx. 15) | custo (∝ banda) |
+| Convergência | lenta | rápida |
+| Escala | pequena | grande (com áreas) |
+| Uso no ISP | legado/raríssimo | **IGP padrão** |
+
+## OSPF na rede do provedor {#sec-roteamento-ospf}
+
+::: {#fig-ospf-areas}
+```{.tikz}
+%%| filename: ospf-areas
+%%| alt: Topologia OSPF com área 0 (backbone) e áreas conectadas por roteadores de borda
+\begin{tikzpicture}[font=\footnotesize,
+    r/.style={draw=manualgray, circle, fill=manualblue!12, minimum size=8mm, inner sep=0pt},
+    abr/.style={draw=manualgreen, circle, fill=manualgreen!16, minimum size=8mm, inner sep=0pt}]
+  \node[manualblue] at (4,2.4) {\textbf{Área 0 (backbone)}};
+  \node[r] (b1) at (2.5,1.4) {B1};
+  \node[r] (b2) at (5.5,1.4) {B2};
+  \draw[curva] (b1)--(b2);
+  \node[abr] (a1) at (1,0) {ABR};
+  \node[abr] (a2) at (7,0) {ABR};
+  \draw[curva] (b1)--(a1);
+  \draw[curva] (b2)--(a2);
+  % area 1
+  \node[r] (x1) at (-1,-1.2) {R};
+  \node[r] (x2) at (1,-1.6) {R};
+  \draw[curva, manualgray] (a1)--(x1) (a1)--(x2);
+  \node[manualgray] at (0,-2.2) {Área 1 (POP norte)};
+  % area 2
+  \node[r] (y1) at (6,-1.6) {R};
+  \node[r] (y2) at (8,-1.2) {R};
+  \draw[curva, manualgray] (a2)--(y1) (a2)--(y2);
+  \node[manualgray] at (7,-2.2) {Área 2 (POP sul)};
+\end{tikzpicture}
+```
+OSPF hierárquico: a **Área 0** é o *backbone*; áreas regionais (POPs) ligam-se a ela
+por **ABRs**. Áreas reduzem o tamanho da base de dados e contêm a instabilidade.
 :::
+
+Conceitos práticos do OSPF:
+
+- **Áreas** dividem o domínio; a **Área 0** é obrigatória e central. Isso limita o
+  alcance dos recálculos (uma falha numa área não recomputa o mundo todo) e permite
+  **sumarizar** entre áreas (capítulo @sec-subredes).
+- **Métrica = custo**, inversamente proporcional à **banda**: OSPF prefere o caminho
+  de maior capacidade, não o de menos saltos.
+- **Loopbacks** como *router-id* e como destino estável para gerência/iBGP.
+- **BFD** acelera a detecção de falha (milissegundos) acoplado ao OSPF.
+
+## Onde cada um entra no ISP {#sec-roteamento-isp}
+
+- **OSPF (ou IS-IS)** como **IGP**: carrega as rotas **internas** (loopbacks, links,
+  prefixos de infraestrutura) entre POPs e agregadores.
+- **BGP** como **EGP**: carrega as rotas **da internet** e dos clientes, e fala com
+  trânsito/IX (capítulo @sec-bgp). Tipicamente o BGP resolve o próximo salto **via
+  loopback aprendido pelo OSPF** (iBGP).
+- **Estático**: default, links pontuais e clientes simples.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Não roteie a internet inteira no OSPF.** O IGP carrega só **infraestrutura**
+  (loopbacks, links, prefixos internos); a tabela cheia da internet (~1M de rotas) é
+  trabalho do **BGP**. Misturar os dois mata a convergência.
+- **Loopback é o coração:** use /32 em loopback como *router-id*, destino de iBGP,
+  SNMP e SSH de gerência — sobrevive à queda de qualquer interface física.
+- **BFD + OSPF/BGP** dá *failover* sub-segundo no anel/núcleo; sem ele, a detecção
+  depende de *timers* lentos e o cliente sente a queda.
+- **Sumarize entre áreas** e ao redistribuir, para conter *flaps* e enxugar tabelas.
+- **Comece simples:** muitos ISPs regionais rodam OSPF interno + BGP na borda; só
+  migram para IS-IS/MPLS (capítulo @sec-mpls) quando a escala exige.
+:::
+
+## Resumo e checklist {#sec-resumo-20}
+
+- Rotear é escolher o **próximo salto** pela regra do **prefixo mais longo**;
+  `0.0.0.0/0` é o default.
+- **Estático**: simples e previsível, não se adapta — bom para default/links/clientes.
+- **Dinâmico**: **OSPF** (estado de enlace, Dijkstra, áreas) é o **IGP** padrão; RIP
+  é legado.
+- No ISP: **OSPF/IS-IS interno + BGP na borda**, com loopbacks e BFD.
+
+**Checklist do capítulo**
+
+- [ ] Resolvo uma rota pela regra do *longest prefix match*.
+- [ ] Sei quando usar estático e como torná-lo resiliente (track/BFD).
+- [ ] Explico OSPF: estado de enlace, custo por banda e áreas.
+- [ ] Separo papéis: OSPF (infra interna) vs. BGP (internet/clientes).

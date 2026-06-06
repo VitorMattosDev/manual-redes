@@ -2,6 +2,177 @@
 title: "Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## O capítulo que você vai usar todo dia {#sec-subredes}
+
+Subdividir endereços IP é a habilidade mais cobrada e mais usada na operação de um
+provedor: dimensionar o **pool de PPPoE** de uma OLT, recortar blocos para
+**CGNAT**, criar **/30 (ou /31)** para *links* de transporte, planejar a rede de
+**gerência**, e **sumarizar** rotas no BGP. Este capítulo é deliberadamente
+**prático e cheio de exercícios resolvidos passo a passo**. A base teórica está nos
+capítulos @sec-enderecamento (rede/host, máscara) e @sec-enderecamento-binario
+(binário) — tenha-os à mão.
+
+## CIDR: máscara de qualquer tamanho {#sec-subredes-cidr}
+
+**CIDR** (*Classless Inter-Domain Routing*) abandonou as classes: a máscara pode ter
+**qualquer comprimento** (`/8` a `/32`), escrita como **prefixo**. A conta-mãe:
+
+$$\text{hosts utilizáveis} = 2^{(32 - \text{prefixo})} - 2$$
+
+(o $-2$ remove **rede** e **broadcast**). E o número de **sub-redes** ao "pedir
+emprestado" $n$ bits de host é $2^n$. A tabela de bolso (memorize as colunas):
+
+| CIDR | Máscara | Bloco (endereços) | Hosts úteis |
+|---|---|---|---|
+| /24 | 255.255.255.0 | 256 | 254 |
+| /25 | 255.255.255.128 | 128 | 126 |
+| /26 | 255.255.255.192 | 64 | 62 |
+| /27 | 255.255.255.224 | 32 | 30 |
+| /28 | 255.255.255.240 | 16 | 14 |
+| /29 | 255.255.255.248 | 8 | 6 |
+| /30 | 255.255.255.252 | 4 | 2 |
+| /31 | 255.255.255.254 | 2 | 2 (ponto a ponto, RFC 3021) |
+| /32 | 255.255.255.255 | 1 | 1 (loopback/host) |
+
+O **"número mágico"** é `256 − (octeto da máscara)`: dá o **tamanho do bloco** no
+octeto que varia, e as redes começam em múltiplos dele. Ex.: /26 → máscara 192 →
+mágico `256−192 = 64` → redes em `.0, .64, .128, .192`.
+
+## Receita de 5 passos para qualquer sub-rede {#sec-subredes-receita}
+
+Dado um IP/prefixo, ache rede, broadcast e faixa:
+
+1. **Tamanho do bloco** = $2^{(32-\text{prefixo})}$ (ou mágico no octeto que varia).
+2. **Endereço de rede** = maior múltiplo do bloco **≤** ao octeto do IP.
+3. **Broadcast** = rede + bloco − 1.
+4. **Primeiro host** = rede + 1; **último host** = broadcast − 1.
+5. **Próxima rede** = broadcast + 1.
+
+### Exercício resolvido 1 — `192.168.10.37/26`
+
+- **Passo 1:** prefixo /26 → $2^{32-26}=2^6=64$ endereços por bloco. Máscara
+  `255.255.255.192`.
+- **Passo 2:** octeto que varia = o 4º (.37). Múltiplos de 64: 0, 64, 128, 192. O
+  maior ≤ 37 é **0** → **rede = 192.168.10.0**.
+- **Passo 3:** broadcast = 0 + 64 − 1 = **192.168.10.63**.
+- **Passo 4:** faixa utilizável = **192.168.10.1 a 192.168.10.62** (62 hosts).
+- **Passo 5:** próxima rede = **192.168.10.64/26**.
+
+### Exercício resolvido 2 — `172.16.20.200/27`
+
+- **Passo 1:** /27 → $2^5=32$ por bloco. Máscara `255.255.255.224`. Mágico 32.
+- **Passo 2:** múltiplos de 32: …160, 192, 224. Maior ≤ 200 = **192** → **rede =
+  172.16.20.192**.
+- **Passo 3:** broadcast = 192 + 32 − 1 = **172.16.20.223**.
+- **Passo 4:** hosts = **172.16.20.193 a 172.16.20.222** (30 hosts).
+- **Passo 5:** próxima = **172.16.20.224/27**.
+
+## VLSM: máscaras de tamanho variável {#sec-subredes-vlsm}
+
+O **VLSM** aplica **máscaras diferentes** dentro do mesmo bloco, dimensionando cada
+sub-rede ao seu tamanho real — sem desperdício. **Regra de ouro: aloque do MAIOR
+para o MENOR.** Isso evita sobreposição e fragmentação.
+
+::: {#fig-vlsm}
+```{.tikz}
+%%| filename: vlsm-divisao
+%%| alt: Bloco /24 dividido por VLSM em sub-redes de tamanhos diferentes alocadas do maior para o menor
+\begin{tikzpicture}[font=\footnotesize]
+  \draw[manualgray] (0,0) rectangle (12,1);
+  \node[manualblue] at (6,1.4) {\textbf{200.0.0.0/24} (256 endereços)};
+  % /25 (128)
+  \fill[manualblue!16] (0,0) rectangle (6,1);
+  \draw[manualgray] (6,0)--(6,1);
+  \node at (3,0.5) {/25 — 126 hosts\\.0–.127};
+  % /26 (64)
+  \fill[manualgreen!16] (6,0) rectangle (9,1);
+  \draw[manualgray] (9,0)--(9,1);
+  \node at (7.5,0.5) {/26\\.128–.191};
+  % /27 (32)
+  \fill[manualyellow!20] (9,0) rectangle (10.5,1);
+  \draw[manualgray] (10.5,0)--(10.5,1);
+  \node[font=\scriptsize] at (9.75,0.5) {/27\\.192–.223};
+  % /30s
+  \fill[manualred!16] (10.5,0) rectangle (12,1);
+  \node[font=\scriptsize] at (11.25,0.5) {/30…\\.224+};
+\end{tikzpicture}
+```
+VLSM em um /24: aloca-se do maior bloco (/25) ao menor (/30), encaixando cada
+sub-rede sem desperdício nem sobreposição.
 :::
+
+### Exercício resolvido 3 — VLSM de um /24 para uma OLT
+
+Você recebeu **200.0.0.0/24** e precisa, nesta ordem de tamanho:
+
+| Necessidade | Hosts | Prefixo | Bloco |
+|---|---|---|---|
+| Pool de assinantes A | 100 | /25 | 128 |
+| Pool de assinantes B | 50 | /26 | 64 |
+| Gerência (OLT/switches) | 20 | /27 | 32 |
+| Link ponto a ponto 1 | 2 | /30 | 4 |
+| Link ponto a ponto 2 | 2 | /30 | 4 |
+
+Alocando do maior para o menor:
+
+1. **A (/25):** `200.0.0.0` – `200.0.0.127` (hosts .1–.126).
+2. **B (/26):** começa em `.128` → `200.0.0.128` – `200.0.0.191` (.129–.190).
+3. **Gerência (/27):** começa em `.192` → `200.0.0.192` – `200.0.0.223` (.193–.222).
+4. **Link 1 (/30):** começa em `.224` → `200.0.0.224` – `200.0.0.227` (.225–.226).
+5. **Link 2 (/30):** começa em `.228` → `200.0.0.228` – `200.0.0.231` (.229–.230).
+
+Sobra de `.232` a `.255` para crescer. **Repare:** se tivéssemos começado pelos
+/30, fragmentaríamos o espaço e não caberia o /25. Por isso **maior primeiro**.
+
+## Sumarização (agregação de rotas) {#sec-subredes-sumarizacao}
+
+**Sumarizar** é o inverso: juntar vários prefixos contíguos em **um só**, menor, para
+**reduzir a tabela de rotas** (essencial no BGP — capítulo @sec-bgp). Achar o
+resumo: alinhe os blocos em binário e ache o **maior prefixo comum**.
+
+### Exercício resolvido 4 — sumarizar quatro /24
+
+Resumir `192.168.0.0/24`, `192.168.1.0/24`, `192.168.2.0/24`, `192.168.3.0/24`:
+
+```
+192.168.0.0 = ...0000 0000  (3º octeto)
+192.168.1.0 = ...0000 0001
+192.168.2.0 = ...0000 0010
+192.168.3.0 = ...0000 0011
+              └──comum──┘ ↑ variam os 2 últimos bits
+```
+
+Os primeiros **22 bits** são idênticos → resumo **`192.168.0.0/22`** (cobre .0 a .3
+no 3º octeto, 1024 endereços, 4 redes /24). Anunciar **uma** rota /22 em vez de
+quatro /24 deixa a tabela BGP mais limpa e estável.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Planeje pools por OLT/PON** com VLSM: estime assinantes + folga de crescimento,
+  escolha o prefixo (não use /24 onde um /25 basta — guarde o resto). Em IPoE com
+  CGNAT, recorte do **`100.64.0.0/10`**.
+- **/30 ou /31 para transporte:** cada *link* ponto a ponto entre roteadores/POPs é
+  um /30 (ou /31, RFC 3021). Mantenha um bloco só para *links*, facilita sumarizar.
+- **Loopbacks em /32** num bloco contíguo → sumariza num único prefixo no IGP.
+- **Sumarize antes de anunciar no BGP:** receba seu bloco do registro (ex.: um
+  /22 do NIC.br) e anuncie **agregado**, não os /24 soltos — tabela menor, menos
+  *flap*, melhor reputação.
+- **Documente cada recorte no IPAM.** VLSM sem documentação vira sobreposição e
+  *blackhole* meses depois.
+:::
+
+## Resumo e checklist {#sec-resumo-16}
+
+- **CIDR**: máscara de qualquer tamanho; hosts úteis = $2^{(32-\text{prefixo})}-2$.
+- Use o **número mágico** e a **receita de 5 passos** para rede/broadcast/faixa.
+- **VLSM**: máscaras variáveis, sempre **do maior para o menor** bloco.
+- **Sumarização**: junte prefixos contíguos no maior prefixo comum (binário) para
+  enxugar o BGP.
+
+**Checklist do capítulo**
+
+- [ ] Acho rede, broadcast e faixa de qualquer IP/prefixo em 5 passos.
+- [ ] Faço VLSM de um bloco para pools, gerência e links sem sobrepor.
+- [ ] Sumarizo prefixos contíguos achando o maior prefixo comum.
+- [ ] Recorto do `100.64.0.0/10` para CGNAT e de blocos próprios para clientes.
