@@ -2,6 +2,120 @@
 title: "Qualidade de Serviço (QoS)"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Nem todo pacote é igual {#sec-qos}
+
+Quando o enlace **não** está congestionado, todo pacote passa e QoS não faz
+diferença. Mas no **pico**, quando a fila enche (capítulo @sec-grandezas), é preciso
+decidir **quem passa primeiro** — e aí um pacote de **voz** atrasado vira corte
+audível, enquanto um pacote de **download** atrasado não incomoda ninguém. **QoS**
+(*Quality of Service*) é o conjunto de mecanismos que **classifica, prioriza e
+controla** o tráfego para que os serviços sensíveis (voz, vídeo ao vivo, gestão)
+sobrevivam ao congestionamento. Para o ISP, QoS é o que viabiliza **VoIP, IPTV e
+SLA corporativo** sobre a mesma rede do tráfego comum.
+
+## As quatro grandezas que o QoS protege {#sec-qos-grandezas}
+
+QoS atua sobre os parâmetros do capítulo @sec-grandezas:
+
+| Parâmetro | Sensível | Tolerante |
+|---|---|---|
+| **Latência** | voz, jogos | download, e-mail |
+| **Jitter** | voz, vídeo ao vivo | quase tudo o resto |
+| **Perda** | voz (corta), TCP (cai vazão) | nada gosta, mas vídeo bufferizado tolera |
+| **Banda** | vídeo, backup | navegação leve |
+
+A meta é dar a cada classe o que ela precisa: **voz** quer latência/jitter baixos;
+**vídeo** quer banda e baixa perda; **bulk** só quer "o que sobrar".
+
+## O modelo DiffServ: marcar e tratar {#sec-qos-diffserv}
+
+O modelo dominante é o **DiffServ** (serviços diferenciados), em duas etapas:
+
+1. **Classificar e marcar** na **borda** (onde o tráfego entra): identifica-se a
+   classe e grava-se uma marca — **DSCP** no cabeçalho IP (capítulo @sec-ip-ipv4) ou
+   **PCP** na tag VLAN (capítulo @sec-switching).
+2. **Tratar** em cada salto (**PHB**, *Per-Hop Behavior*): cada roteador/switch
+   aplica filas e prioridades conforme a marca.
+
+::: {#fig-qos-filas}
+```{.tikz}
+%%| filename: qos-filas
+%%| alt: Classificador separando tráfego em filas de prioridade voz, vídeo e dados, com escalonador para a saída
+\begin{tikzpicture}[font=\footnotesize,
+    q/.style={draw=manualgray, minimum width=22mm, minimum height=7mm, align=center}]
+  \node[q, fill=manualgreen!16] (cls) at (0,0) {Classificador\\(DSCP/PCP)};
+  \node[q, fill=manualred!16] (v) at (3.6,1.4) {Fila VOZ (EF)\\prioridade};
+  \node[q, fill=manualyellow!18] (vid) at (3.6,0) {Fila VÍDEO (AF)};
+  \node[q, fill=manualblue!12] (d) at (3.6,-1.4) {Fila DADOS (BE)};
+  \node[q, fill=manualgray!14] (sch) at (7.2,0) {Escalonador\\(PQ/WFQ)};
+  \node[q] (out) at (10,0) {Saída\\do enlace};
+  \draw[vetor] (cls)--(v); \draw[vetor] (cls)--(vid); \draw[vetor] (cls)--(d);
+  \draw[vetor] (v)--(sch); \draw[vetor] (vid)--(sch); \draw[vetor] (d)--(sch);
+  \draw[vetor, manualblue] (sch)--(out);
+\end{tikzpicture}
+```
+Pipeline DiffServ: classifica-se por marca, distribui-se em **filas** por classe e o
+**escalonador** serve a voz primeiro (prioridade) e reparte o resto com justiça.
 :::
+
+Classes DSCP comuns: **EF** (*Expedited Forwarding*) para voz; **AF** (*Assured
+Forwarding*) para vídeo/transacional; **BE** (*Best Effort*) para o resto.
+
+## Ferramentas de QoS {#sec-qos-ferramentas}
+
+- **Classificação/marcação** — por porta, protocolo, VLAN, DSCP.
+- **Filas + escalonamento** — *Priority Queue* (voz sempre primeiro, com cuidado para
+  não "matar" o resto) e *Weighted Fair Queue* (reparte por pesos).
+- **Policing** — **descarta/remarca** o que excede um limite (rígido; usado para
+  impor plano).
+- **Shaping** — **atrasa** (bufferiza) o excesso para suavizar picos (mais gentil que
+  policing; usado em *uplinks*).
+- **AQM** (ex.: **CoDel/FQ-CoDel**) — gerencia a fila ativamente para combater
+  **bufferbloat** (capítulo @sec-grandezas), mantendo latência baixa sob carga.
+
+## Onde aplicar no provedor {#sec-qos-isp}
+
+- **Plano do assinante (rate-limit):** o BNG (capítulo @sec-bng-pppoe) faz
+  *shaping/policing* para entregar exatamente os "300 Mega" contratados — normalmente
+  via atributo do **RADIUS** (capítulo @sec-radius).
+- **Voz/IPTV próprios:** marque EF/AF na borda e **honre** a marca no core; reserve
+  fila de prioridade para o tráfego de voz do serviço de telefonia do ISP.
+- **Gerência:** classe própria para SSH/SNMP/NTP nunca ficar sem banda durante um
+  incidente.
+- **Uplinks e PON:** dimensione para **≤ 70–80%** no pico (capítulo @sec-grandezas);
+  QoS **prioriza**, mas **não cria** banda — em saturação crônica, a solução é
+  **capacidade**, não só QoS.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Confie só na borda para marcar.** Não confie no DSCP que chega do cliente
+  (qualquer um marca tudo como EF); **remarque na entrada** conforme sua política e
+  honre a marca internamente.
+- **Rate-limit via RADIUS:** mude o plano do cliente trocando o atributo no perfil —
+  *upgrade*/*downgrade* sem tocar no equipamento.
+- **FQ-CoDel no acesso** dá ganho enorme de latência sob carga (mata bufferbloat) —
+  o cliente "sente a internet mais rápida" sem mais banda.
+- **QoS não conserta enlace cheio:** se o *uplink* ou a PON vivem em 95%, o cliente
+  sofre mesmo com QoS perfeito. QoS protege a voz no pico; **capacidade** resolve a
+  lentidão geral.
+- **VLAN/PCP na planta:** use a prioridade 802.1Q para a voz na rede metro/PON,
+  alinhada ao DSCP IP.
+:::
+
+## Resumo e checklist {#sec-resumo-26}
+
+- QoS importa **no congestionamento**: decide quem passa primeiro protegendo
+  latência/jitter/perda dos serviços sensíveis.
+- **DiffServ**: **marca** (DSCP/PCP) na borda, **trata** (filas/PHB) a cada salto.
+- Ferramentas: filas/escalonamento, **policing** (descarta) vs. **shaping** (atrasa),
+  e **AQM** contra bufferbloat.
+- No ISP: **rate-limit via RADIUS no BNG**, EF/AF para voz/vídeo, e **capacidade**
+  onde QoS não basta.
+
+**Checklist do capítulo**
+
+- [ ] Associo cada serviço à grandeza que ele exige (latência/jitter/perda/banda).
+- [ ] Explico DiffServ: marcar na borda, tratar por PHB.
+- [ ] Diferencio policing de shaping e sei onde usar cada um.
+- [ ] Aplico rate-limit por RADIUS e não confio no DSCP do cliente.

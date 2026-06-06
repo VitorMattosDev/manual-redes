@@ -2,6 +2,118 @@
 title: "HTTP, HTTPS e TLS"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## A linguagem da web {#sec-https}
+
+A maior parte do tráfego que passa pela rede do provedor é **web**: HTTP e sua versão
+segura, HTTPS. O **HTTP** (*HyperText Transfer Protocol*) é o protocolo de aplicação
+cliente-servidor que busca páginas, vídeos e APIs; o **HTTPS** é HTTP **dentro de
+TLS**, que cifra e autentica a comunicação. Entender essa pilha ajuda o ISP a
+diagnosticar lentidão percebida, dimensionar *cache*/CDN e compreender por que
+**não dá para "ver" o conteúdo** do tráfego do cliente (e nem deve).
+
+## HTTP: requisição e resposta {#sec-http}
+
+HTTP é **sem estado** (cada requisição é independente; sessão é mantida por *cookies*)
+e segue o modelo **requisição → resposta**:
+
+```
+GET /index.html HTTP/1.1          200 OK
+Host: exemplo.com.br        →      Content-Type: text/html
+User-Agent: ...                    Content-Length: 1234
+                                   <html>...</html>
+```
+
+Métodos comuns: **GET** (buscar), **POST** (enviar), **PUT/DELETE** (APIs). Os
+**códigos de status** dizem o resultado:
+
+| Faixa | Significado | Exemplos |
+|---|---|---|
+| 2xx | sucesso | 200 OK |
+| 3xx | redirecionamento | 301/302 |
+| 4xx | erro do cliente | 403, **404** |
+| 5xx | erro do servidor | 500, 502, 503 |
+
+Versões importam para desempenho: **HTTP/1.1** (uma resposta por vez na conexão),
+**HTTP/2** (multiplexação na mesma conexão TCP) e **HTTP/3** (sobre **QUIC/UDP**,
+capítulo @sec-tcp-udp, elimina o *head-of-line blocking* do TCP).
+
+## TLS: cifra, integridade e identidade {#sec-tls}
+
+O **TLS** (*Transport Layer Security*, sucessor do SSL) envolve o HTTP e entrega três
+garantias:
+
+- **Confidencialidade** — ninguém no caminho lê o conteúdo (cifragem simétrica).
+- **Integridade** — adulteração é detectada.
+- **Autenticidade** — o **certificado** prova que o servidor é quem diz ser
+  (cadeia até uma **CA** confiável).
+
+::: {#fig-tls-handshake}
+```{.tikz}
+%%| filename: tls-handshake
+%%| alt: Handshake TLS sobre TCP estabelecido, trocando ClientHello, certificado e chaves
+\begin{tikzpicture}[font=\footnotesize]
+  \draw[curva, manualgray] (0,0) -- (0,-3.8);
+  \draw[curva, manualgray] (6,0) -- (6,-3.8);
+  \node[manualblue] at (0,0.3) {Cliente};
+  \node[manualgreen] at (6,0.3) {Servidor};
+  \node[manualgray, font=\scriptsize] at (3,-0.2) {(TCP já estabelecido)};
+  \draw[vetor, manualblue] (0,-0.6) -- node[above,font=\scriptsize]{ClientHello (cifras, SNI)} (6,-0.6);
+  \draw[vetor, manualgreen] (6,-1.4) -- node[above,font=\scriptsize]{ServerHello + Certificado} (0,-1.4);
+  \draw[vetor, manualblue] (0,-2.2) -- node[above,font=\scriptsize]{troca de chave} (6,-2.2);
+  \draw[vetor, manualgreen] (6,-3.0) -- node[above,font=\scriptsize]{Finished (cifrado)} (0,-3.0);
+  \node[manualred, font=\footnotesize] at (3,-3.6) {canal cifrado → HTTP dentro};
+\end{tikzpicture}
+```
+Handshake TLS (sobre o TCP já aberto): negocia cifras, valida o **certificado** e
+deriva a chave de sessão. O **SNI** (nome do site) viaja no ClientHello.
 :::
+
+No modelo OSI, o TLS habita a **camada de apresentação/aplicação** (capítulo
+@sec-osi-l567). **TLS 1.3** reduziu o handshake para **1-RTT** (e 0-RTT em retomada),
+cortando latência — relevante porque cada conexão "paga" o handshake do TCP **mais** o
+do TLS.
+
+## O que o ISP vê (e não vê) {#sec-https-visibilidade}
+
+Com HTTPS dominante, o provedor **não enxerga** o conteúdo nem a URL completa — só:
+
+- **IP de destino** (qual servidor/CDN) e portas.
+- **SNI** (o nome do site no ClientHello), hoje em vias de também ser cifrado (ECH).
+- **Volume e tempo** do tráfego.
+
+Isso é bom (privacidade do cliente) e tem implicações: **bloqueio por URL** não
+funciona mais (só por IP/SNI/DNS), e *cache* transparente de conteúdo HTTP morreu —
+hoje o ganho vem de **CDNs e cache de borda autorizado** (ex.: Google Global Cache,
+Netflix Open Connect dentro do ISP).
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **CDN/cache de borda é ouro:** hospedar *appliances* de CDN (Open Connect, GGC)
+  no seu POP/IX serve vídeo **localmente**, economizando trânsito caro e baixando
+  latência — o maior ganho de QoE para o cliente. Negocie com os grandes provedores
+  de conteúdo.
+- **Lentidão de HTTPS** raramente é "do site": cheque **perda/latência** (camada
+  1-4), saturação de *uplink* (capítulo @sec-grandezas) e se a CDN local está
+  ativa. O handshake TLS sofre muito com perda.
+- **Não tente inspecionar HTTPS** dos clientes: além de impraticável (certificados),
+  é invasivo e ilegal sem base. Bloqueios legais (ordens judiciais) hoje se fazem por
+  **DNS/IP**, com as limitações que isso traz.
+- **HTTP/3 (QUIC/UDP 443):** garanta que UDP/443 trafega bem; bloqueá-lo força
+  *fallback* lento e degrada a experiência.
+:::
+
+## Resumo e checklist {#sec-resumo-24}
+
+- **HTTP** é requisição/resposta sem estado; conheça métodos e **códigos de status**.
+- **HTTPS = HTTP em TLS**: confidencialidade, integridade e **autenticidade** por
+  certificado.
+- **TLS 1.3** corta o handshake para 1-RTT; latência/perda pesam no estabelecimento.
+- O ISP só vê **IP/SNI/volume** — privilegie **CDN/cache de borda**, não inspeção.
+
+**Checklist do capítulo**
+
+- [ ] Interpreto métodos e códigos HTTP (2xx–5xx).
+- [ ] Explico as três garantias do TLS e o papel do certificado/SNI.
+- [ ] Sei o que o ISP consegue (e não consegue) ver em HTTPS.
+- [ ] Defendo CDN/cache de borda como principal ganho de QoE e custo.

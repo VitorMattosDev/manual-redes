@@ -2,6 +2,133 @@
 title: "Camada de Transporte: TCP e UDP"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Conversas entre processos {#sec-tcp-udp}
+
+A camada de rede (Parte IV) entrega pacotes **entre máquinas**; a **camada de
+transporte** entrega dados **entre processos** — entre o navegador e o servidor web,
+entre a ONT e o servidor de gerência. Ela resolve dois problemas: **multiplexação**
+(várias conversas na mesma máquina, separadas por **portas**) e **qualidade de
+entrega** (confiável ou não). As duas escolhas clássicas são **TCP** (confiável,
+ordenado — RFC 793 [@rfc793]) e **UDP** (leve, sem garantias). Saber qual cada
+aplicação usa é essencial para QoS, *firewall* e diagnóstico no provedor.
+
+## Portas: o endereço do processo {#sec-tcp-portas}
+
+Uma **porta** é um número de 16 bits (0–65535) que identifica o processo. Uma
+conexão é definida pela **quíntupla**: protocolo + IP origem + porta origem + IP
+destino + porta destino. Faixas:
+
+| Faixa | Nome | Exemplos |
+|---|---|---|
+| 0–1023 | **bem-conhecidas** | 53 DNS, 80 HTTP, 443 HTTPS, 22 SSH, 161 SNMP |
+| 1024–49151 | registradas | 3306 MySQL, 1812 RADIUS |
+| 49152–65535 | **efêmeras** | porta de origem aleatória do cliente |
+
+O cliente abre de uma porta **efêmera** para a porta **bem-conhecida** do servidor.
+É essa porta efêmera que o **NAT/CGNAT** (capítulo @sec-nat-cgnat) multiplexa — e
+cujo esgotamento causa falhas em pico.
+
+## UDP: rápido e sem promessas {#sec-tcp-udp-udp}
+
+O **UDP** é minimalista: cabeçalho de **8 bytes** (portas, comprimento, checksum) e
+pronto. **Sem conexão, sem confirmação, sem ordem, sem controle de
+congestionamento.** Se um datagrama se perde, o UDP não faz nada — quem se importar
+que trate na aplicação. Por que isso é desejável? Porque para **voz, vídeo ao vivo,
+DNS e jogos** chegar **na hora** vale mais que chegar **completo**: retransmitir um
+pacote de voz de 20 ms atrasado é inútil. Usos: **DNS** (capítulo @sec-dns),
+**DHCP** (@sec-dhcp), **VoIP/RTP**, streaming ao vivo, e o moderno **QUIC** (HTTP/3,
+que reimplementa confiabilidade sobre UDP).
+
+## TCP: entrega confiável {#sec-tcp-tcp}
+
+O **TCP** entrega um **fluxo de bytes ordenado e confiável**. Para isso mantém
+**estado de conexão** e usa números de sequência, confirmações (ACK),
+retransmissão, controle de fluxo e de congestionamento. O preço é **mais overhead** e
+**mais latência inicial** (o *handshake*). Usos: web, e-mail, SSH, **BGP**,
+transferências — tudo que **não pode perder byte**.
+
+### O 3-way handshake {#sec-tcp-handshake}
+
+Antes de trocar dados, TCP abre a conexão em **três passos**:
+
+::: {#fig-tcp-handshake}
+```{.tikz}
+%%| filename: tcp-handshake
+%%| alt: Three-way handshake TCP com SYN, SYN-ACK e ACK entre cliente e servidor
+\begin{tikzpicture}[font=\footnotesize]
+  \draw[curva, manualgray] (0,0) -- (0,-3.4);
+  \draw[curva, manualgray] (6,0) -- (6,-3.4);
+  \node[manualblue] at (0,0.3) {Cliente};
+  \node[manualgreen] at (6,0.3) {Servidor};
+  \draw[vetor, manualblue] (0,-0.4) -- node[above,font=\scriptsize]{1. SYN (seq=x)} (6,-0.9);
+  \draw[vetor, manualgreen] (6,-1.3) -- node[above,font=\scriptsize]{2. SYN-ACK (seq=y, ack=x+1)} (0,-1.8);
+  \draw[vetor, manualblue] (0,-2.2) -- node[above,font=\scriptsize]{3. ACK (ack=y+1)} (6,-2.7);
+  \node[manualred, font=\footnotesize] at (3,-3.2) {conexão estabelecida → dados};
+\end{tikzpicture}
+```
+3-way handshake: **SYN → SYN-ACK → ACK**. Só depois dele os dados fluem. O
+encerramento usa **FIN/ACK** (ou **RST** para abortar).
 :::
+
+1. **SYN** — cliente propõe conexão e seu número de sequência inicial.
+2. **SYN-ACK** — servidor aceita, confirma e envia o seu.
+3. **ACK** — cliente confirma; conexão **estabelecida**.
+
+Esse RT extra antes dos dados é por que **latência alta dói no TCP** (capítulo
+@sec-grandezas): cada nova conexão "paga" um RTT só para abrir (e mais um para o TLS,
+capítulo @sec-https).
+
+### Confiabilidade e controle de congestionamento {#sec-tcp-congestionamento}
+
+- **Sequência + ACK**: cada byte é numerado; o receptor confirma o que recebeu;
+  o que não for confirmado é **retransmitido**.
+- **Controle de fluxo** (*janela* anunciada): impede o emissor de afogar um receptor
+  lento. A vazão de uma conexão é limitada por **janela ÷ RTT** (BDP, capítulo
+  @sec-grandezas).
+- **Controle de congestionamento** (slow start, *congestion avoidance*): o TCP
+  **sobe** a taxa até perceber perda e então **recua**. Por isso **perda de pacote
+  destrói a velocidade percebida** — 1% de perda derruba a vazão muito além de 1%.
+
+## TCP vs. UDP lado a lado {#sec-tcp-comparacao}
+
+| Critério | TCP | UDP |
+|---|---|---|
+| Conexão | sim (handshake) | não |
+| Entrega | confiável, ordenada | melhor esforço |
+| Overhead | maior (cabeçalho 20 B+) | mínimo (8 B) |
+| Controle de fluxo/congest. | sim | não |
+| Latência inicial | RTT do handshake | nenhuma |
+| Usos | web, e-mail, SSH, BGP | DNS, DHCP, VoIP, vídeo ao vivo, QUIC |
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Perda mata TCP, atraso mata UDP.** O cliente que "baixa devagar" sofre de
+  **perda** (camada 1 óptica, rádio com interferência); o que tem **voz cortando**
+  sofre de **jitter/perda em tempo real**. Diagnostique conforme o protocolo.
+- **QoS por protocolo:** priorize UDP de voz (VoIP/RTP) e gestão; o TCP de *bulk*
+  (downloads) tolera espera. Marque DSCP/PCP (capítulos @sec-ip-ipv4, @sec-switching)
+  e respeite no core (capítulo @sec-qos).
+- **CGNAT e portas efêmeras:** apps modernos abrem **centenas** de conexões TCP;
+  isso pressiona a tabela de portas do CGNAT — monitore *port exhaustion*.
+- **MSS clamping** (capítulo @sec-ip-fragmentacao) ajusta o TCP ao MTU do PPPoE;
+  sem ele, conexões grandes travam.
+- **QUIC/HTTP3 é UDP/443:** não bloqueie UDP 443 achando que é "tráfego estranho" —
+  é a web moderna; bloquear força *fallback* lento para TCP.
+:::
+
+## Resumo e checklist {#sec-resumo-21}
+
+- Transporte multiplexa por **portas** e escolhe a qualidade: **TCP** (confiável) ou
+  **UDP** (leve).
+- TCP abre com **3-way handshake** (SYN/SYN-ACK/ACK) e garante via sequência/ACK e
+  controle de congestionamento — **perda derruba a vazão**.
+- UDP não garante nada — ideal para **tempo real** (voz/vídeo/DNS/QUIC).
+- Latência alta pesa no TCP (RTT do handshake + BDP); jitter pesa no UDP.
+
+**Checklist do capítulo**
+
+- [ ] Identifico a porta/protocolo de um serviço e o conceito de quíntupla.
+- [ ] Descrevo o 3-way handshake e por que ele custa um RTT.
+- [ ] Explico por que perda afeta TCP e jitter afeta UDP.
+- [ ] Mapeio aplicações a TCP/UDP para QoS e firewall.

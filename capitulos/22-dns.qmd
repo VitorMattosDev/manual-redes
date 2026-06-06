@@ -2,6 +2,123 @@
 title: "DNS"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## A agenda telefônica da internet {#sec-dns}
+
+Humanos lembram `netflix.com`; máquinas roteiam `52.x.x.x`. O **DNS** (*Domain Name
+System*) é o serviço distribuído que traduz **nomes em endereços IP** (e vice-versa).
+Roda majoritariamente sobre **UDP porta 53** (capítulo @sec-tcp-udp), com TCP para
+respostas grandes e transferências de zona. Para o provedor, o DNS é **infraestrutura
+crítica e diferencial de qualidade**: um **resolvedor recursivo** próprio, rápido e
+estável reduz latência percebida e tira dependência de terceiros — quando o DNS do
+ISP cai, "a internet caiu" para o cliente, mesmo com o *backbone* intacto.
+
+## A hierarquia de nomes {#sec-dns-hierarquia}
+
+O espaço de nomes é uma **árvore invertida**, resolvida da direita para a esquerda:
+
+::: {#fig-dns-hierarquia}
+```{.tikz}
+%%| filename: dns-hierarquia
+%%| alt: Árvore DNS da raiz aos TLD, domínio e host, com resolução recursiva
+\begin{tikzpicture}[font=\footnotesize,
+    n/.style={draw=manualgray, rounded corners=2pt, fill=manualblue!10, minimum width=16mm, minimum height=7mm, align=center}]
+  \node[n, fill=manualred!12] (root) at (5,3) {. (raiz)};
+  \node[n] (br) at (2,1.8) {.br};
+  \node[n] (com) at (5,1.8) {.com};
+  \node[n] (org) at (8,1.8) {.org};
+  \node[n, fill=manualgreen!14] (combr) at (2,0.6) {com.br};
+  \node[n] (ex) at (5,0.6) {exemplo};
+  \node[n, fill=manualyellow!16] (host) at (2,-0.6) {www};
+  \draw[curva] (root)--(br) (root)--(com) (root)--(org);
+  \draw[curva] (br)--(combr);
+  \draw[curva] (com)--(ex);
+  \draw[curva] (combr)--(host);
+  \node[manualgray, right=2mm of root] {servidores-raiz};
+  \node[manualgray, right=2mm of com] {TLD};
+  \node[manualgray, right=10mm of ex] {autoritativo do domínio};
+\end{tikzpicture}
+```
+Hierarquia DNS: **raiz → TLD (.br, .com) → domínio → host**. Cada nível delega ao
+seguinte; a resolução desce essa árvore.
 :::
+
+## Recursivo vs. autoritativo {#sec-dns-recursivo-autoritativo}
+
+Dois papéis distintos — confundi-los é erro comum:
+
+- **Servidor autoritativo**: guarda a **verdade** de uma zona (os registros de
+  `exemplo.com.br`). Responde só pelo que é dono.
+- **Resolvedor recursivo (*cache*)**: o que o **cliente usa**; ele **pergunta para
+  os outros** (raiz → TLD → autoritativo), monta a resposta, **guarda em cache** e
+  devolve. É este que o **ISP opera** para seus assinantes.
+
+### O passo a passo de uma resolução {#sec-dns-resolucao}
+
+Cliente quer `www.exemplo.com.br`:
+
+1. Pergunta ao **recursivo do ISP**. Se estiver em **cache**, responde na hora.
+2. Senão, o recursivo pergunta a um **servidor-raiz** → "fale com o TLD `.br`".
+3. Pergunta ao **TLD .br** → "fale com o autoritativo de `exemplo.com.br`".
+4. Pergunta ao **autoritativo** → recebe o **registro A** (o IP).
+5. Guarda em cache (respeitando o **TTL** do registro) e responde ao cliente.
+
+Cada salto desses adiciona latência **na primeira vez**; o **cache** é o que torna o
+DNS rápido nas seguintes. Por isso um recursivo bem posicionado (perto do cliente, no
+POP/IX) faz diferença sensível.
+
+## Tipos de registro essenciais {#sec-dns-registros}
+
+| Registro | Função |
+|---|---|
+| **A / AAAA** | nome → IPv4 / IPv6 |
+| **CNAME** | apelido (nome → outro nome) |
+| **MX** | servidor de e-mail do domínio |
+| **NS** | servidores autoritativos da zona |
+| **PTR** | IP → nome (DNS **reverso**) |
+| **TXT** | texto (SPF, DKIM, verificações) |
+| **SOA** | dados administrativos da zona (TTL, serial) |
+
+O **PTR (reverso)** importa muito ao ISP: servidores de e-mail rejeitam quem não tem
+reverso configurado. O provedor delega/gera PTR para seus blocos.
+
+## DNS seguro e moderno {#sec-dns-seguranca}
+
+- **DNSSEC** assina as respostas, evitando **cache poisoning** (respostas
+  forjadas). Recomendado no recursivo (validação) e nos domínios autoritativos.
+- **DoH/DoT** (DNS over HTTPS/TLS) cifram a consulta. Bom para privacidade, mas o
+  cliente que usa um DoH externo (Google/Cloudflare) **deixa de usar o cache do
+  ISP** — impacto a considerar.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Opere seu recursivo** (BIND/Unbound/Knot) **redundante** (dois ou mais),
+  próximo do cliente (no POP/borda) e com peering no **IX** para alcançar
+  autoritativos com baixa latência. DNS lento = "internet lenta" percebida.
+- **Cache + TTL:** respeite TTLs, dimensione cache; um recursivo bem aquecido
+  responde a maioria das consultas em < 1 ms.
+- **PTR/reverso:** configure o reverso dos seus blocos (e delegue aos clientes
+  corporativos) — sem ele, e-mail dos clientes cai em *spam*.
+- **Anti-abuso:** proteja o recursivo contra uso externo (open resolver vira arma de
+  **DDoS por amplificação** — capítulo @sec-ddos); responda só à sua base, aplique
+  *rate-limit* (RRL).
+- **Monitore o DNS** como serviço crítico (latência, taxa de erro, *cache hit*);
+  é uma das primeiras coisas a falhar de forma "invisível".
+:::
+
+## Resumo e checklist {#sec-resumo-22}
+
+- DNS traduz **nome ↔ IP** numa **hierarquia** raiz → TLD → domínio, sobre UDP/53.
+- Separe **recursivo** (o que o cliente usa, faz cache) de **autoritativo** (dono da
+  zona).
+- Conheça os registros (**A/AAAA, CNAME, MX, NS, PTR, TXT, SOA**); **PTR** é vital
+  para e-mail.
+- Proteja com **DNSSEC** e contra **open resolver**; o recursivo do ISP é
+  infraestrutura crítica.
+
+**Checklist do capítulo**
+
+- [ ] Descrevo a resolução recursiva passo a passo (raiz→TLD→autoritativo).
+- [ ] Diferencio recursivo de autoritativo e sei qual o ISP opera.
+- [ ] Configuro/entendo A, AAAA, MX, NS, PTR e por que o reverso importa.
+- [ ] Protejo o recursivo contra abuso (open resolver, amplificação).

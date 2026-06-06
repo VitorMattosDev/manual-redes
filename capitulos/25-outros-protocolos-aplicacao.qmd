@@ -2,6 +2,122 @@
 title: "Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## O resto da camada de aplicação {#sec-outros-protocolos}
+
+Além de DNS, DHCP e HTTP/HTTPS (capítulos anteriores), o provedor depende de uma
+constelação de protocolos de aplicação para **operar e monitorar a própria rede**:
+acessar equipamentos (SSH), coletar métricas (SNMP), sincronizar relógios (NTP),
+mover arquivos (FTP/TFTP) e dar e-mail aos clientes (SMTP/IMAP). Conhecer suas portas,
+seus riscos e seu papel é o que mantém o NOC funcionando. A tabela-resumo serve de
+referência rápida:
+
+| Protocolo | Porta | Transporte | Função |
+|---|---|---|---|
+| **SSH** | 22 | TCP | acesso remoto **seguro** a equipamentos |
+| Telnet | 23 | TCP | acesso remoto **inseguro** (evitar) |
+| **FTP** | 20/21 | TCP | transferência de arquivos (legado) |
+| **TFTP** | 69 | UDP | *boot*/firmware (sem autenticação) |
+| **SMTP** | 25/587/465 | TCP | envio de e-mail |
+| **IMAP/POP3** | 143/110 (993/995 TLS) | TCP | leitura de e-mail |
+| **SNMP** | 161/162 | UDP | monitoramento/gerência |
+| **NTP** | 123 | UDP | sincronização de relógio |
+
+## SSH: a porta de entrada do operador {#sec-outros-ssh}
+
+**SSH** (*Secure Shell*) é como você administra OLTs, switches e roteadores: sessão
+**cifrada**, com autenticação por senha ou, melhor, por **par de chaves**. Substituiu
+o **Telnet** (texto puro — senha trafega legível!), que **não deve mais existir** na
+rede. Boas práticas: chaves em vez de senha, **porta de gerência fora de banda**,
+restrição por ACL/loopback (capítulo @sec-roteamento) e *logging* de acesso. SSH
+também faz **túnel** e **SFTP** (transferência segura).
+
+## FTP/TFTP: arquivos e firmware {#sec-outros-ftp}
+
+- **FTP** é legado e inseguro (credenciais em claro); prefira **SFTP/SCP** (sobre
+  SSH). Sobrevive em integrações antigas.
+- **TFTP** é minúsculo, sobre UDP, **sem autenticação** — usado para **carregar
+  firmware/configuração** em equipamentos e no *boot* de ONTs/telefones IP. Justamente
+  por não ter segurança, deve ficar **restrito à rede de gerência**.
+
+## E-mail: SMTP, IMAP, POP3 {#sec-outros-email}
+
+- **SMTP** **envia/entrega** e-mail entre servidores e do cliente para o servidor.
+  Porta **587** (submissão com autenticação+TLS) é a correta para o cliente; **25**
+  é entre servidores. **Bloquear a porta 25 de saída dos assinantes** (*Porta 25
+  Management*, recomendação anti-spam brasileira) é prática consagrada para evitar que
+  máquinas infectadas virem fonte de spam.
+- **IMAP** (143/993) mantém o e-mail no servidor (acesso de vários dispositivos);
+  **POP3** (110/995) baixa e remove. Versões com TLS (993/995) são as recomendadas.
+
+## SNMP: os olhos do NOC {#sec-outros-snmp}
+
+O **SNMP** (*Simple Network Management Protocol*) coleta **métricas e estados** dos
+equipamentos: tráfego por interface, CPU, temperatura, potência óptica das ONTs,
+*uptime*. O sistema de monitoramento (capítulo @sec-monitoramento) faz **polling**
+(consulta periódica) e recebe **traps** (alarmes assíncronos).
+
+::: {#fig-snmp}
+```{.tikz}
+%%| filename: snmp-nms
+%%| alt: Servidor de monitoramento fazendo polling SNMP em OLT, switch e rádio e recebendo traps
+\begin{tikzpicture}[font=\footnotesize,
+    d/.style={draw=manualgray, rounded corners=2pt, fill=manualblue!10, minimum width=18mm, minimum height=8mm, align=center}]
+  \node[d, fill=manualgreen!16] (nms) at (0,0) {NMS\\(monitor)};
+  \node[d] (olt) at (5,1.4) {OLT};
+  \node[d] (sw) at (5,0) {Switch};
+  \node[d] (radio) at (5,-1.4) {Rádio};
+  \draw[vetor, manualblue] (nms) -- node[above,font=\scriptsize]{poll 161} (olt);
+  \draw[vetor, manualblue] (nms) -- (sw);
+  \draw[vetor, manualblue] (nms) -- (radio);
+  \draw[vetor, manualred] (olt) to[bend right=30] node[below,font=\scriptsize]{trap 162} (nms);
+\end{tikzpicture}
+```
+SNMP: o NMS faz **polling** (porta 161) nos equipamentos e recebe **traps** (porta
+162) quando algo dispara um alarme.
 :::
+
+**Segurança:** use **SNMPv3** (autenticação + cifra). O **SNMPv1/v2c** usa
+*community strings* em texto e, exposto à internet, vira vetor de **DDoS por
+amplificação** (capítulo @sec-ddos) — restrinja por ACL à rede de gerência.
+
+## NTP: o tempo certo {#sec-outros-ntp}
+
+O **NTP** sincroniza os relógios dos equipamentos. Parece detalhe, mas **relógio
+errado quebra tudo o que importa em operação**: *logs* com horário inconsistente
+inviabilizam correlação de incidentes e o cumprimento do **Marco Civil** (capítulo
+@sec-nat-cgnat), certificados TLS falham, e a autenticação (RADIUS, capítulo
+@sec-radius) e o RADIUS *accounting* ficam sem sentido. Opere **servidores NTP
+internos** sincronizados a fontes confiáveis (e cuide para não virar *open NTP* —
+outro vetor de amplificação).
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Mate o Telnet e o SNMPv2c expostos.** SSH (com chaves) + SNMPv3, ambos
+  restritos à **rede/loopback de gerência** por ACL. Telnet e *community public* na
+  borda são convites a incidente.
+- **Bloqueie a porta 25 de saída dos assinantes** (deixe a 587 com auth): reduz spam
+  da sua rede e protege a **reputação dos seus IPs** (capítulo @sec-nat-cgnat).
+- **NTP interno e correto é inegociável:** sem ele, *logs*, certificados, RADIUS e
+  obrigações legais desmoronam. Sincronize OLTs, BNG, switches e servidores.
+- **TFTP/firmware só na gerência:** nunca exposto; use-o para provisionar ONTs e
+  atualizar equipamentos em rede isolada.
+- **SNMP é o coração do monitoramento:** padronize OIDs (tráfego, ótica, CPU, temp)
+  e alarmes; sem SNMP você fica cego (capítulo @sec-monitoramento).
+:::
+
+## Resumo e checklist {#sec-resumo-25}
+
+- Opere a rede com **SSH** (não Telnet), monitore com **SNMPv3**, sincronize com
+  **NTP** — tudo restrito à gerência.
+- **E-mail:** cliente usa **587 (TLS)**; bloqueie a **25 de saída** dos assinantes
+  (anti-spam).
+- **TFTP** (firmware/boot) não tem segurança — só na rede de gerência.
+- Relógio certo (**NTP**) sustenta *logs*, certificados, RADIUS e o Marco Civil.
+
+**Checklist do capítulo**
+
+- [ ] Sei a porta e o risco de cada protocolo de gerência.
+- [ ] Substituí Telnet por SSH e SNMPv2c por SNMPv3, com ACL.
+- [ ] Apliquei o bloqueio da porta 25 de saída dos assinantes.
+- [ ] Mantenho NTP interno correto em todos os equipamentos.

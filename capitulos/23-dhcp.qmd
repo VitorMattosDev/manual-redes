@@ -2,6 +2,112 @@
 title: "DHCP"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Configuração automática de IP {#sec-dhcp}
+
+Atribuir IP, máscara, gateway e DNS à mão em cada dispositivo é inviável em escala. O
+**DHCP** (*Dynamic Host Configuration Protocol*) faz isso **automaticamente**: o
+cliente liga, pede, e recebe toda a configuração de rede por **empréstimo**
+(*lease*). Roda sobre **UDP** (portas **67** servidor / **68** cliente). No
+provedor, o DHCP aparece em dois mundos: na **LAN do cliente** (o roteador dele
+distribui `192.168.x`) e no **acesso IPoE**, onde o **BNG** (capítulo @sec-bng-pppoe)
+entrega o IP de serviço ao assinante — alternativa ao PPPoE.
+
+## O processo DORA {#sec-dhcp-dora}
+
+A concessão segue quatro mensagens — **DORA**:
+
+::: {#fig-dhcp-dora}
+```{.tikz}
+%%| filename: dhcp-dora
+%%| alt: Troca DHCP Discover, Offer, Request, Ack entre cliente e servidor
+\begin{tikzpicture}[font=\footnotesize]
+  \draw[curva, manualgray] (0,0) -- (0,-3.6);
+  \draw[curva, manualgray] (6,0) -- (6,-3.6);
+  \node[manualblue] at (0,0.3) {Cliente};
+  \node[manualgreen] at (6,0.3) {Servidor DHCP};
+  \draw[vetor, manualred] (0,-0.4) -- node[above,font=\scriptsize]{1. DISCOVER (broadcast)} (6,-0.4);
+  \draw[vetor, manualgreen] (6,-1.2) -- node[above,font=\scriptsize]{2. OFFER (IP proposto)} (0,-1.2);
+  \draw[vetor, manualred] (0,-2.0) -- node[above,font=\scriptsize]{3. REQUEST (aceito esse)} (6,-2.0);
+  \draw[vetor, manualgreen] (6,-2.8) -- node[above,font=\scriptsize]{4. ACK (confirmado + lease)} (0,-2.8);
+  \node[manualblue, font=\footnotesize] at (3,-3.4) {cliente configurado};
+\end{tikzpicture}
+```
+DORA: **Discover → Offer → Request → Ack**. O Discover é broadcast (o cliente ainda
+não tem IP); o Ack confirma o IP e os parâmetros pelo tempo do *lease*.
 :::
+
+1. **Discover** — cliente sem IP envia **broadcast** "alguém me dá uma config?".
+2. **Offer** — servidor(es) oferecem um IP disponível.
+3. **Request** — cliente escolhe uma oferta e pede formalmente.
+4. **Ack** — servidor confirma e entrega IP, máscara, **gateway**, **DNS** e o
+   **tempo de lease**.
+
+Perto da metade do *lease*, o cliente tenta **renovar** (unicast ao mesmo servidor);
+se falhar, tenta de novo mais tarde e, por fim, recomeça o DORA.
+
+## Parâmetros e opções {#sec-dhcp-opcoes}
+
+Além do IP, o DHCP entrega **opções**. As mais usadas:
+
+| Opção | Conteúdo |
+|---|---|
+| 1 | máscara de sub-rede |
+| 3 | gateway (roteador) |
+| 6 | servidores **DNS** |
+| 51 | tempo de *lease* |
+| 66/67 | servidor/arquivo de *boot* (TFTP) |
+| **82** | **Relay Agent Information** (identifica de onde veio o pedido) |
+
+A **Opção 82** é central no ISP: o **relay** (switch/OLT) insere informação de
+**porta/VLAN/circuito** no pedido, permitindo ao servidor saber **qual cliente
+físico** está pedindo — base do IPoE rastreável e do *anti-spoofing*.
+
+## DHCP Relay: servidor longe do cliente {#sec-dhcp-relay}
+
+O Discover é **broadcast**, e broadcast **não cruza roteadores/VLANs** (capítulo
+@sec-switching). Como então um servidor central atende milhares de VLANs de cliente?
+Pelo **DHCP Relay** (*helper*): o roteador/switch/OLT **converte** o broadcast local
+em **unicast** para o servidor central e devolve a resposta. Assim um (ou dois)
+servidores DHCP atendem toda a rede, e a **Opção 82** carimba a origem.
+
+## DHCPv6 {#sec-dhcp-dhcpv6}
+
+Em IPv6 (capítulo @sec-ipv6) há **SLAAC** (autoconfiguração sem servidor) e
+**DHCPv6**. No provedor, o mais importante é o **DHCPv6-PD** (*Prefix Delegation*):
+o BNG **delega um prefixo** (ex.: /56) ao roteador do cliente, que o reparte em /64s
+internos. É assim que o assinante recebe **endereçamento IPv6 público** para a casa
+toda.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **IPoE + DHCP** é alternativa ao PPPoE no acesso: mais simples para o cliente
+  (sem usuário/senha), com autenticação por **Opção 82 + DHCP Snooping** e
+  integração ao **RADIUS** (capítulo @sec-radius). Escolha PPPoE vs. IPoE conforme
+  controle e billing desejados (capítulo @sec-bng-pppoe).
+- **Opção 82 é anti-fraude:** amarra o IP à **porta/ONT/VLAN** física; com **DHCP
+  Snooping + DAI** nos switches, mata IP/ARP spoofing (capítulo @sec-arp) e impede
+  cliente de "se passar" por outro.
+- **Servidor redundante + Relay:** dois servidores DHCP centrais e relay na
+  OLT/agregador; *lease* curto demais sobrecarrega, longo demais trava reuso de IP —
+  ajuste ao churn.
+- **DHCPv6-PD no BNG** entrega o /56 por cliente (via RADIUS) — peça-chave do
+  dual-stack que alivia o CGNAT.
+- **Esgotou o pool?** Clientes sem IP é DORA falhando: monitore utilização do *scope*
+  e o reuso de *lease*.
+:::
+
+## Resumo e checklist {#sec-resumo-23}
+
+- DHCP automatiza IP/máscara/gateway/DNS por **lease**, via **DORA** sobre UDP 67/68.
+- **Opção 82** identifica a origem física (porta/VLAN) — base do IPoE rastreável e
+  anti-spoofing.
+- **DHCP Relay** leva o broadcast do cliente ao servidor central.
+- **DHCPv6-PD** delega o prefixo IPv6 (/56) ao assinante.
+
+**Checklist do capítulo**
+
+- [ ] Descrevo o DORA e o ciclo de renovação do *lease*.
+- [ ] Explico a Opção 82 e seu papel anti-fraude no ISP.
+- [ ] Sei por que o Relay é necessário e onde fica.
+- [ ] Configuro DHCPv6-PD para entregar IPv6 ao cliente.
