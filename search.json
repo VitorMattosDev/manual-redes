@@ -320,7 +320,7 @@
     "href": "capitulos/04-tipos-topologias.html#sec-topologia-fisica-logica",
     "title": "5  Tipos de Rede e Topologias",
     "section": "5.2 Topologia física vs. lógica",
-    "text": "5.2 Topologia física vs. lógica\nUm ponto que confunde iniciantes: a topologia física (como os cabos estão fisicamente dispostos) pode diferir da topologia lógica (como os dados de fato fluem). Uma rede fisicamente em estrela (todos os cabos vão a um switch) pode ser logicamente um barramento (todos no mesmo domínio de broadcast). Em PON, isso é gritante: fisicamente é uma árvore (OLT → splitter → várias ONTs), mas logicamente é ponto-multiponto compartilhado — todas as ONTs ouvem o mesmo sinal downstream, e a OLT arbitra o upstream por tempo (capítulo ?sec-gpon).",
+    "text": "5.2 Topologia física vs. lógica\nUm ponto que confunde iniciantes: a topologia física (como os cabos estão fisicamente dispostos) pode diferir da topologia lógica (como os dados de fato fluem). Uma rede fisicamente em estrela (todos os cabos vão a um switch) pode ser logicamente um barramento (todos no mesmo domínio de broadcast). Em PON, isso é gritante: fisicamente é uma árvore (OLT → splitter → várias ONTs), mas logicamente é ponto-multiponto compartilhado — todas as ONTs ouvem o mesmo sinal downstream, e a OLT arbitra o upstream por tempo (capítulo Seção 29.1).",
     "crumbs": [
       "Parte I — Fundamentos e Modelos de Rede",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Tipos de Rede e Topologias</span>"
@@ -430,7 +430,7 @@
     "href": "capitulos/05-meios-transmissao.html#sec-meios-comparacao-tabela",
     "title": "6  Meios de Transmissão",
     "section": "6.5 Comparando os três meios",
-    "text": "6.5 Comparando os três meios\n\n\n\n\n\n\n\n\n\nCritério\nPar trançado\nFibra\nRádio\n\n\n\n\nBanda\naté ~10 Gbps\nTbps\ndezenas/centenas de Mbps\n\n\nAlcance\n~100 m\ndezenas de km\nkm (com visada)\n\n\nImunidade a ruído\nbaixa\naltíssima\nbaixa (meio aberto)\n\n\nCusto de implantação\nbaixo (interno)\nmédio-alto\nbaixo onde não há postes\n\n\nSegurança física\nmédia\nalta (difícil grampear)\nbaixa (sinal no ar)\n\n\nOnde no ISP\npatch interno\nacesso + núcleo\nacesso rural\n\n\n\n\nNa prática do provedor\nA decisão fibra vs. rádio é, no fundo, econômica e geográfica:\n\nUrbano/adensado → fibra (GPON). O custo por assinante despenca com a densidade; a árvore PON paga-se rápido.\nRural/disperso → rádio a partir de uma torre alimentada por fibra (backhaul de fibra até a torre, distribuição por rádio). Assim você leva a capacidade da fibra para perto do cliente e gasta rádio só no último salto.\nRegra de campo: a atenuação óptica se mede e se prevê (orçamento de potência, capítulo ?sec-orcamento), enquanto o rádio varia com clima e interferência — por isso dimensione o enlace de rádio com margem de desvanecimento folgada (≥ 10–20 dB), nunca no limite.",
+    "text": "6.5 Comparando os três meios\n\n\n\n\n\n\n\n\n\nCritério\nPar trançado\nFibra\nRádio\n\n\n\n\nBanda\naté ~10 Gbps\nTbps\ndezenas/centenas de Mbps\n\n\nAlcance\n~100 m\ndezenas de km\nkm (com visada)\n\n\nImunidade a ruído\nbaixa\naltíssima\nbaixa (meio aberto)\n\n\nCusto de implantação\nbaixo (interno)\nmédio-alto\nbaixo onde não há postes\n\n\nSegurança física\nmédia\nalta (difícil grampear)\nbaixa (sinal no ar)\n\n\nOnde no ISP\npatch interno\nacesso + núcleo\nacesso rural\n\n\n\n\nNa prática do provedor\nA decisão fibra vs. rádio é, no fundo, econômica e geográfica:\n\nUrbano/adensado → fibra (GPON). O custo por assinante despenca com a densidade; a árvore PON paga-se rápido.\nRural/disperso → rádio a partir de uma torre alimentada por fibra (backhaul de fibra até a torre, distribuição por rádio). Assim você leva a capacidade da fibra para perto do cliente e gasta rádio só no último salto.\nRegra de campo: a atenuação óptica se mede e se prevê (orçamento de potência, capítulo Seção 34.1), enquanto o rádio varia com clima e interferência — por isso dimensione o enlace de rádio com margem de desvanecimento folgada (≥ 10–20 dB), nunca no limite.",
     "crumbs": [
       "Parte I — Fundamentos e Modelos de Rede",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Meios de Transmissão</span>"
@@ -496,7 +496,7 @@
     "href": "capitulos/06-grandezas-desempenho.html#sec-grandezas-calculo",
     "title": "7  Grandezas de Desempenho: Banda, Latência, Jitter e Throughput",
     "section": "7.5 Calculando o desempenho percebido",
-    "text": "7.5 Calculando o desempenho percebido\nExemplo 1 — tempo de download. Cliente de 300 Mbps baixa um jogo de 60 GB. Ignorando overhead: 60 GB × 8 = 480 Gb = 480000 Mb; 480000 ÷ 300 = 1600 s ≈ 26,7 min. Com goodput real (~92%), some ~9% → ~29 min. Útil para gerenciar a expectativa no suporte.\nExemplo 2 — limite do TCP pela latência (BDP). A vazão máxima de uma única conexão TCP é limitada pela janela de recepção e pelo RTT: \\[\\text{Vazão}_{\\max} = \\frac{\\text{Janela}}{\\text{RTT}}.\\] Com janela padrão de 64 KB e RTT de 80 ms (link a um servidor distante): 65536 B × 8 ÷ 0,080 s ≈ 6,55 Mbps — por conexão! É por isso que um cliente de 300 Mbps às vezes vê só alguns Mbps baixando de um servidor longínquo de fluxo único: o gargalo é o produto banda-atraso (BDP), não o plano. A solução é window scaling (Borman et al. 2014) e múltiplas conexões.\nExemplo 3 — overbooking de uma PON. Uma porta GPON entrega ~2,5 Gbps downstream compartilhados. Com 64 ONTs de 300 Mbps, a soma contratada é 64 × 300 = 19,2 Gbps — overbooking de ~7,7:1. Funciona porque nem todos usam o pico ao mesmo tempo, mas exige monitorar a ocupação real para não estourar no horário nobre (capítulo ?sec-gpon).",
+    "text": "7.5 Calculando o desempenho percebido\nExemplo 1 — tempo de download. Cliente de 300 Mbps baixa um jogo de 60 GB. Ignorando overhead: 60 GB × 8 = 480 Gb = 480000 Mb; 480000 ÷ 300 = 1600 s ≈ 26,7 min. Com goodput real (~92%), some ~9% → ~29 min. Útil para gerenciar a expectativa no suporte.\nExemplo 2 — limite do TCP pela latência (BDP). A vazão máxima de uma única conexão TCP é limitada pela janela de recepção e pelo RTT: \\[\\text{Vazão}_{\\max} = \\frac{\\text{Janela}}{\\text{RTT}}.\\] Com janela padrão de 64 KB e RTT de 80 ms (link a um servidor distante): 65536 B × 8 ÷ 0,080 s ≈ 6,55 Mbps — por conexão! É por isso que um cliente de 300 Mbps às vezes vê só alguns Mbps baixando de um servidor longínquo de fluxo único: o gargalo é o produto banda-atraso (BDP), não o plano. A solução é window scaling (Borman et al. 2014) e múltiplas conexões.\nExemplo 3 — overbooking de uma PON. Uma porta GPON entrega ~2,5 Gbps downstream compartilhados. Com 64 ONTs de 300 Mbps, a soma contratada é 64 × 300 = 19,2 Gbps — overbooking de ~7,7:1. Funciona porque nem todos usam o pico ao mesmo tempo, mas exige monitorar a ocupação real para não estourar no horário nobre (capítulo Seção 29.1).",
     "crumbs": [
       "Parte I — Fundamentos e Modelos de Rede",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Grandezas de Desempenho: Banda, Latência, Jitter e Throughput</span>"
@@ -562,7 +562,7 @@
     "href": "capitulos/07-fibra-principios.html#sec-fibra-atenuacao",
     "title": "8  Fibra Óptica: Princípios Físicos",
     "section": "8.3 Atenuação: para onde a luz “some”",
-    "text": "8.3 Atenuação: para onde a luz “some”\nAtenuação é a perda de potência óptica ao longo da fibra, medida em dB/km. Suas causas físicas:\n\nAbsorção — impurezas (sobretudo íons OH⁻, o “pico de água”) e a própria sílica convertem luz em calor.\nEspalhamento Rayleigh — flutuações microscópicas de densidade desviam luz; domina nos comprimentos de onda curtos (cai com \\(1/\\lambda^4\\)).\nPerdas por curvatura — dobras fechadas (macrobending) e microdeformações (microbending) deixam a luz escapar. Causa nº 1 de chamado em planta: um drop dobrado demais atrás de um móvel.\n\nComo a atenuação varia com o comprimento de onda, há janelas de menor perda — exatamente onde a fibra é operada:\n\n\n\n\n\n\n\n\n\nJanela\nλ\nAtenuação típica\nUso\n\n\n\n\n2ª (O)\n1310 nm\n~0,33 dB/km\nupstream GPON, curtas\n\n\n—\n1383 nm\npico de água (alta)\nevitado (salvo fibra low water peak)\n\n\n3ª (C)\n1550 nm\n~0,20 dB/km\nbackbone, DWDM, RF overlay\n\n\ndown GPON\n1490 nm\n~0,28 dB/km\ndownstream GPON\n\n\n\nA escala em dB é a linguagem da fibra porque é logarítmica e aditiva: perdas de trechos, conectores, fusões e splitters simplesmente somam em dB (capítulo ?sec-orcamento). Lembre: \\(-3\\,\\text{dB}\\) = metade da potência; \\(-10\\,\\text{dB}\\) = um décimo.",
+    "text": "8.3 Atenuação: para onde a luz “some”\nAtenuação é a perda de potência óptica ao longo da fibra, medida em dB/km. Suas causas físicas:\n\nAbsorção — impurezas (sobretudo íons OH⁻, o “pico de água”) e a própria sílica convertem luz em calor.\nEspalhamento Rayleigh — flutuações microscópicas de densidade desviam luz; domina nos comprimentos de onda curtos (cai com \\(1/\\lambda^4\\)).\nPerdas por curvatura — dobras fechadas (macrobending) e microdeformações (microbending) deixam a luz escapar. Causa nº 1 de chamado em planta: um drop dobrado demais atrás de um móvel.\n\nComo a atenuação varia com o comprimento de onda, há janelas de menor perda — exatamente onde a fibra é operada:\n\n\n\n\n\n\n\n\n\nJanela\nλ\nAtenuação típica\nUso\n\n\n\n\n2ª (O)\n1310 nm\n~0,33 dB/km\nupstream GPON, curtas\n\n\n—\n1383 nm\npico de água (alta)\nevitado (salvo fibra low water peak)\n\n\n3ª (C)\n1550 nm\n~0,20 dB/km\nbackbone, DWDM, RF overlay\n\n\ndown GPON\n1490 nm\n~0,28 dB/km\ndownstream GPON\n\n\n\nA escala em dB é a linguagem da fibra porque é logarítmica e aditiva: perdas de trechos, conectores, fusões e splitters simplesmente somam em dB (capítulo Seção 34.1). Lembre: \\(-3\\,\\text{dB}\\) = metade da potência; \\(-10\\,\\text{dB}\\) = um décimo.",
     "crumbs": [
       "Parte II — Camada Física e Fibra Óptica",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Fibra Óptica: Princípios Físicos</span>"
@@ -584,7 +584,7 @@
     "href": "capitulos/07-fibra-principios.html#sec-fibra-modos",
     "title": "8  Fibra Óptica: Princípios Físicos",
     "section": "8.5 Modos: por que monomodo domina o acesso",
-    "text": "8.5 Modos: por que monomodo domina o acesso\nUm “modo” é um caminho permitido para a luz no núcleo. Se o núcleo é largo (~50 µm), cabem muitos modos (multimodo, MMF) e surge dispersão modal. Se é estreito o bastante (~9 µm) para o comprimento de onda usado, só um modo propaga (monomodo, SMF) — sem dispersão modal e com alcance enorme. Toda a planta PON e o backbone do provedor são monomodo; multimodo fica restrito a patch cords curtos dentro do POP/datacenter. O capítulo Seção 9.1 detalha os tipos comerciais (G.652, G.657 etc.).\n\nNa prática do provedor\nA física vira regra de campo:\n\ndB é tudo. Aprenda a pensar em dB: cada conector ~0,3–0,5 dB, cada fusão ~0,05–0,1 dB, cada km a ~0,35 dB (1310) ou ~0,20 dB (1550). O orçamento de potência (capítulo ?sec-orcamento) é só uma soma dessas perdas.\nMacrobending é o vilão silencioso. Um drop dobrado em curva fechada ou prensado por um portão derruba a potência e o cliente cai no horário em que o sol esquenta o cabo. Fibras G.657 (insensíveis a curvatura) reduzem isso no intradomiciliar.\nPor que 1550 nm chega mais longe. Menor atenuação → mais quilômetros por dB. Por isso backbone e overlay de TV usam 1550, e GPON reserva 1490/1310 para o serviço de dados.\nCuidado com o pico de água (1383 nm). Em fibras antigas, esse comprimento é inutilizável; fibras low water peak (G.652.D) liberam toda a banda — relevante ao planejar CWDM.",
+    "text": "8.5 Modos: por que monomodo domina o acesso\nUm “modo” é um caminho permitido para a luz no núcleo. Se o núcleo é largo (~50 µm), cabem muitos modos (multimodo, MMF) e surge dispersão modal. Se é estreito o bastante (~9 µm) para o comprimento de onda usado, só um modo propaga (monomodo, SMF) — sem dispersão modal e com alcance enorme. Toda a planta PON e o backbone do provedor são monomodo; multimodo fica restrito a patch cords curtos dentro do POP/datacenter. O capítulo Seção 9.1 detalha os tipos comerciais (G.652, G.657 etc.).\n\nNa prática do provedor\nA física vira regra de campo:\n\ndB é tudo. Aprenda a pensar em dB: cada conector ~0,3–0,5 dB, cada fusão ~0,05–0,1 dB, cada km a ~0,35 dB (1310) ou ~0,20 dB (1550). O orçamento de potência (capítulo Seção 34.1) é só uma soma dessas perdas.\nMacrobending é o vilão silencioso. Um drop dobrado em curva fechada ou prensado por um portão derruba a potência e o cliente cai no horário em que o sol esquenta o cabo. Fibras G.657 (insensíveis a curvatura) reduzem isso no intradomiciliar.\nPor que 1550 nm chega mais longe. Menor atenuação → mais quilômetros por dB. Por isso backbone e overlay de TV usam 1550, e GPON reserva 1490/1310 para o serviço de dados.\nCuidado com o pico de água (1383 nm). Em fibras antigas, esse comprimento é inutilizável; fibras low water peak (G.652.D) liberam toda a banda — relevante ao planejar CWDM.",
     "crumbs": [
       "Parte II — Camada Física e Fibra Óptica",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Fibra Óptica: Princípios Físicos</span>"
@@ -639,7 +639,7 @@
     "href": "capitulos/08-fibra-tipos-caracteristicas.html#sec-fibra-atenuacao-pratica",
     "title": "9  Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)",
     "section": "9.4 Atenuação na prática e o orçamento",
-    "text": "9.4 Atenuação na prática e o orçamento\nCada elemento da planta consome dB. Estes são valores de referência de campo (use os do fabricante quando os tiver):\n\n\n\nElemento\nPerda típica\n\n\n\n\nFibra SMF (1310?) nm\n~0,33 dB/km\n\n\nFibra SMF (1490?) nm\n~0,28 dB/km\n\n\nFibra SMF (1550?) nm\n~0,20 dB/km\n\n\nFusão (emenda por fusão)\n0,05–0,10 dB\n\n\nConector (par)\n0,3–0,5 dB\n\n\nSplitter 1:2\n~3,5 dB\n\n\nSplitter 1:8\n~10,5 dB\n\n\nSplitter 1:16\n~13,5 dB\n\n\nSplitter 1:32\n~17,5 dB\n\n\n\nExemplo rápido. Um enlace de 12 km (1490?) nm com 2 conectores e 3 fusões: 12 × 0,28 = 3,36 (fibra) + 2 × 0,4 = 0,8 (conectores) + 3 × 0,08 = 0,24 (fusões) ≈ 4,4 dB. Some os splitters e compare com o orçamento da OLT (capítulo ?sec-orcamento) — é assim que se sabe, antes de ir a campo, se o enlace fecha.",
+    "text": "9.4 Atenuação na prática e o orçamento\nCada elemento da planta consome dB. Estes são valores de referência de campo (use os do fabricante quando os tiver):\n\n\n\nElemento\nPerda típica\n\n\n\n\nFibra SMF (1310?) nm\n~0,33 dB/km\n\n\nFibra SMF (1490?) nm\n~0,28 dB/km\n\n\nFibra SMF (1550?) nm\n~0,20 dB/km\n\n\nFusão (emenda por fusão)\n0,05–0,10 dB\n\n\nConector (par)\n0,3–0,5 dB\n\n\nSplitter 1:2\n~3,5 dB\n\n\nSplitter 1:8\n~10,5 dB\n\n\nSplitter 1:16\n~13,5 dB\n\n\nSplitter 1:32\n~17,5 dB\n\n\n\nExemplo rápido. Um enlace de 12 km (1490?) nm com 2 conectores e 3 fusões: 12 × 0,28 = 3,36 (fibra) + 2 × 0,4 = 0,8 (conectores) + 3 × 0,08 = 0,24 (fusões) ≈ 4,4 dB. Some os splitters e compare com o orçamento da OLT (capítulo Seção 34.1) — é assim que se sabe, antes de ir a campo, se o enlace fecha.",
     "crumbs": [
       "Parte II — Camada Física e Fibra Óptica",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)</span>"
@@ -793,7 +793,7 @@
     "href": "capitulos/10-emendas-fusao.html#sec-emendas-orcamento",
     "title": "11  Emendas: Fusão e Mecânica",
     "section": "11.5 Por que cada fusão importa no orçamento",
-    "text": "11.5 Por que cada fusão importa no orçamento\nLembre que perdas somam em dB (capítulo Seção 8.1). Uma PON real acumula várias fusões entre OLT, splitters e CTOs. Dez fusões a 0,08 dB são 0,8 dB; as mesmas dez a 0,03 dB são 0,3 dB — meio dB de folga que pode ser a diferença entre um cliente na borda funcionar ou ficar abaixo da sensibilidade da ONT. Por isso a meta de fusão alimenta diretamente o orçamento de potência (capítulo ?sec-orcamento).",
+    "text": "11.5 Por que cada fusão importa no orçamento\nLembre que perdas somam em dB (capítulo Seção 8.1). Uma PON real acumula várias fusões entre OLT, splitters e CTOs. Dez fusões a 0,08 dB são 0,8 dB; as mesmas dez a 0,03 dB são 0,3 dB — meio dB de folga que pode ser a diferença entre um cliente na borda funcionar ou ficar abaixo da sensibilidade da ONT. Por isso a meta de fusão alimenta diretamente o orçamento de potência (capítulo Seção 34.1).",
     "crumbs": [
       "Parte II — Camada Física e Fibra Óptica",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Emendas: Fusão e Mecânica</span>"
@@ -804,7 +804,7 @@
     "href": "capitulos/10-emendas-fusao.html#sec-emendas-caixas",
     "title": "11  Emendas: Fusão e Mecânica",
     "section": "11.6 Caixas de emenda e organização",
-    "text": "11.6 Caixas de emenda e organização\nA emenda mora em uma caixa de emenda óptica (CEO) ou na CTO (capítulo ?sec-cto). Regras de acomodação que evitam perda e retrabalho:\n\nRaio de curvatura respeitado nas bandejas (curva fechada = macrobending = perda).\nReserva técnica (sobra de fibra) para refazer emendas no futuro sem precisar de cabo novo.\nIdentificação de cada fibra/tubo por cor (padrão de cores do cabo) — essencial para achar a fibra certa anos depois.\nVedação contra umidade; caixa aberta na rua = água = corrosão e perda.\n\n\nNa prática do provedor\n\nCalibre o clivador e troque a lâmina no intervalo recomendado. Mais fusões ruins vêm de clivagem do que da própria fusora.\nLimpe os eletrodos e faça a manutenção periódica da fusora; eletrodo gasto eleva a perda de todas as emendas do dia.\nMeta de campo: ≤ 0,1 dB por fusão; em rede primária, refaça acima de 0,1 dB — ali a emenda multiplica impacto por todos os clientes a jusante.\nDocumente cada emenda (caixa, bandeja, posição, fibra) no georreferenciamento (capítulo ?sec-doc-georref). Sem isso, o próximo reparo vira caça ao tesouro.\nTenha kit de emenda mecânica no carro só para emergência (rompimento à noite, sem fusora disponível) e substitua por fusão assim que possível.",
+    "text": "11.6 Caixas de emenda e organização\nA emenda mora em uma caixa de emenda óptica (CEO) ou na CTO (capítulo Seção 33.1). Regras de acomodação que evitam perda e retrabalho:\n\nRaio de curvatura respeitado nas bandejas (curva fechada = macrobending = perda).\nReserva técnica (sobra de fibra) para refazer emendas no futuro sem precisar de cabo novo.\nIdentificação de cada fibra/tubo por cor (padrão de cores do cabo) — essencial para achar a fibra certa anos depois.\nVedação contra umidade; caixa aberta na rua = água = corrosão e perda.\n\n\nNa prática do provedor\n\nCalibre o clivador e troque a lâmina no intervalo recomendado. Mais fusões ruins vêm de clivagem do que da própria fusora.\nLimpe os eletrodos e faça a manutenção periódica da fusora; eletrodo gasto eleva a perda de todas as emendas do dia.\nMeta de campo: ≤ 0,1 dB por fusão; em rede primária, refaça acima de 0,1 dB — ali a emenda multiplica impacto por todos os clientes a jusante.\nDocumente cada emenda (caixa, bandeja, posição, fibra) no georreferenciamento (capítulo ?sec-doc-georref). Sem isso, o próximo reparo vira caça ao tesouro.\nTenha kit de emenda mecânica no carro só para emergência (rompimento à noite, sem fusora disponível) e substitua por fusão assim que possível.",
     "crumbs": [
       "Parte II — Camada Física e Fibra Óptica",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Emendas: Fusão e Mecânica</span>"
@@ -1915,7 +1915,51 @@
     "href": "capitulos/27-arquitetura-fttx.html",
     "title": "28  Arquitetura FTTx (FTTH, FTTB, FTTC)",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "28.1 Até onde a fibra vai\nFTTx (Fiber To The x) é o guarda-chuva das arquiteturas que levam fibra mais perto do cliente — e o “x” diz até onde. Quanto mais perto a fibra chega, melhor o desempenho e menor o trecho metálico/rádio final, mas maior o custo de implantação. Para o provedor, escolher a arquitetura FTTx é uma decisão de custo × desempenho × densidade, e na prática brasileira a esmagadora maioria é FTTH com GPON (capítulo Seção 29.1). Este capítulo situa as variantes e introduz a divisão ativa vs. passiva e o caminho físico da rede.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Arquitetura FTTx (FTTH, FTTB, FTTC)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/27-arquitetura-fttx.html#sec-fttx-variantes",
+    "href": "capitulos/27-arquitetura-fttx.html#sec-fttx-variantes",
+    "title": "28  Arquitetura FTTx (FTTH, FTTB, FTTC)",
+    "section": "28.2 As variantes de FTTx",
+    "text": "28.2 As variantes de FTTx\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 28.1: FTTH leva fibra até a casa (ONT); FTTB para no prédio (cobre interno); FTTC para no armário de rua (cobre/DSL no trecho final). Menos cobre = melhor.\n\n\n\n\n\n\n\n\n\n\n\n\nSigla\nFibra chega até\nTrecho final\nComentário\n\n\n\n\nFTTH\na casa/ONT\nnenhum (fibra total)\npadrão do ISP moderno\n\n\nFTTB\no prédio\ncobre/LAN interna\ncondomínios verticais\n\n\nFTTC\no armário de rua\ncobre/DSL\nlegado, transição\n\n\nFTTA\na antena (torre)\nrádio\nbackhaul de rádio rural\n\n\n\nNo provedor regional, FTTH+GPON domina o acesso urbano; FTTA (fibra até a torre, capítulo ?sec-radio-fund) é como se leva capacidade ao rádio rural.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Arquitetura FTTx (FTTH, FTTB, FTTC)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/27-arquitetura-fttx.html#sec-fttx-ativa-passiva",
+    "href": "capitulos/27-arquitetura-fttx.html#sec-fttx-ativa-passiva",
+    "title": "28  Arquitetura FTTx (FTTH, FTTB, FTTC)",
+    "section": "28.3 Rede ativa vs. passiva",
+    "text": "28.3 Rede ativa vs. passiva\nHá duas grandes filosofias para distribuir a fibra:\n\nAON (Ativa) / ponto a ponto: uma fibra dedicada por cliente, com equipamento ativo (switch, energia) no meio do caminho. Banda dedicada e simples de isolar, mas caro (muita fibra, muitas portas, energia em campo).\nPON (Passiva): uma fibra da OLT é dividida por splitters passivos (sem energia) para atender muitos clientes (capítulo Seção 32.1). É muito mais barata por assinante e dispensa energia entre a OLT e a ONT — por isso domina o FTTH. Custo: banda compartilhada na árvore e diagnóstico mais sutil (capítulo Seção 29.1).\n\nA escolha quase universal no acesso residencial é PON, pela economia. AON aparece em nichos (cliente corporativo que exige fibra dedicada).",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Arquitetura FTTx (FTTH, FTTB, FTTC)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/27-arquitetura-fttx.html#sec-fttx-caminho",
+    "href": "capitulos/27-arquitetura-fttx.html#sec-fttx-caminho",
+    "title": "28  Arquitetura FTTx (FTTH, FTTB, FTTC)",
+    "section": "28.4 O caminho físico fim a fim",
+    "text": "28.4 O caminho físico fim a fim\nNa arquitetura PON/FTTH, a fibra percorre uma árvore (capítulo Seção 5.3):\n\nOLT (no POP, capítulo Seção 30.1) origina a PON; cada porta PON atende uma árvore.\nDIO (Distribuidor Interno Óptico, capítulo Seção 33.1) organiza as fibras no POP.\nRede primária — cabo de tronco da OLT/DIO até o primeiro ponto de divisão.\nSplitter — divide o sinal (1:8, 1:16…) — pode haver cascata (capítulo Seção 32.1).\nCTO (Caixa de Terminação Óptica) — onde os drops dos clientes se conectam (rede secundária).\nDrop — cabo da CTO até a casa.\nONT/ONU — equipamento na ponta do assinante (capítulo Seção 31.1).\n\nCada elemento desse caminho consome dB, e a soma tem de caber no orçamento de potência (capítulo Seção 34.1) — é a costura entre arquitetura e física.\n\nNa prática do provedor\n\nPadronize FTTH+GPON no acesso urbano e FTTA (fibra na torre) para levar capacidade ao rádio rural — assim o último salto rural é rádio, mas alimentado por fibra.\nProjete a árvore pensando no orçamento: a taxa de divisão total (ex.: 1:64) e a distância definem se o cliente mais distante fecha o link (capítulo Seção 34.1). Não “estique” a árvore sem refazer a conta.\nReserva e expansão: deixe fibras de reserva no tronco e portas livres no splitter/CTO; crescer depois sem reserva é refazer planta.\nFTTB em prédios: leve a fibra ao condomínio e resolva o vertical conforme o caso (ONT por apto é o ideal; switch interno é compromisso).\nDocumente a árvore (OLT→porta→splitter→CTO→cliente) no georreferenciamento (capítulo ?sec-doc-georref) desde o dia 1 — sem isso, manutenção vira caos.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Arquitetura FTTx (FTTH, FTTB, FTTC)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/27-arquitetura-fttx.html#sec-resumo-27",
+    "href": "capitulos/27-arquitetura-fttx.html#sec-resumo-27",
+    "title": "28  Arquitetura FTTx (FTTH, FTTB, FTTC)",
+    "section": "28.5 Resumo e checklist",
+    "text": "28.5 Resumo e checklist\n\nFTTx = fibra até “x”; FTTH (até a casa) é o padrão, FTTA alimenta o rádio rural.\nPON (passiva) vence no acesso por custo (splitter sem energia, fibra compartilhada); AON é nicho.\nO caminho físico é uma árvore: OLT → DIO → primária → splitter → CTO → drop → ONT.\nArquitetura e orçamento de potência andam juntos — toda divisão/distância custa dB.\n\nChecklist do capítulo\n\nDiferencio FTTH/FTTB/FTTC/FTTA e onde cada um se aplica.\nExplico por que PON é mais barata que AON no acesso.\nDescrevo o caminho físico OLT→ONT e seus elementos.\nRelaciono taxa de divisão e distância ao orçamento de potência.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>28</span>  <span class='chapter-title'>Arquitetura FTTx (FTTH, FTTB, FTTC)</span>"
@@ -1926,7 +1970,62 @@
     "href": "capitulos/28-gpon-epon-xgspon.html",
     "title": "29  Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "29.1 Como uma fibra atende muitos clientes\nA PON (rede óptica passiva, capítulo Seção 28.1) faz uma única porta da OLT atender dezenas de assinantes por uma árvore de splitters. Mas se todos compartilham a mesma fibra, como evitar que os sinais colidam? A resposta está nos padrões PON — GPON (ITU-T G.984 (G.984.1 2008)), EPON (IEEE), XGS-PON (G.9807.1 (G.9807.1 2016)) e NG-PON2 — que definem comprimentos de onda, taxas e o mecanismo de arbitragem do meio compartilhado. No Brasil, GPON é o padrão dominante, com XGS-PON como caminho de evolução.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/28-gpon-epon-xgspon.html#sec-gpon-wdm",
+    "href": "capitulos/28-gpon-epon-xgspon.html#sec-gpon-wdm",
+    "title": "29  Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2",
+    "section": "29.2 Downstream, upstream e WDM",
+    "text": "29.2 Downstream, upstream e WDM\nNa mesma fibra, down e up usam comprimentos de onda diferentes (WDM, capítulo Seção 5.5) — assim coexistem sem colidir entre si:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 29.1: GPON: o downstream (1490 nm) é broadcast — todas as ONTs ouvem tudo, e cada uma filtra/decifra só o que é seu; o upstream (1310 nm) é TDMA — a OLT dá um slot de tempo a cada ONT para ninguém colidir.\n\n\n\n\nDownstream (OLT→ONTs): broadcast. A OLT transmite para todos; cada ONT lê só os quadros endereçados a ela (com cifragem AES para privacidade, já que o vizinho recebe os mesmos bits).\nUpstream (ONTs→OLT): TDMA (Time Division Multiple Access). A OLT agenda slots de tempo (via DBA, abaixo) para cada ONT transmitir, evitando colisão no meio compartilhado.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/28-gpon-epon-xgspon.html#sec-gpon-dba",
+    "href": "capitulos/28-gpon-epon-xgspon.html#sec-gpon-dba",
+    "title": "29  Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2",
+    "section": "29.3 DBA: repartindo o upstream",
+    "text": "29.3 DBA: repartindo o upstream\nO DBA (Dynamic Bandwidth Allocation) é o cérebro do upstream: a OLT distribui os slots dinamicamente conforme a demanda de cada ONT, garantindo bandas mínimas contratadas e aproveitando a capacidade ociosa. É o DBA que permite o overbooking (capítulo Seção 7.1) funcionar bem — quem precisa, recebe mais slots no instante.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/28-gpon-epon-xgspon.html#sec-gpon-padroes",
+    "href": "capitulos/28-gpon-epon-xgspon.html#sec-gpon-padroes",
+    "title": "29  Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2",
+    "section": "29.4 Os padrões lado a lado",
+    "text": "29.4 Os padrões lado a lado\n\n\n\n\n\n\n\n\n\n\n\nPadrão\nÓrgão\nDown\nUp\nλ down/up\nSplit típico\n\n\n\n\nGPON\nITU-T G.984\n2,488 Gbps\n1,244 Gbps\n1490/1310 nm\n1:64 (até 1:128)\n\n\nEPON\nIEEE 802.3ah\n1,25 Gbps\n1,25 Gbps\n1490/1310 nm\n1:32\n\n\nXGS-PON\nITU-T G.9807.1\n9,953 Gbps\n9,953 Gbps\n1577/1270 nm\n1:64\n\n\nNG-PON2\nITU-T G.989\n4×10 Gbps (TWDM)\nvariável\nmúltiplos λ\n1:64\n\n\n\nPontos práticos:\n\nGPON é assimétrico (mais down que up), o que casa com o uso residencial.\nXGS-PON é simétrico 10G e — crucial — usa comprimentos de onda diferentes da GPON (1577/1270), o que permite coexistência na mesma fibra via um combiner WDM: você sobrepõe XGS-PON à GPON existente e migra clientes gradualmente.\nGPON e EPON não se misturam (padrões/órgãos diferentes — capítulo Seção 2.5); ONT GPON não funciona em OLT EPON e vice-versa.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/28-gpon-epon-xgspon.html#sec-gpon-limites",
+    "href": "capitulos/28-gpon-epon-xgspon.html#sec-gpon-limites",
+    "title": "29  Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2",
+    "section": "29.5 Distância e divisão: o limite real",
+    "text": "29.5 Distância e divisão: o limite real\nGPON especifica alcance lógico de até 20 km (até 60 km com extensores) e divisão de até 1:128 — mas o limite prático é o orçamento de potência (capítulo Seção 34.1), não o número no datasheet. Mais divisão = mais perda no splitter; mais distância = mais perda na fibra. As classes ópticas (B+, C+) definem quanto orçamento a OLT/ONT entrega:\n\n\n\nClasse\nOrçamento típico\n\n\n\n\nB+\n28 dB\n\n\nC+\n32 dB\n\n\nC++\n35 dB\n\n\n\nCom Classe B+ (28 dB), um split 1:64 (~17,5 dB) deixa ~10 dB para fibra + conectores + fusões — isso define quão longe a árvore pode ir.\n\nNa prática do provedor\n\nPadronize GPON Classe C+ para ganhar folga de orçamento (32 dB) — permite splits maiores ou árvores mais longas com a mesma margem.\nPlaneje a migração para XGS-PON desde já: por usar λ distintos, ela coexiste com a GPON na fibra; reserve isso para PONs lotadas ou clientes que pedem simétrico 10G, sem reconstruir planta.\nOverbooking consciente: uma porta GPON (~2,5G down) com 64 clientes de 300M tem ratio ~7,7:1 (capítulo Seção 7.1). O DBA segura o pico, mas monitore a ocupação real da porta PON; quando passar de ~80% no horário nobre, divida a PON (mova clientes para outra porta) ou suba para XGS-PON.\nAES sempre ligado: como o downstream é broadcast, a cifra protege o cliente do vizinho na mesma árvore — não desabilite.\nNão tente GPON+EPON juntos: são incompatíveis; escolha um ecossistema (no Brasil, GPON).",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/28-gpon-epon-xgspon.html#sec-resumo-28",
+    "href": "capitulos/28-gpon-epon-xgspon.html#sec-resumo-28",
+    "title": "29  Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2",
+    "section": "29.6 Resumo e checklist",
+    "text": "29.6 Resumo e checklist\n\nPON resolve o meio compartilhado com WDM (down/up por λ), broadcast+AES no down e TDMA+DBA no up.\nGPON (2,5/1,25G, assimétrico) domina; XGS-PON (10G simétrico) coexiste por usar λ diferentes.\nGPON ≠ EPON (incompatíveis); o limite prático de distância/divisão é o orçamento de potência e a classe óptica (B+/C+).\nO DBA viabiliza o overbooking; monitore a ocupação da porta PON.\n\nChecklist do capítulo\n\nExplico down (broadcast/AES) e up (TDMA/DBA) na GPON.\nComparo GPON, EPON e XGS-PON em taxa, λ e compatibilidade.\nSei por que XGS-PON coexiste com GPON na mesma fibra.\nRelaciono classe óptica (B+/C+) ao orçamento e à distância/divisão.\n\n\n\n\n\nG.9807.1: 10-Gigabit-capable symmetric passive optical network (XGS-PON). 2016. ITU-T. https://www.itu.int/rec/T-REC-G.9807.1.\n\n\nG.984.1: Gigabit-capable passive optical networks (GPON): General characteristics. 2008. ITU-T. https://www.itu.int/rec/T-REC-G.984.1.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>29</span>  <span class='chapter-title'>Tecnologias PON: GPON, EPON, XGS-PON e NG-PON2</span>"
@@ -1937,7 +2036,62 @@
     "href": "capitulos/29-olt.html",
     "title": "30  OLT — Optical Line Terminal",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "30.1 O cérebro da rede óptica\nA OLT (Optical Line Terminal) é o equipamento que origina a rede PON: fica no POP do provedor e é a “cabeça” de todas as árvores de fibra que descem até os assinantes (capítulo Seção 28.1). De um lado, ela tem o uplink que a conecta ao backbone/agregador; do outro, portas PON que alimentam os splitters e ONTs. É na OLT que se provisiona, autentica, mede e controla cada ONT — por isso ela é, ao mesmo tempo, o ponto de maior concentração de clientes e o ponto de maior risco (uma OLT fora do ar derruba milhares de assinantes).",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>30</span>  <span class='chapter-title'>OLT — Optical Line Terminal</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/29-olt.html#sec-olt-anatomia",
+    "href": "capitulos/29-olt.html#sec-olt-anatomia",
+    "title": "30  OLT — Optical Line Terminal",
+    "section": "30.2 Anatomia: chassi, placas e portas",
+    "text": "30.2 Anatomia: chassi, placas e portas\nOLTs vêm em dois formatos: chassi (modular, grande, para POP central) e pizza box (compacta, 1U, para POPs menores/distribuídos). No modelo chassi:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 30.1: Chassi de OLT: fontes e controladora redundantes, placas de uplink (ao backbone) e placas PON (cada porta origina uma árvore de splitters/ONTs).\n\n\n\n\nPlacas PON — cada porta é uma árvore independente (uma PON), com seu transceiver óptico (SFP PON da classe B+/C+, capítulo Seção 29.1).\nPlacas de uplink — agregam o tráfego de todas as PONs para o backbone (10/40/100G).\nControladora + fontes redundantes — switching interno, gerência e alimentação; redundância é essencial (capítulo ?sec-redundancia).",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>30</span>  <span class='chapter-title'>OLT — Optical Line Terminal</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/29-olt.html#sec-olt-funcoes",
+    "href": "capitulos/29-olt.html#sec-olt-funcoes",
+    "title": "30  OLT — Optical Line Terminal",
+    "section": "30.3 O que a OLT faz",
+    "text": "30.3 O que a OLT faz\n\nTermina a PON: transmite o downstream (broadcast+AES) e agenda o upstream (TDMA via DBA, capítulo Seção 29.3).\nAutentica/registra ONTs: descobre novas ONTs e as autoriza (por SN ou senha — capítulo 1).\nAplica perfis de serviço: velocidade (line profile), VLANs por cliente (capítulo Seção 14.1), QoS (capítulo Seção 27.1).\nMede a planta: reporta a potência óptica recebida de cada ONT (Rx/Tx), essencial para diagnóstico (capítulo Seção 34.1).\nFaz a ponte L2/L3: entrega o tráfego ao BNG (capítulo ?sec-bng-pppoe) — em modelo bridge (a OLT só comuta L2) ou, em alguns casos, roteando.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>30</span>  <span class='chapter-title'>OLT — Optical Line Terminal</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/29-olt.html#sec-olt-uplink",
+    "href": "capitulos/29-olt.html#sec-olt-uplink",
+    "title": "30  OLT — Optical Line Terminal",
+    "section": "30.4 Uplink, VLANs e o caminho ao BNG",
+    "text": "30.4 Uplink, VLANs e o caminho ao BNG\nA OLT normalmente opera em bridge: ela mapeia a C-VLAN de cada cliente (vinda da ONT) numa S-VLAN por PON/região (Q-in-Q, capítulo Seção 14.3) e entrega tudo num trunk ao agregador/BNG, que termina o PPPoE/IPoE e roteia. Esse desenho mantém o isolamento por cliente da OLT até o BNG e a rastreabilidade. Dimensione o uplink para a soma realista das PONs (overbooking, capítulo Seção 7.1).",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>30</span>  <span class='chapter-title'>OLT — Optical Line Terminal</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/29-olt.html#sec-olt-dimensionamento",
+    "href": "capitulos/29-olt.html#sec-olt-dimensionamento",
+    "title": "30  OLT — Optical Line Terminal",
+    "section": "30.5 Dimensionamento e adensamento",
+    "text": "30.5 Dimensionamento e adensamento\nQuantos clientes por OLT? Multiplique portas PON × split por porta, descontando folga. Ex.: uma placa de 16 portas a 1:64 = 1024 clientes potenciais por placa. Mas o gargalo costuma ser o uplink e o overbooking: 16 PONs × 2,5G = 40G de down na placa — o uplink precisa acompanhar. Regra: não encha a OLT só porque “cabe ONT”; encha conforme o uplink e a ocupação real das PONs suportam.\n\nNa prática do provedor\n\nRedundância onde dói: fontes e uplink redundantes (e idealmente controladora). Uma OLT é um ponto de concentração — sua queda é incidente de milhares de clientes. Alimente o POP com nobreak + gerador.\nEnergia e clima: OLT esquenta e não gosta de calor; garanta climatização e aterramento do POP. Falha térmica de OLT é causa real de queda em massa.\nProvisionamento padronizado: line/service profiles prontos por plano; ONT nova entra “por SN” com perfil aplicado automaticamente (capítulo\n\n— menos erro humano.\n\nMonitore Rx de cada ONT pela OLT: a OLT já te dá a potência recebida; alarme de ONT chegando perto da sensibilidade (ex.: &lt; −27 dBm) antecipa o chamado antes do cliente cair (capítulo Seção 34.1).\nDistribua o risco: em vez de uma OLT gigante para a cidade toda, POPs menores com OLTs pizza box reduzem o raio de impacto de uma falha e encurtam a fibra (melhor orçamento).",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>30</span>  <span class='chapter-title'>OLT — Optical Line Terminal</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/29-olt.html#sec-resumo-29",
+    "href": "capitulos/29-olt.html#sec-resumo-29",
+    "title": "30  OLT — Optical Line Terminal",
+    "section": "30.6 Resumo e checklist",
+    "text": "30.6 Resumo e checklist\n\nA OLT origina a PON no POP: portas PON (uma árvore cada) + uplink ao backbone.\nEla termina a PON (down/up, DBA), autentica ONTs, aplica perfis e mede potência.\nOpera em bridge com Q-in-Q (C-VLAN do cliente → S-VLAN da PON) até o BNG.\nDimensione por uplink + overbooking, não só por “ONTs que cabem”; redundância e energia são críticas.\n\nChecklist do capítulo\n\nDescrevo a anatomia da OLT (PON, uplink, controladora, fontes).\nListo as funções da OLT (terminar PON, autenticar, perfis, medir).\nExplico o Q-in-Q da OLT até o BNG e por que mantém isolamento.\nDimensiono clientes/OLT pelo uplink e ocupação, com redundância de energia.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>30</span>  <span class='chapter-title'>OLT — Optical Line Terminal</span>"
@@ -1948,7 +2102,62 @@
     "href": "capitulos/30-onu-ont.html",
     "title": "31  ONU e ONT",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "31.1 A ponta da rede óptica\nA ONT/ONU é o equipamento que fica na casa do assinante — a outra ponta da PON, oposta à OLT (capítulo Seção 30.1). É ela que converte a luz em Ethernet/Wi-Fi e entrega o serviço ao cliente. É também o equipamento mais numeroso da rede (um por assinante) e o que mais aparece no suporte: LED de LOS, potência óptica, Wi-Fi, e reset. Dominar a ONT — seus tipos, sinais e o que medir nela — resolve a maioria dos chamados de acesso.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>31</span>  <span class='chapter-title'>ONU e ONT</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/30-onu-ont.html#sec-onu-vs-ont",
+    "href": "capitulos/30-onu-ont.html#sec-onu-vs-ont",
+    "title": "31  ONU e ONT",
+    "section": "31.2 ONU vs. ONT: a diferença",
+    "text": "31.2 ONU vs. ONT: a diferença\nOs termos são usados quase como sinônimos, mas há distinção formal:\n\nONU (Optical Network Unit) — termina a fibra, mas entrega a outro equipamento (um roteador/switch do cliente). Sem Wi-Fi/roteamento próprio.\nONT (Optical Network Terminal) — termina a fibra e entrega o serviço final (tem roteador, Wi-Fi, portas LAN, VoIP). É o ONT/roteador típico residencial.\n\nNa prática brasileira fala-se “ONU/ONT” indistintamente; o que importa é se o aparelho é bridge (só converte, o cliente usa o próprio roteador) ou router (faz PPPoE/NAT/Wi-Fi).",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>31</span>  <span class='chapter-title'>ONU e ONT</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/30-onu-ont.html#sec-onu-anatomia",
+    "href": "capitulos/30-onu-ont.html#sec-onu-anatomia",
+    "title": "31  ONU e ONT",
+    "section": "31.3 Anatomia e os LEDs que importam",
+    "text": "31.3 Anatomia e os LEDs que importam\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 31.1: Frente/traseira de uma ONT: óptica (SC/APC verde), portas LAN, TEL (VoIP) e os LEDs. O LOS vermelho é o sinal nº 1 de problema de fibra.\n\n\n\nOs LEDs contam a história em camadas (capítulo Seção 3.8):\n\n\n\n\n\n\n\n\nLED\nEstado\nSignificado\n\n\n\n\nPower\naceso\ntem energia\n\n\nPON\naceso fixo\nautenticou na OLT (camada 1/2 ok)\n\n\nPON\npiscando\ntentando registrar\n\n\nLOS\nvermelho\nsem luz — fibra rompida, conector solto/sujo, dobra\n\n\nInternet\naceso\nPPPoE/IP subiu (camada 3)\n\n\n\nRegra de campo: LOS aceso = problema óptico (camada 1) — nada acima funciona. Cheque conector (verde, limpo), drop (dobras), e a potência antes de qualquer outra coisa.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>31</span>  <span class='chapter-title'>ONU e ONT</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/30-onu-ont.html#sec-onu-potencia",
+    "href": "capitulos/30-onu-ont.html#sec-onu-potencia",
+    "title": "31  ONU e ONT",
+    "section": "31.4 Potência óptica: o número que diz tudo",
+    "text": "31.4 Potência óptica: o número que diz tudo\nA ONT mede e reporta sua potência óptica recebida (Rx) em dBm. É a métrica mais importante do acesso óptico:\n\n\n\nRx na ONT\nEstado\n\n\n\n\n−8 a −24 dBm\nfaixa saudável (GPON típico)\n\n\n−25 a −27 dBm\nlimítrofe — atenção, perto da sensibilidade\n\n\n&lt; −27/−28 dBm\nabaixo da sensibilidade — cai/instável\n\n\nsem leitura / LOS\nsem sinal — camada 1\n\n\n\nEsse valor sai do orçamento de potência (capítulo Seção 34.1): TX da OLT menos todas as perdas (fibra, splitters, conectores, fusões). Uma ONT que piora ao longo do dia (sol esquenta o cabo) sugere macrobending no drop (capítulo Seção 8.1).",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>31</span>  <span class='chapter-title'>ONU e ONT</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/30-onu-ont.html#sec-onu-provisionamento",
+    "href": "capitulos/30-onu-ont.html#sec-onu-provisionamento",
+    "title": "31  ONU e ONT",
+    "section": "31.5 Provisionamento e gerência",
+    "text": "31.5 Provisionamento e gerência\nA ONT é identificada por um número de série (SN) (e/ou MAC). Ao plugá-la, a OLT a descobre; o provedor a autoriza e aplica o perfil de serviço (capítulo Seção 35.1). Para gerência remota em massa, usa-se o TR-069 (ACS): configurar Wi-Fi, atualizar firmware, ler diagnósticos e dar suporte sem ir à casa do cliente.\n\nNa prática do provedor\n\nRoteiro de chamado pela ONT (de baixo para cima, capítulo Seção 3.8): Power? → LOS/PON (camada 1: óptica) → Internet (PPPoE/IP) → Wi-Fi/LAN. Pular etapa custa visita.\nLeia a potência remotamente (pela OLT e/ou TR-069) antes de despachar técnico. Rx em −26 dBm e piorando = problema na fibra/drop, não na ONT — leve fibra/conector, não outra ONT.\nHomologue modelos de ONT e padronize firmware via TR-069/ACS; ONT “paralela” não homologada gera incompatibilidade e dor de suporte.\nWi-Fi é metade dos chamados de “internet lenta”. A fibra entrega 300M na ONT, mas o Wi-Fi do cliente entrega 40M no quarto dos fundos. Saiba diferenciar (teste cabeado vs. Wi-Fi) antes de culpar a rede.\nBridge vs. router: decida o modelo (ONT bridge + roteador do cliente, ou ONT router fazendo tudo) conforme seu controle/suporte; ONT router com TR-069 dá mais gerência remota.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>31</span>  <span class='chapter-title'>ONU e ONT</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/30-onu-ont.html#sec-resumo-30",
+    "href": "capitulos/30-onu-ont.html#sec-resumo-30",
+    "title": "31  ONU e ONT",
+    "section": "31.6 Resumo e checklist",
+    "text": "31.6 Resumo e checklist\n\nA ONT/ONU termina a PON na casa do cliente; ONU entrega a outro equipamento, ONT já roteia/Wi-Fi.\nOs LEDs mapeiam camadas: LOS vermelho = camada 1 (óptica), Internet = camada 3.\nA potência Rx (dBm) é a métrica-chave; faixa saudável ~−8 a −24, problema abaixo de ~−27.\nIdentificada por SN; gerenciada em massa por TR-069/ACS.\n\nChecklist do capítulo\n\nDiferencio ONU (bridge) de ONT (router) e quando usar cada uma.\nInterpreto os LEDs (LOS, PON, Internet) por camada.\nLeio a potência Rx e sei a faixa saudável vs. limítrofe.\nUso TR-069 para gerenciar/diagnosticar a ONT remotamente.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>31</span>  <span class='chapter-title'>ONU e ONT</span>"
@@ -1959,7 +2168,62 @@
     "href": "capitulos/31-splitters.html",
     "title": "32  Splitters Ópticos",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "32.1 O divisor que faz a PON existir\nO splitter (divisor óptico) é o componente passivo que pega a luz de uma fibra e a divide entre várias — é o que permite a uma porta da OLT atender dezenas de assinantes (capítulo Seção 28.1). Por ser passivo (sem energia, sem eletrônica), é barato e confiável, mas tem um custo físico inescapável: cada divisão atenua o sinal. Saber as perdas de cada tipo de splitter e como combiná-los em cascata é o que separa um projeto PON que fecha de um que deixa o cliente da borda sem sinal.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>Splitters Ópticos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/31-splitters.html#sec-splitters-funcionamento",
+    "href": "capitulos/31-splitters.html#sec-splitters-funcionamento",
+    "title": "32  Splitters Ópticos",
+    "section": "32.2 Como funciona e por que atenua",
+    "text": "32.2 Como funciona e por que atenua\nO splitter divide a potência da luz entre as saídas. Dividir em 2 corta a potência pela metade — −3 dB (capítulo Seção 8.1). Dividir em 4 são duas divisões (−6 dB ideal), em 8 são três (−9 dB ideal), e assim por diante. Na prática, soma-se a perda de excesso (imperfeições), resultando nos valores reais:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 32.1: Cascata típica: um 1:2 na rede primária alimenta dois 1:8 nas CTOs. A perda total é a soma (em dB) das perdas de cada estágio.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>Splitters Ópticos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/31-splitters.html#sec-splitters-perdas",
+    "href": "capitulos/31-splitters.html#sec-splitters-perdas",
+    "title": "32  Splitters Ópticos",
+    "section": "32.3 Tabela de perdas por razão de divisão",
+    "text": "32.3 Tabela de perdas por razão de divisão\n\n\n\nSplitter\nPerda típica (dB)\nSaídas\n\n\n\n\n1:2\n3,5\n2\n\n\n1:4\n7,0\n4\n\n\n1:8\n10,5\n8\n\n\n1:16\n13,5\n16\n\n\n1:32\n17,5\n32\n\n\n1:64\n21,0\n64\n\n\n\nCada vez que se dobra a divisão, somam-se ~3,0–3,5 dB. Esses números são o maior item do orçamento de potência (capítulo Seção 34.1) — muito mais que a fibra ou os conectores.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>Splitters Ópticos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/31-splitters.html#sec-splitters-balanceado",
+    "href": "capitulos/31-splitters.html#sec-splitters-balanceado",
+    "title": "32  Splitters Ópticos",
+    "section": "32.4 Balanceado vs. desbalanceado",
+    "text": "32.4 Balanceado vs. desbalanceado\n\nBalanceado: divide a potência igualmente entre as saídas (o 1:8 dá ~10,5 dB em cada porta). É o padrão na distribuição (CTO atendendo vários clientes parecidos).\nDesbalanceado (tap): divide desigualmente, ex.: 10/90 (tira 10% numa saída e deixa 90% seguir). Útil em topologia em cascata ao longo de uma via (rede “em linha”): cada CTO ao longo da rua “sangra” um pouco do sinal e deixa o resto passar para a próxima — assim os clientes distantes ainda recebem potência adequada.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 32.2: Splitters desbalanceados (tap) em linha: úteis em ruas longas, equilibram a potência entre CTOs próximas e distantes.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>Splitters Ópticos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/31-splitters.html#sec-splitters-cascata",
+    "href": "capitulos/31-splitters.html#sec-splitters-cascata",
+    "title": "32  Splitters Ópticos",
+    "section": "32.5 Cálculo de cascata: exemplo",
+    "text": "32.5 Cálculo de cascata: exemplo\nUma árvore com 1:2 (primária) + 1:8 (na CTO) = divisão total 1:16, mas a perda é a soma:\n3,5 (1:2) + 10,5 (1:8) = 14,0 dB de perda de splitters.\nCompare com um 1:16 único (13,5 dB): a cascata 1:2+1:8 perde 0,5 dB a mais, mas dá flexibilidade de topologia (o 1:2 fica na rede primária, os 1:8 espalhados nas CTOs). O projetista escolhe entre menor perda (splitter único) e melhor distribuição geográfica (cascata).\n\nNa prática do provedor\n\nPadronize a árvore: muitos ISPs usam 1:2 na primária + 1:8 (ou 1:16) na CTO, totalizando 1:16 ou 1:32. Defina o padrão e calcule o orçamento uma vez por padrão (capítulo Seção 34.1).\nCada saída do splitter é um cliente potencial — mas não encha 100%: deixe portas de reserva para reparo e crescimento. Splitter lotado = nova visita só para expandir.\nTap (desbalanceado) em ruas longas/rurais: equilibra a potência ao longo da via para o cliente do fim não ficar abaixo da sensibilidade. Em loteamento denso, use balanceado na CTO.\nSplitter é passivo, mas o conector dele não: a maior parte das “perdas fantasma” perto do splitter é conector sujo na entrada/saída (capítulo\n\n— inspecione antes de culpar o componente.\n\nOverbooking nasce aqui: a razão de divisão define quantos clientes dividem a porta PON (capítulo Seção 29.1); 1:64 economiza fibra mas concentra mais gente na mesma banda — equilibre com o uplink.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>Splitters Ópticos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/31-splitters.html#sec-resumo-31",
+    "href": "capitulos/31-splitters.html#sec-resumo-31",
+    "title": "32  Splitters Ópticos",
+    "section": "32.6 Resumo e checklist",
+    "text": "32.6 Resumo e checklist\n\nO splitter é passivo e divide potência — dobrar a divisão custa ~3 dB; é o maior item do orçamento.\nMemorize a tabela (1:8 ≈ 10,5 dB; 1:16 ≈ 13,5; 1:32 ≈ 17,5; 1:64 ≈ 21).\nBalanceado distribui igual (CTO); desbalanceado/tap distribui ao longo de vias longas.\nEm cascata, as perdas somam; escolha entre menor perda (único) e melhor geografia (cascata), com portas de reserva.\n\nChecklist do capítulo\n\nEstimo a perda de qualquer splitter e de uma cascata somando dB.\nEscolho balanceado vs. desbalanceado conforme a topologia da via.\nDeixo portas de reserva e relaciono divisão com overbooking.\nSuspeito de conector sujo antes de culpar o splitter.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>32</span>  <span class='chapter-title'>Splitters Ópticos</span>"
@@ -1970,7 +2234,73 @@
     "href": "capitulos/32-dio-cto-rede-primaria-secundaria.html",
     "title": "33  DIO, CTO e Redes Primária e Secundária",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "33.1 A planta entre a OLT e o cliente\nEntre a OLT (capítulo Seção 30.1) e a ONT (capítulo Seção 31.1) há toda uma infraestrutura física de organização e distribuição da fibra: o DIO no POP, a rede primária, os splitters, as CTOs e a rede secundária até o drop. Conhecer cada elemento — onde fica, o que faz, como se identifica — é essencial para projetar, expandir e, sobretudo, consertar a planta. Este capítulo amarra os componentes físicos no caminho fim a fim.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>DIO, CTO e Redes Primária e Secundária</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/32-dio-cto-rede-primaria-secundaria.html#sec-cto-caminho",
+    "href": "capitulos/32-dio-cto-rede-primaria-secundaria.html#sec-cto-caminho",
+    "title": "33  DIO, CTO e Redes Primária e Secundária",
+    "section": "33.2 O caminho físico em camadas",
+    "text": "33.2 O caminho físico em camadas\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 33.1: Da OLT à ONT: DIO (POP) → rede primária → splitter (em CEO) → CTO → rede secundária/drop → ONT. Cada trecho tem dono e função claros.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>DIO, CTO e Redes Primária e Secundária</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/32-dio-cto-rede-primaria-secundaria.html#sec-cto-dio",
+    "href": "capitulos/32-dio-cto-rede-primaria-secundaria.html#sec-cto-dio",
+    "title": "33  DIO, CTO e Redes Primária e Secundária",
+    "section": "33.3 DIO — Distribuidor Interno Óptico",
+    "text": "33.3 DIO — Distribuidor Interno Óptico\nO DIO é o bastidor de organização das fibras dentro do POP. É onde as fibras da OLT, dos cabos de tronco e dos uplinks são terminadas em conectores (SC/APC), identificadas e manobradas (você conecta/desconecta cordões para rotear sinais). Funções:\n\nTerminar os cabos externos (fusão do cabo a pigtails conectorizados).\nOrganizar com folga/reserva e identificação clara.\nProteger as fibras e permitir manobra sem mexer no cabo externo.\n\nUm DIO bem organizado é o que torna manutenção e expansão rápidas; um DIO bagunçado é fonte de erro e downtime.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>DIO, CTO e Redes Primária e Secundária</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/32-dio-cto-rede-primaria-secundaria.html#sec-cto-primaria-secundaria",
+    "href": "capitulos/32-dio-cto-rede-primaria-secundaria.html#sec-cto-primaria-secundaria",
+    "title": "33  DIO, CTO e Redes Primária e Secundária",
+    "section": "33.4 Rede primária e secundária",
+    "text": "33.4 Rede primária e secundária\nA planta de distribuição se divide em dois trechos:\n\n\n\n\n\n\n\n\nTrecho\nDe → Até\nCaracterística\n\n\n\n\nRede primária\nDIO/OLT → 1º splitter (CEO)\ncabo de alta contagem de fibras, tronco\n\n\nRede secundária\nsplitter/CTO → cliente\ncabos menores, capilaridade, drop\n\n\n\nA rede primária é o “tronco” robusto que sai do POP; a secundária é a “capilaridade” que chega às ruas e casas. O ponto de transição costuma ser o splitter (em uma CEO — Caixa de Emenda Óptica) ou a própria CTO.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>DIO, CTO e Redes Primária e Secundária</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/32-dio-cto-rede-primaria-secundaria.html#sec-cto-cto-ceo",
+    "href": "capitulos/32-dio-cto-rede-primaria-secundaria.html#sec-cto-cto-ceo",
+    "title": "33  DIO, CTO e Redes Primária e Secundária",
+    "section": "33.5 CTO e CEO",
+    "text": "33.5 CTO e CEO\n\nCTO (Caixa de Terminação Óptica) — a caixa no poste/fachada onde os drops dos clientes se conectam (normalmente via conector SC/APC ou adaptador). Costuma abrigar um splitter (ex.: 1:8 ou 1:16) e tem portas de saída para cada assinante. É o ponto de presença da rede secundária mais próximo do cliente.\nCEO (Caixa de Emenda Óptica) — caixa de emenda/passagem (fusões, derivações, splitters da primária), normalmente sem terminação de cliente.\n\nA CTO é onde o técnico instala o cliente: leva o drop da casa até uma porta livre da CTO e conecta. Por isso a contagem de portas e a reserva na CTO definem quantos clientes aquele ponto ainda comporta.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>DIO, CTO e Redes Primária e Secundária</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/32-dio-cto-rede-primaria-secundaria.html#sec-cto-drop",
+    "href": "capitulos/32-dio-cto-rede-primaria-secundaria.html#sec-cto-drop",
+    "title": "33  DIO, CTO e Redes Primária e Secundária",
+    "section": "33.6 Drop e cabo AS",
+    "text": "33.6 Drop e cabo AS\n\nDrop — o cabo (geralmente flat/auto-sustentado de 1–2 fibras, G.657) que liga a CTO à ONT na casa. É o trecho mais sujeito a dobras e tração — causa nº 1 de degradação óptica (capítulo Seção 8.1).\nCabo AS (auto-sustentado) — cabo com elemento de tração que se sustenta entre postes sem cordoalha separada, muito usado na rede aérea (primária e secundária) do ISP. Simplifica a planta aérea.\n\n\nNa prática do provedor\n\nIdentifique tudo: DIO, CEO, CTO e cada fibra/porta. Uma planta sem identificação consistente (e sem o georreferenciamento, capítulo ?sec-doc-georref) transforma cada reparo em caça ao tesouro e multiplica o tempo de reestabelecimento.\nReserva técnica em toda caixa: sobra de fibra na CEO/CTO para refazer fusões e portas livres na CTO para novos clientes. Planta sem reserva = retrabalho a cada expansão.\nDrop é o elo fraco: instale com raio de curvatura respeitado e sem tração excessiva; oriente o cliente a não prender/dobrar. Cliente que “cai quando esquenta” costuma ter drop dobrado (macrobending).\nCTO no ponto certo: posicione CTOs para minimizar comprimento de drop e equilibrar o orçamento (capítulo Seção 34.1). CTO longe demais = drop longo = perda e tração.\nVedação: caixa aberta/malvedada na rua = umidade = corrosão e perda. Feche e vede sempre.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>DIO, CTO e Redes Primária e Secundária</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/32-dio-cto-rede-primaria-secundaria.html#sec-resumo-32",
+    "href": "capitulos/32-dio-cto-rede-primaria-secundaria.html#sec-resumo-32",
+    "title": "33  DIO, CTO e Redes Primária e Secundária",
+    "section": "33.7 Resumo e checklist",
+    "text": "33.7 Resumo e checklist\n\nDIO organiza/termina as fibras no POP; permite manobra sem mexer no cabo.\nRede primária (tronco, alta contagem) vai do POP ao splitter; secundária (capilaridade) vai do splitter/CTO ao cliente.\nCTO termina os drops dos clientes (e costuma abrigar splitter); CEO é emenda/passagem.\nDrop (G.657) é o elo mais frágil; cabo AS sustenta a rede aérea.\n\nChecklist do capítulo\n\nDescrevo o caminho DIO→primária→splitter→CTO→secundária→drop→ONT.\nDiferencio DIO, CEO e CTO e o que cada um abriga.\nSei por que o drop é o ponto mais sujeito a falha óptica.\nMantenho identificação, reserva e vedação em toda caixa.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>33</span>  <span class='chapter-title'>DIO, CTO e Redes Primária e Secundária</span>"
@@ -1981,7 +2311,73 @@
     "href": "capitulos/33-orcamento-potencia.html",
     "title": "34  Orçamento de Potência Óptica (Power Budget)",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "34.1 A conta que decide se o cliente fecha\nO orçamento de potência (power budget) é a conta da PON: ela diz, antes de ir a campo, se o sinal que sai da OLT chega à ONT mais distante acima da sensibilidade — ou seja, se o cliente vai funcionar. É só uma soma de dB (todas as perdas do caminho), comparada ao que a OLT tem de orçamento. Dominar essa conta é o que transforma projeto em certeza e diagnóstico em método. Ela costura tudo que vimos na Parte VI: fibra (cap. Seção 8.1), splitters (Seção 32.1), conectores (Seção 10.1), fusões (Seção 11.1) e a classe da OLT (Seção 29.1).",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Orçamento de Potência Óptica (Power Budget)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/33-orcamento-potencia.html#sec-orcamento-termos",
+    "href": "capitulos/33-orcamento-potencia.html#sec-orcamento-termos",
+    "title": "34  Orçamento de Potência Óptica (Power Budget)",
+    "section": "34.2 Os termos da conta",
+    "text": "34.2 Os termos da conta\n\\[P_{Rx} = P_{Tx} - \\big(\\text{fibra} + \\text{splitters} + \\text{conectores} +\n\\text{fusões} + \\text{margem}\\big)\\]\n\n\\(P_{Tx}\\) — potência que a OLT injeta (ex.: +5 dBm em GPON Classe C+).\nPerdas — somadas em dB (capítulo Seção 8.1): tudo atenua.\nMargem de segurança — folga para envelhecimento, reparos futuros, sujeira (tipicamente 3 dB).\n\\(P_{Rx}\\) — o que chega à ONT; tem de ficar acima da sensibilidade dela (ex.: −28 dBm) — idealmente na faixa saudável (−8 a −24 dBm, capítulo Seção 31.4).\n\nO orçamento da classe (capítulo Seção 29.1) é a diferença entre \\(P_{Tx}\\) e a sensibilidade: B+ ≈ 28 dB, C+ ≈ 32 dB. Sua soma de perdas + margem tem de caber nesse número.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 34.1: A potência cai em degraus: pequenos (fibra) e grandes (splitters). O \\(P_{Rx}\\) final deve ficar bem acima da linha de sensibilidade, com margem.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Orçamento de Potência Óptica (Power Budget)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/33-orcamento-potencia.html#sec-orcamento-referencia",
+    "href": "capitulos/33-orcamento-potencia.html#sec-orcamento-referencia",
+    "title": "34  Orçamento de Potência Óptica (Power Budget)",
+    "section": "34.3 Valores de referência (de bolso)",
+    "text": "34.3 Valores de referência (de bolso)\n\n\n\nElemento\nPerda\n\n\n\n\nFibra (1490?) nm\n0,28 dB/km\n\n\nFibra (1310?) nm\n0,33 dB/km\n\n\nConector (par)\n0,3–0,5 dB\n\n\nFusão\n0,05–0,10 dB\n\n\nSplitter 1:2 / 1:4\n3,5 / 7,0 dB\n\n\nSplitter 1:8 / 1:16\n10,5 / 13,5 dB\n\n\nSplitter 1:32 / 1:64\n17,5 / 21,0 dB\n\n\nMargem de segurança\n~3,0 dB",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Orçamento de Potência Óptica (Power Budget)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/33-orcamento-potencia.html#sec-orcamento-ex1",
+    "href": "capitulos/33-orcamento-potencia.html#sec-orcamento-ex1",
+    "title": "34  Orçamento de Potência Óptica (Power Budget)",
+    "section": "34.4 Exercício resolvido 1 — árvore 1:2 + 1:8",
+    "text": "34.4 Exercício resolvido 1 — árvore 1:2 + 1:8\nCenário: OLT GPON Classe C+ (\\(P_{Tx}=+5\\) dBm, sensibilidade −28 dBm → orçamento 33 dB). Árvore: 8 km de fibra (1490?) nm, splitter 1:2 na primária + 1:8 na CTO, 4 conectores (DIO, splitter, CTO, ONT) e 3 fusões. Margem 3 dB.\nSoma das perdas:\n\n\n\nItem\nCálculo\ndB\n\n\n\n\nFibra\n8 × 0,28\n2,24\n\n\nSplitter 1:2\n—\n3,50\n\n\nSplitter 1:8\n—\n10,50\n\n\nConectores\n4 × 0,4\n1,60\n\n\nFusões\n3 × 0,08\n0,24\n\n\nSubtotal perdas\n\n18,08\n\n\nMargem\n\n3,00\n\n\nTotal\n\n21,08 dB\n\n\n\n\\(P_{Rx} = +5 - 18,08 = \\mathbf{-13,1\\ dBm}\\) — na faixa saudável. Sobra de orçamento: 33 − 21,08 ≈ 12 dB. Fecha com folga, dá até para estender a árvore.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Orçamento de Potência Óptica (Power Budget)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/33-orcamento-potencia.html#sec-orcamento-ex2",
+    "href": "capitulos/33-orcamento-potencia.html#sec-orcamento-ex2",
+    "title": "34  Orçamento de Potência Óptica (Power Budget)",
+    "section": "34.5 Exercício resolvido 2 — onde quebra",
+    "text": "34.5 Exercício resolvido 2 — onde quebra\nCenário: mesma OLT, mas árvore agressiva: 18 km (1490?), splitter 1:64, 4 conectores, 5 fusões, margem 3 dB.\n\n\n\nItem\nCálculo\ndB\n\n\n\n\nFibra\n18 × 0,28\n5,04\n\n\nSplitter 1:64\n—\n21,00\n\n\nConectores\n4 × 0,4\n1,60\n\n\nFusões\n5 × 0,08\n0,40\n\n\nMargem\n\n3,00\n\n\nTotal\n\n31,04 dB\n\n\n\n\\(P_{Rx} = +5 - 28,04 = \\mathbf{-23,0\\ dBm}\\). Ainda acima de −28, mas a sobra é só 33 − 31,04 ≈ 2 dB — perigoso: qualquer conector sujo, uma fusão pior ou envelhecimento joga o cliente abaixo da sensibilidade. Solução: reduzir a divisão (1:32), encurtar a árvore, ou usar classe maior. É exatamente o tipo de erro que a conta pega antes do chamado.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Orçamento de Potência Óptica (Power Budget)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/33-orcamento-potencia.html#sec-orcamento-reverso",
+    "href": "capitulos/33-orcamento-potencia.html#sec-orcamento-reverso",
+    "title": "34  Orçamento de Potência Óptica (Power Budget)",
+    "section": "34.6 Sentido reverso e simetria",
+    "text": "34.6 Sentido reverso e simetria\nO orçamento vale nos dois sentidos: o downstream (OLT→ONT) e o upstream (ONT→OLT) usam λ diferentes (capítulo Seção 29.1) com atenuações ligeiramente distintas e potências de TX diferentes. Em GPON a ONT costuma ter TX menor; verifique os dois sentidos, mas na prática o downstream e a leitura de Rx na ONT e de Rx na OLT (a OLT informa quanto recebe de cada ONT) são as métricas operacionais do dia a dia.\n\nNa prática do provedor\n\nCalcule por padrão de árvore, não por cliente: defina 2–3 padrões (ex.: 1:2+1:8 urbano; 1:2+1:16 denso; tap em via longa) e tenha o orçamento de cada um pronto. Instalação vira “cabe neste padrão?”.\nSempre 3 dB de margem. Projeto no limite (sobra &lt; 3 dB) volta como chamado: sujeira, sol no drop (macrobending), uma fusão refeita pior — tudo come a folga.\nA OLT já te dá o Rx de cada ONT. Compare o medido com o previsto: se a ONT deveria estar em −13 e está em −22, há evento novo (conector sujo, dobra, fusão ruim) — vá direto ao OTDR (capítulo ?sec-otdr) em vez de trocar a ONT.\nCliente “cai à tarde”: clássico de drop no limite que piora com o calor — o orçamento estava apertado. Refaça a conta e o drop.\nPlaneje XGS-PON no orçamento: λ e sensibilidades diferentes mudam levemente a conta; ao coexistir, valide a margem dos dois.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Orçamento de Potência Óptica (Power Budget)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/33-orcamento-potencia.html#sec-resumo-33",
+    "href": "capitulos/33-orcamento-potencia.html#sec-resumo-33",
+    "title": "34  Orçamento de Potência Óptica (Power Budget)",
+    "section": "34.7 Resumo e checklist",
+    "text": "34.7 Resumo e checklist\n\nOrçamento = \\(P_{Tx}\\) − (fibra + splitters + conectores + fusões + margem); o resultado tem de ficar acima da sensibilidade.\nO splitter é o maior item; a margem de 3 dB é inegociável.\nCompare o Rx medido (OLT/ONT informam) com o previsto para localizar eventos.\nQuando a sobra fica &lt; 3 dB: reduza divisão, encurte ou suba a classe.\n\nChecklist do capítulo\n\nMonto a soma de perdas e calculo o \\(P_{Rx}\\) de uma árvore.\nComparo o total com o orçamento da classe (B+ 28 / C+ 32 dB) e a sobra.\nSei reconhecer um projeto “no limite” e como corrigi-lo.\nUso o Rx medido vs. previsto para decidir entre OTDR e troca de equipamento.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>34</span>  <span class='chapter-title'>Orçamento de Potência Óptica (Power Budget)</span>"
@@ -1992,7 +2388,62 @@
     "href": "capitulos/34-provisionamento-pon.html",
     "title": "35  Provisionamento PON (VLANs por Cliente, Perfis, ONT)",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "35.1 Do cabo plugado ao cliente navegando\nProvisionar é o conjunto de passos que transforma uma ONT recém-instalada em um cliente com serviço: a OLT descobre a ONT, o provedor a autoriza, aplica perfis de velocidade e VLAN, e o tráfego sobe até o BNG que autentica e entrega IP. É a junção de tudo da Parte VI com as camadas de enlace/rede (Partes III–IV) e a operação de ISP (Parte X). Um provisionamento padronizado e automatizado é o que permite escalar (centenas de instalações/mês) com baixo erro.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>35</span>  <span class='chapter-title'>Provisionamento PON (VLANs por Cliente, Perfis, ONT)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/34-provisionamento-pon.html#sec-provisionamento-fluxo",
+    "href": "capitulos/34-provisionamento-pon.html#sec-provisionamento-fluxo",
+    "title": "35  Provisionamento PON (VLANs por Cliente, Perfis, ONT)",
+    "section": "35.2 O fluxo de provisionamento",
+    "text": "35.2 O fluxo de provisionamento\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 35.1: Fluxo típico: descoberta por SN → autorização → perfis de velocidade → VLAN (Q-in-Q até o BNG) → PPPoE/IPoE + RADIUS → IP e serviço.\n\n\n\n\nDescoberta — plugada a ONT, a OLT a detecta pelo número de série (SN) (e/ou senha) — capítulo Seção 31.1.\nAutorização — o provedor vincula aquele SN ao cliente/contrato e a uma porta PON.\nPerfis — aplica line profile (parâmetros PON/DBA) e service profile (velocidade, número de portas/SSID).\nVLAN — mapeia a C-VLAN do cliente; a OLT empilha a S-VLAN da PON (Q-in-Q, capítulo 1) e entrega ao BNG.\nAutenticação — o cliente sobe PPPoE (ou IPoE), autenticado pelo RADIUS (capítulo ?sec-radius).\nServiço — o BNG entrega IP (e prefixo IPv6) e aplica o rate-limit do plano (capítulo Seção 27.1).",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>35</span>  <span class='chapter-title'>Provisionamento PON (VLANs por Cliente, Perfis, ONT)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/34-provisionamento-pon.html#sec-provisionamento-perfis",
+    "href": "capitulos/34-provisionamento-pon.html#sec-provisionamento-perfis",
+    "title": "35  Provisionamento PON (VLANs por Cliente, Perfis, ONT)",
+    "section": "35.3 Perfis: line profile e service profile",
+    "text": "35.3 Perfis: line profile e service profile\nA OLT trabalha com perfis reutilizáveis — a chave para escalar sem erro:\n\nLine profile (DBA/T-CONT/GEM): define como a ONT usa a PON — bandas mínima e máxima do upstream (via DBA, capítulo Seção 29.3), filas e mapeamento de serviços. Costuma haver um por plano de velocidade.\nService profile: define a “cara” do serviço na ONT — quantas portas LAN/POTS, VLANs, modo bridge ou router, SSID Wi-Fi.\n\nPadronize: um conjunto de perfis por plano (ex.: 300M, 500M, 1G) e a ONT nova herda tudo ao ser autorizada. Mudar o cliente de plano = trocar o perfil.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>35</span>  <span class='chapter-title'>Provisionamento PON (VLANs por Cliente, Perfis, ONT)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/34-provisionamento-pon.html#sec-provisionamento-vlan",
+    "href": "capitulos/34-provisionamento-pon.html#sec-provisionamento-vlan",
+    "title": "35  Provisionamento PON (VLANs por Cliente, Perfis, ONT)",
+    "section": "35.4 VLAN por cliente na prática",
+    "text": "35.4 VLAN por cliente na prática\nO modelo dominante dá a cada cliente sua C-VLAN (capítulo Seção 14.5), empilhada numa S-VLAN por PON/OLT via Q-in-Q. Isso garante:\n\nIsolamento L2 entre assinantes (mata ARP spoofing entre vizinhos da mesma PON).\nRastreabilidade — a dupla de VLANs identifica o cliente da ONT ao BNG.\nPolítica/QoS por cliente.\n\nA C-VLAN é configurada na ONT (ou pela OLT no perfil) e a OLT cuida do empilhamento — o BNG vê o cliente já isolado.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>35</span>  <span class='chapter-title'>Provisionamento PON (VLANs por Cliente, Perfis, ONT)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/34-provisionamento-pon.html#sec-provisionamento-pppoe-ipoe",
+    "href": "capitulos/34-provisionamento-pon.html#sec-provisionamento-pppoe-ipoe",
+    "title": "35  Provisionamento PON (VLANs por Cliente, Perfis, ONT)",
+    "section": "35.5 PPPoE vs. IPoE no provisionamento",
+    "text": "35.5 PPPoE vs. IPoE no provisionamento\nDuas formas de autenticar/entregar IP (capítulo ?sec-bng-pppoe):\n\n\n\nAspecto\nPPPoE\nIPoE (DHCP)\n\n\n\n\nAutenticação\nusuário/senha\nOpção 82 + RADIUS\n\n\nControle/billing\nforte (sessão explícita)\nbom (via DHCP/RADIUS)\n\n\nExperiência\nexige configurar sessão\n“plug and play”\n\n\nMTU\n1492 (precisa MSS clamp)\n1500\n\n\n\nA escolha depende do controle desejado; muitos ISPs brasileiros usam PPPoE pela gestão de sessão e billing simples, com RADIUS atribuindo velocidade, IP e prefixo IPv6.\n\nNa prática do provedor\n\nAutomatize com perfis + sistema/OSS: ONT nova entra por SN com perfil do plano aplicado automaticamente; integre OLT ↔︎ sistema de gestão (provisionamento via API/NETCONF, capítulo ?sec-sdn). Provisionar a mão em escala é fonte de erro.\nVelocidade vem do RADIUS, não da ONT: o rate-limit do plano é atributo RADIUS no BNG (capítulo Seção 27.1) — upgrade sem tocar no equipamento do cliente.\nTR-069/ACS para a casa do cliente: Wi-Fi, firmware e diagnóstico remoto da ONT (capítulo Seção 31.1) — menos visitas técnicas.\nChecklist de ativação: SN autorizado? potência Rx na faixa (capítulo Seção 34.1)? C-VLAN correta? PPPoE autenticou (RADIUS)? IP/IPv6 entregues? Esse roteiro evita “instalei mas não navega”.\nErro nº 1: VLAN errada no perfil/uplink → ONT autentica na OLT (PON aceso) mas cliente não navega. Confira o caminho da VLAN ONT→OLT→BNG (capítulo\n\nantes de suspeitar de fibra.",
+    "crumbs": [
+      "Parte VI — Redes Ópticas Passivas (PON)",
+      "<span class='chapter-number'>35</span>  <span class='chapter-title'>Provisionamento PON (VLANs por Cliente, Perfis, ONT)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/34-provisionamento-pon.html#sec-resumo-34",
+    "href": "capitulos/34-provisionamento-pon.html#sec-resumo-34",
+    "title": "35  Provisionamento PON (VLANs por Cliente, Perfis, ONT)",
+    "section": "35.6 Resumo e checklist",
+    "text": "35.6 Resumo e checklist\n\nProvisionar = descobrir (SN) → autorizar → perfis → VLAN (Q-in-Q) → PPPoE/IPoE+RADIUS → IP.\nPerfis (line/service) por plano são a chave para escalar sem erro.\nVLAN por cliente isola e rastreia da ONT ao BNG; a velocidade vem do RADIUS.\nAutomatize por SN + OSS e gerencie a ONT por TR-069.\n\nChecklist do capítulo\n\nDescrevo o fluxo de provisionamento ponta a ponta.\nSei o que vai em line profile vs. service profile.\nConfiguro a C-VLAN do cliente e seu empilhamento Q-in-Q ao BNG.\nUso o checklist de ativação para isolar “autenticou mas não navega”.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>35</span>  <span class='chapter-title'>Provisionamento PON (VLANs por Cliente, Perfis, ONT)</span>"
@@ -2465,7 +2916,7 @@
     "href": "capitulos/referencias.html",
     "title": "Apêndice B — Referências",
     "section": "",
-    "text": "Borman, D., B. Braden, V. Jacobson, and R. Scheffenegger. 2014. TCP\nExtensions for High Performance. RFC 7323. IETF. https://www.rfc-editor.org/info/rfc7323.\n\n\nG.984.1: Gigabit-Capable Passive Optical Networks (GPON): General\nCharacteristics. 2008. ITU-T. https://www.itu.int/rec/T-REC-G.984.1.\n\n\nIEEE Standard for Ethernet, Pub. L. Nos. IEEE 802.3 (2022).\n\n\nIEEE Standard for Local and Metropolitan Area Networks–Bridges and\nBridged Networks, Pub. L. Nos. IEEE 802.1Q (2022).\n\n\nKurose, James F., and Keith W. Ross. 2021. Redes de Computadores e a\nInternet: Uma Abordagem Top-down. 8th ed. Pearson.\n\n\nPostel, J. 1981a. Internet Protocol. RFC 791. IETF. https://www.rfc-editor.org/info/rfc791.\n\n\nPostel, J. 1981b. Transmission Control Protocol. RFC 793. IETF.\nhttps://www.rfc-editor.org/info/rfc793.\n\n\nTanenbaum, Andrew S., David J. Wetherall, and Nick Feamster. 2021.\nRedes de Computadores. 6th ed. Pearson.",
+    "text": "Borman, D., B. Braden, V. Jacobson, and R. Scheffenegger. 2014. TCP\nExtensions for High Performance. RFC 7323. IETF. https://www.rfc-editor.org/info/rfc7323.\n\n\nG.9807.1: 10-Gigabit-Capable Symmetric Passive Optical Network\n(XGS-PON). 2016. ITU-T. https://www.itu.int/rec/T-REC-G.9807.1.\n\n\nG.984.1: Gigabit-Capable Passive Optical Networks (GPON): General\nCharacteristics. 2008. ITU-T. https://www.itu.int/rec/T-REC-G.984.1.\n\n\nIEEE Standard for Ethernet, Pub. L. Nos. IEEE 802.3 (2022).\n\n\nIEEE Standard for Local and Metropolitan Area Networks–Bridges and\nBridged Networks, Pub. L. Nos. IEEE 802.1Q (2022).\n\n\nKurose, James F., and Keith W. Ross. 2021. Redes de Computadores e a\nInternet: Uma Abordagem Top-down. 8th ed. Pearson.\n\n\nPostel, J. 1981a. Internet Protocol. RFC 791. IETF. https://www.rfc-editor.org/info/rfc791.\n\n\nPostel, J. 1981b. Transmission Control Protocol. RFC 793. IETF.\nhttps://www.rfc-editor.org/info/rfc793.\n\n\nTanenbaum, Andrew S., David J. Wetherall, and Nick Feamster. 2021.\nRedes de Computadores. 6th ed. Pearson.",
     "crumbs": [
       "Apêndices",
       "<span class='chapter-number'>B</span>  <span class='chapter-title'>Referências</span>"
