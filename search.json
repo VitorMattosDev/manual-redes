@@ -265,7 +265,7 @@
     "href": "capitulos/03-modelo-tcpip-pilha.html#sec-tcpip-caminho",
     "title": "4  O Modelo TCP/IP, a Pilha de Protocolos e o Encapsulamento",
     "section": "4.3 O caminho de um pacote pela pilha",
-    "text": "4.3 O caminho de um pacote pela pilha\nVamos seguir um clique do assinante: ele abre https://exemplo.com.br. O que acontece, camada por camada, na máquina do cliente (envio):\n\nAplicação — o navegador resolve o nome via DNS (uma consulta UDP ao resolvedor recursivo do provedor) e monta a requisição HTTP dentro de TLS.\nTransporte — o TLS/HTTP é colocado em segmentos TCP, destino porta 443, origem uma porta efêmera (ex.: 51324).\nInternet — cada segmento ganha um cabeçalho IP: origem = IP do cliente (ou o IP público após NAT/CGNAT — capítulo ?sec-nat-cgnat), destino = IP do servidor. Vira pacote.\nAcesso à rede — o pacote é embrulhado em um quadro PPPoE/Ethernet para subir até o BNG do provedor, e a OLT/ONT o transporta pela fibra como luz.\n\nNo caminho, cada roteador abre só até a camada 3, lê o IP de destino, consulta a tabela de rotas e reescreve o cabeçalho de camada 2 para o próximo salto. O conteúdo de transporte e aplicação não é tocado pelos roteadores — essa é a beleza do modelo. No servidor, a pilha sobe na ordem inversa até entregar o GET à aplicação.",
+    "text": "4.3 O caminho de um pacote pela pilha\nVamos seguir um clique do assinante: ele abre https://exemplo.com.br. O que acontece, camada por camada, na máquina do cliente (envio):\n\nAplicação — o navegador resolve o nome via DNS (uma consulta UDP ao resolvedor recursivo do provedor) e monta a requisição HTTP dentro de TLS.\nTransporte — o TLS/HTTP é colocado em segmentos TCP, destino porta 443, origem uma porta efêmera (ex.: 51324).\nInternet — cada segmento ganha um cabeçalho IP: origem = IP do cliente (ou o IP público após NAT/CGNAT — capítulo Seção 20.1), destino = IP do servidor. Vira pacote.\nAcesso à rede — o pacote é embrulhado em um quadro PPPoE/Ethernet para subir até o BNG do provedor, e a OLT/ONT o transporta pela fibra como luz.\n\nNo caminho, cada roteador abre só até a camada 3, lê o IP de destino, consulta a tabela de rotas e reescreve o cabeçalho de camada 2 para o próximo salto. O conteúdo de transporte e aplicação não é tocado pelos roteadores — essa é a beleza do modelo. No servidor, a pilha sobe na ordem inversa até entregar o GET à aplicação.",
     "crumbs": [
       "Parte I — Fundamentos e Modelos de Rede",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>O Modelo TCP/IP, a Pilha de Protocolos e o Encapsulamento</span>"
@@ -936,7 +936,7 @@
     "href": "capitulos/12-arp.html#sec-arp-ipv6",
     "title": "13  ARP e Resolução de Endereços",
     "section": "13.5 ARP, IPv6 e o provedor",
-    "text": "13.5 ARP, IPv6 e o provedor\nARP é exclusivo de IPv4. No IPv6 (capítulo ?sec-ipv6) o papel é do NDP (Neighbor Discovery Protocol), que usa ICMPv6 e multicast em vez de broadcast — mais eficiente e com recursos extras (autoconfiguração SLAAC). Conceito equivalente, mecanismo melhor.\n\nNa prática do provedor\n\nARP spoofing é um ataque clássico em rede de acesso compartilhada: um cliente malicioso envia GARP dizendo “eu sou o gateway” e intercepta o tráfego dos vizinhos (man-in-the-middle). Defesas: VLAN por cliente (isola o domínio de broadcast — capítulo Seção 14.1), DHCP Snooping + Dynamic ARP Inspection (DAI) nos switches, e port security.\nIP duplicado na rede de gerência derruba equipamentos de forma intermitente; GARP de detecção e um bom IPAM evitam a dor de cabeça.\nCache ARP grande no BNG/gateway: em redes IPoE com muitos clientes por VLAN, a tabela ARP/ND cresce; dimensione e monitore para não estourar.\nTabela ARP incompleta para o cliente após provisionar: confira VLAN, se a ONT autenticou e se o IP/máscara batem — o ARP só fecha se camada 1/2 estiver de pé.",
+    "text": "13.5 ARP, IPv6 e o provedor\nARP é exclusivo de IPv4. No IPv6 (capítulo Seção 18.1) o papel é do NDP (Neighbor Discovery Protocol), que usa ICMPv6 e multicast em vez de broadcast — mais eficiente e com recursos extras (autoconfiguração SLAAC). Conceito equivalente, mecanismo melhor.\n\nNa prática do provedor\n\nARP spoofing é um ataque clássico em rede de acesso compartilhada: um cliente malicioso envia GARP dizendo “eu sou o gateway” e intercepta o tráfego dos vizinhos (man-in-the-middle). Defesas: VLAN por cliente (isola o domínio de broadcast — capítulo Seção 14.1), DHCP Snooping + Dynamic ARP Inspection (DAI) nos switches, e port security.\nIP duplicado na rede de gerência derruba equipamentos de forma intermitente; GARP de detecção e um bom IPAM evitam a dor de cabeça.\nCache ARP grande no BNG/gateway: em redes IPoE com muitos clientes por VLAN, a tabela ARP/ND cresce; dimensione e monitore para não estourar.\nTabela ARP incompleta para o cliente após provisionar: confira VLAN, se a ONT autenticou e se o IP/máscara batem — o ARP só fecha se camada 1/2 estiver de pé.",
     "crumbs": [
       "Parte III — Camada de Enlace",
       "<span class='chapter-number'>13</span>  <span class='chapter-title'>ARP e Resolução de Endereços</span>"
@@ -1002,7 +1002,7 @@
     "href": "capitulos/13-switching-vlan-stp.html#sec-switching-isp",
     "title": "14  Switching, VLANs (802.1Q) e STP/RSTP",
     "section": "14.5 VLAN por cliente: o modelo do ISP",
-    "text": "14.5 VLAN por cliente: o modelo do ISP\nA prática dominante no acesso é dar a cada cliente sua própria VLAN (ou C-VLAN sob uma S-VLAN por OLT/região). Vantagens:\n\nIsolamento total de camada 2 entre assinantes → mata ARP spoofing e broadcast cruzado.\nRastreabilidade: a VLAN identifica o cliente até o BNG.\nQoS e políticas por VLAN.\n\nRelação VLAN × sub-rede: cada VLAN é um domínio de broadcast e normalmente corresponde a uma sub-rede IP (capítulo ?sec-subredes). “Uma VLAN = uma sub-rede” é a regra que mantém o roteamento limpo.\n\nNa prática do provedor\n\nDesenho típico GPON: porta access não existe na rua; a ONT entrega a C-VLAN do cliente, a OLT empilha a S-VLAN da PON (Q-in-Q) e entrega num trunk ao BNG, que termina o PPPoE/IPoE e roteia.\nNative VLAN hygiene: nunca use a VLAN 1 (default) para serviço; remova a native dos trunks que cruzam o cliente para evitar VLAN hopping.\nMTU é armadilha: com Q-in-Q (+8 B) e PPPoE (+8 B), os uplinks precisam de MTU 1600+; senão sites grandes “não abrem” (ajuste MSS no BNG).\nAnel ≠ STP no core: prefira ERPS no anel metropolitano (&lt; 50 ms); reserve RSTP para topologias de POP. Loop sem proteção = broadcast storm = cidade offline.\nDHCP Snooping + DAI por VLAN blindam o acesso contra cliente malicioso.",
+    "text": "14.5 VLAN por cliente: o modelo do ISP\nA prática dominante no acesso é dar a cada cliente sua própria VLAN (ou C-VLAN sob uma S-VLAN por OLT/região). Vantagens:\n\nIsolamento total de camada 2 entre assinantes → mata ARP spoofing e broadcast cruzado.\nRastreabilidade: a VLAN identifica o cliente até o BNG.\nQoS e políticas por VLAN.\n\nRelação VLAN × sub-rede: cada VLAN é um domínio de broadcast e normalmente corresponde a uma sub-rede IP (capítulo Seção 17.1). “Uma VLAN = uma sub-rede” é a regra que mantém o roteamento limpo.\n\nNa prática do provedor\n\nDesenho típico GPON: porta access não existe na rua; a ONT entrega a C-VLAN do cliente, a OLT empilha a S-VLAN da PON (Q-in-Q) e entrega num trunk ao BNG, que termina o PPPoE/IPoE e roteia.\nNative VLAN hygiene: nunca use a VLAN 1 (default) para serviço; remova a native dos trunks que cruzam o cliente para evitar VLAN hopping.\nMTU é armadilha: com Q-in-Q (+8 B) e PPPoE (+8 B), os uplinks precisam de MTU 1600+; senão sites grandes “não abrem” (ajuste MSS no BNG).\nAnel ≠ STP no core: prefira ERPS no anel metropolitano (&lt; 50 ms); reserve RSTP para topologias de POP. Loop sem proteção = broadcast storm = cidade offline.\nDHCP Snooping + DAI por VLAN blindam o acesso contra cliente malicioso.",
     "crumbs": [
       "Parte III — Camada de Enlace",
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>Switching, VLANs (802.1Q) e STP/RSTP</span>"
@@ -1024,7 +1024,62 @@
     "href": "capitulos/14-protocolo-ip-ipv4.html",
     "title": "15  O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "15.1 O protocolo que une a internet\nO IP (Internet Protocol, IPv4 — RFC 791 (Postel 1981)) é a camada 3: o endereçamento lógico e o roteamento fim a fim. É a “cintura estreita” do modelo TCP/IP (capítulo Seção 4.1) — tudo passa por ele. O IP é não confiável e sem conexão (“melhor esforço”): ele tenta entregar o pacote, mas não garante chegada, ordem ou ausência de duplicatas — essas garantias, quando necessárias, são do TCP (camada 4). Entender o cabeçalho IPv4 é o que permite diagnosticar MTU, TTL, fragmentação e QoS no provedor.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/14-protocolo-ip-ipv4.html#sec-ip-cabecalho",
+    "href": "capitulos/14-protocolo-ip-ipv4.html#sec-ip-cabecalho",
+    "title": "15  O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL",
+    "section": "15.2 O cabeçalho IPv4 campo a campo",
+    "text": "15.2 O cabeçalho IPv4 campo a campo\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 15.1: Cabeçalho IPv4 (20 bytes sem opções). Em destaque: TTL e Flags/offset (fragmentação) e os endereços de origem/destino, base do roteamento.\n\n\n\nOs campos que mais importam na operação:\n\n\n\n\n\n\n\n\nCampo\nFunção\nRelevância no ISP\n\n\n\n\nVersão\n4 (IPv4)\ndistingue de IPv6 (6)\n\n\nIHL\ntamanho do cabeçalho\nnormalmente 20 B\n\n\nDSCP/ECN\nmarcação de QoS\nprioriza voz/vídeo (capítulo ?sec-qos)\n\n\nComprimento total\ntamanho do pacote\nrelação com MTU\n\n\nIdentification/Flags/Offset\nfragmentação\nDF + MTU = “site não abre”\n\n\nTTL\nlimite de saltos\nevita loops; base do traceroute\n\n\nProtocolo\no que vem dentro\n6=TCP, 17=UDP, 1=ICMP\n\n\nChecksum\nerro do cabeçalho\nrecalculado a cada salto\n\n\nOrigem/Destino\nendereços IP\ndecisão de roteamento",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/14-protocolo-ip-ipv4.html#sec-ip-ttl",
+    "href": "capitulos/14-protocolo-ip-ipv4.html#sec-ip-ttl",
+    "title": "15  O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL",
+    "section": "15.3 TTL: o seguro contra loops",
+    "text": "15.3 TTL: o seguro contra loops\nO TTL (Time To Live) é um contador que cada roteador decrementa em 1. Quando chega a zero, o pacote é descartado e o roteador devolve um ICMP Time Exceeded à origem. Isso impede que pacotes circulem para sempre em um loop de roteamento (lembre: a camada 2 não tem esse mecanismo — por isso o STP é vital, capítulo Seção 14.1). O traceroute (capítulo Seção 19.1) explora justamente o TTL: envia pacotes com TTL 1, 2, 3… e coleta os ICMP de cada salto para mapear o caminho.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/14-protocolo-ip-ipv4.html#sec-ip-fragmentacao",
+    "href": "capitulos/14-protocolo-ip-ipv4.html#sec-ip-fragmentacao",
+    "title": "15  O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL",
+    "section": "15.4 Fragmentação e MTU",
+    "text": "15.4 Fragmentação e MTU\nSe um pacote é maior que o MTU do próximo enlace, o IPv4 pode fragmentá-lo em pedaços que são remontados só no destino (campos Identification/Flags/Offset). Mas a fragmentação é cara e frágil: perder um fragmento descarta o pacote inteiro, e firewalls às vezes bloqueiam fragmentos. Por isso usa-se o bit DF (Don’t Fragment): o roteador, em vez de fragmentar, descarta e manda um ICMP “Fragmentation Needed”, e a origem reduz o tamanho — é o Path MTU Discovery.\nA armadilha clássica do provedor: PPPoE reduz o MTU para 1492 (capítulo Seção 4.4). Se o ICMP “Frag Needed” for bloqueado em algum ponto, o PMTUD quebra e o cliente vê “alguns sites não abrem” (carregam o cabeçalho, travam no conteúdo grande). A correção é o MSS clamping no BNG, que força o TCP a anunciar um MSS compatível (ex.: 1452).",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/14-protocolo-ip-ipv4.html#sec-ip-endereco",
+    "href": "capitulos/14-protocolo-ip-ipv4.html#sec-ip-endereco",
+    "title": "15  O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL",
+    "section": "15.5 Endereço IPv4: 32 bits",
+    "text": "15.5 Endereço IPv4: 32 bits\nUm endereço IPv4 tem 32 bits, escritos em decimal pontuado (4 octetos), ex.: 192.168.0.1. São ~4,3 bilhões de endereços — insuficientes para o mundo atual, o que motivou CIDR/VLSM (capítulo Seção 17.1), NAT/CGNAT (capítulo Seção 20.1) e a transição para IPv6 (capítulo Seção 18.1). O capítulo Seção 16.1 detalha classes, máscaras e endereços especiais.\n\nNa prática do provedor\n\nDSCP é dinheiro de QoS: marque voz (EF) e gestão em classes próprias na borda e respeite a marcação no core; sem isso, congestionamento estraga VoIP do cliente corporativo.\nMSS clamping no BNG é obrigatório em PPPoE: configure (ex.: clamp mss to pmtu ou MSS 1452) e poupe-se de uma enxurrada de chamados “Netflix abre, banco não”.\nNão bloqueie ICMP cegamente: filtrar todo ICMP quebra o PMTUD e o diagnóstico. Permita Frag Needed e Time Exceeded.\nTTL no traceroute é seu mapa: quando o cliente reclama de lentidão “na internet”, o traceroute/mtr mostra em qual salto (seu, do trânsito, do destino) o RTT dispara.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/14-protocolo-ip-ipv4.html#sec-resumo-14",
+    "href": "capitulos/14-protocolo-ip-ipv4.html#sec-resumo-14",
+    "title": "15  O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL",
+    "section": "15.6 Resumo e checklist",
+    "text": "15.6 Resumo e checklist\n\nIP (camada 3) é melhor esforço, sem conexão; garante endereçamento e roteamento, não entrega.\nTTL evita loops e sustenta o traceroute; cada salto decrementa.\nFragmentação/DF/PMTUD + PPPoE (MTU 1492) ⇒ use MSS clamping no BNG.\nO endereço tem 32 bits; a escassez levou a CIDR/NAT/IPv6.\n\nChecklist do capítulo\n\nReconheço os campos-chave do cabeçalho IPv4 e seu uso operacional.\nExplico TTL e como o traceroute o usa.\nDiagnostico “site não abre” como problema de MTU/PMTUD e aplico MSS clamping.\nSei por que não se deve bloquear todo ICMP.\n\n\n\n\n\nPostel, J. 1981. Internet Protocol. RFC 791. IETF. https://www.rfc-editor.org/info/rfc791.",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>15</span>  <span class='chapter-title'>O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL</span>"
@@ -1035,7 +1090,62 @@
     "href": "capitulos/15-enderecamento-ipv4.html",
     "title": "16  Endereçamento IPv4: Classes e Máscaras de Sub-rede",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "16.1 Rede e host dentro de um endereço\nUm endereço IPv4 de 32 bits (capítulo Seção 15.1) não é monolítico: ele se divide em uma parte de rede (identifica a sub-rede) e uma parte de host (identifica a máquina dentro dela). Quem define essa divisão é a máscara de sub-rede. Dominar essa separação é a base de tudo que vem a seguir — sub-redes, CIDR, VLSM, roteamento — e do trabalho diário de planejar blocos IP no provedor (pools de PPPoE, gerência, links ponto a ponto, CGNAT).",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Endereçamento IPv4: Classes e Máscaras de Sub-rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/15-enderecamento-ipv4.html#sec-enderecamento-binario",
+    "href": "capitulos/15-enderecamento-ipv4.html#sec-enderecamento-binario",
+    "title": "16  Endereçamento IPv4: Classes e Máscaras de Sub-rede",
+    "section": "16.2 Bits, octetos e binário",
+    "text": "16.2 Bits, octetos e binário\nO endereço se escreve em decimal pontuado (192.168.0.1), mas a mágica acontece em binário. Cada octeto = 8 bits = 0–255. Vale memorizar os valores de bit:\n\n\n\nBit\n128\n64\n32\n16\n8\n4\n2\n1\n\n\n\n\n\nAssim 192 = 11000000 (128+64) e 200 = 11001000. Toda conta de sub-rede (capítulo Seção 17.1) é, no fundo, manipular esses bits. Sem o binário, sub-rede vira decoreba; com ele, vira aritmética simples.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Endereçamento IPv4: Classes e Máscaras de Sub-rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/15-enderecamento-ipv4.html#sec-enderecamento-mascara",
+    "href": "capitulos/15-enderecamento-ipv4.html#sec-enderecamento-mascara",
+    "title": "16  Endereçamento IPv4: Classes e Máscaras de Sub-rede",
+    "section": "16.3 A máscara de sub-rede",
+    "text": "16.3 A máscara de sub-rede\nA máscara é uma sequência de 1s (parte de rede) seguida de 0s (parte de host). Ex.: 255.255.255.0 = 11111111.11111111.11111111.00000000 = 24 bits de rede → notação CIDR /24. Para achar o endereço de rede, faz-se um E lógico (AND) entre IP e máscara:\nIP    192.168.10.37  = 11000000.10101000.00001010.00100101\nMásc. 255.255.255.0  = 11111111.11111111.11111111.00000000\nAND → 192.168.10.0   = endereço de REDE\nEm qualquer bloco, dois endereços são reservados: o endereço de rede (todos os bits de host em 0) e o broadcast (todos em 1). Os utilizáveis são os do meio.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Endereçamento IPv4: Classes e Máscaras de Sub-rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/15-enderecamento-ipv4.html#sec-enderecamento-classes",
+    "href": "capitulos/15-enderecamento-ipv4.html#sec-enderecamento-classes",
+    "title": "16  Endereçamento IPv4: Classes e Máscaras de Sub-rede",
+    "section": "16.4 Classes (A, B, C, D, E): história que ainda ecoa",
+    "text": "16.4 Classes (A, B, C, D, E): história que ainda ecoa\nAntes do CIDR, o IPv4 era dividido em classes com máscara fixa:\n\n\n\nClasse\n1º octeto\nMáscara default\nHosts/rede\nUso\n\n\n\n\nA\n1–126\n/8 (255.0.0.0)\n~16,7 M\ngrandes\n\n\nB\n128–191\n/16 (255.255.0.0)\n~65 k\nmédias\n\n\nC\n192–223\n/24 (255.255.255.0)\n254\npequenas\n\n\nD\n224–239\n—\n—\nmulticast\n\n\nE\n240–255\n—\n—\nreservada\n\n\n\nO modelo classful desperdiçava endereços (uma empresa com 300 hosts precisava de uma classe B inteira de 65 mil) e foi substituído pelo CIDR (sem classes, capítulo Seção 17.1). Mas a nomenclatura sobrevive na conversa do dia a dia (“uma classe C” = um /24).",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Endereçamento IPv4: Classes e Máscaras de Sub-rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/15-enderecamento-ipv4.html#sec-enderecamento-especiais",
+    "href": "capitulos/15-enderecamento-ipv4.html#sec-enderecamento-especiais",
+    "title": "16  Endereçamento IPv4: Classes e Máscaras de Sub-rede",
+    "section": "16.5 Endereços especiais e privados",
+    "text": "16.5 Endereços especiais e privados\nNem todo endereço é roteável na internet. Os que o provedor mais usa:\n\n\n\n\n\n\n\n\nBloco\nTipo\nUso\n\n\n\n\n10.0.0.0/8\nprivado (RFC 1918)\nrede interna, gerência\n\n\n172.16.0.0/12\nprivado\nrede interna\n\n\n192.168.0.0/16\nprivado\nLAN do cliente\n\n\n100.64.0.0/10\nCGNAT (RFC 6598)\nendereçar assinantes atrás de CGNAT\n\n\n127.0.0.0/8\nloopback\nlocalhost\n\n\n169.254.0.0/16\nlink-local (APIPA)\nsem DHCP\n\n\n224.0.0.0/4\nmulticast\nIPTV, OSPF, etc.\n\n\n\nO bloco 100.64.0.0/10 é especialmente importante: foi criado para o CGNAT (capítulo Seção 20.1), justamente para o ISP endereçar milhares de assinantes sem colidir com o 10/8 que o cliente já usa em casa.\n\nNa prática do provedor\n\nPlaneje o espaço privado com disciplina: reserve faixas distintas para gerência (OLTs, switches, rádios), links ponto a ponto (/30 ou /31), loopbacks (/32) e pools de cliente. Misturar tudo no 10/8 sem padrão gera conflito e dor no roteamento.\n/31 em links ponto a ponto (RFC 3021) economiza: em vez de /30 (4 endereços, 2 úteis), o /31 usa os 2 endereços como os dois lados do enlace — útil em redes com muitos links de transporte.\nUse 100.64.0.0/10 para CGNAT, nunca o 10/8 exposto ao cliente — senão colide com a LAN doméstica e cria roteamento ambíguo.\nDocumente em um IPAM. Saber qual /24 é de qual POP/serviço é o que mantém o BGP e o CGNAT sãos quando a rede cresce.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Endereçamento IPv4: Classes e Máscaras de Sub-rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/15-enderecamento-ipv4.html#sec-resumo-15",
+    "href": "capitulos/15-enderecamento-ipv4.html#sec-resumo-15",
+    "title": "16  Endereçamento IPv4: Classes e Máscaras de Sub-rede",
+    "section": "16.6 Resumo e checklist",
+    "text": "16.6 Resumo e checklist\n\nO IP se divide em rede + host; a máscara (1s/0s) define onde.\nAND entre IP e máscara dá o endereço de rede; rede e broadcast são reservados.\nClasses são história; hoje é CIDR, mas “/24 = classe C” persiste na fala.\nConheça os privados (RFC 1918) e o 100.64.0.0/10 do CGNAT.\n\nChecklist do capítulo\n\nConverto octetos entre decimal e binário de cabeça.\nCalculo o endereço de rede com AND.\nIdentifico blocos privados e o bloco de CGNAT.\nPlanejo faixas separadas para gerência, links, loopbacks e clientes.",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>16</span>  <span class='chapter-title'>Endereçamento IPv4: Classes e Máscaras de Sub-rede</span>"
@@ -1046,7 +1156,62 @@
     "href": "capitulos/16-subredes-cidr-vlsm.html",
     "title": "17  Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "17.1 O capítulo que você vai usar todo dia\nSubdividir endereços IP é a habilidade mais cobrada e mais usada na operação de um provedor: dimensionar o pool de PPPoE de uma OLT, recortar blocos para CGNAT, criar /30 (ou /31) para links de transporte, planejar a rede de gerência, e sumarizar rotas no BGP. Este capítulo é deliberadamente prático e cheio de exercícios resolvidos passo a passo. A base teórica está nos capítulos Seção 16.1 (rede/host, máscara) e Seção 16.2 (binário) — tenha-os à mão.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/16-subredes-cidr-vlsm.html#sec-subredes-cidr",
+    "href": "capitulos/16-subredes-cidr-vlsm.html#sec-subredes-cidr",
+    "title": "17  Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)",
+    "section": "17.2 CIDR: máscara de qualquer tamanho",
+    "text": "17.2 CIDR: máscara de qualquer tamanho\nCIDR (Classless Inter-Domain Routing) abandonou as classes: a máscara pode ter qualquer comprimento (/8 a /32), escrita como prefixo. A conta-mãe:\n\\[\\text{hosts utilizáveis} = 2^{(32 - \\text{prefixo})} - 2\\]\n(o \\(-2\\) remove rede e broadcast). E o número de sub-redes ao “pedir emprestado” \\(n\\) bits de host é \\(2^n\\). A tabela de bolso (memorize as colunas):\n\n\n\nCIDR\nMáscara\nBloco (endereços)\nHosts úteis\n\n\n\n\n/24\n255.255.255.0\n256\n254\n\n\n/25\n255.255.255.128\n128\n126\n\n\n/26\n255.255.255.192\n64\n62\n\n\n/27\n255.255.255.224\n32\n30\n\n\n/28\n255.255.255.240\n16\n14\n\n\n/29\n255.255.255.248\n8\n6\n\n\n/30\n255.255.255.252\n4\n2\n\n\n/31\n255.255.255.254\n2\n2 (ponto a ponto, RFC 3021)\n\n\n/32\n255.255.255.255\n1\n1 (loopback/host)\n\n\n\nO “número mágico” é 256 − (octeto da máscara): dá o tamanho do bloco no octeto que varia, e as redes começam em múltiplos dele. Ex.: /26 → máscara 192 → mágico 256−192 = 64 → redes em .0, .64, .128, .192.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/16-subredes-cidr-vlsm.html#sec-subredes-receita",
+    "href": "capitulos/16-subredes-cidr-vlsm.html#sec-subredes-receita",
+    "title": "17  Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)",
+    "section": "17.3 Receita de 5 passos para qualquer sub-rede",
+    "text": "17.3 Receita de 5 passos para qualquer sub-rede\nDado um IP/prefixo, ache rede, broadcast e faixa:\n\nTamanho do bloco = \\(2^{(32-\\text{prefixo})}\\) (ou mágico no octeto que varia).\nEndereço de rede = maior múltiplo do bloco ≤ ao octeto do IP.\nBroadcast = rede + bloco − 1.\nPrimeiro host = rede + 1; último host = broadcast − 1.\nPróxima rede = broadcast + 1.\n\n\n17.3.1 Exercício resolvido 1 — 192.168.10.37/26\n\nPasso 1: prefixo /26 → \\(2^{32-26}=2^6=64\\) endereços por bloco. Máscara 255.255.255.192.\nPasso 2: octeto que varia = o 4º (.37). Múltiplos de 64: 0, 64, 128, 192. O maior ≤ 37 é 0 → rede = 192.168.10.0.\nPasso 3: broadcast = 0 + 64 − 1 = 192.168.10.63.\nPasso 4: faixa utilizável = 192.168.10.1 a 192.168.10.62 (62 hosts).\nPasso 5: próxima rede = 192.168.10.64/26.\n\n\n\n17.3.2 Exercício resolvido 2 — 172.16.20.200/27\n\nPasso 1: /27 → \\(2^5=32\\) por bloco. Máscara 255.255.255.224. Mágico 32.\nPasso 2: múltiplos de 32: …160, 192, 224. Maior ≤ 200 = 192 → rede = 172.16.20.192.\nPasso 3: broadcast = 192 + 32 − 1 = 172.16.20.223.\nPasso 4: hosts = 172.16.20.193 a 172.16.20.222 (30 hosts).\nPasso 5: próxima = 172.16.20.224/27.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/16-subredes-cidr-vlsm.html#sec-subredes-vlsm",
+    "href": "capitulos/16-subredes-cidr-vlsm.html#sec-subredes-vlsm",
+    "title": "17  Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)",
+    "section": "17.4 VLSM: máscaras de tamanho variável",
+    "text": "17.4 VLSM: máscaras de tamanho variável\nO VLSM aplica máscaras diferentes dentro do mesmo bloco, dimensionando cada sub-rede ao seu tamanho real — sem desperdício. Regra de ouro: aloque do MAIOR para o MENOR. Isso evita sobreposição e fragmentação.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 17.1: VLSM em um /24: aloca-se do maior bloco (/25) ao menor (/30), encaixando cada sub-rede sem desperdício nem sobreposição.\n\n\n\n\n17.4.1 Exercício resolvido 3 — VLSM de um /24 para uma OLT\nVocê recebeu 200.0.0.0/24 e precisa, nesta ordem de tamanho:\n\n\n\nNecessidade\nHosts\nPrefixo\nBloco\n\n\n\n\nPool de assinantes A\n100\n/25\n128\n\n\nPool de assinantes B\n50\n/26\n64\n\n\nGerência (OLT/switches)\n20\n/27\n32\n\n\nLink ponto a ponto 1\n2\n/30\n4\n\n\nLink ponto a ponto 2\n2\n/30\n4\n\n\n\nAlocando do maior para o menor:\n\nA (/25): 200.0.0.0 – 200.0.0.127 (hosts .1–.126).\nB (/26): começa em .128 → 200.0.0.128 – 200.0.0.191 (.129–.190).\nGerência (/27): começa em .192 → 200.0.0.192 – 200.0.0.223 (.193–.222).\nLink 1 (/30): começa em .224 → 200.0.0.224 – 200.0.0.227 (.225–.226).\nLink 2 (/30): começa em .228 → 200.0.0.228 – 200.0.0.231 (.229–.230).\n\nSobra de .232 a .255 para crescer. Repare: se tivéssemos começado pelos /30, fragmentaríamos o espaço e não caberia o /25. Por isso maior primeiro.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/16-subredes-cidr-vlsm.html#sec-subredes-sumarizacao",
+    "href": "capitulos/16-subredes-cidr-vlsm.html#sec-subredes-sumarizacao",
+    "title": "17  Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)",
+    "section": "17.5 Sumarização (agregação de rotas)",
+    "text": "17.5 Sumarização (agregação de rotas)\nSumarizar é o inverso: juntar vários prefixos contíguos em um só, menor, para reduzir a tabela de rotas (essencial no BGP — capítulo ?sec-bgp). Achar o resumo: alinhe os blocos em binário e ache o maior prefixo comum.\n\n17.5.1 Exercício resolvido 4 — sumarizar quatro /24\nResumir 192.168.0.0/24, 192.168.1.0/24, 192.168.2.0/24, 192.168.3.0/24:\n192.168.0.0 = ...0000 0000  (3º octeto)\n192.168.1.0 = ...0000 0001\n192.168.2.0 = ...0000 0010\n192.168.3.0 = ...0000 0011\n              └──comum──┘ ↑ variam os 2 últimos bits\nOs primeiros 22 bits são idênticos → resumo 192.168.0.0/22 (cobre .0 a .3 no 3º octeto, 1024 endereços, 4 redes /24). Anunciar uma rota /22 em vez de quatro /24 deixa a tabela BGP mais limpa e estável.\n\nNa prática do provedor\n\nPlaneje pools por OLT/PON com VLSM: estime assinantes + folga de crescimento, escolha o prefixo (não use /24 onde um /25 basta — guarde o resto). Em IPoE com CGNAT, recorte do 100.64.0.0/10.\n/30 ou /31 para transporte: cada link ponto a ponto entre roteadores/POPs é um /30 (ou /31, RFC 3021). Mantenha um bloco só para links, facilita sumarizar.\nLoopbacks em /32 num bloco contíguo → sumariza num único prefixo no IGP.\nSumarize antes de anunciar no BGP: receba seu bloco do registro (ex.: um /22 do NIC.br) e anuncie agregado, não os /24 soltos — tabela menor, menos flap, melhor reputação.\nDocumente cada recorte no IPAM. VLSM sem documentação vira sobreposição e blackhole meses depois.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/16-subredes-cidr-vlsm.html#sec-resumo-16",
+    "href": "capitulos/16-subredes-cidr-vlsm.html#sec-resumo-16",
+    "title": "17  Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)",
+    "section": "17.6 Resumo e checklist",
+    "text": "17.6 Resumo e checklist\n\nCIDR: máscara de qualquer tamanho; hosts úteis = \\(2^{(32-\\text{prefixo})}-2\\).\nUse o número mágico e a receita de 5 passos para rede/broadcast/faixa.\nVLSM: máscaras variáveis, sempre do maior para o menor bloco.\nSumarização: junte prefixos contíguos no maior prefixo comum (binário) para enxugar o BGP.\n\nChecklist do capítulo\n\nAcho rede, broadcast e faixa de qualquer IP/prefixo em 5 passos.\nFaço VLSM de um bloco para pools, gerência e links sem sobrepor.\nSumarizo prefixos contíguos achando o maior prefixo comum.\nRecorto do 100.64.0.0/10 para CGNAT e de blocos próprios para clientes.",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>17</span>  <span class='chapter-title'>Sub-redes na Prática: CIDR, VLSM e Sumarização (com Exercícios)</span>"
@@ -1057,7 +1222,62 @@
     "href": "capitulos/17-ipv6.html",
     "title": "18  IPv6: Endereçamento, SLAAC e Sub-redes",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "18.1 Por que o provedor precisa de IPv6\nO IPv4 acabou: os 4,3 bilhões de endereços (capítulo Seção 15.1) há muito não cabem na internet, e o ISP sobrevive com CGNAT (capítulo Seção 20.1), que custa caro, quebra aplicações e dificulta rastreabilidade. O IPv6 resolve a raiz do problema com 128 bits de endereço — espaço praticamente inesgotável — e permite endereço público real para cada cliente, dispensando NAT. No Brasil, com o IX.br medindo tráfego IPv6 expressivo, implantar IPv6 é estratégico, não opcional (capítulo ?sec-ipv6-isp detalha o deployment). Aqui cobrimos os fundamentos.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>IPv6: Endereçamento, SLAAC e Sub-redes</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/17-ipv6.html#sec-ipv6-endereco",
+    "href": "capitulos/17-ipv6.html#sec-ipv6-endereco",
+    "title": "18  IPv6: Endereçamento, SLAAC e Sub-redes",
+    "section": "18.2 O endereço de 128 bits",
+    "text": "18.2 O endereço de 128 bits\nEscreve-se em 8 grupos de 4 hexadecimais separados por :, ex.: 2001:0db8:0000:0000:0000:ff00:0042:8329. Regras de abreviação:\n\nZeros à esquerda de cada grupo podem cair: 0db8 → db8, 0000 → 0.\nUma sequência de grupos zero vira :: (só uma vez): o exemplo acima fica 2001:db8::ff00:42:8329.\n\nEstrutura típica de um endereço unicast global:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 18.1: Anatomia de um IPv6 unicast global: prefixo do ISP + ID de sub-rede + 64 bits de interface. Toda LAN é um /64 — essa é a regra que organiza tudo.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>IPv6: Endereçamento, SLAAC e Sub-redes</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/17-ipv6.html#sec-ipv6-tipos",
+    "href": "capitulos/17-ipv6.html#sec-ipv6-tipos",
+    "title": "18  IPv6: Endereçamento, SLAAC e Sub-redes",
+    "section": "18.3 Tipos de endereço",
+    "text": "18.3 Tipos de endereço\nIPv6 não tem broadcast — usa multicast e um novo tipo, anycast:\n\n\n\n\n\n\n\n\nTipo\nPrefixo\nPapel\n\n\n\n\nUnicast global (GUA)\n2000::/3\npúblico, roteável (substitui o IPv4 público)\n\n\nLink-local (LLA)\nfe80::/10\nobrigatório, só no enlace; base do NDP\n\n\nUnique local (ULA)\nfc00::/7\nprivado (análogo ao RFC 1918)\n\n\nMulticast\nff00::/8\ngrupos (ex.: ff02::1 = todos os nós do link)\n\n\nLoopback\n::1/128\nlocalhost\n\n\n\nCada interface tem vários endereços ao mesmo tempo (sempre um link-local + um ou mais globais). O link-local é a cola: NDP, roteamento e descoberta de vizinho funcionam sobre ele.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>IPv6: Endereçamento, SLAAC e Sub-redes</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/17-ipv6.html#sec-ipv6-slaac",
+    "href": "capitulos/17-ipv6.html#sec-ipv6-slaac",
+    "title": "18  IPv6: Endereçamento, SLAAC e Sub-redes",
+    "section": "18.4 SLAAC, NDP e DHCPv6",
+    "text": "18.4 SLAAC, NDP e DHCPv6\nEm IPv6 o host pode se autoconfigurar sem servidor, via SLAAC (Stateless Address Autoconfiguration):\n\nO host gera seu link-local (fe80::…).\nEnvia um Router Solicitation (RS) (ICMPv6).\nO roteador responde com Router Advertisement (RA), contendo o prefixo /64.\nO host monta seu endereço global combinando o prefixo + Interface ID (EUI-64 a partir do MAC, ou aleatório por privacidade).\n\nNão há ARP: o NDP (Neighbor Discovery, capítulo Seção 13.1) faz a resolução vizinho↔︎endereço por multicast. Quando o ISP precisa entregar mais que um /64 (a casa do cliente quer várias sub-redes), usa-se DHCPv6-PD (Prefix Delegation): o BNG delega um /56 ou /48 ao roteador do cliente, que reparte em /64s internos.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>IPv6: Endereçamento, SLAAC e Sub-redes</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/17-ipv6.html#sec-ipv6-subredes",
+    "href": "capitulos/17-ipv6.html#sec-ipv6-subredes",
+    "title": "18  IPv6: Endereçamento, SLAAC e Sub-redes",
+    "section": "18.5 Sub-redes em IPv6: pense diferente",
+    "text": "18.5 Sub-redes em IPv6: pense diferente\nEsqueça a economia de endereços do IPv4. Em IPv6 a conta é de prefixos, não de hosts:\n\n\n\nPrefixo\nQuantas /64 contém\nUso típico no ISP\n\n\n\n\n/32\n4 bilhões de /64\nalocação do registro ao ISP grande\n\n\n/48\n65.536 /64\nsite corporativo / POP\n\n\n/56\n256 /64\ndelegação típica ao assinante residencial\n\n\n/64\n1 (uma LAN)\ntoda rede de acesso/LAN\n\n\n\nA regra inviolável: a LAN é sempre /64 (SLAAC exige). Não se “economiza” fazendo /120 — quebra a autoconfiguração. Sobra espaço para todos: um único /32 do ISP comporta milhões de clientes com /56 cada.\n\nNa prática do provedor\n\nPlano de numeração: receba seu /32 (NIC.br) e fatie em /48 por POP/região e /56 por assinante (via DHCPv6-PD no BNG). Mantenha hierarquia para sumarizar no BGP (capítulo Seção 17.1).\nDual-stack é o caminho: rode IPv4+IPv6 juntos; o IPv6 alivia o CGNAT (menos sessões NAT, menos custo, menos chamado de jogo/console).\nNão filtre ICMPv6! Diferente do IPv4, IPv6 depende de ICMPv6 (RS/RA, NDP, PMTUD). Bloquear ICMPv6 quebra a conectividade — libere os tipos essenciais.\nPPPoE/IPoE com IPv6: entregue um /64 para o WAN/LAN via RA e delegue um /56 por PD; configure o RADIUS (capítulo ?sec-radius) para atribuir o prefixo por cliente.\nCGNAT só no IPv4: com bom IPv6 dual-stack, grande parte do tráfego (vídeo, CDNs) já vai por IPv6 nativo, reduzindo a pressão no CGNAT.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>IPv6: Endereçamento, SLAAC e Sub-redes</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/17-ipv6.html#sec-resumo-17",
+    "href": "capitulos/17-ipv6.html#sec-resumo-17",
+    "title": "18  IPv6: Endereçamento, SLAAC e Sub-redes",
+    "section": "18.6 Resumo e checklist",
+    "text": "18.6 Resumo e checklist\n\nIPv6 tem 128 bits; abrevia com supressão de zeros e :: (uma vez).\nSem broadcast; usa multicast/anycast, link-local obrigatório e NDP no lugar do ARP.\nSLAAC autoconfigura via RA; DHCPv6-PD delega prefixo (/56) ao cliente.\nLAN = /64 sempre; planeje /32→/48→/56 e rode dual-stack para aliviar o CGNAT.\n\nChecklist do capítulo\n\nAbrevio e expando endereços IPv6 corretamente.\nDistingo GUA, LLA, ULA e multicast.\nExplico SLAAC (RS/RA) e DHCPv6-PD para o assinante.\nPlanejo /32→/48→/56→/64 e sei por que a LAN é /64.",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>18</span>  <span class='chapter-title'>IPv6: Endereçamento, SLAAC e Sub-redes</span>"
@@ -1068,7 +1288,73 @@
     "href": "capitulos/18-icmp-diagnostico.html",
     "title": "19  ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "19.1 A camada 3 falando consigo mesma\nO IP entrega pacotes em “melhor esforço” (capítulo Seção 15.1) — mas quando algo dá errado (host inalcançável, TTL esgotado, pacote grande demais), alguém precisa avisar. Esse mensageiro é o ICMP (Internet Control Message Protocol). Não transporta dados de usuário: transporta mensagens de controle e erro sobre o próprio IP. Para o provedor, o ICMP é a base de quase todo diagnóstico de rede — ping, traceroute, mtr, PMTUD. Saber lê-lo separa o palpite do diagnóstico.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/18-icmp-diagnostico.html#sec-icmp-tipos",
+    "href": "capitulos/18-icmp-diagnostico.html#sec-icmp-tipos",
+    "title": "19  ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)",
+    "section": "19.2 Tipos de mensagem essenciais",
+    "text": "19.2 Tipos de mensagem essenciais\n\n\n\n\n\n\n\n\nMensagem\nQuando\nPara que serve\n\n\n\n\nEcho Request/Reply\nping\ntestar alcance e medir RTT\n\n\nTime Exceeded\nTTL chegou a 0\nbase do traceroute\n\n\nDestination Unreachable\nsem rota/porta/host\ndiz por que não chegou\n\n\nFragmentation Needed (DF)\npacote &gt; MTU com DF\nbase do PMTUD\n\n\nRedirect\nrota melhor existe\notimização (cuidado: risco de segurança)\n\n\n\nNo “Destination Unreachable”, o código detalha: network unreachable (problema de rota), host unreachable (vizinho não responde), port unreachable (nada ouvindo naquela porta UDP). Esse código é ouro no diagnóstico.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/18-icmp-diagnostico.html#sec-icmp-ping",
+    "href": "capitulos/18-icmp-diagnostico.html#sec-icmp-ping",
+    "title": "19  ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)",
+    "section": "19.3 ping: o primeiro teste",
+    "text": "19.3 ping: o primeiro teste\nping envia Echo Request e cronometra o Echo Reply. O que ele revela:\n\nResponde? Sim → camada 3 alcança o destino. Não → pode ser falha real ou ICMP bloqueado (muitos servidores filtram ping).\nRTT (tempo) → latência; variação → jitter (capítulo Seção 7.1).\nPerda → percentual de pacotes sem resposta.\n\nOpções úteis no provedor: tamanho do pacote (-s/-l) e não fragmentar (-M do no Linux, -f no Windows) para sondar MTU.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/18-icmp-diagnostico.html#sec-icmp-traceroute",
+    "href": "capitulos/18-icmp-diagnostico.html#sec-icmp-traceroute",
+    "title": "19  ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)",
+    "section": "19.4 traceroute / mtr: o caminho salto a salto",
+    "text": "19.4 traceroute / mtr: o caminho salto a salto\nO traceroute explora o TTL (capítulo Seção 15.3): envia pacotes com TTL crescente (1, 2, 3…). Cada roteador que zera o TTL devolve um Time Exceeded, revelando seu IP. Assim se desenha o caminho e o RTT de cada salto.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 19.1: Traceroute: TTL crescente faz cada roteador “se denunciar” com um Time Exceeded, mapeando o caminho e o RTT por salto.\n\n\n\nO mtr combina ping + traceroute contínuo: roda por dezenas de pacotes e mostra perda e latência por salto em tempo real — a melhor ferramenta para achar onde a rede dói. Cuidado ao interpretar: perda só num salto intermediário (mas não nos seguintes) costuma ser rate-limit de ICMP daquele roteador, não perda real do caminho. O que importa é a perda no destino e a tendência a partir de um salto.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/18-icmp-diagnostico.html#sec-icmp-pmtud",
+    "href": "capitulos/18-icmp-diagnostico.html#sec-icmp-pmtud",
+    "title": "19  ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)",
+    "section": "19.5 PMTUD: descobrir o MTU do caminho",
+    "text": "19.5 PMTUD: descobrir o MTU do caminho\nO Path MTU Discovery usa o ICMP “Fragmentation Needed”: a origem manda pacotes grandes com DF; se algum enlace tem MTU menor, o roteador descarta e avisa, e a origem reduz. Se esse ICMP for bloqueado, o PMTUD quebra — o sintoma clássico de PPPoE (MTU 1492): conexões abrem mas travam em transferências grandes (“alguns sites não abrem”). Solução: não bloquear ICMP e usar MSS clamping no BNG (capítulo Seção 15.4).\nSondagem manual de MTU (Windows): ping -f -l 1472 destino (1472 + 28 de cabeçalho = 1500). Se vier “Packet needs to be fragmented but DF set”, reduza até passar — você achou o MTU do caminho.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/18-icmp-diagnostico.html#sec-icmp-icmpv6",
+    "href": "capitulos/18-icmp-diagnostico.html#sec-icmp-icmpv6",
+    "title": "19  ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)",
+    "section": "19.6 ICMPv6: ainda mais essencial",
+    "text": "19.6 ICMPv6: ainda mais essencial\nEm IPv6 (capítulo Seção 18.1) o ICMPv6 é parte estrutural do protocolo: o NDP (descoberta de vizinho, RS/RA do SLAAC) roda sobre ICMPv6. Por isso a regra é categórica: nunca bloqueie ICMPv6 indiscriminadamente — você derrubaria a própria conectividade IPv6 (sem NDP não há resolução de vizinho; sem RA não há endereço).\n\nNa prática do provedor\n\nRoteiro de chamado “internet lenta/caindo”: ping no gateway (camada 1/2/3 local) → ping num IP do IX/CDN local (sua rede) → mtr até um destino conhecido. O salto onde a perda/RTT começa e persiste indica o responsável (você, o trânsito ou o destino).\nNão filtre ICMP no agregado/BNG: libere ao menos Echo, Time Exceeded e Frag Needed (e os tipos de NDP no IPv6). Filtrar tudo cega o suporte e quebra PMTUD/SLAAC.\nRate-limit de ICMP nos roteadores é normal e gera “perda” fantasma em saltos intermediários do mtr — não confunda com problema real.\nMonitore por ICMP com cautela: sondas de ping a OLTs/rádios são ótimas, mas combine com SNMP (capítulo ?sec-monitoramento) para não depender só de ICMP, que pode estar despriorizado.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/18-icmp-diagnostico.html#sec-resumo-18",
+    "href": "capitulos/18-icmp-diagnostico.html#sec-resumo-18",
+    "title": "19  ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)",
+    "section": "19.7 Resumo e checklist",
+    "text": "19.7 Resumo e checklist\n\nICMP carrega controle/erro do IP; é a base de ping, traceroute, mtr e PMTUD.\nEcho testa alcance/RTT; Time Exceeded (via TTL) sustenta o traceroute.\nFragmentation Needed faz o PMTUD; bloqueá-lo causa “site não abre” no PPPoE.\nICMPv6 é estrutural (NDP/SLAAC) — jamais bloqueie por atacado.\n\nChecklist do capítulo\n\nInterpreto resposta/RTT/perda do ping e o código do Unreachable.\nUso mtr e sei distinguir perda real de rate-limit intermediário.\nSondo o MTU do caminho com ping -f -l e ligo isso ao MSS clamping.\nSei por que ICMPv6 não pode ser bloqueado.",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>19</span>  <span class='chapter-title'>ICMP/ICMPv6 e Diagnóstico (ping, traceroute, MTU)</span>"
@@ -1079,7 +1365,62 @@
     "href": "capitulos/19-nat-cgnat.html",
     "title": "20  NAT e CGNAT",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "20.1 Esticar o IPv4 que acabou\nCom o IPv4 esgotado (capítulo Seção 15.1), é impossível dar um endereço público a cada dispositivo. O NAT (Network Address Translation) contorna isso traduzindo muitos endereços privados (RFC 1918) em um público. Na casa do cliente, o roteador já faz NAT. No provedor, quando nem endereços públicos para cada assinante sobram, entra o CGNAT (Carrier-Grade NAT): um NAT em escala de operadora que compartilha um IPv4 público entre dezenas/centenas de assinantes. É uma muleta cara e cheia de efeitos colaterais — daí a urgência do IPv6 (capítulo Seção 18.1).",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>NAT e CGNAT</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/19-nat-cgnat.html#sec-nat-funcionamento",
+    "href": "capitulos/19-nat-cgnat.html#sec-nat-funcionamento",
+    "title": "20  NAT e CGNAT",
+    "section": "20.2 Como o NAT funciona (NAPT/PAT)",
+    "text": "20.2 Como o NAT funciona (NAPT/PAT)\nO tipo usado na prática é o NAPT (Network Address Port Translation, ou PAT): traduz IP + porta, multiplexando muitas conexões internas em um IP público pela porta de origem.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 20.1: NAPT/PAT: dois hosts internos com a mesma porta saem pelo mesmo IP público em portas distintas; a tabela de tradução sabe devolver cada resposta ao dono.\n\n\n\nA tradução guarda uma entrada de estado (IP:porta interno ↔︎ IP:porta externo) por conexão. Quando a resposta volta, o NAT consulta a tabela e reescreve de volta. O problema: conexões de fora para dentro não têm entrada — por isso, atrás de NAT, não dá para “abrir porta” sem port forwarding.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>NAT e CGNAT</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/19-nat-cgnat.html#sec-cgnat",
+    "href": "capitulos/19-nat-cgnat.html#sec-cgnat",
+    "title": "20  NAT e CGNAT",
+    "section": "20.3 CGNAT: NAT na escala do provedor",
+    "text": "20.3 CGNAT: NAT na escala do provedor\nO CGNAT adiciona uma segunda camada de NAT na borda do ISP. O fluxo típico:\nLAN cliente (192.168.0.x)  →  NAT do roteador do cliente\n   →  CGNAT do provedor (100.64.0.0/10)  →  IPv4 público compartilhado\nUsa-se o bloco 100.64.0.0/10 (RFC 6598, capítulo Seção 16.1) entre o roteador do cliente e o CGNAT, justamente para não colidir com o 10/8/192.168 que o cliente já usa em casa (duplo NAT sem ambiguidade). Cada IP público é compartilhado por N assinantes, divididos por blocos de portas.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>NAT e CGNAT</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/19-nat-cgnat.html#sec-cgnat-problemas",
+    "href": "capitulos/19-nat-cgnat.html#sec-cgnat-problemas",
+    "title": "20  NAT e CGNAT",
+    "section": "20.4 Os efeitos colaterais (e as obrigações legais)",
+    "text": "20.4 Os efeitos colaterais (e as obrigações legais)\nO CGNAT quebra coisas e gera obrigações:\n\n\n\n\n\n\n\nProblema\nImpacto\n\n\n\n\nSem porta de entrada\ncâmeras, DVR, jogos com host, P2P, VPN entrante falham\n\n\nPort exhaustion\npoucas portas por cliente → conexões falham em pico\n\n\nGeolocalização errada\nserviços acham o cliente em outra cidade\n\n\nReputação compartilhada\num cliente abusador faz o IP cair em blacklist (CAPTCHA pra todos)\n\n\nLogs (Marco Civil)\nobrigação legal de registrar quem usou qual porta/quando\n\n\n\nA alocação de portas por bloco (em vez de dinâmica) reduz o volume de log: em vez de registrar cada conexão, registra-se “cliente X = portas 1024–2047 no IP Y das 10h às 12h”. Isso é essencial para cumprir o Marco Civil da Internet sem explodir o armazenamento de logs.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>NAT e CGNAT</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/19-nat-cgnat.html#sec-cgnat-dimensionamento",
+    "href": "capitulos/19-nat-cgnat.html#sec-cgnat-dimensionamento",
+    "title": "20  NAT e CGNAT",
+    "section": "20.5 Dimensionando o CGNAT",
+    "text": "20.5 Dimensionando o CGNAT\nQuantos clientes por IP público? Cada IPv4 tem ~64.512 portas úteis (acima de 1024). Se você reservar 2.048 portas por assinante, cabem 64512 / 2048 ≈ 31 clientes por IP. Com 1.024 portas, ~63 clientes. Trade-off: mais clientes por IP economiza endereços, mas aumenta port exhaustion (apps modernos abrem centenas de conexões). Monitore o uso de portas e ajuste o ratio.\n\nNa prática do provedor\n\nIPv6 é a saída real. Rode dual-stack: o tráfego IPv6 (boa parte de vídeo e CDNs) não passa pelo CGNAT, aliviando a tabela de estado, reduzindo port exhaustion e cortando custo de IPv4. CGNAT vira ponte, não destino.\nReserve portas por bloco (não dinâmico) para minimizar logs e cumprir o Marco Civil; guarde a tabela cliente↔︎IP↔︎faixa de portas↔︎tempo.\nOfereça IP público fixo como produto (avulso/empresarial) para quem precisa de câmera/servidor/VPN entrante — resolve o cliente e gera receita.\nCGNAT carrier-grade (NPU/placa dedicada ou roteador robusto): a tabela de estado e a tradução em line-rate derrubam a CPU de um roteador comum no pico.\nAtenção a CAPTCHA/blacklist: monitore reputação dos IPs compartilhados; isole ou notifique o assinante abusador antes que o IP inteiro seja punido.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>NAT e CGNAT</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/19-nat-cgnat.html#sec-resumo-19",
+    "href": "capitulos/19-nat-cgnat.html#sec-resumo-19",
+    "title": "20  NAT e CGNAT",
+    "section": "20.6 Resumo e checklist",
+    "text": "20.6 Resumo e checklist\n\nNAT/NAPT multiplexa muitos privados em um público por IP+porta; entrada espontânea exige port forwarding.\nCGNAT é o NAT do ISP, usa 100.64.0.0/10 e compartilha um público entre dezenas de clientes.\nEfeitos: sem porta de entrada, port exhaustion, geolocalização, reputação e logs do Marco Civil.\nDual-stack IPv6 é a verdadeira solução; CGNAT bem dimensionado e logado por bloco de portas é o paliativo.\n\nChecklist do capítulo\n\nExplico NAPT e por que não há entrada sem forwarding.\nDesenho o duplo NAT cliente→CGNAT com o 100.64.0.0/10.\nDimensiono clientes por IP pelo número de portas e monitoro exhaustion.\nConfiguro alocação por bloco de portas para cumprir o Marco Civil.",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>20</span>  <span class='chapter-title'>NAT e CGNAT</span>"
@@ -1090,7 +1431,73 @@
     "href": "capitulos/20-roteamento.html",
     "title": "21  Roteamento: Estático e Dinâmico (RIP, OSPF)",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "21.1 Decidir o próximo salto\nEndereçar (capítulos Seção 16.1 e Seção 17.1) é só metade da camada 3; a outra é rotear: decidir, para cada pacote, por onde mandá-lo rumo ao destino. Cada roteador mantém uma tabela de rotas e, ao receber um pacote, procura o prefixo de destino mais específico e o encaminha ao próximo salto. No provedor, o roteamento interno (entre POPs, OLTs, agregadores) é o que faz a rede funcionar como um todo coeso; o roteamento externo (com outros ISPs) é o BGP (capítulo ?sec-bgp). Aqui tratamos o interno: estático, RIP e, sobretudo, OSPF.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Roteamento: Estático e Dinâmico (RIP, OSPF)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/20-roteamento.html#sec-roteamento-tabela",
+    "href": "capitulos/20-roteamento.html#sec-roteamento-tabela",
+    "title": "21  Roteamento: Estático e Dinâmico (RIP, OSPF)",
+    "section": "21.2 A tabela de rotas e o longest prefix match",
+    "text": "21.2 A tabela de rotas e o longest prefix match\nA decisão segue a regra do prefixo mais longo (longest prefix match): entre rotas que casam com o destino, vence a mais específica (maior prefixo). Exemplo de tabela:\n\n\n\nDestino\nPróximo salto\nOrigem\n\n\n\n\n0.0.0.0/0\n200.1.1.1\nestática (default)\n\n\n10.0.0.0/8\n10.10.0.2\nOSPF\n\n\n10.20.0.0/16\n10.10.0.6\nOSPF\n\n\n10.20.5.0/24\n10.10.0.10\nestática\n\n\n\nUm pacote para 10.20.5.7 casa com três rotas (/8, /16, /24) → vence o /24. A rota default (0.0.0.0/0) é o “se nada mais casar, mande para a internet”.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Roteamento: Estático e Dinâmico (RIP, OSPF)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/20-roteamento.html#sec-roteamento-estatico",
+    "href": "capitulos/20-roteamento.html#sec-roteamento-estatico",
+    "title": "21  Roteamento: Estático e Dinâmico (RIP, OSPF)",
+    "section": "21.3 Roteamento estático",
+    "text": "21.3 Roteamento estático\nSão rotas configuradas à mão. Vantagens: simples, previsível, sem overhead de protocolo, controle total. Desvantagens: não se adaptam a falhas (se o caminho cai, a rota continua apontando para o buraco) e não escalam (centenas de rotas manuais = erro garantido). Uso ideal no ISP:\n\nRota default do agregador para a borda.\nLinks ponto a ponto estáveis e poucos.\nRotas para clientes com bloco fixo.\n\nBom estático combina com rastreamento (ex.: track/BFD): a rota só fica ativa se o próximo salto responde, permitindo failover básico.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Roteamento: Estático e Dinâmico (RIP, OSPF)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/20-roteamento.html#sec-roteamento-dinamico",
+    "href": "capitulos/20-roteamento.html#sec-roteamento-dinamico",
+    "title": "21  Roteamento: Estático e Dinâmico (RIP, OSPF)",
+    "section": "21.4 Roteamento dinâmico: a rede se descobre",
+    "text": "21.4 Roteamento dinâmico: a rede se descobre\nProtocolos dinâmicos fazem os roteadores trocarem informação e calcularem rotas automaticamente, adaptando-se a falhas. Duas famílias:\n\nVetor de distância (ex.: RIP): cada roteador conta aos vizinhos “sei chegar em X a N saltos”. Simples, mas lento para convergir e limitado (RIP: máx. 15 saltos). Praticamente aposentado em redes sérias.\nEstado de enlace (ex.: OSPF, IS-IS): cada roteador anuncia o estado de seus links a todos; cada um monta um mapa completo e calcula o melhor caminho por Dijkstra. Converge rápido e escala — é o padrão de IGP do provedor.\n\n\n\n\nCritério\nRIP\nOSPF\n\n\n\n\nTipo\nvetor de distância\nestado de enlace\n\n\nMétrica\nsaltos (máx. 15)\ncusto (∝ banda)\n\n\nConvergência\nlenta\nrápida\n\n\nEscala\npequena\ngrande (com áreas)\n\n\nUso no ISP\nlegado/raríssimo\nIGP padrão",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Roteamento: Estático e Dinâmico (RIP, OSPF)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/20-roteamento.html#sec-roteamento-ospf",
+    "href": "capitulos/20-roteamento.html#sec-roteamento-ospf",
+    "title": "21  Roteamento: Estático e Dinâmico (RIP, OSPF)",
+    "section": "21.5 OSPF na rede do provedor",
+    "text": "21.5 OSPF na rede do provedor\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 21.1: OSPF hierárquico: a Área 0 é o backbone; áreas regionais (POPs) ligam-se a ela por ABRs. Áreas reduzem o tamanho da base de dados e contêm a instabilidade.\n\n\n\nConceitos práticos do OSPF:\n\nÁreas dividem o domínio; a Área 0 é obrigatória e central. Isso limita o alcance dos recálculos (uma falha numa área não recomputa o mundo todo) e permite sumarizar entre áreas (capítulo Seção 17.1).\nMétrica = custo, inversamente proporcional à banda: OSPF prefere o caminho de maior capacidade, não o de menos saltos.\nLoopbacks como router-id e como destino estável para gerência/iBGP.\nBFD acelera a detecção de falha (milissegundos) acoplado ao OSPF.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Roteamento: Estático e Dinâmico (RIP, OSPF)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/20-roteamento.html#sec-roteamento-isp",
+    "href": "capitulos/20-roteamento.html#sec-roteamento-isp",
+    "title": "21  Roteamento: Estático e Dinâmico (RIP, OSPF)",
+    "section": "21.6 Onde cada um entra no ISP",
+    "text": "21.6 Onde cada um entra no ISP\n\nOSPF (ou IS-IS) como IGP: carrega as rotas internas (loopbacks, links, prefixos de infraestrutura) entre POPs e agregadores.\nBGP como EGP: carrega as rotas da internet e dos clientes, e fala com trânsito/IX (capítulo ?sec-bgp). Tipicamente o BGP resolve o próximo salto via loopback aprendido pelo OSPF (iBGP).\nEstático: default, links pontuais e clientes simples.\n\n\nNa prática do provedor\n\nNão roteie a internet inteira no OSPF. O IGP carrega só infraestrutura (loopbacks, links, prefixos internos); a tabela cheia da internet (~1M de rotas) é trabalho do BGP. Misturar os dois mata a convergência.\nLoopback é o coração: use /32 em loopback como router-id, destino de iBGP, SNMP e SSH de gerência — sobrevive à queda de qualquer interface física.\nBFD + OSPF/BGP dá failover sub-segundo no anel/núcleo; sem ele, a detecção depende de timers lentos e o cliente sente a queda.\nSumarize entre áreas e ao redistribuir, para conter flaps e enxugar tabelas.\nComece simples: muitos ISPs regionais rodam OSPF interno + BGP na borda; só migram para IS-IS/MPLS (capítulo ?sec-mpls) quando a escala exige.",
+    "crumbs": [
+      "Parte IV — Camada de Rede e Endereçamento IP",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Roteamento: Estático e Dinâmico (RIP, OSPF)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/20-roteamento.html#sec-resumo-20",
+    "href": "capitulos/20-roteamento.html#sec-resumo-20",
+    "title": "21  Roteamento: Estático e Dinâmico (RIP, OSPF)",
+    "section": "21.7 Resumo e checklist",
+    "text": "21.7 Resumo e checklist\n\nRotear é escolher o próximo salto pela regra do prefixo mais longo; 0.0.0.0/0 é o default.\nEstático: simples e previsível, não se adapta — bom para default/links/clientes.\nDinâmico: OSPF (estado de enlace, Dijkstra, áreas) é o IGP padrão; RIP é legado.\nNo ISP: OSPF/IS-IS interno + BGP na borda, com loopbacks e BFD.\n\nChecklist do capítulo\n\nResolvo uma rota pela regra do longest prefix match.\nSei quando usar estático e como torná-lo resiliente (track/BFD).\nExplico OSPF: estado de enlace, custo por banda e áreas.\nSeparo papéis: OSPF (infra interna) vs. BGP (internet/clientes).",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>21</span>  <span class='chapter-title'>Roteamento: Estático e Dinâmico (RIP, OSPF)</span>"
@@ -1717,7 +2124,7 @@
     "href": "capitulos/referencias.html",
     "title": "Apêndice B — Referências",
     "section": "",
-    "text": "Borman, D., B. Braden, V. Jacobson, and R. Scheffenegger. 2014. TCP\nExtensions for High Performance. RFC 7323. IETF. https://www.rfc-editor.org/info/rfc7323.\n\n\nG.984.1: Gigabit-Capable Passive Optical Networks (GPON): General\nCharacteristics. 2008. ITU-T. https://www.itu.int/rec/T-REC-G.984.1.\n\n\nIEEE Standard for Ethernet, Pub. L. Nos. IEEE 802.3 (2022).\n\n\nIEEE Standard for Local and Metropolitan Area Networks–Bridges and\nBridged Networks, Pub. L. Nos. IEEE 802.1Q (2022).\n\n\nKurose, James F., and Keith W. Ross. 2021. Redes de Computadores e a\nInternet: Uma Abordagem Top-down. 8th ed. Pearson.\n\n\nTanenbaum, Andrew S., David J. Wetherall, and Nick Feamster. 2021.\nRedes de Computadores. 6th ed. Pearson.",
+    "text": "Borman, D., B. Braden, V. Jacobson, and R. Scheffenegger. 2014. TCP\nExtensions for High Performance. RFC 7323. IETF. https://www.rfc-editor.org/info/rfc7323.\n\n\nG.984.1: Gigabit-Capable Passive Optical Networks (GPON): General\nCharacteristics. 2008. ITU-T. https://www.itu.int/rec/T-REC-G.984.1.\n\n\nIEEE Standard for Ethernet, Pub. L. Nos. IEEE 802.3 (2022).\n\n\nIEEE Standard for Local and Metropolitan Area Networks–Bridges and\nBridged Networks, Pub. L. Nos. IEEE 802.1Q (2022).\n\n\nKurose, James F., and Keith W. Ross. 2021. Redes de Computadores e a\nInternet: Uma Abordagem Top-down. 8th ed. Pearson.\n\n\nPostel, J. 1981. Internet Protocol. RFC 791. IETF. https://www.rfc-editor.org/info/rfc791.\n\n\nTanenbaum, Andrew S., David J. Wetherall, and Nick Feamster. 2021.\nRedes de Computadores. 6th ed. Pearson.",
     "crumbs": [
       "Apêndices",
       "<span class='chapter-number'>B</span>  <span class='chapter-title'>Referências</span>"

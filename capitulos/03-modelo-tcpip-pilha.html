@@ -899,7 +899,7 @@ Figura&nbsp;4.1: O modelo “ampulheta”: o <strong>IP</strong> é a cintura es
 <ol type="1">
 <li><strong>Aplicação</strong> — o navegador resolve o nome via <strong>DNS</strong> (uma consulta UDP ao resolvedor recursivo do provedor) e monta a requisição <strong>HTTP</strong> dentro de <strong>TLS</strong>.</li>
 <li><strong>Transporte</strong> — o TLS/HTTP é colocado em <strong>segmentos TCP</strong>, destino porta <strong>443</strong>, origem uma porta efêmera (ex.: 51324).</li>
-<li><strong>Internet</strong> — cada segmento ganha um <strong>cabeçalho IP</strong>: origem = IP do cliente (ou o IP público após NAT/CGNAT — capítulo <span class="quarto-unresolved-ref">?sec-nat-cgnat</span>), destino = IP do servidor. Vira <strong>pacote</strong>.</li>
+<li><strong>Internet</strong> — cada segmento ganha um <strong>cabeçalho IP</strong>: origem = IP do cliente (ou o IP público após NAT/CGNAT — capítulo <a href="19-nat-cgnat.html#sec-nat-cgnat" class="quarto-xref"><span>Seção 20.1</span></a>), destino = IP do servidor. Vira <strong>pacote</strong>.</li>
 <li><strong>Acesso à rede</strong> — o pacote é embrulhado em um <strong>quadro PPPoE/Ethernet</strong> para subir até o <strong>BNG</strong> do provedor, e a OLT/ONT o transporta pela fibra como <strong>luz</strong>.</li>
 </ol>
 <p>No caminho, <strong>cada roteador</strong> abre só até a <strong>camada 3</strong>, lê o IP de destino, consulta a tabela de rotas e reescreve o cabeçalho de camada 2 para o próximo salto. <strong>O conteúdo de transporte e aplicação não é tocado pelos roteadores</strong> — essa é a beleza do modelo. No servidor, a pilha sobe na ordem inversa até entregar o <code>GET</code> à aplicação.</p>

@@ -610,8 +610,19 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#sec-enderecamento" id="toc-sec-enderecamento" class="nav-link active" data-scroll-target="#sec-enderecamento"><span class="header-section-number">16.1</span> Rede e host dentro de um endereço</a></li>
+  <li><a href="#sec-enderecamento-binario" id="toc-sec-enderecamento-binario" class="nav-link" data-scroll-target="#sec-enderecamento-binario"><span class="header-section-number">16.2</span> Bits, octetos e binário</a></li>
+  <li><a href="#sec-enderecamento-mascara" id="toc-sec-enderecamento-mascara" class="nav-link" data-scroll-target="#sec-enderecamento-mascara"><span class="header-section-number">16.3</span> A máscara de sub-rede</a></li>
+  <li><a href="#sec-enderecamento-classes" id="toc-sec-enderecamento-classes" class="nav-link" data-scroll-target="#sec-enderecamento-classes"><span class="header-section-number">16.4</span> Classes (A, B, C, D, E): história que ainda ecoa</a></li>
+  <li><a href="#sec-enderecamento-especiais" id="toc-sec-enderecamento-especiais" class="nav-link" data-scroll-target="#sec-enderecamento-especiais"><span class="header-section-number">16.5</span> Endereços especiais e privados</a></li>
+  <li><a href="#sec-resumo-15" id="toc-sec-resumo-15" class="nav-link" data-scroll-target="#sec-resumo-15"><span class="header-section-number">16.6</span> Resumo e checklist</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/15-enderecamento-ipv4.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -635,21 +646,176 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="sec-enderecamento" class="level2" data-number="16.1">
+<h2 data-number="16.1" class="anchored" data-anchor-id="sec-enderecamento"><span class="header-section-number">16.1</span> Rede e host dentro de um endereço</h2>
+<p>Um endereço IPv4 de 32 bits (capítulo <a href="14-protocolo-ip-ipv4.html#sec-ip-ipv4" class="quarto-xref"><span>Seção 15.1</span></a>) não é monolítico: ele se divide em uma parte de <strong>rede</strong> (identifica a sub-rede) e uma parte de <strong>host</strong> (identifica a máquina dentro dela). Quem define essa divisão é a <strong>máscara de sub-rede</strong>. Dominar essa separação é a base de <strong>tudo</strong> que vem a seguir — sub-redes, CIDR, VLSM, roteamento — e do trabalho diário de planejar blocos IP no provedor (pools de PPPoE, gerência, <em>links</em> ponto a ponto, CGNAT).</p>
+</section>
+<section id="sec-enderecamento-binario" class="level2" data-number="16.2">
+<h2 data-number="16.2" class="anchored" data-anchor-id="sec-enderecamento-binario"><span class="header-section-number">16.2</span> Bits, octetos e binário</h2>
+<p>O endereço se escreve em <strong>decimal pontuado</strong> (<code>192.168.0.1</code>), mas a mágica acontece em <strong>binário</strong>. Cada octeto = 8 bits = 0–255. Vale memorizar os <strong>valores de bit</strong>:</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Bit</th>
+<th>128</th>
+<th>64</th>
+<th>32</th>
+<th>16</th>
+<th>8</th>
+<th>4</th>
+<th>2</th>
+<th>1</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p>Assim <code>192 = 11000000</code> (128+64) e <code>200 = 11001000</code>. <strong>Toda</strong> conta de sub-rede (capítulo <a href="16-subredes-cidr-vlsm.html#sec-subredes" class="quarto-xref"><span>Seção 17.1</span></a>) é, no fundo, manipular esses bits. Sem o binário, sub-rede vira decoreba; com ele, vira aritmética simples.</p>
+</section>
+<section id="sec-enderecamento-mascara" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="sec-enderecamento-mascara"><span class="header-section-number">16.3</span> A máscara de sub-rede</h2>
+<p>A <strong>máscara</strong> é uma sequência de <strong>1s</strong> (parte de rede) seguida de <strong>0s</strong> (parte de host). Ex.: <code>255.255.255.0</code> = <code>11111111.11111111.11111111.00000000</code> = <strong>24 bits de rede</strong> → notação <strong>CIDR /24</strong>. Para achar o <strong>endereço de rede</strong>, faz-se um <strong>E lógico (AND)</strong> entre IP e máscara:</p>
+<pre><code>IP    192.168.10.37  = 11000000.10101000.00001010.00100101
+Másc. 255.255.255.0  = 11111111.11111111.11111111.00000000
+AND → 192.168.10.0   = endereço de REDE</code></pre>
+<p>Em qualquer bloco, dois endereços são <strong>reservados</strong>: o <strong>endereço de rede</strong> (todos os bits de host em 0) e o <strong>broadcast</strong> (todos em 1). Os <strong>utilizáveis</strong> são os do meio.</p>
+</section>
+<section id="sec-enderecamento-classes" class="level2" data-number="16.4">
+<h2 data-number="16.4" class="anchored" data-anchor-id="sec-enderecamento-classes"><span class="header-section-number">16.4</span> Classes (A, B, C, D, E): história que ainda ecoa</h2>
+<p>Antes do CIDR, o IPv4 era dividido em <strong>classes</strong> com máscara fixa:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Classe</th>
+<th>1º octeto</th>
+<th>Máscara default</th>
+<th>Hosts/rede</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>A</strong></td>
+<td>1–126</td>
+<td>/8 (255.0.0.0)</td>
+<td>~16,7 M</td>
+<td>grandes</td>
+</tr>
+<tr class="even">
+<td><strong>B</strong></td>
+<td>128–191</td>
+<td>/16 (255.255.0.0)</td>
+<td>~65 k</td>
+<td>médias</td>
+</tr>
+<tr class="odd">
+<td><strong>C</strong></td>
+<td>192–223</td>
+<td>/24 (255.255.255.0)</td>
+<td>254</td>
+<td>pequenas</td>
+</tr>
+<tr class="even">
+<td><strong>D</strong></td>
+<td>224–239</td>
+<td>—</td>
+<td>—</td>
+<td><strong>multicast</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>E</strong></td>
+<td>240–255</td>
+<td>—</td>
+<td>—</td>
+<td>reservada</td>
+</tr>
+</tbody>
+</table>
+<p>O modelo classful <strong>desperdiçava</strong> endereços (uma empresa com 300 hosts precisava de uma classe B inteira de 65 mil) e foi substituído pelo <strong>CIDR</strong> (sem classes, capítulo <a href="16-subredes-cidr-vlsm.html#sec-subredes" class="quarto-xref"><span>Seção 17.1</span></a>). Mas a nomenclatura sobrevive na conversa do dia a dia (“uma classe C” = um /24).</p>
+</section>
+<section id="sec-enderecamento-especiais" class="level2" data-number="16.5">
+<h2 data-number="16.5" class="anchored" data-anchor-id="sec-enderecamento-especiais"><span class="header-section-number">16.5</span> Endereços especiais e privados</h2>
+<p>Nem todo endereço é roteável na internet. Os que o provedor mais usa:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Bloco</th>
+<th>Tipo</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>10.0.0.0/8</code></td>
+<td>privado (RFC 1918)</td>
+<td>rede interna, gerência</td>
+</tr>
+<tr class="even">
+<td><code>172.16.0.0/12</code></td>
+<td>privado</td>
+<td>rede interna</td>
+</tr>
+<tr class="odd">
+<td><code>192.168.0.0/16</code></td>
+<td>privado</td>
+<td>LAN do cliente</td>
+</tr>
+<tr class="even">
+<td><strong><code>100.64.0.0/10</code></strong></td>
+<td><strong>CGNAT (RFC 6598)</strong></td>
+<td>endereçar assinantes atrás de CGNAT</td>
+</tr>
+<tr class="odd">
+<td><code>127.0.0.0/8</code></td>
+<td>loopback</td>
+<td><code>localhost</code></td>
+</tr>
+<tr class="even">
+<td><code>169.254.0.0/16</code></td>
+<td>link-local (APIPA)</td>
+<td>sem DHCP</td>
+</tr>
+<tr class="odd">
+<td><code>224.0.0.0/4</code></td>
+<td>multicast</td>
+<td>IPTV, OSPF, etc.</td>
+</tr>
+</tbody>
+</table>
+<p>O bloco <strong><code>100.64.0.0/10</code></strong> é especialmente importante: foi criado para o <strong>CGNAT</strong> (capítulo <a href="19-nat-cgnat.html#sec-nat-cgnat" class="quarto-xref"><span>Seção 20.1</span></a>), justamente para o ISP endereçar milhares de assinantes sem colidir com o <code>10/8</code> que o cliente já usa em casa.</p>
+<div class="callout-provedor">
+<p><strong>Na prática do provedor</strong></p>
+<ul>
+<li><strong>Planeje o espaço privado com disciplina:</strong> reserve faixas distintas para <strong>gerência</strong> (OLTs, switches, rádios), <strong>links ponto a ponto</strong> (/30 ou /31), <strong>loopbacks</strong> (/32) e <strong>pools de cliente</strong>. Misturar tudo no <code>10/8</code> sem padrão gera conflito e dor no roteamento.</li>
+<li><strong><code>/31</code> em links ponto a ponto</strong> (RFC 3021) economiza: em vez de /30 (4 endereços, 2 úteis), o /31 usa os 2 endereços como os dois lados do enlace — útil em redes com muitos <em>links</em> de transporte.</li>
+<li><strong>Use <code>100.64.0.0/10</code> para CGNAT</strong>, nunca o <code>10/8</code> exposto ao cliente — senão colide com a LAN doméstica e cria roteamento ambíguo.</li>
+<li><strong>Documente em um IPAM.</strong> Saber qual /24 é de qual POP/serviço é o que mantém o BGP e o CGNAT sãos quando a rede cresce.</li>
+</ul>
 </div>
-<div class="callout-title-container flex-fill">
-Nota
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Capítulo a ser desenvolvido pelo Claude Code (ver <code>PROMPT-CLAUDE-CODE.md</code> e <code>CLAUDE.md</code>).</p>
-</div>
-</div>
+</section>
+<section id="sec-resumo-15" class="level2" data-number="16.6">
+<h2 data-number="16.6" class="anchored" data-anchor-id="sec-resumo-15"><span class="header-section-number">16.6</span> Resumo e checklist</h2>
+<ul>
+<li>O IP se divide em <strong>rede + host</strong>; a <strong>máscara</strong> (1s/0s) define onde.</li>
+<li><strong>AND</strong> entre IP e máscara dá o <strong>endereço de rede</strong>; rede e broadcast são reservados.</li>
+<li><strong>Classes</strong> são história; hoje é <strong>CIDR</strong>, mas “/24 = classe C” persiste na fala.</li>
+<li>Conheça os <strong>privados</strong> (RFC 1918) e o <strong><code>100.64.0.0/10</code></strong> do CGNAT.</li>
+</ul>
+<p><strong>Checklist do capítulo</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox">Converto octetos entre decimal e binário de cabeça.</label></li>
+<li><label><input type="checkbox">Calculo o endereço de rede com AND.</label></li>
+<li><label><input type="checkbox">Identifico blocos privados e o bloco de CGNAT.</label></li>
+<li><label><input type="checkbox">Planejo faixas separadas para gerência, links, loopbacks e clientes.</label></li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1069,4 +1235,4 @@ Nota
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/15-enderecamento-ipv4.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/VitorMattosDev/manual-redes/edit/main/capitulos/15-enderecamento-ipv4.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/VitorMattosDev/manual-redes/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li></ul></div></div></div></footer></body></html>
