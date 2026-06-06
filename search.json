@@ -188,7 +188,7 @@
     "href": "capitulos/02-modelo-osi.html#sec-osi-l4",
     "title": "3  O Modelo OSI em Detalhe",
     "section": "3.6 Camada 4 — Transporte",
-    "text": "3.6 Camada 4 — Transporte\nCria uma conversa fim a fim entre processos (não entre máquinas — entre programas), identificados por portas. Oferece dois serviços clássicos:\n\nTCP — confiável, orientado a conexão, com controle de fluxo e retransmissão. O navegador, o e-mail e o SSH usam TCP.\nUDP — leve, sem garantias, ideal para voz, vídeo ao vivo e DNS.\n\nO capítulo ?sec-tcp-udp aprofunda o 3-way handshake e o controle de congestionamento.",
+    "text": "3.6 Camada 4 — Transporte\nCria uma conversa fim a fim entre processos (não entre máquinas — entre programas), identificados por portas. Oferece dois serviços clássicos:\n\nTCP — confiável, orientado a conexão, com controle de fluxo e retransmissão. O navegador, o e-mail e o SSH usam TCP.\nUDP — leve, sem garantias, ideal para voz, vídeo ao vivo e DNS.\n\nO capítulo Seção 22.1 aprofunda o 3-way handshake e o controle de congestionamento.",
     "crumbs": [
       "Parte I — Fundamentos e Modelos de Rede",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>O Modelo OSI em Detalhe</span>"
@@ -254,7 +254,7 @@
     "href": "capitulos/03-modelo-tcpip-pilha.html#sec-tcpip-transporte",
     "title": "4  O Modelo TCP/IP, a Pilha de Protocolos e o Encapsulamento",
     "section": "4.2 TCP e UDP: as duas portas de saída do transporte",
-    "text": "4.2 TCP e UDP: as duas portas de saída do transporte\nA camada de transporte multiplexa conversas por portas e oferece dois serviços:\n\nTCP — confiável e ordenado. Estabelece conexão (3-way handshake), numera bytes, retransmite o que se perde e controla o ritmo (congestionamento). Usado por web, e-mail, SSH, BGP.\nUDP — “dispara e esquece”. Sem conexão, sem retransmissão, baixíssimo overhead. Usado por DNS, DHCP, voz (VoIP/RTP) e vídeo ao vivo, onde chegar na hora vale mais que chegar completo.\n\nO capítulo ?sec-tcp-udp detalha cada um; aqui basta fixar a escolha de projeto.",
+    "text": "4.2 TCP e UDP: as duas portas de saída do transporte\nA camada de transporte multiplexa conversas por portas e oferece dois serviços:\n\nTCP — confiável e ordenado. Estabelece conexão (3-way handshake), numera bytes, retransmite o que se perde e controla o ritmo (congestionamento). Usado por web, e-mail, SSH, BGP.\nUDP — “dispara e esquece”. Sem conexão, sem retransmissão, baixíssimo overhead. Usado por DNS, DHCP, voz (VoIP/RTP) e vídeo ao vivo, onde chegar na hora vale mais que chegar completo.\n\nO capítulo Seção 22.1 detalha cada um; aqui basta fixar a escolha de projeto.",
     "crumbs": [
       "Parte I — Fundamentos e Modelos de Rede",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>O Modelo TCP/IP, a Pilha de Protocolos e o Encapsulamento</span>"
@@ -485,7 +485,7 @@
     "href": "capitulos/06-grandezas-desempenho.html#sec-jitter-perda",
     "title": "7  Grandezas de Desempenho: Banda, Latência, Jitter e Throughput",
     "section": "7.4 Jitter e perda de pacotes",
-    "text": "7.4 Jitter e perda de pacotes\n\nJitter é a variação da latência entre pacotes. Para download é quase irrelevante; para voz e vídeo ao vivo é crítico — um jitter alto causa cortes e robotização, mesmo com latência média baixa. Mitiga-se com jitter buffer e QoS (capítulo ?sec-qos).\nPerda de pacotes é a fração que não chega. No TCP, perda dispara retransmissão e o controle de congestionamento reduz a janela, derrubando a vazão — daí “1% de perda” parecer pouco mas destruir a velocidade percebida. No UDP (voz), perda vira ruído/corte direto.",
+    "text": "7.4 Jitter e perda de pacotes\n\nJitter é a variação da latência entre pacotes. Para download é quase irrelevante; para voz e vídeo ao vivo é crítico — um jitter alto causa cortes e robotização, mesmo com latência média baixa. Mitiga-se com jitter buffer e QoS (capítulo Seção 27.1).\nPerda de pacotes é a fração que não chega. No TCP, perda dispara retransmissão e o controle de congestionamento reduz a janela, derrubando a vazão — daí “1% de perda” parecer pouco mas destruir a velocidade percebida. No UDP (voz), perda vira ruído/corte direto.",
     "crumbs": [
       "Parte I — Fundamentos e Modelos de Rede",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Grandezas de Desempenho: Banda, Latência, Jitter e Throughput</span>"
@@ -969,7 +969,7 @@
     "href": "capitulos/13-switching-vlan-stp.html#sec-switching-vlan",
     "title": "14  Switching, VLANs (802.1Q) e STP/RSTP",
     "section": "14.2 VLAN e o padrão 802.1Q",
-    "text": "14.2 VLAN e o padrão 802.1Q\nUma VLAN (Virtual LAN, IEEE 802.1Q (IEEE Standard for Local and Metropolitan Area Networks–Bridges and Bridged Networks 2022)) é um domínio de broadcast lógico identificado por um número de 12 bits (VID, 1–4094). Quadros de VLANs diferentes não se enxergam na camada 2 — para conversar, precisam subir à camada 3 (roteamento). O 802.1Q insere uma tag de 4 bytes no quadro Ethernet:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 14.1: A tag 802.1Q (4 bytes) carrega o VID (qual VLAN) e o PCP (prioridade de classe de serviço, usada em QoS — capítulo ?sec-qos).\n\n\n\nTipos de porta:\n\nAccess — pertence a uma VLAN; o quadro entra/sai sem tag (o dispositivo final não sabe de VLAN). É a porta do cliente/host.\nTrunk — transporta várias VLANs com tag; liga switches entre si e ao roteador/BNG. A native VLAN trafega sem tag no trunk (cuidado de segurança).",
+    "text": "14.2 VLAN e o padrão 802.1Q\nUma VLAN (Virtual LAN, IEEE 802.1Q (IEEE Standard for Local and Metropolitan Area Networks–Bridges and Bridged Networks 2022)) é um domínio de broadcast lógico identificado por um número de 12 bits (VID, 1–4094). Quadros de VLANs diferentes não se enxergam na camada 2 — para conversar, precisam subir à camada 3 (roteamento). O 802.1Q insere uma tag de 4 bytes no quadro Ethernet:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 14.1: A tag 802.1Q (4 bytes) carrega o VID (qual VLAN) e o PCP (prioridade de classe de serviço, usada em QoS — capítulo Seção 27.1).\n\n\n\nTipos de porta:\n\nAccess — pertence a uma VLAN; o quadro entra/sai sem tag (o dispositivo final não sabe de VLAN). É a porta do cliente/host.\nTrunk — transporta várias VLANs com tag; liga switches entre si e ao roteador/BNG. A native VLAN trafega sem tag no trunk (cuidado de segurança).",
     "crumbs": [
       "Parte III — Camada de Enlace",
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>Switching, VLANs (802.1Q) e STP/RSTP</span>"
@@ -1035,7 +1035,7 @@
     "href": "capitulos/14-protocolo-ip-ipv4.html#sec-ip-cabecalho",
     "title": "15  O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL",
     "section": "15.2 O cabeçalho IPv4 campo a campo",
-    "text": "15.2 O cabeçalho IPv4 campo a campo\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 15.1: Cabeçalho IPv4 (20 bytes sem opções). Em destaque: TTL e Flags/offset (fragmentação) e os endereços de origem/destino, base do roteamento.\n\n\n\nOs campos que mais importam na operação:\n\n\n\n\n\n\n\n\nCampo\nFunção\nRelevância no ISP\n\n\n\n\nVersão\n4 (IPv4)\ndistingue de IPv6 (6)\n\n\nIHL\ntamanho do cabeçalho\nnormalmente 20 B\n\n\nDSCP/ECN\nmarcação de QoS\nprioriza voz/vídeo (capítulo ?sec-qos)\n\n\nComprimento total\ntamanho do pacote\nrelação com MTU\n\n\nIdentification/Flags/Offset\nfragmentação\nDF + MTU = “site não abre”\n\n\nTTL\nlimite de saltos\nevita loops; base do traceroute\n\n\nProtocolo\no que vem dentro\n6=TCP, 17=UDP, 1=ICMP\n\n\nChecksum\nerro do cabeçalho\nrecalculado a cada salto\n\n\nOrigem/Destino\nendereços IP\ndecisão de roteamento",
+    "text": "15.2 O cabeçalho IPv4 campo a campo\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 15.1: Cabeçalho IPv4 (20 bytes sem opções). Em destaque: TTL e Flags/offset (fragmentação) e os endereços de origem/destino, base do roteamento.\n\n\n\nOs campos que mais importam na operação:\n\n\n\n\n\n\n\n\nCampo\nFunção\nRelevância no ISP\n\n\n\n\nVersão\n4 (IPv4)\ndistingue de IPv6 (6)\n\n\nIHL\ntamanho do cabeçalho\nnormalmente 20 B\n\n\nDSCP/ECN\nmarcação de QoS\nprioriza voz/vídeo (capítulo Seção 27.1)\n\n\nComprimento total\ntamanho do pacote\nrelação com MTU\n\n\nIdentification/Flags/Offset\nfragmentação\nDF + MTU = “site não abre”\n\n\nTTL\nlimite de saltos\nevita loops; base do traceroute\n\n\nProtocolo\no que vem dentro\n6=TCP, 17=UDP, 1=ICMP\n\n\nChecksum\nerro do cabeçalho\nrecalculado a cada salto\n\n\nOrigem/Destino\nendereços IP\ndecisão de roteamento",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>15</span>  <span class='chapter-title'>O Protocolo IP (IPv4): Cabeçalho, Fragmentação e TTL</span>"
@@ -1508,7 +1508,62 @@
     "href": "capitulos/21-tcp-udp.html",
     "title": "22  Camada de Transporte: TCP e UDP",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "22.1 Conversas entre processos\nA camada de rede (Parte IV) entrega pacotes entre máquinas; a camada de transporte entrega dados entre processos — entre o navegador e o servidor web, entre a ONT e o servidor de gerência. Ela resolve dois problemas: multiplexação (várias conversas na mesma máquina, separadas por portas) e qualidade de entrega (confiável ou não). As duas escolhas clássicas são TCP (confiável, ordenado — RFC 793 (Postel 1981)) e UDP (leve, sem garantias). Saber qual cada aplicação usa é essencial para QoS, firewall e diagnóstico no provedor.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Camada de Transporte: TCP e UDP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/21-tcp-udp.html#sec-tcp-portas",
+    "href": "capitulos/21-tcp-udp.html#sec-tcp-portas",
+    "title": "22  Camada de Transporte: TCP e UDP",
+    "section": "22.2 Portas: o endereço do processo",
+    "text": "22.2 Portas: o endereço do processo\nUma porta é um número de 16 bits (0–65535) que identifica o processo. Uma conexão é definida pela quíntupla: protocolo + IP origem + porta origem + IP destino + porta destino. Faixas:\n\n\n\n\n\n\n\n\nFaixa\nNome\nExemplos\n\n\n\n\n0–1023\nbem-conhecidas\n53 DNS, 80 HTTP, 443 HTTPS, 22 SSH, 161 SNMP\n\n\n1024–49151\nregistradas\n3306 MySQL, 1812 RADIUS\n\n\n49152–65535\nefêmeras\nporta de origem aleatória do cliente\n\n\n\nO cliente abre de uma porta efêmera para a porta bem-conhecida do servidor. É essa porta efêmera que o NAT/CGNAT (capítulo Seção 20.1) multiplexa — e cujo esgotamento causa falhas em pico.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Camada de Transporte: TCP e UDP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/21-tcp-udp.html#sec-tcp-udp-udp",
+    "href": "capitulos/21-tcp-udp.html#sec-tcp-udp-udp",
+    "title": "22  Camada de Transporte: TCP e UDP",
+    "section": "22.3 UDP: rápido e sem promessas",
+    "text": "22.3 UDP: rápido e sem promessas\nO UDP é minimalista: cabeçalho de 8 bytes (portas, comprimento, checksum) e pronto. Sem conexão, sem confirmação, sem ordem, sem controle de congestionamento. Se um datagrama se perde, o UDP não faz nada — quem se importar que trate na aplicação. Por que isso é desejável? Porque para voz, vídeo ao vivo, DNS e jogos chegar na hora vale mais que chegar completo: retransmitir um pacote de voz de 20 ms atrasado é inútil. Usos: DNS (capítulo Seção 23.1), DHCP (Seção 24.1), VoIP/RTP, streaming ao vivo, e o moderno QUIC (HTTP/3, que reimplementa confiabilidade sobre UDP).",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Camada de Transporte: TCP e UDP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/21-tcp-udp.html#sec-tcp-tcp",
+    "href": "capitulos/21-tcp-udp.html#sec-tcp-tcp",
+    "title": "22  Camada de Transporte: TCP e UDP",
+    "section": "22.4 TCP: entrega confiável",
+    "text": "22.4 TCP: entrega confiável\nO TCP entrega um fluxo de bytes ordenado e confiável. Para isso mantém estado de conexão e usa números de sequência, confirmações (ACK), retransmissão, controle de fluxo e de congestionamento. O preço é mais overhead e mais latência inicial (o handshake). Usos: web, e-mail, SSH, BGP, transferências — tudo que não pode perder byte.\n\n22.4.1 O 3-way handshake\nAntes de trocar dados, TCP abre a conexão em três passos:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 22.1: 3-way handshake: SYN → SYN-ACK → ACK. Só depois dele os dados fluem. O encerramento usa FIN/ACK (ou RST para abortar).\n\n\n\n\nSYN — cliente propõe conexão e seu número de sequência inicial.\nSYN-ACK — servidor aceita, confirma e envia o seu.\nACK — cliente confirma; conexão estabelecida.\n\nEsse RT extra antes dos dados é por que latência alta dói no TCP (capítulo Seção 7.1): cada nova conexão “paga” um RTT só para abrir (e mais um para o TLS, capítulo Seção 25.1).\n\n\n22.4.2 Confiabilidade e controle de congestionamento\n\nSequência + ACK: cada byte é numerado; o receptor confirma o que recebeu; o que não for confirmado é retransmitido.\nControle de fluxo (janela anunciada): impede o emissor de afogar um receptor lento. A vazão de uma conexão é limitada por janela ÷ RTT (BDP, capítulo Seção 7.1).\nControle de congestionamento (slow start, congestion avoidance): o TCP sobe a taxa até perceber perda e então recua. Por isso perda de pacote destrói a velocidade percebida — 1% de perda derruba a vazão muito além de 1%.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Camada de Transporte: TCP e UDP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/21-tcp-udp.html#sec-tcp-comparacao",
+    "href": "capitulos/21-tcp-udp.html#sec-tcp-comparacao",
+    "title": "22  Camada de Transporte: TCP e UDP",
+    "section": "22.5 TCP vs. UDP lado a lado",
+    "text": "22.5 TCP vs. UDP lado a lado\n\n\n\nCritério\nTCP\nUDP\n\n\n\n\nConexão\nsim (handshake)\nnão\n\n\nEntrega\nconfiável, ordenada\nmelhor esforço\n\n\nOverhead\nmaior (cabeçalho 20 B+)\nmínimo (8 B)\n\n\nControle de fluxo/congest.\nsim\nnão\n\n\nLatência inicial\nRTT do handshake\nnenhuma\n\n\nUsos\nweb, e-mail, SSH, BGP\nDNS, DHCP, VoIP, vídeo ao vivo, QUIC\n\n\n\n\nNa prática do provedor\n\nPerda mata TCP, atraso mata UDP. O cliente que “baixa devagar” sofre de perda (camada 1 óptica, rádio com interferência); o que tem voz cortando sofre de jitter/perda em tempo real. Diagnostique conforme o protocolo.\nQoS por protocolo: priorize UDP de voz (VoIP/RTP) e gestão; o TCP de bulk (downloads) tolera espera. Marque DSCP/PCP (capítulos Seção 15.1, Seção 14.1) e respeite no core (capítulo Seção 27.1).\nCGNAT e portas efêmeras: apps modernos abrem centenas de conexões TCP; isso pressiona a tabela de portas do CGNAT — monitore port exhaustion.\nMSS clamping (capítulo Seção 15.4) ajusta o TCP ao MTU do PPPoE; sem ele, conexões grandes travam.\nQUIC/HTTP3 é UDP/443: não bloqueie UDP 443 achando que é “tráfego estranho” — é a web moderna; bloquear força fallback lento para TCP.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Camada de Transporte: TCP e UDP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/21-tcp-udp.html#sec-resumo-21",
+    "href": "capitulos/21-tcp-udp.html#sec-resumo-21",
+    "title": "22  Camada de Transporte: TCP e UDP",
+    "section": "22.6 Resumo e checklist",
+    "text": "22.6 Resumo e checklist\n\nTransporte multiplexa por portas e escolhe a qualidade: TCP (confiável) ou UDP (leve).\nTCP abre com 3-way handshake (SYN/SYN-ACK/ACK) e garante via sequência/ACK e controle de congestionamento — perda derruba a vazão.\nUDP não garante nada — ideal para tempo real (voz/vídeo/DNS/QUIC).\nLatência alta pesa no TCP (RTT do handshake + BDP); jitter pesa no UDP.\n\nChecklist do capítulo\n\nIdentifico a porta/protocolo de um serviço e o conceito de quíntupla.\nDescrevo o 3-way handshake e por que ele custa um RTT.\nExplico por que perda afeta TCP e jitter afeta UDP.\nMapeio aplicações a TCP/UDP para QoS e firewall.\n\n\n\n\n\nPostel, J. 1981. Transmission Control Protocol. RFC 793. IETF. https://www.rfc-editor.org/info/rfc793.",
     "crumbs": [
       "Parte V — Transporte e Aplicação",
       "<span class='chapter-number'>22</span>  <span class='chapter-title'>Camada de Transporte: TCP e UDP</span>"
@@ -1519,7 +1574,62 @@
     "href": "capitulos/22-dns.html",
     "title": "23  DNS",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "23.1 A agenda telefônica da internet\nHumanos lembram netflix.com; máquinas roteiam 52.x.x.x. O DNS (Domain Name System) é o serviço distribuído que traduz nomes em endereços IP (e vice-versa). Roda majoritariamente sobre UDP porta 53 (capítulo Seção 22.1), com TCP para respostas grandes e transferências de zona. Para o provedor, o DNS é infraestrutura crítica e diferencial de qualidade: um resolvedor recursivo próprio, rápido e estável reduz latência percebida e tira dependência de terceiros — quando o DNS do ISP cai, “a internet caiu” para o cliente, mesmo com o backbone intacto.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>DNS</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/22-dns.html#sec-dns-hierarquia",
+    "href": "capitulos/22-dns.html#sec-dns-hierarquia",
+    "title": "23  DNS",
+    "section": "23.2 A hierarquia de nomes",
+    "text": "23.2 A hierarquia de nomes\nO espaço de nomes é uma árvore invertida, resolvida da direita para a esquerda:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 23.1: Hierarquia DNS: raiz → TLD (.br, .com) → domínio → host. Cada nível delega ao seguinte; a resolução desce essa árvore.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>DNS</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/22-dns.html#sec-dns-recursivo-autoritativo",
+    "href": "capitulos/22-dns.html#sec-dns-recursivo-autoritativo",
+    "title": "23  DNS",
+    "section": "23.3 Recursivo vs. autoritativo",
+    "text": "23.3 Recursivo vs. autoritativo\nDois papéis distintos — confundi-los é erro comum:\n\nServidor autoritativo: guarda a verdade de uma zona (os registros de exemplo.com.br). Responde só pelo que é dono.\nResolvedor recursivo (cache): o que o cliente usa; ele pergunta para os outros (raiz → TLD → autoritativo), monta a resposta, guarda em cache e devolve. É este que o ISP opera para seus assinantes.\n\n\n23.3.1 O passo a passo de uma resolução\nCliente quer www.exemplo.com.br:\n\nPergunta ao recursivo do ISP. Se estiver em cache, responde na hora.\nSenão, o recursivo pergunta a um servidor-raiz → “fale com o TLD .br”.\nPergunta ao TLD .br → “fale com o autoritativo de exemplo.com.br”.\nPergunta ao autoritativo → recebe o registro A (o IP).\nGuarda em cache (respeitando o TTL do registro) e responde ao cliente.\n\nCada salto desses adiciona latência na primeira vez; o cache é o que torna o DNS rápido nas seguintes. Por isso um recursivo bem posicionado (perto do cliente, no POP/IX) faz diferença sensível.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>DNS</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/22-dns.html#sec-dns-registros",
+    "href": "capitulos/22-dns.html#sec-dns-registros",
+    "title": "23  DNS",
+    "section": "23.4 Tipos de registro essenciais",
+    "text": "23.4 Tipos de registro essenciais\n\n\n\nRegistro\nFunção\n\n\n\n\nA / AAAA\nnome → IPv4 / IPv6\n\n\nCNAME\napelido (nome → outro nome)\n\n\nMX\nservidor de e-mail do domínio\n\n\nNS\nservidores autoritativos da zona\n\n\nPTR\nIP → nome (DNS reverso)\n\n\nTXT\ntexto (SPF, DKIM, verificações)\n\n\nSOA\ndados administrativos da zona (TTL, serial)\n\n\n\nO PTR (reverso) importa muito ao ISP: servidores de e-mail rejeitam quem não tem reverso configurado. O provedor delega/gera PTR para seus blocos.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>DNS</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/22-dns.html#sec-dns-seguranca",
+    "href": "capitulos/22-dns.html#sec-dns-seguranca",
+    "title": "23  DNS",
+    "section": "23.5 DNS seguro e moderno",
+    "text": "23.5 DNS seguro e moderno\n\nDNSSEC assina as respostas, evitando cache poisoning (respostas forjadas). Recomendado no recursivo (validação) e nos domínios autoritativos.\nDoH/DoT (DNS over HTTPS/TLS) cifram a consulta. Bom para privacidade, mas o cliente que usa um DoH externo (Google/Cloudflare) deixa de usar o cache do ISP — impacto a considerar.\n\n\nNa prática do provedor\n\nOpere seu recursivo (BIND/Unbound/Knot) redundante (dois ou mais), próximo do cliente (no POP/borda) e com peering no IX para alcançar autoritativos com baixa latência. DNS lento = “internet lenta” percebida.\nCache + TTL: respeite TTLs, dimensione cache; um recursivo bem aquecido responde a maioria das consultas em &lt; 1 ms.\nPTR/reverso: configure o reverso dos seus blocos (e delegue aos clientes corporativos) — sem ele, e-mail dos clientes cai em spam.\nAnti-abuso: proteja o recursivo contra uso externo (open resolver vira arma de DDoS por amplificação — capítulo ?sec-ddos); responda só à sua base, aplique rate-limit (RRL).\nMonitore o DNS como serviço crítico (latência, taxa de erro, cache hit); é uma das primeiras coisas a falhar de forma “invisível”.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>DNS</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/22-dns.html#sec-resumo-22",
+    "href": "capitulos/22-dns.html#sec-resumo-22",
+    "title": "23  DNS",
+    "section": "23.6 Resumo e checklist",
+    "text": "23.6 Resumo e checklist\n\nDNS traduz nome ↔︎ IP numa hierarquia raiz → TLD → domínio, sobre UDP/53.\nSepare recursivo (o que o cliente usa, faz cache) de autoritativo (dono da zona).\nConheça os registros (A/AAAA, CNAME, MX, NS, PTR, TXT, SOA); PTR é vital para e-mail.\nProteja com DNSSEC e contra open resolver; o recursivo do ISP é infraestrutura crítica.\n\nChecklist do capítulo\n\nDescrevo a resolução recursiva passo a passo (raiz→TLD→autoritativo).\nDiferencio recursivo de autoritativo e sei qual o ISP opera.\nConfiguro/entendo A, AAAA, MX, NS, PTR e por que o reverso importa.\nProtejo o recursivo contra abuso (open resolver, amplificação).",
     "crumbs": [
       "Parte V — Transporte e Aplicação",
       "<span class='chapter-number'>23</span>  <span class='chapter-title'>DNS</span>"
@@ -1530,7 +1640,62 @@
     "href": "capitulos/23-dhcp.html",
     "title": "24  DHCP",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "24.1 Configuração automática de IP\nAtribuir IP, máscara, gateway e DNS à mão em cada dispositivo é inviável em escala. O DHCP (Dynamic Host Configuration Protocol) faz isso automaticamente: o cliente liga, pede, e recebe toda a configuração de rede por empréstimo (lease). Roda sobre UDP (portas 67 servidor / 68 cliente). No provedor, o DHCP aparece em dois mundos: na LAN do cliente (o roteador dele distribui 192.168.x) e no acesso IPoE, onde o BNG (capítulo ?sec-bng-pppoe) entrega o IP de serviço ao assinante — alternativa ao PPPoE.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>DHCP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/23-dhcp.html#sec-dhcp-dora",
+    "href": "capitulos/23-dhcp.html#sec-dhcp-dora",
+    "title": "24  DHCP",
+    "section": "24.2 O processo DORA",
+    "text": "24.2 O processo DORA\nA concessão segue quatro mensagens — DORA:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 24.1: DORA: Discover → Offer → Request → Ack. O Discover é broadcast (o cliente ainda não tem IP); o Ack confirma o IP e os parâmetros pelo tempo do lease.\n\n\n\n\nDiscover — cliente sem IP envia broadcast “alguém me dá uma config?”.\nOffer — servidor(es) oferecem um IP disponível.\nRequest — cliente escolhe uma oferta e pede formalmente.\nAck — servidor confirma e entrega IP, máscara, gateway, DNS e o tempo de lease.\n\nPerto da metade do lease, o cliente tenta renovar (unicast ao mesmo servidor); se falhar, tenta de novo mais tarde e, por fim, recomeça o DORA.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>DHCP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/23-dhcp.html#sec-dhcp-opcoes",
+    "href": "capitulos/23-dhcp.html#sec-dhcp-opcoes",
+    "title": "24  DHCP",
+    "section": "24.3 Parâmetros e opções",
+    "text": "24.3 Parâmetros e opções\nAlém do IP, o DHCP entrega opções. As mais usadas:\n\n\n\n\n\n\n\nOpção\nConteúdo\n\n\n\n\n1\nmáscara de sub-rede\n\n\n3\ngateway (roteador)\n\n\n6\nservidores DNS\n\n\n51\ntempo de lease\n\n\n66/67\nservidor/arquivo de boot (TFTP)\n\n\n82\nRelay Agent Information (identifica de onde veio o pedido)\n\n\n\nA Opção 82 é central no ISP: o relay (switch/OLT) insere informação de porta/VLAN/circuito no pedido, permitindo ao servidor saber qual cliente físico está pedindo — base do IPoE rastreável e do anti-spoofing.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>DHCP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/23-dhcp.html#sec-dhcp-relay",
+    "href": "capitulos/23-dhcp.html#sec-dhcp-relay",
+    "title": "24  DHCP",
+    "section": "24.4 DHCP Relay: servidor longe do cliente",
+    "text": "24.4 DHCP Relay: servidor longe do cliente\nO Discover é broadcast, e broadcast não cruza roteadores/VLANs (capítulo Seção 14.1). Como então um servidor central atende milhares de VLANs de cliente? Pelo DHCP Relay (helper): o roteador/switch/OLT converte o broadcast local em unicast para o servidor central e devolve a resposta. Assim um (ou dois) servidores DHCP atendem toda a rede, e a Opção 82 carimba a origem.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>DHCP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/23-dhcp.html#sec-dhcp-dhcpv6",
+    "href": "capitulos/23-dhcp.html#sec-dhcp-dhcpv6",
+    "title": "24  DHCP",
+    "section": "24.5 DHCPv6",
+    "text": "24.5 DHCPv6\nEm IPv6 (capítulo Seção 18.1) há SLAAC (autoconfiguração sem servidor) e DHCPv6. No provedor, o mais importante é o DHCPv6-PD (Prefix Delegation): o BNG delega um prefixo (ex.: /56) ao roteador do cliente, que o reparte em /64s internos. É assim que o assinante recebe endereçamento IPv6 público para a casa toda.\n\nNa prática do provedor\n\nIPoE + DHCP é alternativa ao PPPoE no acesso: mais simples para o cliente (sem usuário/senha), com autenticação por Opção 82 + DHCP Snooping e integração ao RADIUS (capítulo ?sec-radius). Escolha PPPoE vs. IPoE conforme controle e billing desejados (capítulo ?sec-bng-pppoe).\nOpção 82 é anti-fraude: amarra o IP à porta/ONT/VLAN física; com DHCP Snooping + DAI nos switches, mata IP/ARP spoofing (capítulo Seção 13.1) e impede cliente de “se passar” por outro.\nServidor redundante + Relay: dois servidores DHCP centrais e relay na OLT/agregador; lease curto demais sobrecarrega, longo demais trava reuso de IP — ajuste ao churn.\nDHCPv6-PD no BNG entrega o /56 por cliente (via RADIUS) — peça-chave do dual-stack que alivia o CGNAT.\nEsgotou o pool? Clientes sem IP é DORA falhando: monitore utilização do scope e o reuso de lease.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>DHCP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/23-dhcp.html#sec-resumo-23",
+    "href": "capitulos/23-dhcp.html#sec-resumo-23",
+    "title": "24  DHCP",
+    "section": "24.6 Resumo e checklist",
+    "text": "24.6 Resumo e checklist\n\nDHCP automatiza IP/máscara/gateway/DNS por lease, via DORA sobre UDP 67/68.\nOpção 82 identifica a origem física (porta/VLAN) — base do IPoE rastreável e anti-spoofing.\nDHCP Relay leva o broadcast do cliente ao servidor central.\nDHCPv6-PD delega o prefixo IPv6 (/56) ao assinante.\n\nChecklist do capítulo\n\nDescrevo o DORA e o ciclo de renovação do lease.\nExplico a Opção 82 e seu papel anti-fraude no ISP.\nSei por que o Relay é necessário e onde fica.\nConfiguro DHCPv6-PD para entregar IPv6 ao cliente.",
     "crumbs": [
       "Parte V — Transporte e Aplicação",
       "<span class='chapter-number'>24</span>  <span class='chapter-title'>DHCP</span>"
@@ -1541,7 +1706,51 @@
     "href": "capitulos/24-http-https-tls.html",
     "title": "25  HTTP, HTTPS e TLS",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "25.1 A linguagem da web\nA maior parte do tráfego que passa pela rede do provedor é web: HTTP e sua versão segura, HTTPS. O HTTP (HyperText Transfer Protocol) é o protocolo de aplicação cliente-servidor que busca páginas, vídeos e APIs; o HTTPS é HTTP dentro de TLS, que cifra e autentica a comunicação. Entender essa pilha ajuda o ISP a diagnosticar lentidão percebida, dimensionar cache/CDN e compreender por que não dá para “ver” o conteúdo do tráfego do cliente (e nem deve).",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>HTTP, HTTPS e TLS</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/24-http-https-tls.html#sec-http",
+    "href": "capitulos/24-http-https-tls.html#sec-http",
+    "title": "25  HTTP, HTTPS e TLS",
+    "section": "25.2 HTTP: requisição e resposta",
+    "text": "25.2 HTTP: requisição e resposta\nHTTP é sem estado (cada requisição é independente; sessão é mantida por cookies) e segue o modelo requisição → resposta:\nGET /index.html HTTP/1.1          200 OK\nHost: exemplo.com.br        →      Content-Type: text/html\nUser-Agent: ...                    Content-Length: 1234\n                                   &lt;html&gt;...&lt;/html&gt;\nMétodos comuns: GET (buscar), POST (enviar), PUT/DELETE (APIs). Os códigos de status dizem o resultado:\n\n\n\nFaixa\nSignificado\nExemplos\n\n\n\n\n2xx\nsucesso\n200 OK\n\n\n3xx\nredirecionamento\n301/302\n\n\n4xx\nerro do cliente\n403, 404\n\n\n5xx\nerro do servidor\n500, 502, 503\n\n\n\nVersões importam para desempenho: HTTP/1.1 (uma resposta por vez na conexão), HTTP/2 (multiplexação na mesma conexão TCP) e HTTP/3 (sobre QUIC/UDP, capítulo Seção 22.1, elimina o head-of-line blocking do TCP).",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>HTTP, HTTPS e TLS</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/24-http-https-tls.html#sec-tls",
+    "href": "capitulos/24-http-https-tls.html#sec-tls",
+    "title": "25  HTTP, HTTPS e TLS",
+    "section": "25.3 TLS: cifra, integridade e identidade",
+    "text": "25.3 TLS: cifra, integridade e identidade\nO TLS (Transport Layer Security, sucessor do SSL) envolve o HTTP e entrega três garantias:\n\nConfidencialidade — ninguém no caminho lê o conteúdo (cifragem simétrica).\nIntegridade — adulteração é detectada.\nAutenticidade — o certificado prova que o servidor é quem diz ser (cadeia até uma CA confiável).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 25.1: Handshake TLS (sobre o TCP já aberto): negocia cifras, valida o certificado e deriva a chave de sessão. O SNI (nome do site) viaja no ClientHello.\n\n\n\nNo modelo OSI, o TLS habita a camada de apresentação/aplicação (capítulo Seção 3.7). TLS 1.3 reduziu o handshake para 1-RTT (e 0-RTT em retomada), cortando latência — relevante porque cada conexão “paga” o handshake do TCP mais o do TLS.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>HTTP, HTTPS e TLS</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/24-http-https-tls.html#sec-https-visibilidade",
+    "href": "capitulos/24-http-https-tls.html#sec-https-visibilidade",
+    "title": "25  HTTP, HTTPS e TLS",
+    "section": "25.4 O que o ISP vê (e não vê)",
+    "text": "25.4 O que o ISP vê (e não vê)\nCom HTTPS dominante, o provedor não enxerga o conteúdo nem a URL completa — só:\n\nIP de destino (qual servidor/CDN) e portas.\nSNI (o nome do site no ClientHello), hoje em vias de também ser cifrado (ECH).\nVolume e tempo do tráfego.\n\nIsso é bom (privacidade do cliente) e tem implicações: bloqueio por URL não funciona mais (só por IP/SNI/DNS), e cache transparente de conteúdo HTTP morreu — hoje o ganho vem de CDNs e cache de borda autorizado (ex.: Google Global Cache, Netflix Open Connect dentro do ISP).\n\nNa prática do provedor\n\nCDN/cache de borda é ouro: hospedar appliances de CDN (Open Connect, GGC) no seu POP/IX serve vídeo localmente, economizando trânsito caro e baixando latência — o maior ganho de QoE para o cliente. Negocie com os grandes provedores de conteúdo.\nLentidão de HTTPS raramente é “do site”: cheque perda/latência (camada 1-4), saturação de uplink (capítulo Seção 7.1) e se a CDN local está ativa. O handshake TLS sofre muito com perda.\nNão tente inspecionar HTTPS dos clientes: além de impraticável (certificados), é invasivo e ilegal sem base. Bloqueios legais (ordens judiciais) hoje se fazem por DNS/IP, com as limitações que isso traz.\nHTTP/3 (QUIC/UDP 443): garanta que UDP/443 trafega bem; bloqueá-lo força fallback lento e degrada a experiência.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>HTTP, HTTPS e TLS</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/24-http-https-tls.html#sec-resumo-24",
+    "href": "capitulos/24-http-https-tls.html#sec-resumo-24",
+    "title": "25  HTTP, HTTPS e TLS",
+    "section": "25.5 Resumo e checklist",
+    "text": "25.5 Resumo e checklist\n\nHTTP é requisição/resposta sem estado; conheça métodos e códigos de status.\nHTTPS = HTTP em TLS: confidencialidade, integridade e autenticidade por certificado.\nTLS 1.3 corta o handshake para 1-RTT; latência/perda pesam no estabelecimento.\nO ISP só vê IP/SNI/volume — privilegie CDN/cache de borda, não inspeção.\n\nChecklist do capítulo\n\nInterpreto métodos e códigos HTTP (2xx–5xx).\nExplico as três garantias do TLS e o papel do certificado/SNI.\nSei o que o ISP consegue (e não consegue) ver em HTTPS.\nDefendo CDN/cache de borda como principal ganho de QoE e custo.",
     "crumbs": [
       "Parte V — Transporte e Aplicação",
       "<span class='chapter-number'>25</span>  <span class='chapter-title'>HTTP, HTTPS e TLS</span>"
@@ -1552,7 +1761,84 @@
     "href": "capitulos/25-outros-protocolos-aplicacao.html",
     "title": "26  Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "26.1 O resto da camada de aplicação\nAlém de DNS, DHCP e HTTP/HTTPS (capítulos anteriores), o provedor depende de uma constelação de protocolos de aplicação para operar e monitorar a própria rede: acessar equipamentos (SSH), coletar métricas (SNMP), sincronizar relógios (NTP), mover arquivos (FTP/TFTP) e dar e-mail aos clientes (SMTP/IMAP). Conhecer suas portas, seus riscos e seu papel é o que mantém o NOC funcionando. A tabela-resumo serve de referência rápida:",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-protocolos",
+    "href": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-protocolos",
+    "title": "26  Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)",
+    "section": "",
+    "text": "Protocolo\nPorta\nTransporte\nFunção\n\n\n\n\nSSH\n22\nTCP\nacesso remoto seguro a equipamentos\n\n\nTelnet\n23\nTCP\nacesso remoto inseguro (evitar)\n\n\nFTP\n20/21\nTCP\ntransferência de arquivos (legado)\n\n\nTFTP\n69\nUDP\nboot/firmware (sem autenticação)\n\n\nSMTP\n25/587/465\nTCP\nenvio de e-mail\n\n\nIMAP/POP3\n143/110 (993/995 TLS)\nTCP\nleitura de e-mail\n\n\nSNMP\n161/162\nUDP\nmonitoramento/gerência\n\n\nNTP\n123\nUDP\nsincronização de relógio",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-ssh",
+    "href": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-ssh",
+    "title": "26  Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)",
+    "section": "26.2 SSH: a porta de entrada do operador",
+    "text": "26.2 SSH: a porta de entrada do operador\nSSH (Secure Shell) é como você administra OLTs, switches e roteadores: sessão cifrada, com autenticação por senha ou, melhor, por par de chaves. Substituiu o Telnet (texto puro — senha trafega legível!), que não deve mais existir na rede. Boas práticas: chaves em vez de senha, porta de gerência fora de banda, restrição por ACL/loopback (capítulo Seção 21.1) e logging de acesso. SSH também faz túnel e SFTP (transferência segura).",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-ftp",
+    "href": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-ftp",
+    "title": "26  Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)",
+    "section": "26.3 FTP/TFTP: arquivos e firmware",
+    "text": "26.3 FTP/TFTP: arquivos e firmware\n\nFTP é legado e inseguro (credenciais em claro); prefira SFTP/SCP (sobre SSH). Sobrevive em integrações antigas.\nTFTP é minúsculo, sobre UDP, sem autenticação — usado para carregar firmware/configuração em equipamentos e no boot de ONTs/telefones IP. Justamente por não ter segurança, deve ficar restrito à rede de gerência.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-email",
+    "href": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-email",
+    "title": "26  Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)",
+    "section": "26.4 E-mail: SMTP, IMAP, POP3",
+    "text": "26.4 E-mail: SMTP, IMAP, POP3\n\nSMTP envia/entrega e-mail entre servidores e do cliente para o servidor. Porta 587 (submissão com autenticação+TLS) é a correta para o cliente; 25 é entre servidores. Bloquear a porta 25 de saída dos assinantes (Porta 25 Management, recomendação anti-spam brasileira) é prática consagrada para evitar que máquinas infectadas virem fonte de spam.\nIMAP (143/993) mantém o e-mail no servidor (acesso de vários dispositivos); POP3 (110/995) baixa e remove. Versões com TLS (993/995) são as recomendadas.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-snmp",
+    "href": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-snmp",
+    "title": "26  Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)",
+    "section": "26.5 SNMP: os olhos do NOC",
+    "text": "26.5 SNMP: os olhos do NOC\nO SNMP (Simple Network Management Protocol) coleta métricas e estados dos equipamentos: tráfego por interface, CPU, temperatura, potência óptica das ONTs, uptime. O sistema de monitoramento (capítulo ?sec-monitoramento) faz polling (consulta periódica) e recebe traps (alarmes assíncronos).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 26.1: SNMP: o NMS faz polling (porta 161) nos equipamentos e recebe traps (porta 162) quando algo dispara um alarme.\n\n\n\nSegurança: use SNMPv3 (autenticação + cifra). O SNMPv1/v2c usa community strings em texto e, exposto à internet, vira vetor de DDoS por amplificação (capítulo ?sec-ddos) — restrinja por ACL à rede de gerência.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-ntp",
+    "href": "capitulos/25-outros-protocolos-aplicacao.html#sec-outros-ntp",
+    "title": "26  Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)",
+    "section": "26.6 NTP: o tempo certo",
+    "text": "26.6 NTP: o tempo certo\nO NTP sincroniza os relógios dos equipamentos. Parece detalhe, mas relógio errado quebra tudo o que importa em operação: logs com horário inconsistente inviabilizam correlação de incidentes e o cumprimento do Marco Civil (capítulo Seção 20.1), certificados TLS falham, e a autenticação (RADIUS, capítulo ?sec-radius) e o RADIUS accounting ficam sem sentido. Opere servidores NTP internos sincronizados a fontes confiáveis (e cuide para não virar open NTP — outro vetor de amplificação).\n\nNa prática do provedor\n\nMate o Telnet e o SNMPv2c expostos. SSH (com chaves) + SNMPv3, ambos restritos à rede/loopback de gerência por ACL. Telnet e community public na borda são convites a incidente.\nBloqueie a porta 25 de saída dos assinantes (deixe a 587 com auth): reduz spam da sua rede e protege a reputação dos seus IPs (capítulo Seção 20.1).\nNTP interno e correto é inegociável: sem ele, logs, certificados, RADIUS e obrigações legais desmoronam. Sincronize OLTs, BNG, switches e servidores.\nTFTP/firmware só na gerência: nunca exposto; use-o para provisionar ONTs e atualizar equipamentos em rede isolada.\nSNMP é o coração do monitoramento: padronize OIDs (tráfego, ótica, CPU, temp) e alarmes; sem SNMP você fica cego (capítulo ?sec-monitoramento).",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/25-outros-protocolos-aplicacao.html#sec-resumo-25",
+    "href": "capitulos/25-outros-protocolos-aplicacao.html#sec-resumo-25",
+    "title": "26  Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)",
+    "section": "26.7 Resumo e checklist",
+    "text": "26.7 Resumo e checklist\n\nOpere a rede com SSH (não Telnet), monitore com SNMPv3, sincronize com NTP — tudo restrito à gerência.\nE-mail: cliente usa 587 (TLS); bloqueie a 25 de saída dos assinantes (anti-spam).\nTFTP (firmware/boot) não tem segurança — só na rede de gerência.\nRelógio certo (NTP) sustenta logs, certificados, RADIUS e o Marco Civil.\n\nChecklist do capítulo\n\nSei a porta e o risco de cada protocolo de gerência.\nSubstituí Telnet por SSH e SNMPv2c por SNMPv3, com ACL.\nApliquei o bloqueio da porta 25 de saída dos assinantes.\nMantenho NTP interno correto em todos os equipamentos.",
     "crumbs": [
       "Parte V — Transporte e Aplicação",
       "<span class='chapter-number'>26</span>  <span class='chapter-title'>Outros Protocolos de Aplicação (SSH, FTP, SMTP/IMAP, SNMP, NTP)</span>"
@@ -1563,7 +1849,62 @@
     "href": "capitulos/26-qos.html",
     "title": "27  Qualidade de Serviço (QoS)",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "27.1 Nem todo pacote é igual\nQuando o enlace não está congestionado, todo pacote passa e QoS não faz diferença. Mas no pico, quando a fila enche (capítulo Seção 7.1), é preciso decidir quem passa primeiro — e aí um pacote de voz atrasado vira corte audível, enquanto um pacote de download atrasado não incomoda ninguém. QoS (Quality of Service) é o conjunto de mecanismos que classifica, prioriza e controla o tráfego para que os serviços sensíveis (voz, vídeo ao vivo, gestão) sobrevivam ao congestionamento. Para o ISP, QoS é o que viabiliza VoIP, IPTV e SLA corporativo sobre a mesma rede do tráfego comum.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>Qualidade de Serviço (QoS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/26-qos.html#sec-qos-grandezas",
+    "href": "capitulos/26-qos.html#sec-qos-grandezas",
+    "title": "27  Qualidade de Serviço (QoS)",
+    "section": "27.2 As quatro grandezas que o QoS protege",
+    "text": "27.2 As quatro grandezas que o QoS protege\nQoS atua sobre os parâmetros do capítulo Seção 7.1:\n\n\n\n\n\n\n\n\nParâmetro\nSensível\nTolerante\n\n\n\n\nLatência\nvoz, jogos\ndownload, e-mail\n\n\nJitter\nvoz, vídeo ao vivo\nquase tudo o resto\n\n\nPerda\nvoz (corta), TCP (cai vazão)\nnada gosta, mas vídeo bufferizado tolera\n\n\nBanda\nvídeo, backup\nnavegação leve\n\n\n\nA meta é dar a cada classe o que ela precisa: voz quer latência/jitter baixos; vídeo quer banda e baixa perda; bulk só quer “o que sobrar”.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>Qualidade de Serviço (QoS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/26-qos.html#sec-qos-diffserv",
+    "href": "capitulos/26-qos.html#sec-qos-diffserv",
+    "title": "27  Qualidade de Serviço (QoS)",
+    "section": "27.3 O modelo DiffServ: marcar e tratar",
+    "text": "27.3 O modelo DiffServ: marcar e tratar\nO modelo dominante é o DiffServ (serviços diferenciados), em duas etapas:\n\nClassificar e marcar na borda (onde o tráfego entra): identifica-se a classe e grava-se uma marca — DSCP no cabeçalho IP (capítulo Seção 15.1) ou PCP na tag VLAN (capítulo Seção 14.1).\nTratar em cada salto (PHB, Per-Hop Behavior): cada roteador/switch aplica filas e prioridades conforme a marca.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 27.1: Pipeline DiffServ: classifica-se por marca, distribui-se em filas por classe e o escalonador serve a voz primeiro (prioridade) e reparte o resto com justiça.\n\n\n\nClasses DSCP comuns: EF (Expedited Forwarding) para voz; AF (Assured Forwarding) para vídeo/transacional; BE (Best Effort) para o resto.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>Qualidade de Serviço (QoS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/26-qos.html#sec-qos-ferramentas",
+    "href": "capitulos/26-qos.html#sec-qos-ferramentas",
+    "title": "27  Qualidade de Serviço (QoS)",
+    "section": "27.4 Ferramentas de QoS",
+    "text": "27.4 Ferramentas de QoS\n\nClassificação/marcação — por porta, protocolo, VLAN, DSCP.\nFilas + escalonamento — Priority Queue (voz sempre primeiro, com cuidado para não “matar” o resto) e Weighted Fair Queue (reparte por pesos).\nPolicing — descarta/remarca o que excede um limite (rígido; usado para impor plano).\nShaping — atrasa (bufferiza) o excesso para suavizar picos (mais gentil que policing; usado em uplinks).\nAQM (ex.: CoDel/FQ-CoDel) — gerencia a fila ativamente para combater bufferbloat (capítulo Seção 7.1), mantendo latência baixa sob carga.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>Qualidade de Serviço (QoS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/26-qos.html#sec-qos-isp",
+    "href": "capitulos/26-qos.html#sec-qos-isp",
+    "title": "27  Qualidade de Serviço (QoS)",
+    "section": "27.5 Onde aplicar no provedor",
+    "text": "27.5 Onde aplicar no provedor\n\nPlano do assinante (rate-limit): o BNG (capítulo ?sec-bng-pppoe) faz shaping/policing para entregar exatamente os “300 Mega” contratados — normalmente via atributo do RADIUS (capítulo ?sec-radius).\nVoz/IPTV próprios: marque EF/AF na borda e honre a marca no core; reserve fila de prioridade para o tráfego de voz do serviço de telefonia do ISP.\nGerência: classe própria para SSH/SNMP/NTP nunca ficar sem banda durante um incidente.\nUplinks e PON: dimensione para ≤ 70–80% no pico (capítulo Seção 7.1); QoS prioriza, mas não cria banda — em saturação crônica, a solução é capacidade, não só QoS.\n\n\nNa prática do provedor\n\nConfie só na borda para marcar. Não confie no DSCP que chega do cliente (qualquer um marca tudo como EF); remarque na entrada conforme sua política e honre a marca internamente.\nRate-limit via RADIUS: mude o plano do cliente trocando o atributo no perfil — upgrade/downgrade sem tocar no equipamento.\nFQ-CoDel no acesso dá ganho enorme de latência sob carga (mata bufferbloat) — o cliente “sente a internet mais rápida” sem mais banda.\nQoS não conserta enlace cheio: se o uplink ou a PON vivem em 95%, o cliente sofre mesmo com QoS perfeito. QoS protege a voz no pico; capacidade resolve a lentidão geral.\nVLAN/PCP na planta: use a prioridade 802.1Q para a voz na rede metro/PON, alinhada ao DSCP IP.",
+    "crumbs": [
+      "Parte V — Transporte e Aplicação",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>Qualidade de Serviço (QoS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/26-qos.html#sec-resumo-26",
+    "href": "capitulos/26-qos.html#sec-resumo-26",
+    "title": "27  Qualidade de Serviço (QoS)",
+    "section": "27.6 Resumo e checklist",
+    "text": "27.6 Resumo e checklist\n\nQoS importa no congestionamento: decide quem passa primeiro protegendo latência/jitter/perda dos serviços sensíveis.\nDiffServ: marca (DSCP/PCP) na borda, trata (filas/PHB) a cada salto.\nFerramentas: filas/escalonamento, policing (descarta) vs. shaping (atrasa), e AQM contra bufferbloat.\nNo ISP: rate-limit via RADIUS no BNG, EF/AF para voz/vídeo, e capacidade onde QoS não basta.\n\nChecklist do capítulo\n\nAssocio cada serviço à grandeza que ele exige (latência/jitter/perda/banda).\nExplico DiffServ: marcar na borda, tratar por PHB.\nDiferencio policing de shaping e sei onde usar cada um.\nAplico rate-limit por RADIUS e não confio no DSCP do cliente.",
     "crumbs": [
       "Parte V — Transporte e Aplicação",
       "<span class='chapter-number'>27</span>  <span class='chapter-title'>Qualidade de Serviço (QoS)</span>"
@@ -2124,7 +2465,7 @@
     "href": "capitulos/referencias.html",
     "title": "Apêndice B — Referências",
     "section": "",
-    "text": "Borman, D., B. Braden, V. Jacobson, and R. Scheffenegger. 2014. TCP\nExtensions for High Performance. RFC 7323. IETF. https://www.rfc-editor.org/info/rfc7323.\n\n\nG.984.1: Gigabit-Capable Passive Optical Networks (GPON): General\nCharacteristics. 2008. ITU-T. https://www.itu.int/rec/T-REC-G.984.1.\n\n\nIEEE Standard for Ethernet, Pub. L. Nos. IEEE 802.3 (2022).\n\n\nIEEE Standard for Local and Metropolitan Area Networks–Bridges and\nBridged Networks, Pub. L. Nos. IEEE 802.1Q (2022).\n\n\nKurose, James F., and Keith W. Ross. 2021. Redes de Computadores e a\nInternet: Uma Abordagem Top-down. 8th ed. Pearson.\n\n\nPostel, J. 1981. Internet Protocol. RFC 791. IETF. https://www.rfc-editor.org/info/rfc791.\n\n\nTanenbaum, Andrew S., David J. Wetherall, and Nick Feamster. 2021.\nRedes de Computadores. 6th ed. Pearson.",
+    "text": "Borman, D., B. Braden, V. Jacobson, and R. Scheffenegger. 2014. TCP\nExtensions for High Performance. RFC 7323. IETF. https://www.rfc-editor.org/info/rfc7323.\n\n\nG.984.1: Gigabit-Capable Passive Optical Networks (GPON): General\nCharacteristics. 2008. ITU-T. https://www.itu.int/rec/T-REC-G.984.1.\n\n\nIEEE Standard for Ethernet, Pub. L. Nos. IEEE 802.3 (2022).\n\n\nIEEE Standard for Local and Metropolitan Area Networks–Bridges and\nBridged Networks, Pub. L. Nos. IEEE 802.1Q (2022).\n\n\nKurose, James F., and Keith W. Ross. 2021. Redes de Computadores e a\nInternet: Uma Abordagem Top-down. 8th ed. Pearson.\n\n\nPostel, J. 1981a. Internet Protocol. RFC 791. IETF. https://www.rfc-editor.org/info/rfc791.\n\n\nPostel, J. 1981b. Transmission Control Protocol. RFC 793. IETF.\nhttps://www.rfc-editor.org/info/rfc793.\n\n\nTanenbaum, Andrew S., David J. Wetherall, and Nick Feamster. 2021.\nRedes de Computadores. 6th ed. Pearson.",
     "crumbs": [
       "Apêndices",
       "<span class='chapter-number'>B</span>  <span class='chapter-title'>Referências</span>"

@@ -1030,7 +1030,7 @@ Figura&nbsp;7.1: Latência em função da utilização: estável enquanto há fo
 <section id="sec-jitter-perda" class="level2" data-number="7.4">
 <h2 data-number="7.4" class="anchored" data-anchor-id="sec-jitter-perda"><span class="header-section-number">7.4</span> Jitter e perda de pacotes</h2>
 <ul>
-<li><strong>Jitter</strong> é a <strong>variação</strong> da latência entre pacotes. Para download é quase irrelevante; para <strong>voz e vídeo ao vivo</strong> é crítico — um jitter alto causa cortes e robotização, mesmo com latência média baixa. Mitiga-se com <em>jitter buffer</em> e <strong>QoS</strong> (capítulo <span class="quarto-unresolved-ref">?sec-qos</span>).</li>
+<li><strong>Jitter</strong> é a <strong>variação</strong> da latência entre pacotes. Para download é quase irrelevante; para <strong>voz e vídeo ao vivo</strong> é crítico — um jitter alto causa cortes e robotização, mesmo com latência média baixa. Mitiga-se com <em>jitter buffer</em> e <strong>QoS</strong> (capítulo <a href="26-qos.html#sec-qos" class="quarto-xref"><span>Seção 27.1</span></a>).</li>
 <li><strong>Perda de pacotes</strong> é a fração que não chega. No TCP, perda dispara retransmissão e o controle de congestionamento <strong>reduz a janela</strong>, derrubando a vazão — daí “1% de perda” parecer pouco mas <strong>destruir</strong> a velocidade percebida. No UDP (voz), perda vira ruído/corte direto.</li>
 </ul>
 </section>
