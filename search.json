@@ -639,7 +639,7 @@
     "href": "capitulos/08-fibra-tipos-caracteristicas.html#sec-fibra-atenuacao-pratica",
     "title": "9  Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)",
     "section": "9.4 Atenuação na prática e o orçamento",
-    "text": "9.4 Atenuação na prática e o orçamento\nCada elemento da planta consome dB. Estes são valores de referência de campo (use os do fabricante quando os tiver):\n\n\n\nElemento\nPerda típica\n\n\n\n\nFibra SMF (1310?) nm\n~0,33 dB/km\n\n\nFibra SMF (1490?) nm\n~0,28 dB/km\n\n\nFibra SMF (1550?) nm\n~0,20 dB/km\n\n\nFusão (emenda por fusão)\n0,05–0,10 dB\n\n\nConector (par)\n0,3–0,5 dB\n\n\nSplitter 1:2\n~3,5 dB\n\n\nSplitter 1:8\n~10,5 dB\n\n\nSplitter 1:16\n~13,5 dB\n\n\nSplitter 1:32\n~17,5 dB\n\n\n\nExemplo rápido. Um enlace de 12 km (1490?) nm com 2 conectores e 3 fusões: 12 × 0,28 = 3,36 (fibra) + 2 × 0,4 = 0,8 (conectores) + 3 × 0,08 = 0,24 (fusões) ≈ 4,4 dB. Some os splitters e compare com o orçamento da OLT (capítulo Seção 34.1) — é assim que se sabe, antes de ir a campo, se o enlace fecha.",
+    "text": "9.4 Atenuação na prática e o orçamento\nCada elemento da planta consome dB. Estes são valores de referência de campo (use os do fabricante quando os tiver):\n\n\n\nElemento\nPerda típica\n\n\n\n\nFibra SMF em 1310 nm\n~0,33 dB/km\n\n\nFibra SMF em 1490 nm\n~0,28 dB/km\n\n\nFibra SMF em 1550 nm\n~0,20 dB/km\n\n\nFusão (emenda por fusão)\n0,05–0,10 dB\n\n\nConector (par)\n0,3–0,5 dB\n\n\nSplitter 1:2\n~3,5 dB\n\n\nSplitter 1:8\n~10,5 dB\n\n\nSplitter 1:16\n~13,5 dB\n\n\nSplitter 1:32\n~17,5 dB\n\n\n\nExemplo rápido. Um enlace de 12 km em 1490 nm com 2 conectores e 3 fusões: 12 × 0,28 = 3,36 (fibra) + 2 × 0,4 = 0,8 (conectores) + 3 × 0,08 = 0,24 (fusões) ≈ 4,4 dB. Some os splitters e compare com o orçamento da OLT (capítulo Seção 34.1) — é assim que se sabe, antes de ir a campo, se o enlace fecha.",
     "crumbs": [
       "Parte II — Camada Física e Fibra Óptica",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Tipos de Fibra e Características (Monomodo, Multimodo, Atenuação, Dispersão)</span>"
@@ -1222,7 +1222,7 @@
     "href": "capitulos/17-ipv6.html",
     "title": "18  IPv6: Endereçamento, SLAAC e Sub-redes",
     "section": "",
-    "text": "18.1 Por que o provedor precisa de IPv6\nO IPv4 acabou: os 4,3 bilhões de endereços (capítulo Seção 15.1) há muito não cabem na internet, e o ISP sobrevive com CGNAT (capítulo Seção 20.1), que custa caro, quebra aplicações e dificulta rastreabilidade. O IPv6 resolve a raiz do problema com 128 bits de endereço — espaço praticamente inesgotável — e permite endereço público real para cada cliente, dispensando NAT. No Brasil, com o IX.br medindo tráfego IPv6 expressivo, implantar IPv6 é estratégico, não opcional (capítulo ?sec-ipv6-isp detalha o deployment). Aqui cobrimos os fundamentos.",
+    "text": "18.1 Por que o provedor precisa de IPv6\nO IPv4 acabou: os 4,3 bilhões de endereços (capítulo Seção 15.1) há muito não cabem na internet, e o ISP sobrevive com CGNAT (capítulo Seção 20.1), que custa caro, quebra aplicações e dificulta rastreabilidade. O IPv6 resolve a raiz do problema com 128 bits de endereço — espaço praticamente inesgotável — e permite endereço público real para cada cliente, dispensando NAT. No Brasil, com o IX.br medindo tráfego IPv6 expressivo, implantar IPv6 é estratégico, não opcional (capítulo Seção 56.1 detalha o deployment). Aqui cobrimos os fundamentos.",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>18</span>  <span class='chapter-title'>IPv6: Endereçamento, SLAAC e Sub-redes</span>"
@@ -1486,7 +1486,7 @@
     "href": "capitulos/20-roteamento.html#sec-roteamento-isp",
     "title": "21  Roteamento: Estático e Dinâmico (RIP, OSPF)",
     "section": "21.6 Onde cada um entra no ISP",
-    "text": "21.6 Onde cada um entra no ISP\n\nOSPF (ou IS-IS) como IGP: carrega as rotas internas (loopbacks, links, prefixos de infraestrutura) entre POPs e agregadores.\nBGP como EGP: carrega as rotas da internet e dos clientes, e fala com trânsito/IX (capítulo Seção 49.1). Tipicamente o BGP resolve o próximo salto via loopback aprendido pelo OSPF (iBGP).\nEstático: default, links pontuais e clientes simples.\n\n\nNa prática do provedor\n\nNão roteie a internet inteira no OSPF. O IGP carrega só infraestrutura (loopbacks, links, prefixos internos); a tabela cheia da internet (~1M de rotas) é trabalho do BGP. Misturar os dois mata a convergência.\nLoopback é o coração: use /32 em loopback como router-id, destino de iBGP, SNMP e SSH de gerência — sobrevive à queda de qualquer interface física.\nBFD + OSPF/BGP dá failover sub-segundo no anel/núcleo; sem ele, a detecção depende de timers lentos e o cliente sente a queda.\nSumarize entre áreas e ao redistribuir, para conter flaps e enxugar tabelas.\nComece simples: muitos ISPs regionais rodam OSPF interno + BGP na borda; só migram para IS-IS/MPLS (capítulo ?sec-mpls) quando a escala exige.",
+    "text": "21.6 Onde cada um entra no ISP\n\nOSPF (ou IS-IS) como IGP: carrega as rotas internas (loopbacks, links, prefixos de infraestrutura) entre POPs e agregadores.\nBGP como EGP: carrega as rotas da internet e dos clientes, e fala com trânsito/IX (capítulo Seção 49.1). Tipicamente o BGP resolve o próximo salto via loopback aprendido pelo OSPF (iBGP).\nEstático: default, links pontuais e clientes simples.\n\n\nNa prática do provedor\n\nNão roteie a internet inteira no OSPF. O IGP carrega só infraestrutura (loopbacks, links, prefixos internos); a tabela cheia da internet (~1M de rotas) é trabalho do BGP. Misturar os dois mata a convergência.\nLoopback é o coração: use /32 em loopback como router-id, destino de iBGP, SNMP e SSH de gerência — sobrevive à queda de qualquer interface física.\nBFD + OSPF/BGP dá failover sub-segundo no anel/núcleo; sem ele, a detecção depende de timers lentos e o cliente sente a queda.\nSumarize entre áreas e ao redistribuir, para conter flaps e enxugar tabelas.\nComece simples: muitos ISPs regionais rodam OSPF interno + BGP na borda; só migram para IS-IS/MPLS (capítulo Seção 54.1) quando a escala exige.",
     "crumbs": [
       "Parte IV — Camada de Rede e Endereçamento IP",
       "<span class='chapter-number'>21</span>  <span class='chapter-title'>Roteamento: Estático e Dinâmico (RIP, OSPF)</span>"
@@ -2333,7 +2333,7 @@
     "href": "capitulos/33-orcamento-potencia.html#sec-orcamento-referencia",
     "title": "34  Orçamento de Potência Óptica (Power Budget)",
     "section": "34.3 Valores de referência (de bolso)",
-    "text": "34.3 Valores de referência (de bolso)\n\n\n\nElemento\nPerda\n\n\n\n\nFibra (1490?) nm\n0,28 dB/km\n\n\nFibra (1310?) nm\n0,33 dB/km\n\n\nConector (par)\n0,3–0,5 dB\n\n\nFusão\n0,05–0,10 dB\n\n\nSplitter 1:2 / 1:4\n3,5 / 7,0 dB\n\n\nSplitter 1:8 / 1:16\n10,5 / 13,5 dB\n\n\nSplitter 1:32 / 1:64\n17,5 / 21,0 dB\n\n\nMargem de segurança\n~3,0 dB",
+    "text": "34.3 Valores de referência (de bolso)\n\n\n\nElemento\nPerda\n\n\n\n\nFibra em 1490 nm\n0,28 dB/km\n\n\nFibra em 1310 nm\n0,33 dB/km\n\n\nConector (par)\n0,3–0,5 dB\n\n\nFusão\n0,05–0,10 dB\n\n\nSplitter 1:2 / 1:4\n3,5 / 7,0 dB\n\n\nSplitter 1:8 / 1:16\n10,5 / 13,5 dB\n\n\nSplitter 1:32 / 1:64\n17,5 / 21,0 dB\n\n\nMargem de segurança\n~3,0 dB",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>34</span>  <span class='chapter-title'>Orçamento de Potência Óptica (Power Budget)</span>"
@@ -2344,7 +2344,7 @@
     "href": "capitulos/33-orcamento-potencia.html#sec-orcamento-ex1",
     "title": "34  Orçamento de Potência Óptica (Power Budget)",
     "section": "34.4 Exercício resolvido 1 — árvore 1:2 + 1:8",
-    "text": "34.4 Exercício resolvido 1 — árvore 1:2 + 1:8\nCenário: OLT GPON Classe C+ (\\(P_{Tx}=+5\\) dBm, sensibilidade −28 dBm → orçamento 33 dB). Árvore: 8 km de fibra (1490?) nm, splitter 1:2 na primária + 1:8 na CTO, 4 conectores (DIO, splitter, CTO, ONT) e 3 fusões. Margem 3 dB.\nSoma das perdas:\n\n\n\nItem\nCálculo\ndB\n\n\n\n\nFibra\n8 × 0,28\n2,24\n\n\nSplitter 1:2\n—\n3,50\n\n\nSplitter 1:8\n—\n10,50\n\n\nConectores\n4 × 0,4\n1,60\n\n\nFusões\n3 × 0,08\n0,24\n\n\nSubtotal perdas\n\n18,08\n\n\nMargem\n\n3,00\n\n\nTotal\n\n21,08 dB\n\n\n\n\\(P_{Rx} = +5 - 18,08 = \\mathbf{-13,1\\ dBm}\\) — na faixa saudável. Sobra de orçamento: 33 − 21,08 ≈ 12 dB. Fecha com folga, dá até para estender a árvore.",
+    "text": "34.4 Exercício resolvido 1 — árvore 1:2 + 1:8\nCenário: OLT GPON Classe C+ (\\(P_{Tx}=+5\\) dBm, sensibilidade −28 dBm → orçamento 33 dB). Árvore: 8 km de fibra em 1490 nm, splitter 1:2 na primária + 1:8 na CTO, 4 conectores (DIO, splitter, CTO, ONT) e 3 fusões. Margem 3 dB.\nSoma das perdas:\n\n\n\nItem\nCálculo\ndB\n\n\n\n\nFibra\n8 × 0,28\n2,24\n\n\nSplitter 1:2\n—\n3,50\n\n\nSplitter 1:8\n—\n10,50\n\n\nConectores\n4 × 0,4\n1,60\n\n\nFusões\n3 × 0,08\n0,24\n\n\nSubtotal perdas\n\n18,08\n\n\nMargem\n\n3,00\n\n\nTotal\n\n21,08 dB\n\n\n\n\\(P_{Rx} = +5 - 18,08 = \\mathbf{-13,1\\ dBm}\\) — na faixa saudável. Sobra de orçamento: 33 − 21,08 ≈ 12 dB. Fecha com folga, dá até para estender a árvore.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>34</span>  <span class='chapter-title'>Orçamento de Potência Óptica (Power Budget)</span>"
@@ -2355,7 +2355,7 @@
     "href": "capitulos/33-orcamento-potencia.html#sec-orcamento-ex2",
     "title": "34  Orçamento de Potência Óptica (Power Budget)",
     "section": "34.5 Exercício resolvido 2 — onde quebra",
-    "text": "34.5 Exercício resolvido 2 — onde quebra\nCenário: mesma OLT, mas árvore agressiva: 18 km (1490?), splitter 1:64, 4 conectores, 5 fusões, margem 3 dB.\n\n\n\nItem\nCálculo\ndB\n\n\n\n\nFibra\n18 × 0,28\n5,04\n\n\nSplitter 1:64\n—\n21,00\n\n\nConectores\n4 × 0,4\n1,60\n\n\nFusões\n5 × 0,08\n0,40\n\n\nMargem\n\n3,00\n\n\nTotal\n\n31,04 dB\n\n\n\n\\(P_{Rx} = +5 - 28,04 = \\mathbf{-23,0\\ dBm}\\). Ainda acima de −28, mas a sobra é só 33 − 31,04 ≈ 2 dB — perigoso: qualquer conector sujo, uma fusão pior ou envelhecimento joga o cliente abaixo da sensibilidade. Solução: reduzir a divisão (1:32), encurtar a árvore, ou usar classe maior. É exatamente o tipo de erro que a conta pega antes do chamado.",
+    "text": "34.5 Exercício resolvido 2 — onde quebra\nCenário: mesma OLT, mas árvore agressiva: 18 km em 1490 nm, splitter 1:64, 4 conectores, 5 fusões, margem 3 dB.\n\n\n\nItem\nCálculo\ndB\n\n\n\n\nFibra\n18 × 0,28\n5,04\n\n\nSplitter 1:64\n—\n21,00\n\n\nConectores\n4 × 0,4\n1,60\n\n\nFusões\n5 × 0,08\n0,40\n\n\nMargem\n\n3,00\n\n\nTotal\n\n31,04 dB\n\n\n\n\\(P_{Rx} = +5 - 28,04 = \\mathbf{-23,0\\ dBm}\\). Ainda acima de −28, mas a sobra é só 33 − 31,04 ≈ 2 dB — perigoso: qualquer conector sujo, uma fusão pior ou envelhecimento joga o cliente abaixo da sensibilidade. Solução: reduzir a divisão (1:32), encurtar a árvore, ou usar classe maior. É exatamente o tipo de erro que a conta pega antes do chamado.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>34</span>  <span class='chapter-title'>Orçamento de Potência Óptica (Power Budget)</span>"
@@ -2432,7 +2432,7 @@
     "href": "capitulos/34-provisionamento-pon.html#sec-provisionamento-pppoe-ipoe",
     "title": "35  Provisionamento PON (VLANs por Cliente, Perfis, ONT)",
     "section": "35.5 PPPoE vs. IPoE no provisionamento",
-    "text": "35.5 PPPoE vs. IPoE no provisionamento\nDuas formas de autenticar/entregar IP (capítulo Seção 47.1):\n\n\n\nAspecto\nPPPoE\nIPoE (DHCP)\n\n\n\n\nAutenticação\nusuário/senha\nOpção 82 + RADIUS\n\n\nControle/billing\nforte (sessão explícita)\nbom (via DHCP/RADIUS)\n\n\nExperiência\nexige configurar sessão\n“plug and play”\n\n\nMTU\n1492 (precisa MSS clamp)\n1500\n\n\n\nA escolha depende do controle desejado; muitos ISPs brasileiros usam PPPoE pela gestão de sessão e billing simples, com RADIUS atribuindo velocidade, IP e prefixo IPv6.\n\nNa prática do provedor\n\nAutomatize com perfis + sistema/OSS: ONT nova entra por SN com perfil do plano aplicado automaticamente; integre OLT ↔︎ sistema de gestão (provisionamento via API/NETCONF, capítulo ?sec-sdn). Provisionar a mão em escala é fonte de erro.\nVelocidade vem do RADIUS, não da ONT: o rate-limit do plano é atributo RADIUS no BNG (capítulo Seção 27.1) — upgrade sem tocar no equipamento do cliente.\nTR-069/ACS para a casa do cliente: Wi-Fi, firmware e diagnóstico remoto da ONT (capítulo Seção 31.1) — menos visitas técnicas.\nChecklist de ativação: SN autorizado? potência Rx na faixa (capítulo Seção 34.1)? C-VLAN correta? PPPoE autenticou (RADIUS)? IP/IPv6 entregues? Esse roteiro evita “instalei mas não navega”.\nErro nº 1: VLAN errada no perfil/uplink → ONT autentica na OLT (PON aceso) mas cliente não navega. Confira o caminho da VLAN ONT→OLT→BNG (capítulo\n\nantes de suspeitar de fibra.",
+    "text": "35.5 PPPoE vs. IPoE no provisionamento\nDuas formas de autenticar/entregar IP (capítulo Seção 47.1):\n\n\n\nAspecto\nPPPoE\nIPoE (DHCP)\n\n\n\n\nAutenticação\nusuário/senha\nOpção 82 + RADIUS\n\n\nControle/billing\nforte (sessão explícita)\nbom (via DHCP/RADIUS)\n\n\nExperiência\nexige configurar sessão\n“plug and play”\n\n\nMTU\n1492 (precisa MSS clamp)\n1500\n\n\n\nA escolha depende do controle desejado; muitos ISPs brasileiros usam PPPoE pela gestão de sessão e billing simples, com RADIUS atribuindo velocidade, IP e prefixo IPv6.\n\nNa prática do provedor\n\nAutomatize com perfis + sistema/OSS: ONT nova entra por SN com perfil do plano aplicado automaticamente; integre OLT ↔︎ sistema de gestão (provisionamento via API/NETCONF, capítulo Seção 55.1). Provisionar a mão em escala é fonte de erro.\nVelocidade vem do RADIUS, não da ONT: o rate-limit do plano é atributo RADIUS no BNG (capítulo Seção 27.1) — upgrade sem tocar no equipamento do cliente.\nTR-069/ACS para a casa do cliente: Wi-Fi, firmware e diagnóstico remoto da ONT (capítulo Seção 31.1) — menos visitas técnicas.\nChecklist de ativação: SN autorizado? potência Rx na faixa (capítulo Seção 34.1)? C-VLAN correta? PPPoE autenticou (RADIUS)? IP/IPv6 entregues? Esse roteiro evita “instalei mas não navega”.\nErro nº 1: VLAN errada no perfil/uplink → ONT autentica na OLT (PON aceso) mas cliente não navega. Confira o caminho da VLAN ONT→OLT→BNG (capítulo\n\nantes de suspeitar de fibra.",
     "crumbs": [
       "Parte VI — Redes Ópticas Passivas (PON)",
       "<span class='chapter-number'>35</span>  <span class='chapter-title'>Provisionamento PON (VLANs por Cliente, Perfis, ONT)</span>"
@@ -3455,7 +3455,7 @@
     "href": "capitulos/49-sistemas-gerencia-monitoramento.html#sec-mon-fontes",
     "title": "50  Gerência e Monitoramento (SNMP, Zabbix, NMS)",
     "section": "50.3 As fontes de dados",
-    "text": "50.3 As fontes de dados\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 50.1: O NMS central coleta SNMP (métricas), syslog (eventos), flow (tráfego) e telemetria dos equipamentos, gerando dashboards e disparando alarmes para o NOC.\n\n\n\n\nSNMP (capítulo Seção 26.5) — polling de métricas (tráfego, CPU, ótica) e traps (alarmes). A espinha dorsal do monitoramento.\nSyslog — eventos e logs dos equipamentos centralizados (correlação de incidentes; precisa de NTP correto, capítulo Seção 26.6).\nFlow (NetFlow/sFlow/IPFIX) — quem fala com quem e quanto: análise de tráfego, detecção de anomalias/DDoS (capítulo Seção 53.1), planejamento de peering.\nTelemetria/streaming & APIs — coleta moderna em alta frequência (capítulo ?sec-sdn).\nICMP (capítulo Seção 19.1) — sondas de disponibilidade/latência.",
+    "text": "50.3 As fontes de dados\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 50.1: O NMS central coleta SNMP (métricas), syslog (eventos), flow (tráfego) e telemetria dos equipamentos, gerando dashboards e disparando alarmes para o NOC.\n\n\n\n\nSNMP (capítulo Seção 26.5) — polling de métricas (tráfego, CPU, ótica) e traps (alarmes). A espinha dorsal do monitoramento.\nSyslog — eventos e logs dos equipamentos centralizados (correlação de incidentes; precisa de NTP correto, capítulo Seção 26.6).\nFlow (NetFlow/sFlow/IPFIX) — quem fala com quem e quanto: análise de tráfego, detecção de anomalias/DDoS (capítulo Seção 53.1), planejamento de peering.\nTelemetria/streaming & APIs — coleta moderna em alta frequência (capítulo Seção 55.1).\nICMP (capítulo Seção 19.1) — sondas de disponibilidade/latência.",
     "crumbs": [
       "Parte X — Operação de Provedor (ISP)",
       "<span class='chapter-number'>50</span>  <span class='chapter-title'>Gerência e Monitoramento (SNMP, Zabbix, NMS)</span>"
@@ -3719,7 +3719,62 @@
     "href": "capitulos/53-mpls-vpns.html",
     "title": "54  MPLS e VPNs (L2VPN/L3VPN, VPLS)",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "54.1 Quando o roteamento puro não basta\nÀ medida que o provedor cresce, o roteamento IP puro (capítulo Seção 21.1) começa a limitar: é difícil oferecer VPNs corporativas (interligar filiais de um cliente com isolamento), fazer engenharia de tráfego fina, e separar serviços. O MPLS (Multiprotocol Label Switching) resolve isso comutando pacotes por rótulos (labels) em vez de consultar o IP a cada salto, criando uma base flexível para VPNs L2/L3, traffic engineering e qualidade. É a tecnologia que transforma um ISP regional em um provedor capaz de vender serviços além de “banda”.",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>54</span>  <span class='chapter-title'>MPLS e VPNs (L2VPN/L3VPN, VPLS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/53-mpls-vpns.html#sec-mpls-comutacao",
+    "href": "capitulos/53-mpls-vpns.html#sec-mpls-comutacao",
+    "title": "54  MPLS e VPNs (L2VPN/L3VPN, VPLS)",
+    "section": "54.2 Como o MPLS comuta",
+    "text": "54.2 Como o MPLS comuta\nNo MPLS, na entrada da rede (roteador de borda, PE — Provider Edge) o pacote recebe um rótulo; os roteadores do núcleo (P — Provider) comutam só pelo rótulo (rápido, sem olhar o IP); na saída, o rótulo é removido. O caminho rotulado é um LSP (Label Switched Path).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 54.1: MPLS: o PE de entrada empilha um rótulo (classificando o pacote no serviço/LSP certo); os P comutam só por rótulo; o PE de saída remove e entrega. Rótulos podem ser empilhados (VPN sobre LSP).\n\n\n\nA “mágica” é o empilhamento de rótulos: um rótulo identifica o LSP (por onde ir) e outro o serviço/VPN (de quem é o pacote) — permitindo VPNs sobre a mesma infraestrutura.",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>54</span>  <span class='chapter-title'>MPLS e VPNs (L2VPN/L3VPN, VPLS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/53-mpls-vpns.html#sec-mpls-l3vpn",
+    "href": "capitulos/53-mpls-vpns.html#sec-mpls-l3vpn",
+    "title": "54  MPLS e VPNs (L2VPN/L3VPN, VPLS)",
+    "section": "54.3 L3VPN: roteamento isolado por cliente",
+    "text": "54.3 L3VPN: roteamento isolado por cliente\nA L3VPN (MPLS/BGP, RFC 4364) entrega a cada cliente uma tabela de roteamento própria e isolada (VRF) sobre o mesmo backbone. Filiais de uma empresa em cidades diferentes ficam na mesma VPN roteada, com endereçamento próprio (inclusive sobreposto ao de outro cliente — as VRFs isolam). O MP-BGP distribui as rotas de VPN entre os PEs. É o produto corporativo clássico: “interligar minhas unidades como se fossem uma rede só”.",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>54</span>  <span class='chapter-title'>MPLS e VPNs (L2VPN/L3VPN, VPLS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/53-mpls-vpns.html#sec-mpls-l2vpn",
+    "href": "capitulos/53-mpls-vpns.html#sec-mpls-l2vpn",
+    "title": "54  MPLS e VPNs (L2VPN/L3VPN, VPLS)",
+    "section": "54.4 L2VPN e VPLS: estender a camada 2",
+    "text": "54.4 L2VPN e VPLS: estender a camada 2\nQuando o cliente quer que as pontas estejam no mesmo domínio de camada 2 (mesma LAN/VLAN entre cidades):\n\nL2VPN ponto a ponto (VPWS / pseudowire): “fio virtual” que transporta um enlace L2 (uma VLAN) de um ponto a outro pela MPLS — como se fosse um cabo direto.\nVPLS: emula um switch distribuído — várias pontas no mesmo domínio de broadcast (multiponto), como uma LAN espalhada pela cidade.\n\n\n\n\nServiço\nCamada\nEntrega\n\n\n\n\nL3VPN\n3\nroteamento isolado (VRF) entre sites\n\n\nVPWS (L2 p2p)\n2\nenlace ponto a ponto (pseudowire)\n\n\nVPLS\n2\nLAN multiponto (switch virtual)",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>54</span>  <span class='chapter-title'>MPLS e VPNs (L2VPN/L3VPN, VPLS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/53-mpls-vpns.html#sec-mpls-te",
+    "href": "capitulos/53-mpls-vpns.html#sec-mpls-te",
+    "title": "54  MPLS e VPNs (L2VPN/L3VPN, VPLS)",
+    "section": "54.5 Engenharia de tráfego e segregação",
+    "text": "54.5 Engenharia de tráfego e segregação\nAlém de VPNs, o MPLS habilita:\n\nTE (Traffic Engineering): direcionar LSPs por caminhos específicos (não só o “mais curto”), reservando banda e contornando gargalos.\nFRR (Fast Reroute): proteção em &lt; 50 ms desviando o LSP para um caminho de backup pré-calculado (complementa o anel, capítulo Seção 52.1).\nSegregação de serviços: voz, gestão, internet e VPNs de clientes em contextos separados sobre a mesma rede.\n\n\nNa prática do provedor\n\nMPLS é o passo de “ISP que vende serviço”. Com L3VPN/VPLS você atende corporativo (interligar filiais, MPLS dedicado) — receita maior e SLA — sobre o mesmo backbone da internet residencial.\nComece quando a escala pedir. Um ISP pequeno roda bem com OSPF+BGP (capítulo Seção 21.1). Introduza MPLS quando precisar de VPNs, TE ou segregação — não por modismo; ele adiciona complexidade.\nVPLS/L2VPN para clientes que querem “mesma LAN”: câmeras, PABX, redes que dependem de broadcast entre unidades. VPWS para enlaces ponto a ponto.\nFRR + anel dão resiliência de núcleo de operadora (&lt; 50 ms) — combine com BFD/ERPS (capítulo Seção 52.1).\nPlaneje o IGP primeiro: MPLS apoia-se no IGP (OSPF/IS-IS) e em LDP/SR para distribuir rótulos; uma base de roteamento limpa (loopbacks, sumarização) é pré-requisito.\nSegment Routing (SR/SRv6) é a evolução do MPLS clássico (menos protocolos de rótulo, integra-se a SDN, capítulo Seção 55.1) — avalie ao modernizar.",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>54</span>  <span class='chapter-title'>MPLS e VPNs (L2VPN/L3VPN, VPLS)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/53-mpls-vpns.html#sec-resumo-53",
+    "href": "capitulos/53-mpls-vpns.html#sec-resumo-53",
+    "title": "54  MPLS e VPNs (L2VPN/L3VPN, VPLS)",
+    "section": "54.6 Resumo e checklist",
+    "text": "54.6 Resumo e checklist\n\nMPLS comuta por rótulos (push no PE, swap nos P, pop no PE) sobre LSPs; rótulos empilháveis habilitam VPNs.\nL3VPN (VRF + MP-BGP) dá roteamento isolado por cliente; L2VPN/VPLS estendem a camada 2 (ponto a ponto / multiponto).\nHabilita TE, FRR (&lt; 50 ms) e segregação de serviços.\nAdote quando a escala/serviços pedirem; apoia-se num IGP limpo; SR/SRv6 é a evolução.\n\nChecklist do capítulo\n\nExplico push/swap/pop de rótulos e o conceito de LSP.\nDiferencio L3VPN (VRF) de L2VPN/VPLS e quando usar cada um.\nSei o que MPLS habilita (TE, FRR, segregação) além de VPN.\nAvalio adotar MPLS conforme escala e produtos corporativos.",
     "crumbs": [
       "Parte XII — Tópicos Avançados",
       "<span class='chapter-number'>54</span>  <span class='chapter-title'>MPLS e VPNs (L2VPN/L3VPN, VPLS)</span>"
@@ -3730,7 +3785,62 @@
     "href": "capitulos/54-sdn-automacao.html",
     "title": "55  SDN e Automação de Rede",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "55.1 Operar a rede como software\nConfigurar equipamento por equipamento, na mão, via SSH (capítulo Seção 26.2), não escala: é lento, propenso a erro e impossível de auditar quando a rede tem centenas de nós. SDN (Software-Defined Networking) e automação mudam a abordagem: a rede passa a ser programável e gerida por software, com configuração versionada, mudanças automatizadas e estado consultável por API. Para o ISP, isso significa provisionar mais rápido, errar menos e reagir automaticamente — do provisionamento de ONT (capítulo Seção 35.1) à mitigação de DDoS (capítulo Seção 53.1).",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>55</span>  <span class='chapter-title'>SDN e Automação de Rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/54-sdn-automacao.html#sec-sdn-ideia",
+    "href": "capitulos/54-sdn-automacao.html#sec-sdn-ideia",
+    "title": "55  SDN e Automação de Rede",
+    "section": "55.2 A ideia central do SDN",
+    "text": "55.2 A ideia central do SDN\nO SDN separa o plano de controle (a “inteligência” que decide as rotas/políticas) do plano de dados (o hardware que encaminha pacotes), centralizando o controle:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 55.1: SDN: o controlador centraliza o plano de controle e programa os equipamentos (plano de dados) por APIs southbound; aplicações/OSS pedem serviços por API northbound.\n\n\n\nNa prática do ISP, “SDN puro” (OpenFlow) é menos comum; o que realmente transforma a operação é a automação sobre equipamentos tradicionais via APIs e modelos.",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>55</span>  <span class='chapter-title'>SDN e Automação de Rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/54-sdn-automacao.html#sec-sdn-ferramentas",
+    "href": "capitulos/54-sdn-automacao.html#sec-sdn-ferramentas",
+    "title": "55  SDN e Automação de Rede",
+    "section": "55.3 As ferramentas da automação",
+    "text": "55.3 As ferramentas da automação\n\n\n\n\n\n\n\n\nCamada\nTecnologia\nPara quê\n\n\n\n\nConfiguração\nNETCONF/RESTCONF + YANG\nconfigurar por modelo estruturado (não CLI frágil)\n\n\nTelemetria\nstreaming telemetry, gNMI\nmétricas em alta frequência (capítulo 2)\n\n\nOrquestração\nAnsible, scripts, Python\naplicar mudanças em massa, idempotentes\n\n\nVersionamento\nGit\nhistórico, revisão, rollback da configuração\n\n\nFonte da verdade\nIPAM/inventário\ndados que alimentam a automação\n\n\n\nA combinação “infraestrutura como código” — config descrita em arquivos, versionada em Git, aplicada por Ansible/scripts — é o ganho mais acessível e imediato, mesmo sem um controlador SDN formal.",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>55</span>  <span class='chapter-title'>SDN e Automação de Rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/54-sdn-automacao.html#sec-sdn-casos",
+    "href": "capitulos/54-sdn-automacao.html#sec-sdn-casos",
+    "title": "55  SDN e Automação de Rede",
+    "section": "55.4 Casos de uso no ISP",
+    "text": "55.4 Casos de uso no ISP\n\nProvisionamento automático: cadastro do cliente dispara, via API, a configuração da ONT/OLT (capítulo Seção 35.1) e do RADIUS (capítulo 1) — zero touch.\nMudança em massa: aplicar um ajuste (NTP, ACL, banner) em todos os switches com um playbook, igual e auditável.\nReação automática: detecção de DDoS por flow dispara RTBH/Flowspec via API (capítulo Seção 53.1).\nBackup e conformidade: coletar e versionar configs automaticamente; detectar desvio do padrão (drift).\nSelf-service: portal do cliente corporativo que aciona mudanças (banda, VPN) que a automação aplica.",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>55</span>  <span class='chapter-title'>SDN e Automação de Rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/54-sdn-automacao.html#sec-sdn-sr",
+    "href": "capitulos/54-sdn-automacao.html#sec-sdn-sr",
+    "title": "55  SDN e Automação de Rede",
+    "section": "55.5 Segment Routing e a rede programável",
+    "text": "55.5 Segment Routing e a rede programável\nO Segment Routing (SR/SRv6) — evolução do MPLS (capítulo Seção 54.1) — encaixa-se no mundo SDN: o caminho é codificado no próprio pacote (lista de segmentos), sem estado por fluxo no núcleo, e um controlador pode computar caminhos otimizados (TE) centralmente. É a direção das redes de operadora modernas: engenharia de tráfego dirigida por software.\n\nNa prática do provedor\n\nComece pela automação, não pelo “SDN”. O maior ganho imediato é infraestrutura como código: configs em Git, mudanças por Ansible/scripts, e provisionamento por API. Não precisa de controlador OpenFlow para colher 80% do benefício.\nProvisionamento zero-touch é o caso que mais paga: ONT entra por SN, sistema configura OLT + RADIUS automaticamente (capítulos Seção 35.1,\n\n— escala o crescimento sem inflar a equipe nem os erros.\n\nFonte da verdade (IPAM/inventário) alimenta a automação: sem dados confiáveis (capítulo Seção 39.1), automatizar só propaga erros mais rápido.\nNETCONF/YANG &gt; CLI scraping: prefira APIs estruturadas a “raspar” CLI, que quebra a cada mudança de firmware.\nAutomação fecha o ciclo com monitoramento: detecção (flow/SNMP, capítulo\n\n→ ação (RTBH/Flowspec, bloqueio, failover) sem humano no meio, para incidentes conhecidos.\n\nVersione e teste: mudança automatizada errada erra em toda a rede de uma vez — Git + revisão + rollback + ambiente de teste são rede de segurança.",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>55</span>  <span class='chapter-title'>SDN e Automação de Rede</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/54-sdn-automacao.html#sec-resumo-54",
+    "href": "capitulos/54-sdn-automacao.html#sec-resumo-54",
+    "title": "55  SDN e Automação de Rede",
+    "section": "55.6 Resumo e checklist",
+    "text": "55.6 Resumo e checklist\n\nSDN separa controle e dados (controlador + APIs); no ISP, a automação sobre equipamentos tradicionais é o ganho real.\nFerramentas: NETCONF/YANG, telemetria, Ansible/Python, Git e uma fonte da verdade (IPAM).\nCasos: provisionamento zero-touch, mudança em massa, reação automática (DDoS), backup/conformidade.\nSR/SRv6 leva a engenharia de tráfego para o mundo programável.\n\nChecklist do capítulo\n\nExplico a separação de planos do SDN e o papel das APIs.\nAdoto infraestrutura como código (Git + Ansible/API) para mudanças.\nAutomatizo provisionamento ligando cadastro → OLT/RADIUS.\nFecho o ciclo detecção→ação e versiono/testo a automação.",
     "crumbs": [
       "Parte XII — Tópicos Avançados",
       "<span class='chapter-number'>55</span>  <span class='chapter-title'>SDN e Automação de Rede</span>"
@@ -3741,7 +3851,73 @@
     "href": "capitulos/55-ipv6-deployment-isp.html",
     "title": "56  Implantação de IPv6 no Provedor",
     "section": "",
-    "text": "Nota\n\n\n\nCapítulo a ser desenvolvido pelo Claude Code (ver PROMPT-CLAUDE-CODE.md e CLAUDE.md).",
+    "text": "56.1 Tirar o IPv6 do papel\nVimos os fundamentos do IPv6 (capítulo Seção 18.1) e por que ele importa: o IPv4 acabou, o CGNAT (capítulo Seção 20.1) é caro e problemático, e o tráfego IPv6 no Brasil já é expressivo. Este capítulo fecha o manual com o como: o plano de implantação de IPv6 num provedor real, em dual-stack, do backbone ao assinante. É um projeto que toca todas as partes anteriores — endereçamento, roteamento, BNG, RADIUS, DNS, segurança — e por isso é o encerramento natural.",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>56</span>  <span class='chapter-title'>Implantação de IPv6 no Provedor</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/55-ipv6-deployment-isp.html#sec-ipv6-isp-porque",
+    "href": "capitulos/55-ipv6-deployment-isp.html#sec-ipv6-isp-porque",
+    "title": "56  Implantação de IPv6 no Provedor",
+    "section": "56.2 Por que implantar (de novo, com números)",
+    "text": "56.2 Por que implantar (de novo, com números)\n\nAlívio do CGNAT: com dual-stack, grande parte do tráfego (vídeo, CDNs, grandes plataformas) vai por IPv6 nativo, fora do CGNAT — menos sessões NAT, menos port exhaustion, menos custo de IPv4 e menos chamados (jogos/consoles/ câmeras funcionam melhor).\nEndereço público real por cliente — fim das limitações do CGNAT para quem precisa de entrada.\nFuturo: conteúdo e serviços crescentemente IPv6-only; estar pronto é competitivo.",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>56</span>  <span class='chapter-title'>Implantação de IPv6 no Provedor</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/55-ipv6-deployment-isp.html#sec-ipv6-isp-dualstack",
+    "href": "capitulos/55-ipv6-deployment-isp.html#sec-ipv6-isp-dualstack",
+    "title": "56  Implantação de IPv6 no Provedor",
+    "section": "56.3 A estratégia: dual-stack",
+    "text": "56.3 A estratégia: dual-stack\nA abordagem recomendada é dual-stack: rodar IPv4 e IPv6 em paralelo, cada serviço escolhendo o que estiver disponível (apps preferem IPv6 quando há — Happy Eyeballs). Evita-se “ilhas” e a tradução fica mínima. Mecanismos de transição (NAT64/464XLAT, DS-Lite) existem para cenários IPv6-only, mas para a maioria dos ISPs regionais dual-stack é o caminho mais simples e robusto.",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>56</span>  <span class='chapter-title'>Implantação de IPv6 no Provedor</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/55-ipv6-deployment-isp.html#sec-ipv6-isp-plano",
+    "href": "capitulos/55-ipv6-deployment-isp.html#sec-ipv6-isp-plano",
+    "title": "56  Implantação de IPv6 no Provedor",
+    "section": "56.4 O plano de numeração",
+    "text": "56.4 O plano de numeração\nTudo começa pelo endereçamento hierárquico (capítulo Seção 18.1), pensado para sumarizar no BGP (capítulo Seção 17.1):\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigura 56.1: Plano hierárquico: o /32 do ISP fatia em /48 por POP, /56 por assinante (via DHCPv6-PD) e /64 por LAN — hierarquia que permite sumarizar no BGP.\n\n\n\n\n/32 do Registro.br para o seu ASN.\n/48 por POP/região (sumarizável).\n/56 por assinante (residencial) entregue por DHCPv6-PD (256 /64s para a casa).\n/64 por LAN (regra inviolável do SLAAC).",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>56</span>  <span class='chapter-title'>Implantação de IPv6 no Provedor</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/55-ipv6-deployment-isp.html#sec-ipv6-isp-passos",
+    "href": "capitulos/55-ipv6-deployment-isp.html#sec-ipv6-isp-passos",
+    "title": "56  Implantação de IPv6 no Provedor",
+    "section": "56.5 O passo a passo da implantação",
+    "text": "56.5 O passo a passo da implantação\n\nObter o bloco (/32) e habilitar IPv6 no BGP (capítulo Seção 49.1): anunciar o /32, peering IPv6 no IX e trânsito dual-stack, ROA/RPKI também para IPv6.\nCore/IGP dual-stack: IPv6 no backbone (OSPFv3/IS-IS), loopbacks IPv6, roteamento interno.\nBNG: habilitar IPv6 nas sessões — RA para o /64 do enlace e DHCPv6-PD para o /56 do cliente; atributos no RADIUS (Delegated-IPv6-Prefix, capítulo Seção 48.1).\nDNS dual-stack: recursivo respondendo sobre IPv6 e servindo AAAA; publicar AAAA dos seus serviços (capítulo Seção 23.1).\nCPE/ONT: garantir que o equipamento do cliente faz DHCPv6-PD + RA/SLAAC na LAN (capítulo Seção 31.1); homologar firmwares.\nSegurança: não filtrar ICMPv6 (NDP/PMTUD), aplicar filtros equivalentes ao IPv4, anti-spoofing também em IPv6 (capítulo Seção 51.1).\nMonitorar: acompanhar a adoção (% de tráfego IPv6) e a saúde (capítulo Seção 50.1).",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>56</span>  <span class='chapter-title'>Implantação de IPv6 no Provedor</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/55-ipv6-deployment-isp.html#sec-ipv6-isp-armadilhas",
+    "href": "capitulos/55-ipv6-deployment-isp.html#sec-ipv6-isp-armadilhas",
+    "title": "56  Implantação de IPv6 no Provedor",
+    "section": "56.6 Armadilhas comuns",
+    "text": "56.6 Armadilhas comuns\n\nFiltrar ICMPv6 — quebra NDP/SLAAC/PMTUD; o IPv6 depende dele (capítulo Seção 19.1).\nSub-rede menor que /64 na LAN — quebra SLAAC; LAN é sempre /64.\nEsquecer segurança IPv6 — firewall só no IPv4 deixa o IPv6 exposto; aplique paridade de políticas.\nCPE que não suporta PD — sem DHCPv6-PD o cliente não recebe prefixo; homologue o parque.\nDNS sem AAAA / reverso IPv6 — degrada a experiência e o e-mail.\n\n\nNa prática do provedor\n\nDual-stack é meta, não opção. Cada % de tráfego que migra para IPv6 alivia o CGNAT (menos NAT, menos custo de IPv4, menos chamado). Meça a adoção e celebre a curva subindo.\nRADIUS entrega o /56: padronize o atributo Delegated-IPv6-Prefix por plano (capítulo Seção 48.1); o BNG faz RA (/64 WAN) + PD (/56 LAN). É o coração da entrega ao assinante.\nHomologue CPE/ONT com PD + firewall IPv6: o elo fraco costuma ser o equipamento do cliente. Sem PD não há IPv6 na casa; sem firewall IPv6, expõe a LAN.\nICMPv6 liberado e segurança em paridade: replique no IPv6 as proteções do IPv4 (anti-spoofing, ACLs) sem matar o NDP/PMTUD.\nBGP + RPKI também em IPv6: anuncie o /32 sumarizado, com ROA; peering IPv6 no IX traz o conteúdo nacional nativo.\nVá incremental: core → BNG → piloto de clientes → massa. Dual-stack permite ligar IPv6 sem desligar nada — risco baixo, ganho crescente.",
+    "crumbs": [
+      "Parte XII — Tópicos Avançados",
+      "<span class='chapter-number'>56</span>  <span class='chapter-title'>Implantação de IPv6 no Provedor</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/55-ipv6-deployment-isp.html#sec-resumo-55",
+    "href": "capitulos/55-ipv6-deployment-isp.html#sec-resumo-55",
+    "title": "56  Implantação de IPv6 no Provedor",
+    "section": "56.7 Resumo e checklist",
+    "text": "56.7 Resumo e checklist\n\nIPv6 em dual-stack alivia o CGNAT e prepara o ISP para o futuro; é projeto que toca toda a rede.\nPlano hierárquico: /32 → /48 (POP) → /56 (assinante via DHCPv6-PD) → /64 (LAN).\nPassos: BGP/RPKI, core/IGP, BNG (RA+PD via RADIUS), DNS AAAA, CPE, segurança, monitorar adoção.\nEvite as armadilhas: não filtre ICMPv6, LAN sempre /64, segurança em paridade, CPE com PD.\n\nChecklist do capítulo\n\nDefino o plano /32→/48→/56→/64 e a entrega por DHCPv6-PD.\nHabilito IPv6 em BGP/RPKI, core, BNG (RADIUS) e DNS (AAAA).\nHomologo CPE/ONT com PD e firewall IPv6.\nMantenho ICMPv6 liberado, segurança em paridade e meço a adoção.",
     "crumbs": [
       "Parte XII — Tópicos Avançados",
       "<span class='chapter-number'>56</span>  <span class='chapter-title'>Implantação de IPv6 no Provedor</span>"

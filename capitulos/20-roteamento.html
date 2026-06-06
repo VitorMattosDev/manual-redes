@@ -1085,7 +1085,7 @@ Figura&nbsp;21.1: OSPF hierárquico: a <strong>Área 0</strong> é o <em>backbon
 <li><strong>Loopback é o coração:</strong> use /32 em loopback como <em>router-id</em>, destino de iBGP, SNMP e SSH de gerência — sobrevive à queda de qualquer interface física.</li>
 <li><strong>BFD + OSPF/BGP</strong> dá <em>failover</em> sub-segundo no anel/núcleo; sem ele, a detecção depende de <em>timers</em> lentos e o cliente sente a queda.</li>
 <li><strong>Sumarize entre áreas</strong> e ao redistribuir, para conter <em>flaps</em> e enxugar tabelas.</li>
-<li><strong>Comece simples:</strong> muitos ISPs regionais rodam OSPF interno + BGP na borda; só migram para IS-IS/MPLS (capítulo <span class="quarto-unresolved-ref">?sec-mpls</span>) quando a escala exige.</li>
+<li><strong>Comece simples:</strong> muitos ISPs regionais rodam OSPF interno + BGP na borda; só migram para IS-IS/MPLS (capítulo <a href="53-mpls-vpns.html#sec-mpls" class="quarto-xref"><span>Seção 54.1</span></a>) quando a escala exige.</li>
 </ul>
 </div>
 </section>
