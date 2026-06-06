@@ -2,6 +2,130 @@
 title: "Instrumentos: Power Meter, OTDR, VFL e Fonte de Luz"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## O kit que mede a camada 1 {#sec-otdr}
+
+Tudo na fibra é **camada 1** (capítulo @sec-osi-l1) — e camada 1 **se mede**, não se
+adivinha. O conjunto de instrumentos ópticos é o que transforma "o cliente caiu" em
+"há um evento de 2,3 dB a 480 m do POP". Cada instrumento responde a uma pergunta
+diferente: **quanta** potência chega (power-meter), **qual** é o mapa de eventos do
+trecho (OTDR), **onde** exatamente está a fibra/quebra (VFL), e serve de **referência**
+de transmissão (fonte de luz). Saber qual usar quando é metade do diagnóstico óptico.
+
+## Power-meter e fonte de luz {#sec-otdr-powermeter}
+
+- **Power-meter (medidor de potência):** lê a **potência óptica** que chega, em
+  **dBm**, no λ selecionado. É o instrumento do dia a dia: medir o **Rx** num ponto e
+  comparar com o orçamento (capítulo @sec-orcamento). Barato, simples, definitivo
+  para "quanto chega aqui".
+- **Fonte de luz (light source):** emite potência **conhecida e estável** num λ.
+  Sozinha não mede; combinada com o power-meter na outra ponta, dá a **perda de
+  inserção** (atenuação total) do enlace:
+
+$$\text{Perda (dB)} = P_{\text{fonte}} - P_{\text{medido}}.$$
+
+Esse par **fonte + power-meter** é o teste de **certificação fim a fim** (capítulo
+@sec-fusao-campo): mede a perda total real, no λ de operação.
+
+## OTDR: o "ultrassom" da fibra {#sec-otdr-otdr}
+
+O **OTDR** (*Optical Time-Domain Reflectometer*) injeta **pulsos** de luz e mede o
+**retroespalhamento** (Rayleigh) e as **reflexões** que voltam. Pelo **tempo** de
+retorno, calcula a **distância** de cada evento; pela **queda** do sinal, mede a
+**perda** de cada um. O resultado é um **traço** (curva potência × distância) que é a
+**radiografia** do enlace:
+
+::: {#fig-otdr-trace}
+```{.tikz}
+%%| filename: otdr-trace
+%%| alt: Traço OTDR com zona morta, declive da fibra, pico de conector, degrau de fusão e fim da fibra
+\begin{tikzpicture}
+\begin{axis}[
+    width=11cm, height=5.6cm,
+    xlabel={Distância (km)},
+    ylabel={Potência (dB)},
+    xmin=0, xmax=10, ymin=0, ymax=10,
+    axis lines=left, font=\footnotesize, ytick=\empty,
+  ]
+  % zona morta inicial (pico)
+  \addplot[curva] coordinates {(0,9.5) (0.2,8.0)};
+  % fibra (declive) ate conector
+  \addplot[curva] coordinates {(0.2,8.0) (3,6.4)};
+  % conector: pico reflexivo + perda
+  \addplot[curva] coordinates {(3,6.4) (3.05,7.3) (3.1,5.6)};
+  % fibra
+  \addplot[curva] coordinates {(3.1,5.6) (6,4.2)};
+  % fusao: degrau sem pico
+  \addplot[curva] coordinates {(6,4.2) (6.02,3.7)};
+  \addplot[curva] coordinates {(6.02,3.7) (8.5,2.5)};
+  % fim da fibra: pico + queda ao ruido
+  \addplot[curva] coordinates {(8.5,2.5) (8.55,3.6) (8.7,0.5)};
+  \node[manualred, font=\scriptsize, anchor=west] at (axis cs:0.1,9.2){zona morta};
+  \node[manualgreen, font=\scriptsize, anchor=west] at (axis cs:3.0,7.6){conector (pico+perda)};
+  \node[manualblue, font=\scriptsize, anchor=west] at (axis cs:5.6,4.7){fusão (degrau)};
+  \node[manualred, font=\scriptsize, anchor=west] at (axis cs:7.3,3.9){fim da fibra};
+\end{axis}
+\end{tikzpicture}
+```
+Traço OTDR: o **declive** contínuo é a atenuação da fibra; **picos reflexivos** são
+conectores/fim; **degraus sem pico** são fusões/curvaturas; o **fim** reflete e cai
+ao ruído. (Interpretação detalhada no capítulo @sec-interpretacao-otdr.)
 :::
+
+Parâmetros que o operador escolhe no OTDR (capítulo @sec-interpretacao-otdr explica o
+impacto): **comprimento de onda**, **largura de pulso** (resolução × alcance),
+**tempo de média** e **faixa (range)**.
+
+## VFL: o localizador visual {#sec-otdr-vfl}
+
+O **VFL** (*Visual Fault Locator*) é uma **caneta laser vermelha** (650 nm visível)
+que se injeta na fibra: onde houver **quebra, dobra forte ou conector ruim**, a luz
+**vaza e acende em vermelho**, visível a olho nu. Usos:
+
+- **Achar a quebra** num *patch*/drop curto (onde o OTDR tem zona morta).
+- **Identificar a fibra correta** num feixe (acende a ponta certa).
+- **Checar continuidade** e conectores em bancada.
+
+Limitação: alcance curto (centenas de metros a ~poucos km) e não mede perda — é
+**localização visual**, complementar ao OTDR.
+
+## Qual instrumento para qual pergunta {#sec-otdr-qual}
+
+| Pergunta | Instrumento |
+|---|---|
+| Quanta potência chega aqui? (Rx) | **power-meter** |
+| Qual a perda total do enlace? | **fonte + power-meter** |
+| Onde estão os eventos e quanto cada um perde? | **OTDR** |
+| Onde exatamente está a quebra/dobra (curto)? | **VFL** |
+| A fibra está identificada corretamente? | **VFL** (ou identificador de fibra) |
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Power-meter no kit de todo técnico:** medir o **Rx** na ONT/CTO e comparar com o
+  orçamento (capítulo @sec-orcamento) resolve a maioria dos chamados sem OTDR.
+- **OTDR para a primária e para achar evento novo:** quando o Rx caiu vs. o
+  **baseline** (capítulo @sec-fusao-campo), o OTDR diz **onde** e **quanto** — vá ao
+  ponto, não saia trocando peças.
+- **VFL para o último trecho:** quebra no *drop* ou identificar a fibra certa na CTO —
+  rápido e barato. Cuidado: não olhe direto para o laser.
+- **Meça sempre no λ certo:** PON usa 1310/1490/1550; medir no λ errado dá número
+  errado. Para diagnosticar sem afetar o serviço, há OTDR/medições em **1625/1650 nm**
+  (fora da banda de dados) com filtro.
+- **Calibre e cuide dos conectores dos instrumentos:** um conector sujo no próprio
+  OTDR/power-meter (capítulo @sec-conectores) contamina toda medição.
+:::
+
+## Resumo e checklist {#sec-resumo-39}
+
+- **Power-meter** mede **Rx** (dBm); **fonte + power-meter** dá a **perda total**.
+- **OTDR** mapeia **eventos** (distância + perda) — a radiografia do enlace.
+- **VFL** **localiza visualmente** quebras/dobras em trechos curtos e identifica
+  fibra.
+- Escolha o instrumento pela **pergunta**; meça sempre no **λ correto**.
+
+**Checklist do capítulo**
+
+- [ ] Uso power-meter para ler Rx e comparar com o orçamento.
+- [ ] Meço perda de inserção com fonte + power-meter.
+- [ ] Sei quando o OTDR é necessário (evento novo, primária).
+- [ ] Uso VFL no último trecho e meço no comprimento de onda certo.

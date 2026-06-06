@@ -2,6 +2,134 @@
 title: "Interpretação de Traços OTDR"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Ler a radiografia da fibra {#sec-interpretacao-otdr}
+
+Ter um OTDR (capítulo @sec-otdr) é metade do trabalho; a outra metade é **interpretar
+o traço** corretamente. Um OTDR mal configurado ou mal lido leva a conclusões erradas
+— "tem uma fusão ruim" onde há só uma curvatura, ou "a fibra acaba aqui" quando é só
+zona morta. Este capítulo ensina a **reconhecer cada evento**, **escolher os
+parâmetros** e evitar as armadilhas clássicas de leitura.
+
+## Os eventos e suas assinaturas {#sec-otdr-eventos}
+
+Cada elemento da fibra deixa uma **marca característica** no traço:
+
+::: {#fig-otdr-eventos}
+```{.tikz}
+%%| filename: otdr-eventos
+%%| alt: Assinaturas OTDR: declive da fibra, degrau de fusão, pico de conector, ganho fantasma e fim
+\begin{tikzpicture}
+\begin{axis}[
+    width=11cm, height=6cm,
+    xlabel={Distância}, ylabel={Potência (dB)},
+    xmin=0, xmax=10, ymin=0, ymax=10,
+    axis lines=left, font=\footnotesize, xtick=\empty, ytick=\empty,
+  ]
+  % declive fibra
+  \addplot[curva] coordinates {(0.2,9) (2,7.8)};
+  \node[manualgreen, font=\scriptsize, anchor=west] at (axis cs:0.3,8.2){fibra (declive)};
+  % fusao boa: degrau pequeno
+  \addplot[curva] coordinates {(2,7.8) (2.03,7.5) (4,6.6)};
+  \node[manualblue, font=\scriptsize] at (axis cs:2.3,8.4){fusão};
+  % conector: pico + perda
+  \addplot[curva] coordinates {(4,6.6) (4.05,7.4) (4.12,5.9) (6,5.1)};
+  \node[manualred, font=\scriptsize] at (axis cs:4.4,8.0){conector};
+  % ganho fantasma (gainer)
+  \addplot[curva] coordinates {(6,5.1) (6.03,5.5) (8,4.6)};
+  \node[manualyellow, font=\scriptsize, anchor=west] at (axis cs:6.1,6.2){\textcolor{black}{``gainer'' (falso ganho)}};
+  % fim
+  \addplot[curva] coordinates {(8,4.6) (8.05,5.6) (8.25,0.4)};
+  \node[manualred, font=\scriptsize, anchor=west] at (axis cs:8.1,3.5){fim};
+\end{axis}
+\end{tikzpicture}
+```
+Assinaturas típicas no traço OTDR: cada tipo de evento tem uma forma própria — saber
+distingui-las é o cerne da interpretação.
 :::
+
+| Evento | Assinatura no traço | Reflexivo? |
+|---|---|---|
+| **Fibra** | declive reto e constante (dB/km) | — |
+| **Fusão** | **degrau** para baixo, sem pico | não |
+| **Conector/mecânica** | **pico** para cima + degrau | **sim** |
+| **Curvatura (macrobend)** | degrau, **maior em 1550 que em 1310** | não |
+| **Splitter** | degrau **grande** (ex.: 10,5 dB num 1:8) | leve |
+| **Fim da fibra** | pico + queda ao **ruído** | sim |
+| **"Gainer" (falso ganho)** | degrau **para cima** (artefato) | não |
+
+## O "gainer": a pegadinha clássica {#sec-otdr-gainer}
+
+Um evento que parece um **ganho** (o traço sobe!) é fisicamente impossível — a fibra
+só atenua. O **"gainer"** é um **artefato** que ocorre quando se emendam fibras com
+**coeficientes de retroespalhamento diferentes** (ex.: fibras de fabricantes/lotes
+distintos): de um lado o OTDR superestima, do outro subestima. A perda **real** da
+fusão é a **média das medições nos dois sentidos** (A→B e B→A). **Por isso fusões
+críticas se medem bidirecionalmente** — confiar num sentido só engana.
+
+## Curvatura vs. fusão: use dois λ {#sec-otdr-curvatura}
+
+Uma **curvatura** (macrobending, capítulo @sec-fibra-principios) e uma **fusão ruim**
+podem parecer degraus iguais em 1310 nm. O truque: a curvatura **perde muito mais em
+1550 nm** que em 1310 (a perda por curvatura cresce com o λ), enquanto a fusão perde
+parecido nos dois. **Medindo nos dois comprimentos de onda**, um degrau que "dispara"
+em 1550 é **curvatura**; um degrau parecido nos dois é **fusão/conector**. Isso
+direciona o reparo certo (endireitar o cabo vs. refazer a emenda).
+
+## Parâmetros: largura de pulso e zona morta {#sec-otdr-parametros}
+
+A configuração define o que você consegue ver:
+
+- **Largura de pulso:** pulso **curto** → melhor **resolução** (eventos próximos
+  separados) e **menor zona morta**, mas **menos alcance**. Pulso **longo** → mais
+  alcance, mas eventos próximos "se fundem". Escolha conforme o trecho.
+- **Zona morta:** trecho **logo após** um evento reflexivo forte onde o OTDR fica
+  "cego" (saturado). Por isso o OTDR não enxerga bem os primeiros metros — use um
+  **fiber ring / launch cable** (rolo de lançamento) para "jogar" a zona morta para
+  fora do trecho de interesse.
+- **Tempo de média:** mais média → traço **mais limpo** (menos ruído), mais lento.
+- **Range:** ajuste à distância real; range curto demais "esconde" o fim.
+
+## Método de leitura {#sec-otdr-metodo}
+
+1. Configure **λ, pulso, range, média** ao trecho; use **launch cable**.
+2. Identifique o **fim da fibra** (último pico+queda) — confirme a distância
+   esperada.
+3. Percorra os eventos da origem ao fim: classifique cada um (fusão/conector/
+   curvatura/splitter) pela assinatura.
+4. Para eventos suspeitos, **meça nos dois λ** (curvatura?) e **bidirecional**
+   (gainer?).
+5. **Compare com o baseline** (capítulo @sec-fusao-campo): o que **mudou** é o
+   culpado.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Baseline é rei.** Guarde o traço de aceitação de cada trecho (capítulo
+  @sec-fusao-campo). No incidente, **sobreponha** o traço atual ao baseline: o
+  evento novo salta aos olhos e você vai **direto ao ponto** (capítulo
+  @sec-localizacao-falhas).
+- **Use launch cable sempre:** sem ele, a zona morta esconde o primeiro conector/CTO
+  e você "perde" os metros mais próximos do POP.
+- **Mediu degrau alto em 1550 e baixo em 1310?** É **curvatura** — procure cabo
+  dobrado/prensado, não refaça a fusão.
+- **Viu "ganho"?** Não comemore: é **gainer**; meça **bidirecional** para a perda
+  real da fusão.
+- **Em PON com splitter**, o OTDR depois do splitter vê **várias fibras somadas** —
+  meça **antes** do splitter ou use **OTDR PON-aware** que entende a árvore; senão a
+  leitura confunde.
+:::
+
+## Resumo e checklist {#sec-resumo-40}
+
+- Cada evento tem **assinatura**: fusão = degrau; conector/fim = pico; curvatura =
+  degrau pior em 1550; splitter = degrau grande.
+- O **"gainer"** é artefato — perda real = **média bidirecional**.
+- **Dois λ** distinguem curvatura de fusão; **launch cable** elimina a zona morta.
+- **Compare com o baseline** para achar o evento novo.
+
+**Checklist do capítulo**
+
+- [ ] Classifico cada evento do traço pela assinatura.
+- [ ] Reconheço e trato o "gainer" com medição bidirecional.
+- [ ] Distingo curvatura de fusão medindo em 1310 e 1550 nm.
+- [ ] Configuro pulso/range/launch cable e comparo com o baseline.

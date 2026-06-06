@@ -2,6 +2,122 @@
 title: "Localização de Falhas na Planta Óptica"
 ---
 
-::: {.callout-note}
-Capítulo a ser desenvolvido pelo Claude Code (ver `PROMPT-CLAUDE-CODE.md` e `CLAUDE.md`).
+## Do alarme ao ponto exato {#sec-localizacao-falhas}
+
+Cliente ligou, ou o monitoramento alarmou: agora é preciso **localizar e consertar** a
+falha rápido — o tempo de reparo é SLA e reputação. Este capítulo junta tudo da Parte
+VIII (instrumentos, OTDR) com o orçamento (capítulo @sec-orcamento) e a documentação
+(capítulo @sec-doc-georref) em um **método** de localização: do sintoma à coordenada
+no mapa, sem trocar peças no escuro. A regra-mestra continua a do capítulo
+@sec-osi-encapsulamento: **diagnostique de baixo para cima**, e a camada 1 (óptica) é
+a suspeita nº 1.
+
+## Triagem: um cliente ou muitos? {#sec-loc-triagem}
+
+A primeira pergunta define tudo:
+
+::: {#fig-loc-arvore}
+```{.tikz}
+%%| filename: loc-arvore
+%%| alt: Árvore PON mostrando que falha no tronco afeta muitos e falha no drop afeta um cliente
+\begin{tikzpicture}[font=\footnotesize,
+    b/.style={draw=manualgray, rounded corners=2pt, minimum height=7mm, align=center}]
+  \node[b, fill=manualgreen!14] (olt) at (0,0) {OLT};
+  \node[b, fill=manualyellow!18] (sp) at (3,0) {Splitter};
+  \node[b, fill=manualyellow!18] (cto) at (6,0) {CTO};
+  \node[b, fill=manualred!10] (o1) at (9,1) {ONT A};
+  \node[b, fill=manualred!10] (o2) at (9,0) {ONT B};
+  \node[b, fill=manualred!10] (o3) at (9,-1) {ONT C};
+  \draw[curva, manualgreen] (olt)--(sp)--(cto);
+  \draw[curva, manualgreen] (cto)--(o1); \draw[curva, manualgreen] (cto)--(o2); \draw[curva, manualgreen] (cto)--(o3);
+  \draw[destaque, manualred] (1.5,0.5) -- (1.5,-0.5) node[below,font=\scriptsize]{quebra aqui = TODOS};
+  \draw[destaque, manualblue] (7.5,1.4) -- (7.5,0.6) node[above,font=\scriptsize]{drop = só A};
+\end{tikzpicture}
+```
+Na árvore PON, **onde** está a falha define o impacto: tronco/primária afeta **muitos**
+clientes; *drop* afeta **um**. O padrão de quem caiu já localiza o problema.
 :::
+
+- **Um cliente só** → provável **drop/ONT** (rede secundária). Comece pela ONT
+  (potência Rx, LEDs — capítulo @sec-onu-ont) e pelo *drop*.
+- **Todos de uma CTO** → problema **na CTO ou no trecho até ela** (splitter,
+  secundária).
+- **Toda uma PON / vários bairros** → **rede primária ou OLT** (capítulo @sec-olt) —
+  incidente grave. Use o georreferenciamento para ver **quem** caiu e inferir o
+  trecho comum.
+
+O **georreferenciamento** (capítulo @sec-doc-georref) responde isso em segundos:
+"todos os afetados compartilham a CEO da rua X" → a falha está no trecho até ela.
+
+## Sintomas ópticos e o que indicam {#sec-loc-sintomas}
+
+| Sintoma | Provável causa |
+|---|---|
+| **LOS** na ONT, sem luz | fibra rompida, conector solto, drop quebrado |
+| **Rx muito baixo** (ex.: −28 dBm) | curvatura, conector sujo, splitter/fusão ruim, fibra envelhecida |
+| **Rx piora ao longo do dia** | macrobending no drop (calor/sol — capítulo @sec-fibra-principios) |
+| **Cai e volta intermitente** | conector mal encaixado, infiltração na caixa, drop tensionado |
+| **Toda a PON com Rx baixo** | problema na primária/porta da OLT |
+
+## O método de localização {#sec-loc-metodo}
+
+1. **Confirme a camada 1** primeiro: leia a **potência** (na ONT/OLT e/ou com
+   power-meter, capítulo @sec-otdr). Rx fora da faixa = óptico.
+2. **Compare com o orçamento/baseline** (capítulos @sec-orcamento, @sec-fusao-campo):
+   quanto deveria chegar? a diferença mede a gravidade.
+3. **Dispare o OTDR** do POP/ponto de acesso: localize o **evento novo** (distância +
+   perda) sobrepondo ao **baseline** (capítulo @sec-interpretacao-otdr).
+4. **Converta distância → local** pelo georreferenciamento (a rota do cabo, não a
+   linha reta): "evento a 480 m = a CEO da esquina Y".
+5. **VFL** no último trecho (drop/patch) para achar a quebra exata onde o OTDR tem
+   zona morta.
+6. **Repare** (refazer fusão, trocar conector/drop, endireitar curvatura), **meça de
+   novo** e confirme o Rx na faixa.
+7. **Atualize a documentação** (o que mudou) e o baseline.
+
+## Casos típicos e a correção {#sec-loc-casos}
+
+- **"Cliente cai à tarde, volta à noite":** *drop* dobrado/prensado (macrobending) que
+  piora com o calor. OTDR mostra degrau pior em 1550; **endireite/refaça o drop**.
+- **"PON inteira degradou":** conector sujo no DIO/porta da OLT ou fusão ruim na
+  primária. Inspecione/limpe conectores (capítulo @sec-conectores) **antes** de
+  abrir caixa; OTDR localiza se for fusão.
+- **"Cliente novo não fecha":** Rx no limite — orçamento apertado (capítulo
+  @sec-orcamento). Reduza divisão/encurte, ou cheque conector/drop.
+- **"Rompimento de cabo" (retroescavadeira/poda):** OTDR dá a distância exata; o
+  georreferenciamento dá o endereço; leve **reserva técnica** (capítulo
+  @sec-infraestrutura) para emendar.
+
+::: {.callout-provedor}
+**Na prática do provedor**
+
+- **Leia a potência ANTES de despachar.** A OLT já reporta o Rx de cada ONT
+  (capítulo @sec-olt): Rx em −10 dBm e cliente reclamando → não é óptico, é
+  configuração/Wi-Fi; Rx em −27 e piorando → é fibra, leve fibra/conector. Isso
+  **economiza visitas**.
+- **Baseline + georreferenciamento = reparo rápido.** Sobreponha o OTDR ao baseline
+  para achar o evento, e o mapa para achar o endereço. Sem eles, você mede do zero e
+  anda às cegas.
+- **Inspecione/limpe conector primeiro** (capítulo @sec-conectores): a "falha óptica"
+  mais comum e mais barata de resolver é sujeira.
+- **Comunique o impacto** (georreferenciamento mostra quantos caíram): priorize
+  reparos por número de afetados e avise proativamente os clientes do trecho.
+- **Padronize o kit e o método:** power-meter + OTDR + VFL + reserva no carro, e o
+  roteiro de 7 passos. Diagnóstico vira processo, não improviso.
+:::
+
+## Resumo e checklist {#sec-resumo-41}
+
+- **Triagem por impacto:** um cliente (drop/ONT), uma CTO (secundária), uma PON
+  (primária/OLT).
+- **Camada 1 primeiro:** leia o **Rx**, compare com **orçamento/baseline**, então
+  **OTDR + georreferenciamento** para localizar.
+- **VFL** acha a quebra no último trecho; **dois λ** distinguem curvatura de fusão.
+- **Repare, remeça e documente** — atualize o baseline.
+
+**Checklist do capítulo**
+
+- [ ] Faço triagem por número/padrão de clientes afetados.
+- [ ] Leio a potência e comparo com orçamento/baseline antes de despachar.
+- [ ] Localizo o evento com OTDR e converto distância em endereço pelo GIS.
+- [ ] Reparo, confirmo o Rx na faixa e atualizo a documentação.
