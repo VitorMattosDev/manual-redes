@@ -3,6 +3,8 @@
 Quarto book (HTML + PDF) publicado no GitHub Pages. Foco em redes ópticas
 (FTTx/PON) e rádio rural, do básico ao avançado.
 
+**📖 Leia online:** https://VitorMattosDev.github.io/manual-redes
+
 ## Pré-requisitos
 
 - [Quarto](https://quarto.org) ≥ 1.5
